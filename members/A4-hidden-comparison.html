@@ -3,87 +3,321 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A4 · Start Unknown — Cognis11</title>
+  <title>A4 · Hidden Comparison — Cognis 11+</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/style.css">
   <script src="https://api.memberstack.com/static/memberstack.js?custom"
     data-memberstack-app="YOUR_APP_ID"></script>
 </head>
 <body>
 
-  <nav>
-    <a href="/members/">← All question types</a>
-    <span>A4 · Start Unknown</span>
-    <button onclick="markDone('A4')" id="doneBtn">Mark as done ✓</button>
-  </nav>
+<nav>
+  <a href="/members/" class="nav-back">← All question types</a>
+  <span class="nav-label">A4 · Hidden Comparison</span>
+  <button class="btn-done" id="doneBtn" onclick="markDone('A4')">Mark as done</button>
+</nav>
 
-  <main>
+<div class="content-wrap">
 
-    <div class="type-header">
-      <div class="type-code">A4</div>
-      <h1>Start Unknown / Reversal</h1>
-      <div class="age-tabs">
-        <button class="age-tab active" onclick="showAge('standard')">Standard · Y2–3</button>
-        <button class="age-tab" onclick="showAge('high')">High · Y3–4</button>
-        <button class="age-tab" onclick="showAge('extended')">Extended · Y4–5</button>
+  <div id="doneBanner" class="done-banner">
+    ✓ Marked as done — this type will show as complete on your progress tracker.
+  </div>
+
+  <div class="type-header">
+    <div class="type-eyebrow">A4 · Numerical Word Problems</div>
+    <h1>Hidden Comparison</h1>
+    <div class="age-tabs">
+      <button class="age-tab active" onclick="showAge(this,'standard')">Standard · Y2–3</button>
+      <button class="age-tab" onclick="showAge(this,'high')">High · Y3–4</button>
+      <button class="age-tab" onclick="showAge(this,'extended')">Extended · Y4–5</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ STANDARD -->
+  <div class="age-content" id="age-standard">
+
+    <section class="parent-note">
+      <h2>For parents</h2>
+      <p>This type is deceptively simple in appearance but catches many children out. The question asks how many more one person or group has than another — but the phrasing makes children want to add rather than subtract. "How many more" often triggers addition automatically, even though the answer requires finding the difference between two numbers. The signal your child needs to catch is the word "more" appearing in the question alongside two quantities that need to be compared, not combined. When they see "how many more," the reflex should be: find the gap, not the total.</p>
+    </section>
+
+    <section class="signal-card">
+      <h2>Signal card <span>(read this to your child)</span></h2>
+      <blockquote>When a question asks "how many more" or "how many fewer" and gives you two amounts to compare — this is a Hidden Comparison question. Don't add. Find the gap between the two numbers. Subtract the smaller from the larger.</blockquote>
+    </section>
+
+    <section class="stems">
+      <h2>Opening sentences <span>(child classifies — does not solve)</span></h2>
+      <ol>
+        <li>Ava has 12 stickers. Ben has 7 stickers.</li>
+        <li>There are 15 apples in a red bowl and 9 in a green bowl.</li>
+        <li>Sam scored 14 points. Tom scored 8 points.</li>
+        <li>A red car has 11 passengers. A blue car has 6.</li>
+        <li>Lily read 16 pages. Her brother read 9 pages.</li>
+        <li>There are 18 children in Year 3 and 11 in Year 2.</li>
+        <li>A cat weighs 8 kg. A dog weighs 13 kg.</li>
+        <li>Mum has 14 eggs. Gran has 6 eggs.</li>
+        <li>A red tin has 20 buttons. A blue tin has 12.</li>
+        <li>Jake collected 17 conkers. His friend collected 9.</li>
+        <li>One shelf has 15 books. Another shelf has 7.</li>
+        <li>A tall plant is 18 cm high. A short plant is 11 cm high.</li>
+        <li>Class A has 25 pupils. Class B has 19 pupils.</li>
+        <li>Ava saved £14. Ben saved £9.</li>
+        <li>A yellow bag holds 13 marbles. A green bag holds 5.</li>
+        <li>In the morning, 16 birds sat on a wire. In the afternoon, only 7 did.</li>
+        <li>A school football team scored 11 goals this term. Last term they scored 6.</li>
+        <li>A red box has 18 counters. A blue box has 12.</li>
+        <li>Lily is 132 cm tall. Her sister is 118 cm tall.</li>
+        <li>Tom's sunflower grew to 24 cm. Ava's grew to 17 cm.</li>
+      </ol>
+    </section>
+
+    <section class="near-misses">
+      <h2>Near-miss pairs <span>(discrimination training)</span></h2>
+
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>Ava has 12 stickers. Ben has 7. How many more does Ava have?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>Ava has 12 stickers. Ben gives her 7 more.</div>
+        <div class="pair-diff"><strong>The difference:</strong> A compares two separate amounts — find the gap. B combines them — find the total.</div>
       </div>
-    </div>
 
-    <!-- STANDARD -->
-    <div class="age-content" id="age-standard">
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>Sam scored 14 points. Tom scored 8. How many more did Sam score?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>Sam scored 14 points. Tom scored 8 more than Sam.</div>
+        <div class="pair-diff"><strong>The difference:</strong> A finds the gap between two known values. B requires adding the excess to Sam's score to find Tom's total.</div>
+      </div>
 
-      <section class="parent-note">
-        <h2>For parents</h2>
-        <p><!-- paste parent note here --></p>
-      </section>
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>One shelf has 15 books. Another has 7. How many more books are on the first shelf?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>A shelf has 15 books. A pupil adds 7 more.</div>
+        <div class="pair-diff"><strong>The difference:</strong> A compares two shelves — subtract. B adds to one shelf — add.</div>
+      </div>
 
-      <section class="signal-card">
-        <h2>Signal card <span>(read this to your child)</span></h2>
-        <blockquote><!-- paste signal card here --></blockquote>
-      </section>
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>Lily read 16 pages. Her brother read 9. How many more did Lily read?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>Lily had read some pages. Her brother read 9 fewer. Lily had read 16.</div>
+        <div class="pair-diff"><strong>The difference:</strong> A is a straightforward comparison. B is still a comparison but framed from the other direction — same operation, different wording.</div>
+      </div>
 
-      <section class="stems">
-        <h2>Opening sentences <span>(20 items — child classifies, doesn't solve)</span></h2>
-        <ol><!-- paste 20 stems here as <li> items --></ol>
-      </section>
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>Class A has 25 pupils. Class B has 19. How many more are in Class A?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>Class A has 25 pupils. Class B has 19. How many pupils are there altogether?</div>
+        <div class="pair-diff"><strong>The difference:</strong> Same two numbers, opposite operations. "More" → subtract. "Altogether" → add.</div>
+      </div>
+    </section>
 
-      <section class="near-misses">
-        <h2>Near-miss pairs <span>(discrimination training)</span></h2>
-        <!-- paste near-miss pairs here -->
-      </section>
+    <section class="mastery-check">
+      <h2>Mastery check <span>(parent reads aloud — child classifies only)</span></h2>
+      <div class="mastery-item">
+        <span class="mastery-tag tag-this">A4</span>
+        Ava has 14 stickers. Ben has 9. How many more does Ava have?
+      </div>
+      <div class="mastery-item">
+        <span class="mastery-tag tag-other">A2</span>
+        Ava has 14 stickers. Ben gives her 9 more. How many does she have now?
+      </div>
+      <div class="mastery-item">
+        <span class="mastery-tag tag-hard">Discuss</span>
+        Ava has 14 stickers. Ben has 9. How many do they have altogether? — Same two numbers, but "altogether" means add, not subtract. What word tells you which operation to use?
+      </div>
+    </section>
 
-      <section class="mastery-check">
-        <h2>Mastery check</h2>
-        <!-- paste mastery check here -->
-      </section>
+  </div>
 
-    </div>
+  <!-- ══════════════════════════════════════ HIGH -->
+  <div class="age-content hidden" id="age-high">
 
-    <!-- HIGH -->
-    <div class="age-content hidden" id="age-high">
-      <!-- same structure, different content -->
-    </div>
+    <section class="parent-note">
+      <h2>For parents</h2>
+      <p>The Hidden Comparison question asks for the difference between two quantities, but the language disguises this. "£8 less than he started with," "12 more than the other class," "how many fewer" — all of these signal a comparison, but the surface vocabulary often activates the wrong operation. The trap is particularly sharp when the comparison is expressed as a relationship to an unstated value: "now he has £8 less than he started with" requires identifying the starting value, computing the target, and subtracting. The classification signal: two quantities being related, not combined.</p>
+    </section>
 
-    <!-- EXTENDED -->
-    <div class="age-content hidden" id="age-extended">
-      <!-- same structure, different content -->
-    </div>
+    <section class="signal-card">
+      <h2>Signal card <span>(read this to your child)</span></h2>
+      <blockquote>When a question compares two amounts using words like "more than," "fewer than," "less than," or "how many more/fewer" — this is a Hidden Comparison. The answer is the gap between the two amounts, not their total. Subtract the smaller from the larger.</blockquote>
+    </section>
 
-  </main>
+    <section class="stems">
+      <h2>Opening sentences <span>(child classifies — does not solve)</span></h2>
+      <ol>
+        <li>Class A has 34 pupils. Class B has 27 pupils.</li>
+        <li>A red team scored 87 points. A blue team scored 64.</li>
+        <li>A school library has 840 books. A nearby school's library has 612.</li>
+        <li>A farmer grew 348 apples. His neighbour grew 279.</li>
+        <li>Callum saved £48. His sister saved £31.</li>
+        <li>A train carries 214 passengers. The next train carries 178.</li>
+        <li>A shop sold 384 items on Saturday. On Sunday it sold 247.</li>
+        <li>The school record for the long jump is 4.8 m. Maya jumped 3.9 m.</li>
+        <li>Year 5 raised £324 for charity. Year 6 raised £287.</li>
+        <li>A red car has travelled 1,240 km. A blue car has travelled 987 km.</li>
+        <li>A builder laid 84 bricks before lunch. He laid 67 bricks after lunch.</li>
+        <li>The morning session had 156 audience members. The afternoon session had 213.</li>
+        <li>A factory produces 640 units on Monday. On Tuesday it produces 583.</li>
+        <li>Tom's book has 312 pages. Maya's book has 248 pages.</li>
+        <li>A swimming pool holds 480,000 litres. The school pool holds 124,000 litres.</li>
+        <li>One side of a playground is 48 m long. The other side is 37 m long.</li>
+        <li>A school collects 284 items for the food bank. The target was 350.</li>
+        <li>A cyclist rides 67 km on Saturday. On Sunday she rides 84 km.</li>
+        <li>The winning team scored 43 points. The runners-up scored 38.</li>
+        <li>A school fete raises £1,240. Last year's fete raised £980.</li>
+      </ol>
+    </section>
 
-  <script src="/assets/progress.js"></script>
-  <script>
-    function showAge(level) {
-      document.querySelectorAll('.age-content').forEach(el => el.classList.add('hidden'));
-      document.querySelectorAll('.age-tab').forEach(el => el.classList.remove('active'));
-      document.getElementById('age-' + level).classList.remove('hidden');
-      event.target.classList.add('active');
-    }
+    <section class="near-misses">
+      <h2>Near-miss pairs <span>(discrimination training)</span></h2>
 
-    // Restore done state
-    if (localStorage.getItem('done_A4') === 'true') {
-      document.getElementById('doneBtn').classList.add('done');
-      document.getElementById('doneBtn').textContent = '✓ Done';
-    }
-  </script>
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>Class A has 34 pupils. Class B has 27. How many more are in Class A?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>Class A has 34 pupils. Class B joins them for assembly. There are now 61.</div>
+        <div class="pair-diff"><strong>The difference:</strong> A compares — find the gap. B combines — find the total.</div>
+      </div>
+
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>Year 5 raised £324. Year 6 raised £287. How much more did Year 5 raise?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>Year 5 raised £324. Year 6 raised £287. How much did they raise altogether?</div>
+        <div class="pair-diff"><strong>The difference:</strong> Same two numbers. "How much more" → subtract. "Altogether" → add.</div>
+      </div>
+
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>A shop sold 384 items on Saturday. On Sunday it sold 247. How many more did it sell on Saturday?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>A shop had some items. It sold 247 on Sunday. It had sold 384 altogether by end of weekend.</div>
+        <div class="pair-diff"><strong>The difference:</strong> A is a direct comparison of two days' sales. B is start-unknown across two days — different structure entirely.</div>
+      </div>
+
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>A farmer grew 348 apples. His neighbour grew 279. How many more did the farmer grow?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>A farmer grew 348 apples. He gives his neighbour 279.</div>
+        <div class="pair-diff"><strong>The difference:</strong> A compares two independent quantities. B subtracts from one quantity — direct operation.</div>
+      </div>
+
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>The school record for the long jump is 4.8 m. Maya jumped 3.9 m. How much further is the record?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>Maya jumped 3.9 m. To beat the record of 4.8 m she needs to jump how much further?</div>
+        <div class="pair-diff"><strong>The difference:</strong> Both compare the same two values — same calculation, different framing. The operation is identical despite the wording change.</div>
+      </div>
+    </section>
+
+    <section class="mastery-check">
+      <h2>Mastery check <span>(parent reads aloud — child classifies only)</span></h2>
+      <div class="mastery-item">
+        <span class="mastery-tag tag-this">A4</span>
+        Year 5 raised £324. Year 6 raised £287. How much more did Year 5 raise?
+      </div>
+      <div class="mastery-item">
+        <span class="mastery-tag tag-other">A2</span>
+        Year 5 raised £324. Year 6 raised £287. How much did they raise altogether?
+      </div>
+      <div class="mastery-item">
+        <span class="mastery-tag tag-hard">Discuss</span>
+        Year 5 raised some money. Year 6 raised £287, which was £37 less than Year 5. How much did Year 5 raise? — Comparison expressed as a relationship to an unknown. Must compute Year 5's amount from Year 6's amount plus the difference.
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ══════════════════════════════════════ EXTENDED -->
+  <div class="age-content hidden" id="age-extended">
+
+    <section class="parent-note">
+      <h2>For parents</h2>
+      <p>At this level, the Hidden Comparison is often expressed as a relational statement rather than a direct question. "The new model is 340 units more efficient than the old one," "output fell by 12% relative to last quarter," "the gap between the two schools narrowed to 43 points" — all describe a comparison without explicitly saying "subtract." The child who hasn't classified this type will often either add the comparison value, or treat it as the answer directly. The classification signal: a relationship between two quantities that defines a gap, not a total.</p>
+    </section>
+
+    <section class="signal-card">
+      <h2>Signal card <span>(read this to your child)</span></h2>
+      <blockquote>When a story describes a relationship between two quantities using "more than," "less than," "greater than," "the gap," or "relative to" — this is a Hidden Comparison. The answer is the difference between the two values. Identify both quantities and subtract.</blockquote>
+    </section>
+
+    <section class="stems">
+      <h2>Opening sentences <span>(child classifies — does not solve)</span></h2>
+      <ol>
+        <li>A company's Q1 revenue was £2.4 million. Q2 revenue was £1.87 million.</li>
+        <li>The new factory produces 8,400 units per week. The old factory produced 6,750.</li>
+        <li>School A's average test score is 74%. School B's average is 68%.</li>
+        <li>A marathon runner's personal best is 3 hours 12 minutes. Her time today was 3 hours 27 minutes.</li>
+        <li>The population of Town A is 84,200. The population of Town B is 67,800.</li>
+        <li>A satellite's orbital period is 94.2 minutes. The ISS orbital period is 92.9 minutes.</li>
+        <li>A cyclist's average speed on the outward journey was 24.6 km/h. On the return it was 21.3 km/h.</li>
+        <li>The record rainfall for June is 84.3 mm. This June recorded 61.7 mm.</li>
+        <li>A company's market share is 34.8%. Its closest competitor's is 28.4%.</li>
+        <li>The winning candidate received 14,840 votes. The runner-up received 12,390.</li>
+        <li>A school's budget increased from £1,240,000 to £1,380,000 over two years.</li>
+        <li>A factory's energy consumption last year was 4,840 MWh. This year it is 4,120 MWh.</li>
+        <li>The average house price in Area A is £384,000. In Area B it is £312,000.</li>
+        <li>A swimmer's time in the heats was 58.4 seconds. In the final she swam 57.1 seconds.</li>
+        <li>Exports this year totalled £84.3 billion. Last year they were £79.6 billion.</li>
+        <li>The tallest building in the city is 312 m. The second tallest is 287 m.</li>
+        <li>A school's carbon footprint fell from 840 tonnes to 612 tonnes over three years.</li>
+        <li>The morning shift produced 1,240 components. The afternoon shift produced 987.</li>
+        <li>A river's flow rate in summer is 84 cubic metres per second. In winter it is 312.</li>
+        <li>The fastest lap was completed in 1 minute 24.3 seconds. The second fastest was 1 minute 26.8 seconds.</li>
+      </ol>
+    </section>
+
+    <section class="near-misses">
+      <h2>Near-miss pairs <span>(discrimination training)</span></h2>
+
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>A company's Q1 revenue was £2.4m. Q2 revenue was £1.87m. How much more was earned in Q1?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>A company's Q1 revenue was £2.4m. In Q2 it earned £1.87m more.</div>
+        <div class="pair-diff"><strong>The difference:</strong> A compares two independent figures — subtract. B adds the Q2 figure to Q1 — add.</div>
+      </div>
+
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>The winning candidate received 14,840 votes. The runner-up received 12,390. What was the margin of victory?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>The winning candidate received 14,840 votes. The runner-up received 12,390 votes. How many votes were cast in total?</div>
+        <div class="pair-diff"><strong>The difference:</strong> Same numbers. "Margin" → subtract. "Total" → add.</div>
+      </div>
+
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>School A's average score is 74%. School B's is 68%. What is the gap between them?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>School A's average score is 74%. After moderation, School B's score was revised upward by 6%.</div>
+        <div class="pair-diff"><strong>The difference:</strong> A compares two independent scores. B applies a change to one score — direct addition.</div>
+      </div>
+
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>A factory's energy use last year was 4,840 MWh. This year it is 4,120 MWh. How much less is being used?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>A factory used 4,840 MWh last year. This year it reduced consumption by 720 MWh. What is this year's total?</div>
+        <div class="pair-diff"><strong>The difference:</strong> A gives both values and asks for the difference. B gives the start and the reduction — subtract to find the end value. Different unknowns.</div>
+      </div>
+
+      <div class="near-miss-pair">
+        <div class="pair-item pair-a"><span class="pair-label">A</span>A swimmer's heat time was 58.4 seconds. Her final time was 57.1 seconds. By how much did she improve?</div>
+        <div class="pair-item pair-b"><span class="pair-label">B</span>A swimmer's target time is 57.1 seconds. Her current personal best is 58.4 seconds. How much does she need to improve?</div>
+        <div class="pair-diff"><strong>The difference:</strong> Both compare the same two values — same calculation, different framing. Make sure your child sees the operation is identical despite the different wording.</div>
+      </div>
+    </section>
+
+    <section class="mastery-check">
+      <h2>Mastery check <span>(parent reads aloud — child classifies only)</span></h2>
+      <div class="mastery-item">
+        <span class="mastery-tag tag-this">A4</span>
+        The winning candidate received 14,840 votes. The runner-up received 12,390. What was the margin of victory?
+      </div>
+      <div class="mastery-item">
+        <span class="mastery-tag tag-hard">Discuss</span>
+        The winning candidate received 14,840 votes. The runner-up received 12,390 more votes than the third-place candidate, who received 4,200. — Multi-step: find the runner-up's total first, then compare to the winner.
+      </div>
+      <div class="mastery-item">
+        <span class="mastery-tag tag-other">A1</span>
+        Together, the top two candidates received 27,230 votes. The winner received 14,840. How many did the runner-up receive? — Looks like a comparison but is actually a reversal. Discuss why.
+      </div>
+    </section>
+
+  </div>
+
+</div>
+
+<script src="/assets/progress.js"></script>
+<script>
+  function showAge(btn, level) {
+    document.querySelectorAll('.age-content').forEach(function(el) { el.classList.add('hidden'); });
+    document.querySelectorAll('.age-tab').forEach(function(el) { el.classList.remove('active'); });
+    document.getElementById('age-' + level).classList.remove('hidden');
+    btn.classList.add('active');
+  }
+  restoreDoneState('A4');
+</script>
+
 </body>
 </html>

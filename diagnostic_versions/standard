@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deep Understander · Cognitive Profile Assessment · Standard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#1B3A5C; --steel:#2E6DA4; --lblue:#E4EEF8; --dblue:#163050;
+  --amber:#A05800; --lamber:#FDF4E3; --damber:#7A4000;
+  --green:#276245; --lgreen:#E2F0E9;
+  --red:#9E2B1A; --lred:#FAEAE7;
+  --cream:#FAFAF6; --offwhite:#F4F2ED;
+  --dgrey:#3A3A3A; --mgrey:#888; --lgrey:#E5E3DD; --xgrey:#CCC9C2;
+  --white:#fff;
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'DM Sans',system-ui,sans-serif;
+  --radius:8px; --shadow:0 2px 16px rgba(0,0,0,0.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--cream);color:var(--dgrey);min-height:100vh;font-size:16px;line-height:1.6}
+
+/* ── PROGRESS ── */
+#progressBar{position:fixed;top:0;left:0;right:0;height:3px;background:var(--lgrey);z-index:200}
+#progressFill{height:100%;background:var(--steel);transition:width .6s ease;width:0%}
+
+/* ── NAV ── */
+nav{position:fixed;top:3px;left:0;right:0;background:rgba(250,250,246,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--lgrey);padding:13px 44px;display:flex;align-items:center;justify-content:space-between;z-index:199}
+.nav-brand{font-family:var(--font-display);font-size:1.05rem;font-weight:600;color:var(--navy);letter-spacing:-.01em}
+.nav-right{display:flex;align-items:center;gap:20px}
+.nav-step{font-size:.72rem;color:var(--mgrey);font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+.nav-save-badge{font-size:.72rem;font-weight:600;color:var(--green);letter-spacing:.04em;opacity:0;transition:opacity .3s;background:var(--lgreen);padding:3px 10px;border-radius:12px}
+.nav-save-badge.show{opacity:1}
+
+/* ── SECTIONS ── */
+.section{display:none;min-height:100vh;padding:96px 44px 80px;max-width:860px;margin:0 auto}
+.section.active{display:block}
+#cover,#resume{display:none;min-height:100vh;padding:0 44px;max-width:860px;margin:0 auto;flex-direction:column;justify-content:center}
+#cover.active,#resume.active{display:flex}
+#generating{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:20px;text-align:center;padding:0 44px;max-width:860px;margin:0 auto}
+#generating.active{display:flex}
+#report.active{display:block;padding:96px 44px 80px;max-width:860px;margin:0 auto}
+
+/* ── COVER ── */
+.cover-tag{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin-bottom:18px}
+.cover-h1{font-family:var(--font-display);font-size:clamp(2.4rem,5vw,3.6rem);line-height:1.12;font-weight:700;color:var(--navy);margin-bottom:8px}
+.cover-h1 em{font-style:italic;color:var(--steel)}
+.cover-sub{font-size:1.05rem;color:var(--mgrey);font-weight:300;margin-bottom:36px;max-width:560px;line-height:1.65}
+.cover-meta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px}
+.cover-chip{display:flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--lgrey);border-radius:20px;font-size:.83rem;color:var(--dgrey);background:var(--white)}
+.cover-chip-dot{width:7px;height:7px;border-radius:50%;background:var(--steel);flex-shrink:0}
+.child-field{margin-bottom:32px;max-width:360px}
+.child-field label{display:block;font-size:.75rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--navy);margin-bottom:9px}
+.child-field input{width:100%;padding:13px 17px;border:1.5px solid var(--xgrey);border-radius:6px;background:var(--white);font-family:var(--font-body);font-size:1rem;color:var(--dgrey);outline:none;transition:border-color .2s}
+.child-field input:focus{border-color:var(--steel)}
+
+/* ── RESUME SCREEN ── */
+.resume-card{background:var(--white);border:1px solid var(--lgrey);border-radius:var(--radius);padding:40px;max-width:520px;box-shadow:var(--shadow)}
+.resume-tag{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:12px}
+.resume-h{font-family:var(--font-display);font-size:1.7rem;font-weight:700;color:var(--navy);margin-bottom:10px}
+.resume-sub{font-size:.93rem;color:var(--mgrey);margin-bottom:28px;line-height:1.6}
+.resume-progress{margin-bottom:28px}
+.resume-prog-label{font-size:.75rem;font-weight:600;color:var(--dgrey);margin-bottom:8px;letter-spacing:.04em}
+.resume-acts{display:flex;flex-direction:column;gap:6px;margin-bottom:4px}
+.resume-act{display:flex;align-items:center;gap:10px;font-size:.88rem}
+.resume-act-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.resume-act-dot.done{background:var(--green)}
+.resume-act-dot.current{background:var(--amber)}
+.resume-act-dot.todo{background:var(--lgrey)}
+.resume-act.done-act{color:var(--mgrey)}
+.resume-act.current-act{color:var(--navy);font-weight:600}
+.resume-btn-row{display:flex;gap:12px;flex-wrap:wrap}
+
+/* ── BUTTONS ── */
+.btn-primary{display:inline-flex;align-items:center;gap:9px;background:var(--navy);color:var(--white);font-family:var(--font-body);font-size:.93rem;font-weight:600;padding:15px 34px;border-radius:6px;border:none;cursor:pointer;transition:background .2s,transform .12s;letter-spacing:.01em}
+.btn-primary:hover{background:var(--steel);transform:translateY(-1px)}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--navy);font-family:var(--font-body);font-size:.88rem;font-weight:500;padding:11px 22px;border-radius:6px;border:1.5px solid var(--xgrey);cursor:pointer;transition:border-color .2s,background .2s}
+.btn-secondary:hover{border-color:var(--navy);background:var(--offwhite)}
+.btn-danger{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--mgrey);font-family:var(--font-body);font-size:.83rem;font-weight:400;padding:8px 0;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.btn-row{display:flex;gap:14px;align-items:center;margin-top:36px;flex-wrap:wrap}
+
+/* ── ACTIVITY HEADER ── */
+.act-header{margin-bottom:32px;padding-bottom:22px;border-bottom:1px solid var(--lgrey)}
+.act-num{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--steel);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.act-num-pip{width:20px;height:20px;border-radius:50%;background:var(--steel);color:var(--white);font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.act-title{font-family:var(--font-display);font-size:1.9rem;font-weight:700;color:var(--navy);line-height:1.18;margin-bottom:7px}
+.act-desc{font-size:.93rem;color:var(--mgrey);font-weight:300;line-height:1.65;max-width:620px}
+
+/* ── CONTENT BLOCKS ── */
+.setup-box{background:var(--offwhite);border:1px solid var(--lgrey);border-radius:var(--radius);padding:26px 30px;margin-bottom:28px}
+.setup-box h3,.box-label{font-size:.68rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--steel);margin-bottom:14px}
+.setup-items{display:flex;flex-direction:column;gap:11px}
+.setup-item{display:flex;gap:13px;align-items:flex-start}
+.setup-num{width:23px;height:23px;border-radius:50%;background:var(--navy);color:var(--white);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.setup-text{font-size:.9rem;line-height:1.55;color:var(--dgrey)}
+.setup-text strong{color:var(--navy);font-weight:600}
+
+.instr-block{margin-bottom:26px}
+.instr-block h3{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);margin-bottom:12px}
+.instr-block p{font-size:.92rem;line-height:1.7;color:var(--dgrey);margin-bottom:9px}
+
+.script{background:var(--white);border-left:3px solid var(--steel);padding:14px 18px;border-radius:0 6px 6px 0;margin:12px 0;font-style:italic;font-size:.92rem;line-height:1.65;color:var(--dgrey)}
+
+.warn-box{background:var(--lred);border:1px solid rgba(158,43,26,.18);border-radius:6px;padding:14px 18px;margin-bottom:22px;font-size:.86rem;line-height:1.6;color:var(--red)}
+.warn-box strong{display:block;margin-bottom:3px;font-weight:700}
+.note-box{background:var(--lamber);border:1px solid rgba(160,88,0,.18);border-radius:6px;padding:14px 18px;margin-bottom:22px;font-size:.86rem;line-height:1.6;color:var(--amber)}
+.note-box strong{font-weight:700}
+.info-box{background:var(--lblue);border:1px solid rgba(46,109,164,.18);border-radius:6px;padding:14px 18px;margin-bottom:22px;font-size:.86rem;line-height:1.6;color:var(--navy)}
+.info-box strong{font-weight:700}
+
+/* Phase cards */
+.phase-cards{display:flex;flex-direction:column;gap:13px;margin-bottom:26px}
+.phase-card{border:1px solid var(--lgrey);border-radius:var(--radius);overflow:hidden}
+.phase-card-head{padding:13px 18px;display:flex;align-items:center;gap:13px}
+.phase-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:var(--white);flex-shrink:0}
+.phase-card-title{font-weight:600;font-size:.92rem;color:var(--navy)}
+.phase-card-body{padding:2px 18px 14px 65px;font-size:.88rem;line-height:1.6;color:var(--dgrey)}
+
+/* Story cards */
+.story-cards{display:flex;flex-direction:column;gap:12px;margin-bottom:26px}
+.story-card{background:var(--white);border:1px solid var(--lgrey);border-radius:var(--radius);overflow:hidden}
+.story-card-head{padding:11px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--lgrey);background:var(--offwhite)}
+.story-label{font-size:.72rem;font-weight:700;color:var(--mgrey);letter-spacing:.06em;text-transform:uppercase}
+.story-ans{font-size:.72rem;font-weight:700;color:var(--green)}
+.story-card-body{padding:13px 16px}
+.story-text{font-style:italic;font-size:.92rem;line-height:1.6;margin-bottom:7px;color:var(--dgrey)}
+.story-watch{font-size:.81rem;color:var(--mgrey);line-height:1.5}
+
+/* ── OBS FORM ── */
+.obs-section{margin-bottom:36px;padding-bottom:32px;border-bottom:1px solid var(--lgrey)}
+.obs-section:last-of-type{border-bottom:none}
+.obs-section-title{font-family:var(--font-display);font-size:1.15rem;font-weight:600;color:var(--navy);margin-bottom:5px}
+.obs-section-sub{font-size:.83rem;color:var(--mgrey);margin-bottom:22px;line-height:1.5}
+
+.obs-q{margin-bottom:26px}
+.obs-q label{display:block;font-size:.91rem;font-weight:500;color:var(--dgrey);line-height:1.6;margin-bottom:13px}
+.obs-q label .qn{font-weight:700;color:var(--steel);margin-right:3px}
+
+.radio-opts{display:flex;flex-direction:column;gap:9px}
+.radio-opt{display:flex;align-items:flex-start;gap:11px;padding:12px 16px;border:1.5px solid var(--lgrey);border-radius:6px;cursor:pointer;transition:border-color .15s,background .15s;background:var(--white)}
+.radio-opt:hover{border-color:var(--steel);background:var(--lblue)}
+.radio-opt.selected{border-color:var(--steel);background:var(--lblue)}
+.radio-opt input{display:none}
+.rdot{width:17px;height:17px;border-radius:50%;border:2px solid var(--xgrey);flex-shrink:0;margin-top:3px;transition:border-color .15s,background .15s;display:flex;align-items:center;justify-content:center}
+.radio-opt.selected .rdot{border-color:var(--steel);background:var(--steel)}
+.rdot::after{content:'';width:5px;height:5px;border-radius:50%;background:var(--white);opacity:0;transition:opacity .15s}
+.radio-opt.selected .rdot::after{opacity:1}
+.rtext{font-size:.9rem;line-height:1.5;color:var(--dgrey)}
+.rtext .rl{font-weight:600;color:var(--navy);display:block;margin-bottom:2px}
+.rtext .rd{font-size:.82rem;color:var(--mgrey)}
+
+.obs-ta{width:100%;padding:13px 16px;border:1.5px solid var(--lgrey);border-radius:6px;background:var(--white);font-family:var(--font-body);font-size:.9rem;line-height:1.6;color:var(--dgrey);resize:vertical;min-height:85px;outline:none;transition:border-color .2s}
+.obs-ta:focus{border-color:var(--steel)}
+
+.val-msg{font-size:.8rem;color:var(--red);margin-top:5px;display:none}
+.obs-q.error .val-msg{display:block}
+.obs-q.error .radio-opts,.obs-q.error .obs-ta{outline:1.5px solid var(--red);border-radius:6px}
+
+/* ── SAVE TOAST ── */
+#saveToast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--navy);color:var(--white);padding:10px 22px;border-radius:20px;font-size:.85rem;font-weight:500;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;z-index:300;white-space:nowrap}
+#saveToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── STICKY BOTTOM NAV ── */
+.sticky-foot{position:fixed;bottom:0;left:0;right:0;background:rgba(250,250,246,.97);backdrop-filter:blur(8px);border-top:1px solid var(--lgrey);padding:14px 44px;display:flex;justify-content:space-between;align-items:center;z-index:199}
+.sticky-foot-info{font-size:.8rem;color:var(--mgrey)}
+
+/* ── GENERATING ── */
+.gen-spinner{width:46px;height:46px;border:3px solid var(--lgrey);border-top-color:var(--steel);border-radius:50%;animation:spin .85s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.gen-title{font-family:var(--font-display);font-size:1.7rem;color:var(--navy)}
+.gen-sub{font-size:.92rem;color:var(--mgrey);max-width:380px;line-height:1.6}
+.gen-steps{display:flex;flex-direction:column;gap:7px;margin-top:6px;text-align:left}
+.gen-step{font-size:.83rem;color:var(--mgrey);opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s}
+.gen-step.vis{opacity:1;transform:translateY(0)}
+
+/* ── REPORT ── */
+.report-hero{background:var(--navy);border-radius:12px;padding:44px;margin-bottom:36px;position:relative;overflow:hidden}
+.report-hero::before{content:'';position:absolute;top:-70px;right:-70px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.04)}
+.report-hero::after{content:'';position:absolute;bottom:-50px;left:50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.03)}
+.rh-tag{font-size:.7rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:9px}
+.rh-type{font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--white);line-height:1.18;margin-bottom:10px}
+.rh-type em{font-style:italic;opacity:.85}
+.rh-conf{font-size:.85rem;color:rgba(255,255,255,.55);margin-bottom:24px}
+.rh-pills{display:flex;flex-wrap:wrap;gap:8px}
+.rpill{padding:5px 13px;border-radius:16px;font-size:.75rem;font-weight:600;letter-spacing:.02em}
+.rpill-s2{background:rgba(46,109,164,.3);color:rgba(255,255,255,.85)}
+.rpill-s1{background:rgba(39,98,69,.35);color:rgba(255,255,255,.85)}
+.rpill-mx{background:rgba(160,88,0,.3);color:rgba(255,255,255,.85)}
+
+.report-body{font-size:.95rem;line-height:1.75;color:var(--dgrey)}
+.report-body h2{font-family:var(--font-display);font-size:1.3rem;font-weight:600;color:var(--navy);margin:32px 0 12px}
+.report-body h3{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);margin:24px 0 9px}
+.report-body p{margin-bottom:13px}
+.report-body ul{padding-left:18px;margin-bottom:13px}
+.report-body li{margin-bottom:7px}
+.report-body strong{color:var(--navy);font-weight:600}
+
+.act-result-card{border:1px solid var(--lgrey);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
+.arc-head{padding:11px 16px;background:var(--offwhite);border-bottom:1px solid var(--lgrey);display:flex;justify-content:space-between;align-items:center}
+.arc-title{font-weight:600;font-size:.86rem;color:var(--navy)}
+.arc-badge{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:11px;letter-spacing:.04em;text-transform:uppercase}
+.arc-s2{background:var(--lblue);color:var(--steel)}
+.arc-s1{background:var(--lgreen);color:var(--green)}
+.arc-mx{background:var(--lamber);color:var(--amber)}
+.arc-body{padding:13px 16px;font-size:.88rem;line-height:1.6;color:var(--dgrey)}
+
+/* Upsell */
+.upsell{background:linear-gradient(135deg,var(--navy) 0%,#2a4f7a 100%);border-radius:12px;padding:44px;margin-top:44px;color:var(--white);position:relative;overflow:hidden}
+.upsell::before{content:'';position:absolute;top:-80px;right:-40px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.04)}
+.upsell-tag{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:12px}
+.upsell-title{font-family:var(--font-display);font-size:1.65rem;font-weight:700;line-height:1.22;margin-bottom:12px}
+.upsell-desc{font-size:.92rem;line-height:1.7;color:rgba(255,255,255,.72);max-width:520px;margin-bottom:28px}
+.upsell-feats{display:flex;flex-direction:column;gap:9px;margin-bottom:32px}
+.upsell-feat{display:flex;gap:11px;align-items:flex-start;font-size:.88rem;color:rgba(255,255,255,.78);line-height:1.5}
+.ucheck{width:19px;height:19px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.62rem;font-weight:700;color:var(--white);margin-top:1px}
+.upsell-price-row{display:flex;align-items:baseline;gap:9px;margin-bottom:22px}
+.upsell-price{font-family:var(--font-display);font-size:2.3rem;font-weight:700;color:var(--white)}
+.upsell-price-sub{font-size:.86rem;color:rgba(255,255,255,.45)}
+.btn-upsell{display:inline-flex;align-items:center;gap:9px;background:var(--white);color:var(--navy);font-family:var(--font-body);font-size:.95rem;font-weight:700;padding:17px 38px;border-radius:6px;border:none;cursor:pointer;transition:transform .14s,box-shadow .14s;letter-spacing:.01em}
+.btn-upsell:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.22)}
+.upsell-note{margin-top:14px;font-size:.75rem;color:rgba(255,255,255,.3)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:620px){
+  .section,#cover,#resume,#generating{padding-left:20px;padding-right:20px}
+  nav{padding:11px 20px}
+  .sticky-foot{padding:13px 20px}
+  .report-hero,.upsell{padding:28px 24px}
+}
+</style>
+</head>
+<body>
+
+<div id="progressBar"><div id="progressFill"></div></div>
+<div id="saveToast">Progress saved ✓</div>
+
+<nav>
+  <div class="nav-brand">[ Brand ] · Diagnostic</div>
+  <div class="nav-right">
+    <div class="nav-step" id="navStep"></div>
+    <div class="nav-save-badge" id="saveBadge">Saved ✓</div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════ COVER -->
+<div id="cover" class="active">
+  <div style="padding-top:80px">
+    <div class="cover-tag">Cognitive Profile Assessment · Years 2–3 · Standard</div>
+    <h1 class="cover-h1">Is <span id="coverName">your child</span> a<br><em>Deep Understander?</em></h1>
+    <p class="cover-sub">Calibrated for above-average Year 2 children (age 6–7). A guided home assessment across 6 activities that identifies how your child approaches problems — and whether their preparation for selective entry is matched to how they actually think.</p>
+    <div class="cover-meta">
+      <div class="cover-chip"><div class="cover-chip-dot"></div>6 short activities</div>
+      <div class="cover-chip"><div class="cover-chip-dot"></div>Suited to above-average Year 2 and average Year 3</div>
+      <div class="cover-chip"><div class="cover-chip-dot"></div>~25 minutes total</div>
+      <div class="cover-chip"><div class="cover-chip-dot"></div>Progress saved — complete across multiple visits</div>
+      <div class="cover-chip"><div class="cover-chip-dot"></div>Personalised report generated instantly</div>
+    </div>
+    <div class="child-field">
+      <label for="childInput">Your child's first name</label>
+      <input type="text" id="childInput" placeholder="e.g. Priya" maxlength="40" autocomplete="off">
+    </div>
+    <div class="warn-box">
+      <strong>Before you begin</strong>
+      Do not show approval or disapproval during any activity. Keep a neutral expression throughout — your reactions will change what your child does. Read each activity's instructions fully before sitting down with your child.
+    </div>
+    <button class="btn-primary" onclick="startAssessment()">Begin Assessment →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ RESUME -->
+<div id="resume">
+  <div style="padding-top:80px">
+    <div class="resume-card">
+      <div class="resume-tag">Welcome back</div>
+      <h2 class="resume-h" id="resumeH">Continue assessment</h2>
+      <p class="resume-sub" id="resumeSub">You've made a start. Pick up exactly where you left off below.</p>
+      <div class="resume-progress">
+        <div class="resume-prog-label">YOUR PROGRESS</div>
+        <div class="resume-acts" id="resumeActs"></div>
+      </div>
+      <div class="resume-btn-row">
+        <button class="btn-primary" id="resumeBtn">Continue →</button>
+        <button class="btn-danger" onclick="clearAndRestart()">Start over</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ ACTIVITY 1 — INSTRUCTIONS -->
+<div class="section" id="a1i">
+  <div class="act-header">
+    <div class="act-num"><div class="act-num-pip">1</div>Activity 1 of 6 · Setup</div>
+    <h2 class="act-title">The Rule Switch Game</h2>
+    <p class="act-desc">Measures whether old habits fire automatically when rules change — or whether your child pauses to understand before acting. This is the single most diagnostic activity in the assessment.</p>
+  </div>
+  <div class="setup-box">
+    <h3>You will need</h3>
+    <div class="setup-items">
+      <div class="setup-item"><div class="setup-num">1</div><div class="setup-text"><strong>6 household objects</strong> — a mix of big and small things: e.g. a mug, a spoon, a book, a coin, a shoe, a pen</div></div>
+      <div class="setup-item"><div class="setup-num">2</div><div class="setup-text">A flat surface with two clearly defined sides — use a piece of tape down the middle of a table if helpful</div></div>
+    </div>
+  </div>
+  <div class="instr-block">
+    <h3>Phase 1 — Establish the rule (2 min)</h3>
+    <p>Say to your child:</p>
+    <div class="script">"We're going to sort these. Big things go on the left, small things go on the right. Go."</div>
+    <p>Let them sort all six. Shuffle and repeat twice more. This builds the habit — it is not yet diagnostic.</p>
+  </div>
+  <div class="instr-block">
+    <h3>Phase 2 — Switch the rule (the diagnostic moment)</h3>
+    <p>Immediately after the third sort, without any pause, say:</p>
+    <div class="script">"Good. New rule now. Heavy things go left, light things go right."</div>
+    <p>Present the objects again immediately. <strong>Watch closely. Do not react.</strong> You are looking for whether your child re-engages with each object to judge its weight, or just keeps applying the old left/right pattern from memory.</p>
+  </div>
+  <div class="instr-block">
+    <h3>Phase 3 — Introduce an ambiguous object</h3>
+    <p>After the second sort, add a new object that is genuinely ambiguous — a half-full water bottle works well. Say only:</p>
+    <div class="script">"Now sort them all again, including the new one."</div>
+    <p>Watch what your child does with the ambiguous object. Do they ask? Do they place it without comment? Do they hesitate?</p>
+  </div>
+  <div class="note-box"><strong>Note:</strong> A confident wrong placement is more diagnostic than a correct placement reached by asking. You are observing process, not outcome.</div>
+  <div class="btn-row">
+    <button class="btn-primary" onclick="goTo('a1o')">I've completed this activity →</button>
+  </div>
+</div>
+
+<!-- ACTIVITY 1 — OBSERVATIONS -->
+<div class="section" id="a1o">
+  <div class="act-header">
+    <div class="act-num"><div class="act-num-pip">1</div>Activity 1 of 6 · Observations</div>
+    <h2 class="act-title">What did you see?</h2>
+    <p class="act-desc">Answer based on what actually happened. There are no correct answers — you are describing what you observed.</p>
+  </div>
+
+  <div class="obs-q" data-req id="q1a">
+    <label><span class="qn">1.</span> When you announced the rule change in Phase 2, what did your child do <em>first</em>?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q1a','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Sorted by the old size rule first — before self-correcting</span><span class="rd">The old pattern fired before the new one could take over</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q1a','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Paused and picked up each object to feel its weight before placing it</span><span class="rd">Re-engaged with each object under the new rule</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q1a','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Applied the new rule confidently and correctly from the first object</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q1a','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Asked you to repeat the new rule before starting</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q1b">
+    <label><span class="qn">2.</span> If your child made an error in Phase 2 by using the old rule — did they notice?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q1b','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">They didn't make an error</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q1b','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">They made an error and immediately self-corrected</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q1b','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">They made an error and only noticed when you pointed it out</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q1b','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">They made an error and didn't notice at all — confident and incorrect</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q1c">
+    <label><span class="qn">3.</span> In Phase 3, what did your child do with the ambiguous object?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q1c','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Asked about it — "is this heavy or light?" or similar</span><span class="rd">Recognised the ambiguity and sought clarification</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q1c','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Placed it confidently without comment</span><span class="rd">Didn't flag it as different from the others</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q1c','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Placed it, then moved it to the other side</span><span class="rd">Self-identified the ambiguity after acting</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q1c','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Held it for a while and said something like "it's a bit both"</span><span class="rd">Articulated the ambiguity explicitly</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q1d">
+    <label><span class="qn">4.</span> Each time you introduced a new rule, what was your child's general attitude?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q1d','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Just got on with it — action-first, no questions</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q1d','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Asked why the rule changed</span><span class="rd">Wanted a reason, not just an instruction</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q1d','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Repeated the rule back quietly before starting</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q1d','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Seemed mildly frustrated — "why does it keep changing?"</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" id="q1e">
+    <label><span class="qn">5.</span> Anything else you noticed? <em>(optional)</em></label>
+    <textarea class="obs-ta" name="q1e" placeholder="e.g. 'kept checking their previous placement before moving on' or 'seemed to enjoy the switching'"></textarea>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary" onclick="saveAndNext('a1o','a2i',1)">Save & continue to Activity 2 →</button>
+    <button class="btn-secondary" onclick="goTo('a1i')">← Back to instructions</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ ACTIVITY 2 — INSTRUCTIONS -->
+<div class="section" id="a2i">
+  <div class="act-header">
+    <div class="act-num"><div class="act-num-pip">2</div>Activity 2 of 6 · Setup</div>
+    <h2 class="act-title">The Story Maths Game</h2>
+    <p class="act-desc">Measures whether your child constructs the meaning of a problem before solving, or matches surface words to a known operation. Read each story slowly. After the last word, say nothing and wait — you want their first-fire response.</p>
+  </div>
+  <div class="note-box"><strong>Key instruction:</strong> Tell your child to answer as soon as they know — don't wait, don't explain yet. Read each story slowly and clearly. Observe the very first thing they say.</div>
+  <div class="story-cards">
+    <div class="story-card"><div class="story-card-head"><span class="story-label">Story 1 · Baseline</span><span class="story-ans">Answer: 9</span></div><div class="story-card-body"><div class="story-text">"Sam has 5 stickers. He gets 4 more for his birthday. How many stickers does he have now?"</div><div class="story-watch">Both types answer quickly. Slowness here signals anxiety, not a cognitive pattern.</div></div></div>
+    <div class="story-card"><div class="story-card-head"><span class="story-label">Story 2 · Language swap</span><span class="story-ans">Answer: 4</span></div><div class="story-card-body"><div class="story-text">"There were 10 grapes in a bowl. The children ate some. Now there are 6. How many did they eat?"</div><div class="story-watch">"Ate" replaces "subtract." Children who match surface words may pause or reach for the wrong operation.</div></div></div>
+    <div class="story-card"><div class="story-card-head"><span class="story-label">Story 3 · Distractor detail</span><span class="story-ans">Answer: 5</span></div><div class="story-card-body"><div class="story-text">"Lily has 8 coloured pencils in a purple case with a unicorn on it. She gives 3 to her friend. How many does she have left?"</div><div class="story-watch">The purple case and unicorn are distractors. Does your child incorporate them, or filter them correctly?</div></div></div>
+    <div class="story-card"><div class="story-card-head"><span class="story-label">Story 4 · Structural reversal ★ Highest signal</span><span class="story-ans">Answer: 6</span></div><div class="story-card-body"><div class="story-text">"A jar had some sweets in it. Mum put 4 more in. Now there are 10. How many sweets were in the jar at the start?"</div><div class="story-watch">Children who surface-match "put 4 more in" will add and get 14. Children who construct the situation will subtract to get 6. This is the most diagnostic story.</div></div></div>
+    <div class="story-card"><div class="story-card-head"><span class="story-label">Story 5 · Two steps</span><span class="story-ans">Answer: 9</span></div><div class="story-card-body"><div class="story-text">"There are 8 children on the swings. 3 go home for tea. Then 4 new children arrive. How many are on the swings now?"</div><div class="story-watch">Requires two operations in sequence. Watch whether your child processes both steps or stops after the first.</div></div></div>
+    <div class="story-card"><div class="story-card-head"><span class="story-label">Story 6 · Comparison</span><span class="story-ans">Answer: 3</span></div><div class="story-card-body"><div class="story-text">"Ava has 7 marbles. Ben has 4 marbles. How many more does Ava have than Ben?"</div><div class="story-watch">"How many more" is often misread as addition. Watch whether your child subtracts or adds.</div></div></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-primary" onclick="goTo('a2o')">I've completed this activity →</button>
+    <button class="btn-secondary" onclick="goTo('a1o')">← Back</button>
+  </div>
+</div>
+
+<!-- ACTIVITY 2 — OBSERVATIONS -->
+<div class="section" id="a2o">
+  <div class="act-header">
+    <div class="act-num"><div class="act-num-pip">2</div>Activity 2 of 6 · Observations</div>
+    <h2 class="act-title">What did you see?</h2>
+  </div>
+
+  <div class="obs-q" data-req id="q2a">
+    <label><span class="qn">6.</span> On Story 4 (the jar of sweets — highest signal), what did your child answer?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q2a','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">6 — correctly subtracted</span><span class="rd">Constructed the situation and worked backwards from the total</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q2a','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">14 — added instead</span><span class="rd">"Put 4 more in" triggered addition automatically</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q2a','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Said 14 first, then self-corrected to 6</span><span class="rd">The automatic response fired, then was caught</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q2a','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Paused a long time before answering</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q2a','e')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Got a different answer or didn't attempt it</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q2b">
+    <label><span class="qn">7.</span> On Story 5 (the two-step swings problem), did your child complete both steps?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q2b','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Yes — got 9 correctly</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q2b','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Stopped after the first step — answered 5 (only subtracted)</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q2b','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Completed both steps but made an arithmetic error</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q2b','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Asked you to repeat the story before answering</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q2c">
+    <label><span class="qn">8.</span> On Story 6 ("how many more"), what did your child do?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q2c','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Answered 3 immediately — subtracted without hesitation</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q2c','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Answered 11 — added ("how many more" triggered addition)</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q2c','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Paused, then answered correctly</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q2c','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Asked "do I add or take away?"</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q2d">
+    <label><span class="qn">9.</span> When your child got an answer wrong, what happened next?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q2d','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">They didn't get any wrong</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q2d','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">They self-corrected without prompting</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q2d','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">They accepted the wrong answer — didn't question it</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q2d','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">They asked to hear the story again</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary" onclick="saveAndNext('a2o','a3i',2)">Save & continue to Activity 3 →</button>
+    <button class="btn-secondary" onclick="goTo('a2i')">← Back to instructions</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ ACTIVITY 3 — INSTRUCTIONS -->
+<div class="section" id="a3i">
+  <div class="act-header">
+    <div class="act-num"><div class="act-num-pip">3</div>Activity 3 of 6 · Setup</div>
+    <h2 class="act-title">The Repetition and Pattern Game</h2>
+    <p class="act-desc">Two parts. First: how your child handles repetition — and whether novelty re-engages them. Second: what kind of pattern they invent when given complete freedom.</p>
+  </div>
+  <div class="instr-block">
+    <h3>Part A — Flashcard run (4 min)</h3>
+    <p>Write 15 simple addition and subtraction facts on small cards — all within your child's confident ability (e.g. 3+5, 9−4, 6+2). Show them one by one at a steady pace. Your child calls out the answer as fast as possible. Keep a completely neutral expression — no feedback, no encouragement, no reaction.</p>
+    <p>After card 15, immediately switch format: <em>say</em> three of the same type of problem aloud rather than showing a card. Watch whether your child's energy or engagement visibly changes.</p>
+  </div>
+  <div class="instr-block">
+    <h3>Part B — Invent a pattern (5 min)</h3>
+    <p>Give your child paper and a pencil. Say:</p>
+    <div class="script">"Make up a pattern with a secret rule — numbers, shapes, colours, whatever you like. Don't tell me the rule. I'll try to guess."</div>
+    <p>Give them up to 3 minutes. If they ask "what kind?" say only: <em>"Any kind you like."</em> Say nothing else.</p>
+  </div>
+  <div class="btn-row">
+    <button class="btn-primary" onclick="goTo('a3o')">I've completed this activity →</button>
+    <button class="btn-secondary" onclick="goTo('a2o')">← Back</button>
+  </div>
+</div>
+
+<!-- ACTIVITY 3 — OBSERVATIONS -->
+<div class="section" id="a3o">
+  <div class="act-header">
+    <div class="act-num"><div class="act-num-pip">3</div>Activity 3 of 6 · Observations</div>
+    <h2 class="act-title">What did you see?</h2>
+  </div>
+
+  <div class="obs-q" data-req id="q3a">
+    <label><span class="qn">10.</span> How did your child's performance change across the 15 flashcards?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q3a','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Stayed consistent from card 1 to card 15</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3a','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Noticeably slower or less focused from around card 9–10</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3a','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Making errors or commenting aloud by card 12+</span><span class="rd">"This is boring," "can we stop?" etc.</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3a','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Got faster as they went — repetition helped</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q3b">
+    <label><span class="qn">11.</span> When you switched to saying the problems aloud instead of showing cards, what happened?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q3b','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Clear re-engagement — noticeably more alert</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3b','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">No real change — same energy as the cards</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3b','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Seemed relieved but not more engaged</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3b','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Seemed confused by the format change</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q3c">
+    <label><span class="qn">12.</span> What kind of pattern did your child invent in Part B?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q3c','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Simple alternation</span><span class="rd">e.g. red, blue, red, blue — or circle, square, circle, square</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3c','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Simple counting sequence</span><span class="rd">1, 2, 3, 4 or 2, 4, 6, 8</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3c','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">A pattern with a growing or changing rule</span><span class="rd">e.g. 1, 2, 4, 8 or a shape that gets one extra side each time</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3c','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">A trick pattern — looks like a rule but breaks deliberately</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3c','e')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Couldn't or wouldn't make one — stopped after 1–2 elements</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q3d">
+    <label><span class="qn">13.</span> How long did your child spend creating their pattern?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q3d','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Under 30 seconds — done immediately</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3d','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Around 1–2 minutes — took some thought</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3d','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Close to the full 3 minutes — visibly absorbed in it</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q3e">
+    <label><span class="qn">14.</span> After finishing their pattern, did your child say anything about it?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q3e','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Nothing — finished and waited</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3e','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Explained the rule unprompted before you could guess</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3e','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Asked if you thought it was hard</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q3e','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Said it was too easy and wanted to make a harder one</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary" onclick="saveAndNext('a3o','a4i',3)">Save & continue to Activity 4 →</button>
+    <button class="btn-secondary" onclick="goTo('a3i')">← Back to instructions</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ ACTIVITY 4 — INSTRUCTIONS -->
+<div class="section" id="a4i">
+  <div class="act-header">
+    <div class="act-num"><div class="act-num-pip">4</div>Activity 4 of 6 · Setup</div>
+    <h2 class="act-title">The "Why Does That Work?" Game</h2>
+    <p class="act-desc">The most revealing activity. A child can arrive at the right answer by pattern-matching or by genuine understanding. This activity separates the two by asking them to explain answers they already know.</p>
+  </div>
+  <div class="instr-block">
+    <h3>The setup</h3>
+    <p>Use problems your child can already solve confidently. After each correct answer, say:</p>
+    <div class="script">"That's right! But <em>why</em> is it right? Explain it to me like I'm a little robot who's never done maths before."</div>
+    <p>The robot framing removes the awkwardness of explaining something "easy." Run all three probes below.</p>
+  </div>
+  <div class="phase-cards">
+    <div class="phase-card">
+      <div class="phase-card-head"><div class="phase-icon" style="background:var(--steel)">1</div><div class="phase-card-title">Probe 1 — Arithmetic: "What is 5 + 3?"</div></div>
+      <div class="phase-card-body">When they say 8, ask: "Why is it 8? How would you explain it to the robot?" Listen for whether they say "I just know" or "you add them" (pattern) versus "if you have 5 things and you put 3 more with them and count all of them together..." (causal chain).</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-card-head"><div class="phase-icon" style="background:var(--amber)">2</div><div class="phase-card-title">Probe 2 — Sequence: Show 2, 4, 6, 8 — "what comes next?"</div></div>
+      <div class="phase-card-body">When they say 10, ask: "Why 10? How do you know?" Listen for the rule label ("it goes up by 2") versus the causal reasoning ("each number is 2 more than the one before, so after 8 you add 2 to get 10").</div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-card-head"><div class="phase-icon" style="background:var(--green)">3</div><div class="phase-card-title">Probe 3 — Category: "Is a whale a fish or an animal?"</div></div>
+      <div class="phase-card-body">Either answer is acceptable. Ask "Why?" Listen: association-based ("because it lives in the sea") versus definitional reasoning ("because it has warm blood and feeds its babies milk, so it's a mammal which is a type of animal"). Note if they question the premise — "it's both, because fish are animals too."</div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-primary" onclick="goTo('a4o')">I've completed this activity →</button>
+    <button class="btn-secondary" onclick="goTo('a3o')">← Back</button>
+  </div>
+</div>
+
+<!-- ACTIVITY 4 — OBSERVATIONS -->
+<div class="section" id="a4o">
+  <div class="act-header">
+    <div class="act-num"><div class="act-num-pip">4</div>Activity 4 of 6 · Observations</div>
+    <h2 class="act-title">What did you see?</h2>
+  </div>
+
+  <div class="obs-q" data-req id="q4a">
+    <label><span class="qn">15.</span> On Probe 1 (Why is 5+3=8?), how did your child respond?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q4a','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">"I just know" or counted on fingers with no explanation</span><span class="rd">Retrieved the answer — no underlying model accessible</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q4a','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Named the operation without explaining it</span><span class="rd">"Because you add them together"</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q4a','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Constructed a causal explanation</span><span class="rd">Described what addition actually does, not just that it works</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q4b">
+    <label><span class="qn">16.</span> On Probe 2 (why does 2,4,6,8 → 10?), what did your child say?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q4b','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">"It goes up by 2" — named the rule, nothing more</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q4b','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Explained the step-by-step reasoning</span><span class="rd">"Each one is 2 more, so after 8 you add 2 again"</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q4b','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Knew the answer but couldn't explain how they knew</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q4c">
+    <label><span class="qn">17.</span> On Probe 3 (whale — fish or animal?), how did your child justify their answer?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q4c','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Association-based</span><span class="rd">"Because it lives in the sea" or "because it's big"</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q4c','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Definitional reasoning</span><span class="rd">Tried to define what makes something a fish or animal and applied it</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q4c','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">"I don't know" or "it just is one"</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q4c','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Questioned the premise</span><span class="rd">"Fish are animals too, so it's both" or similar</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q4d">
+    <label><span class="qn">18.</span> Across all three probes, when your child gave a correct answer they couldn't explain, how did they react to being asked why?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q4d','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Indifferent — comfortable not knowing why</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q4d','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Visibly uncomfortable — frustrated they couldn't explain</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q4d','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Started reasoning aloud — trying to construct the explanation on the spot</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q4d','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">N/A — they were able to explain all their answers</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary" onclick="saveAndNext('a4o','a5i',4)">Save & continue to Activity 5 →</button>
+    <button class="btn-secondary" onclick="goTo('a4i')">← Back to instructions</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ ACTIVITY 5 — INSTRUCTIONS -->
+<div class="section" id="a5i">
+  <div class="act-header">
+    <div class="act-num"><div class="act-num-pip">5</div>Activity 5 of 6 · Setup</div>
+    <h2 class="act-title">The Puzzle Narration Game</h2>
+    <p class="act-desc">Measures how your child narrates their thinking when working unprompted — not when asked to explain, but when left to work naturally. Also captures their response when stuck.</p>
+  </div>
+  <div class="instr-block">
+    <h3>Setup</h3>
+    <p>Give your child a jigsaw puzzle of 30–60 pieces, or a simple spatial challenge like tangrams. Tell them:</p>
+    <div class="script">"See how quickly you can do this. I'm just going to watch."</div>
+    <p>Say nothing else. Do not react. Observe and listen.</p>
+  </div>
+  <div class="instr-block">
+    <h3>What to listen for</h3>
+    <p>Does your child narrate aloud as they work? Some children explain their thinking to themselves or to you — "this one's blue so it must go near the sky part." Others work in complete silence. Neither is better — they are different signals.</p>
+    <p>Also watch: when your child gets stuck, what is their first move? Try something immediately, or stop and look before touching anything?</p>
+  </div>
+  <div class="instr-block">
+    <h3>Follow-up</h3>
+    <p>When they finish, ask:</p>
+    <div class="script">"How did you know where to start?"</div>
+    <p>Wait for their full answer before saying anything.</p>
+  </div>
+  <div class="btn-row">
+    <button class="btn-primary" onclick="goTo('a5o')">I've completed this activity →</button>
+    <button class="btn-secondary" onclick="goTo('a4o')">← Back</button>
+  </div>
+</div>
+
+<!-- ACTIVITY 5 — OBSERVATIONS -->
+<div class="section" id="a5o">
+  <div class="act-header">
+    <div class="act-num"><div class="act-num-pip">5</div>Activity 5 of 6 · Observations</div>
+    <h2 class="act-title">What did you see?</h2>
+  </div>
+
+  <div class="obs-q" data-req id="q5a">
+    <label><span class="qn">19.</span> While working on the puzzle, did your child narrate their thinking aloud?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q5a','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Yes — extensive commentary throughout</span><span class="rd">Explained decisions, reasoned aloud, described what they were doing</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q5a','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">A few comments — mainly when stuck or when something clicked</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q5a','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Mostly silent — concentrated, few words</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q5a','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Silent but regularly looked up at you as if checking for a reaction</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q5b">
+    <label><span class="qn">20.</span> When your child got stuck, what was their first response?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q5b','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Tried something immediately — trial and error</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q5b','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Paused, looked carefully at the options, then acted</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q5b','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Asked for help</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q5b','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Stepped back to look at the whole picture before touching anything</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q5c">
+    <label><span class="qn">21.</span> When you asked "How did you know where to start?", what did your child say?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q5c','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">"I don't know, I just did" or a shrug</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q5c','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Named a strategy — "I always do the edges first"</span><span class="rd">Described what they did, not why</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q5c','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Explained the reasoning behind their strategy</span><span class="rd">"The edges are easier because they have a straight side so there are fewer places they can go"</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q5c','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Turned it around — "how would <em>you</em> start?"</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="obs-q" data-req id="q5d">
+    <label><span class="qn">22.</span> Did your child apply a consistent strategy throughout, or work more intuitively?</label>
+    <div class="radio-opts">
+      <div class="radio-opt" onclick="pick(this,'q5d','a')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Clear consistent strategy from the start</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q5d','b')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Started with a strategy but adapted it as they went</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q5d','c')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Intuitive throughout — picked up whatever looked right</span></div></div>
+      <div class="radio-opt" onclick="pick(this,'q5d','d')"><input type="radio"><div class="rdot"></div><div class="rtext"><span class="rl">Constructed a better strategy mid-way and switched to it</span></div></div>
+    </div>
+    <div class="val-msg">Please select an answer.</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-primary" onclick="saveAndNext('a5o','a6i',5)">Save & continue to Activity 6 →</button>
+    <button class="btn-secondary" onclick="goTo('a5i')">← Back to instructions</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ ACTIVITY 6 — INSTRUCTIONS -->
+<div class="section" id="a6i">
+  <div class="act-header">
+    <div class="act-num"><div class="act-num-pip">6</div>Activity 6 of 6 · Setup</div>
+    <h2 class="act-title">Play and Rules Observation</h2>
+    <p class="act-desc">The most ecologically valid activity. You have years of direct observation of your child at play — this section asks you to recall and record it systematically. No setup required.</p>
+  </div>
+  <div class="info-box"><strong>No activity needed.</strong> Answer these questions based on your consistent long-term observations of your child. Take a moment to think carefully before each answer.</div>
+  <div class="instr-block">
+    <h3>Think about</h3>
+    <p>Recent situations where your child was playing a game — board games, card games, playground games, or games they made up. Think about how they respond to new rules, unclear rules, losing, and free play.</p>
+  </div>
+  <div class="btn-row">
+    <button class="btn-primary" onclick="goTo('a6o')">Ready to answer →</button>
+    <button class="btn-secondary" onclick="goTo('a5o')">← Back</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ GENERATING -->
+<div id="generating">
+  <div class="gen-spinner"></div>
+  <div class="gen-title">Analysing your observations…</div>
+  <div class="gen-sub">Building a personalised cognitive profile from everything you've recorded across 6 activities.</div>
+  <div class="gen-steps">
+    <div class="gen-step" id="gs1">Reviewing Activity 1 — Rule switching patterns</div>
+    <div class="gen-step" id="gs2">Reviewing Activity 2 — Story reasoning signals</div>
+    <div class="gen-step" id="gs3">Reviewing Activity 3 — Repetition and construction</div>
+    <div class="gen-step" id="gs4">Reviewing Activity 4 — Explanation depth</div>
+    <div class="gen-step" id="gs5">Reviewing Activity 5 — Narration and strategy</div>
+    <div class="gen-step" id="gs6">Reviewing Activity 6 — Play and rule behaviour</div>
+    <div class="gen-step" id="gs7">Composing your child's profile…</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ REPORT -->
+<div id="report">
+  <div id="reportContent"></div>
+</div>
+
+<!-- STICKY FOOTER (shown during obs pages) -->
+<div class="sticky-foot" id="stickyFoot" style="display:none">
+  <div class="sticky-foot-info" id="stickyInfo"></div>
+  <div></div>
+</div>
+
+<script>
+// ── STATE ────────────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'dud_standard_v1';
+const ACT_SECTIONS = ['a1i','a1o','a2i','a2o','a3i','a3o','a4i','a4o','a5i','a5o','a6i','a6o'];
+const ALL_SECTIONS = ['cover','resume',...ACT_SECTIONS,'generating','report'];
+const ACT_LABELS = {
+  'a1i':'Activity 1 · Setup','a1o':'Activity 1 · Observations',
+  'a2i':'Activity 2 · Setup','a2o':'Activity 2 · Observations',
+  'a3i':'Activity 3 · Setup','a3o':'Activity 3 · Observations',
+  'a4i':'Activity 4 · Setup','a4o':'Activity 4 · Observations',
+  'a5i':'Activity 5 · Setup','a5o':'Activity 5 · Observations',
+  'a6i':'Activity 6 · Setup','a6o':'Activity 6 · Observations',
+  'generating':'Generating report…','report':'Your Report'
+};
+const ACTIVITY_NAMES = [
+  'The Rule Switch Game',
+  'The Story Maths Game',
+  'The Repetition and Pattern Game',
+  'The "Why Does That Work?" Game',
+  'The Explanation and Narration Game',
+  'Rules and Play Observation'
+];
+const OBS_PAGES = ['a1o','a2o','a3o','a4o','a5o','a6o'];
+
+let state = { childName:'', answers:{}, completedActs:[], currentSection:'cover' };
+
+// ── PERSISTENCE ──────────────────────────────────────────────────────────────
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) { state = {...state, ...JSON.parse(raw)}; return true; }
+  } catch(e){}
+  return false;
+}
+function clearAndRestart() {
+  if (!confirm('This will erase all your progress and start over. Are you sure?')) return;
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+  state = { childName:'', answers:{}, completedActs:[], currentSection:'cover' };
+  goTo('cover');
+}
+
+// ── NAVIGATION ───────────────────────────────────────────────────────────────
+function goTo(id) {
+  document.querySelectorAll('.section, #cover, #resume, #generating, #report')
+    .forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  state.currentSection = id;
+  saveState();
+
+  // Progress
+  const idx = ALL_SECTIONS.indexOf(id);
+  const pct = idx < 0 ? 0 : Math.round((idx / (ALL_SECTIONS.length - 1)) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('navStep').textContent = ACT_LABELS[id] || '';
+
+  // Sticky footer
+  const sf = document.getElementById('stickyFoot');
+  const si = document.getElementById('stickyInfo');
+  if (OBS_PAGES.includes(id)) {
+    const n = OBS_PAGES.indexOf(id) + 1;
+    si.textContent = `Activity ${n} of 6`;
+    sf.style.display = 'flex';
+  } else { sf.style.display = 'none'; }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── ANSWER SELECTION ─────────────────────────────────────────────────────────
+function pick(el, qId, val) {
+  el.closest('.radio-opts').querySelectorAll('.radio-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  state.answers[qId] = val;
+  document.getElementById(qId).classList.remove('error');
+}
+
+// ── VALIDATION ───────────────────────────────────────────────────────────────
+function validate(sectionId) {
+  const section = document.getElementById(sectionId);
+  let ok = true;
+  section.querySelectorAll('.obs-q[data-req]').forEach(q => {
+    if (!state.answers[q.id]) { q.classList.add('error'); ok = false; }
+  });
+  if (!ok) {
+    const first = section.querySelector('.obs-q.error');
+    if (first) first.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+  return ok;
+}
+
+// ── SAVE TOAST ───────────────────────────────────────────────────────────────
+function showToast() {
+  const t = document.getElementById('saveToast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ── SAVE AND NEXT ────────────────────────────────────────────────────────────
+function saveAndNext(currentObs, next, actNum) {
+  // collect textarea
+  document.querySelectorAll(`#${currentObs} textarea`).forEach(ta => {
+    if (ta.name) state.answers[ta.name] = ta.value.trim();
+  });
+  if (!validate(currentObs)) return;
+  if (!state.completedActs.includes(actNum)) state.completedActs.push(actNum);
+  saveState();
+  showToast();
+  goTo(next);
+}
+
+// ── START ────────────────────────────────────────────────────────────────────
+function startAssessment() {
+  const inp = document.getElementById('childInput').value.trim();
+  state.childName = inp || 'your child';
+  document.getElementById('coverName').textContent = state.childName;
+  saveState();
+  goTo('a1i');
+}
+
+// ── RESTORE ANSWERS ──────────────────────────────────────────────────────────
+function restoreAnswers() {
+  Object.entries(state.answers).forEach(([qId, val]) => {
+    const el = document.getElementById(qId);
+    if (!el) {
+      // textarea
+      const ta = document.querySelector(`textarea[name="${qId}"]`);
+      if (ta) ta.value = val;
+      return;
+    }
+    const opt = el.querySelector(`.radio-opt[onclick*="'${val}'"]`);
+    if (opt) opt.classList.add('selected');
+  });
+}
+
+// ── RESUME SCREEN ────────────────────────────────────────────────────────────
+function buildResumeScreen() {
+  const n = state.childName || 'your child';
+  document.getElementById('resumeH').textContent = `Continue ${n}'s assessment`;
+  document.getElementById('resumeSub').textContent =
+    `You've completed ${state.completedActs.length} of 6 activities. Pick up exactly where you left off.`;
+
+  const actsEl = document.getElementById('resumeActs');
+  actsEl.innerHTML = '';
+  ACTIVITY_NAMES.forEach((name, i) => {
+    const actNum = i + 1;
+    const done = state.completedActs.includes(actNum);
+    const current = !done && (actNum === state.completedActs.length + 1 || state.completedActs.length === 0 && actNum === 1);
+    const div = document.createElement('div');
+    div.className = `resume-act ${done ? 'done-act' : current ? 'current-act' : ''}`;
+    div.innerHTML = `<div class="resume-act-dot ${done ? 'done' : current ? 'current' : 'todo'}"></div>${actNum}. ${name}${done ? ' ✓' : current ? ' ← continue here' : ''}`;
+    actsEl.appendChild(div);
+  });
+
+  // Determine where to resume
+  let resumeTarget = 'a1i';
+  if (state.completedActs.length >= 6) {
+    resumeTarget = 'a6o';
+  } else if (state.completedActs.length > 0) {
+    const next = state.completedActs.length + 1;
+    resumeTarget = `a${next}i`;
+  }
+  document.getElementById('resumeBtn').onclick = () => goTo(resumeTarget);
+}
+
+// ── BOOT ─────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const had = loadState();
+  if (had && state.completedActs.length > 0) {
+    restoreAnswers();
+    buildResumeScreen();
+    if (state.childName) document.getElementById('childInput').value = state.childName;
+    goTo('resume');
+  } else {
+    goTo('cover');
+  }
+});
+
+// ── GENERATE REPORT ──────────────────────────────────────────────────────────
+async function generateReport() {
+  // collect final textareas
+  document.querySelectorAll('#a6o textarea').forEach(ta => {
+    if (ta.name) state.answers[ta.name] = ta.value.trim();
+  });
+  if (!validate('a6o')) return;
+  if (!state.completedActs.includes(6)) state.completedActs.push(6);
+  saveState();
+
+  goTo('generating');
+  const steps = ['gs1','gs2','gs3','gs4','gs5','gs6','gs7'];
+  for (let i = 0; i < steps.length; i++) {
+    await new Promise(r => setTimeout(r, 700));
+    document.getElementById(steps[i]).classList.add('vis');
+  }
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:`You are writing a personalised cognitive profile report for a parent who has completed a 6-activity home assessment of their child. The assessment identifies whether the child is a "Pattern Recogniser" (fast, automatic, pattern-matching — System 1 dominant) or a "Deep Understander" (constructs understanding before acting — System 2 dominant). Write a warm, precise report that references the specific observations entered. Use the child's name throughout. Never use the terms "System 1" or "System 2" — always say "Pattern Recogniser" or "Deep Understander." The report should feel like it was written specifically for this child, not a template. End with a recommendation for the Classification Speed Programme subscription. Output clean HTML using only: <h2>, <h3>, <p>, <ul>, <li>, <strong>. No markdown, no preamble, no extra tags.`,
+        messages:[{ role:'user', content: buildPrompt() }]
+      })
+    });
+    const data = await res.json();
+    const html = data.content.map(b => b.text||'').join('');
+    renderReport(html);
+  } catch(e) {
+    renderReport(fallback());
+  }
+}
+
+function buildPrompt() {
+  const a = state.answers;
+  const n = state.childName;
+  const m = (map, key) => map[key] || 'not recorded';
+
+  const maps = {
+    q1a:{a:'sorted by the old colour rule first (System 1 override)',b:'paused and asked a question before touching anything (System 2)',c:'applied the new rule correctly and immediately',d:'appeared confused and needed the rule repeated'},
+    q1b:{a:'did not make an error',b:'made an error and immediately self-corrected',c:'made an error and only noticed when pointed out',d:'made an error and did not notice at all'},
+    q1c:{a:'asked about the ambiguous square before placing it',b:'placed the square confidently without comment',c:'placed it then changed their mind',d:'did not notice it was ambiguous'},
+    q1d:{a:'action-oriented — just applied rules without questioning',b:'asked why the rule changed before proceeding',c:'repeated the rule back to themselves before acting',d:'seemed mildly frustrated by rule changes'},
+    q2a:{a:'correctly subtracted to get 4 (constructed the situation)',b:'added to get 14 (surface pattern-matched)',c:'said 14 first then self-corrected to 4',d:'paused a long time then got it right',e:'got a different wrong answer or did not answer'},
+    q2b:{a:'completed both steps correctly',b:'stopped after first step — answered 8',c:'completed both steps but made an arithmetic error',d:'asked how many steps before answering'},
+    q2c:{a:'fast and mostly correct including the reversal',b:'careful and mostly correct throughout',c:'fast on simple stories, slower on complex ones',d:'consistent pace regardless of difficulty'},
+    q2d:{a:'did not get any wrong',b:'self-corrected without prompting',c:'accepted wrong answers without questioning',d:'asked to hear the story again'},
+    q3a:{a:'consistent throughout — repetition had no negative effect',b:'noticeably slower from around card 10-12',c:'making errors or commenting by card 15+',d:'got faster as repetition continued'},
+    q3b:{a:'clear re-engagement on format switch',b:'no change in energy',c:'relieved but not re-engaged',d:'confused by format change'},
+    q3c:{a:'simple alternation (A,B,A,B)',b:'simple number sequence',c:'multi-step or growing rule',d:'trick pattern that deliberately breaks','e':'cross-domain mixing numbers and letters',f:'could not or would not make one'},
+    q3d:{a:'under 30 seconds',b:'1-2 minutes',c:'close to the full 3 minutes — absorbed'},
+    q3e:{a:'said nothing',b:'explained the rule unprompted',c:'asked if you thought it was hard',d:'said it was too easy and wanted to make harder one'},
+    q4a:{a:'"I just know" or counted on fingers — no explanation',b:'gave rule label without mechanism',c:'constructed a causal chain explaining why'},
+    q4b:{a:'named the rule only',b:'explained step-by-step reasoning',c:'knew the answer but could not explain'},
+    q4c:{a:'association-based justification',b:'definitional rule applied',c:'"I don\'t know" or "it just is"',d:'questioned the premise of the question itself'},
+    q4d:{a:'indifferent — comfortable not knowing why',b:'visibly uncomfortable when could not explain',c:'started reasoning aloud to construct explanation',d:'was able to explain all answers'},
+    q5a:{a:'extensive self-commentary throughout',b:'occasional comments when stuck or when something clicked',c:'mostly silent — concentrated',d:'silent but regularly looked up for reaction'},
+    q5b:{a:'tried something immediately — trial and error',b:'paused, looked carefully, then acted',c:'asked for help or asked if doing it right',d:'stepped back to view the whole puzzle before touching anything'},
+    q5c:{a:'"I don\'t know, I just did" or a shrug',b:'gave a rule — "I always do edges first"',c:'explained the reasoning behind their strategy',d:'asked you how you would start — reversed the question'},
+    q5d:{a:'clear consistent strategy from the start',b:'started with strategy but adapted as went',c:'intuitive throughout — picked up pieces that looked right',d:'constructed a strategy mid-way and switched to it'},
+    q6a:{a:'wants to start immediately and learn rules as they go',b:'listens, asks clarifying questions, then starts',c:'wants all rules fully before touching anything',d:'watches others play first before joining'},
+    q6b:{a:'accepts majority view and moves on',b:'argues position with reasoning',c:'insists on looking it up to find correct answer',d:'proposes a compromise rule'},
+    q6c:{a:'no — prefers existing games',b:'yes — simple rules loosely applied',c:'yes — specific structured rules they expected others to follow',d:'yes — elaborate rules with exceptions and scoring systems'},
+    q6d:{a:'moves on — does not dwell on not knowing',b:'asks you immediately',c:'tries to work it out from context before asking',d:'gets bothered by not knowing — persists until they understand'},
+    q6e:{a:'accepts corrections easily and moves on',b:'wants to understand WHY they were wrong before accepting',c:'dislikes being wrong — gets frustrated or upset',d:'sometimes argues they were not wrong'},
+    q_instinct:{a:'pattern-matching and acting quickly',b:'understanding deeply before acting',c:'both depending on the situation',d:'genuinely unsure'}
+  };
+
+  return `Write a personalised cognitive profile for ${n} based on these observations from 6 activities:
+
+ACTIVITY 1 — RULE SWITCH:
+Phase 2 response: ${m(maps.q1a, a.q1a)}
+Error self-awareness: ${m(maps.q1b, a.q1b)}
+Phase 3 ambiguous square: ${m(maps.q1c, a.q1c)}
+Attitude to rule changes: ${m(maps.q1d, a.q1d)}
+Parent note: ${a.q1e || 'none'}
+
+ACTIVITY 2 — STORY MATHS:
+Story 4 (structural reversal — highest signal): ${m(maps.q2a, a.q2a)}
+Story 5 (two-step): ${m(maps.q2b, a.q2b)}
+Overall response pattern: ${m(maps.q2c, a.q2c)}
+Response to own errors: ${m(maps.q2d, a.q2d)}
+
+ACTIVITY 3 — REPETITION AND PATTERN:
+Flashcard accuracy trend: ${m(maps.q3a, a.q3a)}
+Re-engagement on format switch: ${m(maps.q3b, a.q3b)}
+Pattern invented: ${m(maps.q3c, a.q3c)}
+Time on pattern: ${m(maps.q3d, a.q3d)}
+Comment after finishing pattern: ${m(maps.q3e, a.q3e)}
+
+ACTIVITY 4 — WHY DOES THAT WORK:
+Probe 1 (arithmetic): ${m(maps.q4a, a.q4a)}
+Probe 2 (sequence): ${m(maps.q4b, a.q4b)}
+Probe 3 (tomato category): ${m(maps.q4c, a.q4c)}
+Reaction to unexplainable correct answers: ${m(maps.q4d, a.q4d)}
+
+ACTIVITY 5 — NARRATION AND STRATEGY:
+Self-narration during puzzle: ${m(maps.q5a, a.q5a)}
+Response when stuck: ${m(maps.q5b, a.q5b)}
+Explanation of how they started: ${m(maps.q5c, a.q5c)}
+Strategy consistency: ${m(maps.q5d, a.q5d)}
+
+ACTIVITY 6 — PLAY AND RULES:
+New game response: ${m(maps.q6a, a.q6a)}
+Rule disputes: ${m(maps.q6b, a.q6b)}
+Inventing games: ${m(maps.q6c, a.q6c)}
+Response to not knowing: ${m(maps.q6d, a.q6d)}
+Relationship with being wrong: ${m(maps.q6e, a.q6e)}
+
+PARENT'S INSTINCT: ${m(maps.q_instinct, a.q_instinct)}
+PARENT'S ADDITIONAL NOTES: ${a.q_extra || 'none'}
+
+Write a 5-section report of approximately 600-700 words:
+1. Opening — what the assessment revealed about ${n} specifically, referencing 3-4 of the most diagnostic observations by name
+2. "What this profile means" — what it implies for how ${n} currently learns and why standard drilling may or may not work for them in 11+ preparation
+3. "The specific signals" — a brief activity-by-activity summary of the most significant observations in plain language
+4. "The one thing to know" — one clear, memorable insight about ${n}'s cognitive style that the parent can carry forward
+5. "What comes next" — a warm, specific recommendation for the Classification Speed Programme, explaining what it will do for a child with ${n}'s specific profile. End with an encouraging closing sentence.
+
+Be specific to these observations. Avoid generic statements. Reference actual things that happened.`;
+}
+
+// ── SCORE AND RENDER ─────────────────────────────────────────────────────────
+function scoreProfile() {
+  const a = state.answers;
+  let s2 = 0, s1 = 0;
+  // Activity 1
+  if (a.q1a === 'b') s2 += 2;
+  if (a.q1a === 'a') s1 += 2;
+  if (a.q1b === 'b') s2++;
+  if (a.q1b === 'd') s1 += 2;
+  if (a.q1c === 'a') s2 += 2;
+  if (['b','d'].includes(a.q1c)) s1++;
+  if (['b','c'].includes(a.q1d)) s2++;
+  if (a.q1d === 'a') s1++;
+  // Activity 2
+  if (['a','d'].includes(a.q2a)) s2++;
+  if (a.q2a === 'b') s1 += 2;
+  if (a.q2a === 'c') s2++;
+  if (a.q2b === 'd') s2++;
+  if (a.q2b === 'b') s1++;
+  if (a.q2c === 'b') s2++;
+  if (a.q2c === 'a') s1++;
+  if (a.q2d === 'b') s2++;
+  if (a.q2d === 'c') s1++;
+  // Activity 3
+  if (['b','c'].includes(a.q3a)) s2++;
+  if (a.q3a === 'd') s1 += 2;
+  if (a.q3b === 'a') s2++;
+  if (a.q3b === 'b') s1++;
+  if (['c','d','e'].includes(a.q3c)) s2 += 2;
+  if (['a','b'].includes(a.q3c)) s1++;
+  if (a.q3d === 'c') s2++;
+  if (a.q3d === 'a') s1++;
+  if (a.q3e === 'd') s2++;
+  // Activity 4
+  if (a.q4a === 'c') s2 += 2;
+  if (a.q4a === 'a') s1 += 2;
+  if (a.q4b === 'b') s2 += 2;
+  if (a.q4b === 'c') s1++;
+  if (['b','d'].includes(a.q4c)) s2 += 2;
+  if (a.q4c === 'a') s1++;
+  if (['b','c'].includes(a.q4d)) s2++;
+  // Activity 5
+  if (a.q5a === 'a') s2 += 2;
+  if (a.q5a === 'c') s1++;
+  if (['b','d'].includes(a.q5b)) s2++;
+  if (a.q5b === 'a') s1++;
+  if (a.q5c === 'c') s2 += 2;
+  if (a.q5c === 'a') s1 += 2;
+  if (['b','d'].includes(a.q5d)) s2++;
+  if (a.q5d === 'a') s1++;
+  // Activity 6
+  if (['b','c'].includes(a.q6a)) s2++;
+  if (a.q6a === 'a') s1++;
+  if (['b','c','d'].includes(a.q6b)) s2++;
+  if (a.q6b === 'a') s1++;
+  if (['c','d'].includes(a.q6c)) s2 += 2;
+  if (['c','d'].includes(a.q6d)) s2++;
+  if (a.q6d === 'a') s1++;
+  if (a.q6e === 'b') s2 += 2;
+  if (a.q6e === 'a') s1++;
+  return { s2, s1 };
+}
+
+function renderReport(html) {
+  const n = state.childName;
+  const { s2, s1 } = scoreProfile();
+  const total = s2 + s1;
+  const s2pct = total > 0 ? Math.round((s2 / total) * 100) : 50;
+
+  let type, sub, pillClass, conf, pills;
+  if (s2 >= s1 + 4) {
+    type = 'Deep Understander'; sub = 'Strong System 2 profile';
+    pillClass = 'rpill-s2';
+    conf = s2 >= s1 + 8 ? 'Strong signal across all six activities' : 'Clear signal with some variation';
+    pills = ['Constructs before acting','Rule-derivation default','High transfer ability','Low repetition tolerance','Explanation-seeking'];
+  } else if (s1 >= s2 + 4) {
+    type = 'Pattern Recogniser'; sub = 'Strong System 1 profile';
+    pillClass = 'rpill-s1';
+    conf = s1 >= s2 + 8 ? 'Strong signal across all six activities' : 'Clear signal with some variation';
+    pills = ['Fast pattern-matching','High drilling tolerance','Action before understanding','Strong repetition response','Verify on novel questions'];
+  } else {
+    type = 'Flexible Thinker'; sub = 'Mixed — context-adaptive profile';
+    pillClass = 'rpill-mx';
+    conf = 'Balanced signals across activities';
+    pills = ['Context-adaptive','Switches between approaches','Task-dependent strategy','Targeted preparation recommended'];
+  }
+
+  document.getElementById('reportContent').innerHTML = `
+    <div class="report-hero">
+      <div class="rh-tag">${n} · Cognitive Profile Assessment</div>
+      <div class="rh-type">${n} is a<br><em>${type}</em></div>
+      <div class="rh-conf">${conf}</div>
+      <div class="rh-pills">${pills.map(p=>`<span class="rpill ${pillClass}">${p}</span>`).join('')}</div>
+    </div>
+    <div class="report-body">${html}</div>
+    <div class="upsell">
+      <div class="upsell-tag">The next step for ${n}</div>
+      <div class="upsell-title">The Classification Speed<br>Programme</div>
+      <div class="upsell-desc">20-minute sessions, delivered fortnightly. Structured to build the pattern recognition reflex for every major 11+ question type — delivered as games, not worksheets. Designed specifically for children with ${n}'s cognitive profile.</div>
+      <div class="upsell-feats">
+        <div class="upsell-feat"><div class="ucheck">✓</div>Fortnightly session plan matched to ${n}'s specific profile and year group</div>
+        <div class="upsell-feat"><div class="ucheck">✓</div>Full parent delivery guide — no specialist knowledge required</div>
+        <div class="upsell-feat"><div class="ucheck">✓</div>16 sessions covering all Tier 1 question types across maths and verbal reasoning</div>
+        <div class="upsell-feat"><div class="ucheck">✓</div>Progress markers at weeks 4, 8, and 16 with re-assessment guide</div>
+        <div class="upsell-feat"><div class="ucheck">✓</div>Access to the full question type taxonomy — 52 types across maths, verbal and non-verbal reasoning</div>
+        <div class="upsell-feat"><div class="ucheck">✓</div>Cancel any time</div>
+      </div>
+      <div class="upsell-price-row">
+        <div class="upsell-price">£18</div>
+        <div class="upsell-price-sub">per month · billed monthly</div>
+      </div>
+      <button class="btn-upsell" onclick="alert('Connect to Stripe payment link here')">Start the Programme for ${n} →</button>
+      <div class="upsell-note">No commitment. Cancel any time. First session available immediately after signup.</div>
+    </div>
+  `;
+
+  goTo('report');
+}
+
+function fallback() {
+  const n = state.childName;
+  return `<h2>${n}'s Cognitive Profile</h2>
+<p>Thank you for completing all six activities. Based on your observations, we've identified important signals about how ${n} approaches problems and processes new information.</p>
+<h2>What this means</h2>
+<p>The pattern across all six activities gives us a picture of ${n}'s natural cognitive default — how they reach for solutions before any preparation has shaped their approach. This is the most important input for designing the right preparation strategy.</p>
+<h2>What comes next</h2>
+<p>The Classification Speed Programme is designed to complement exactly what you've observed. Each fortnightly session targets a specific question type, building the recognition reflex that makes timed preparation work as it should for ${n}'s profile.</p>
+<p><strong>Note: We were unable to connect to generate your full personalised analysis. Please try refreshing the page.</strong></p>`;
+}
+</script>
+</body>
+</html>

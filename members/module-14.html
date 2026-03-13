@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 14: Interval Logic | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        h1, h2 { color: var(--primary); margin-top: 0; }
+        
+        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
+        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
+        
+        .anatomy-callout { background: #fefce8; border-left: 5px solid #eab308; padding: 20px; border-radius: 4px; margin: 20px 0; }
+        
+        .engine-controls { display: grid; gap: 20px; background: #eff6ff; padding: 20px; border-radius: 8px; border: 1px solid #dbeafe; }
+        .slider-group { display: flex; align-items: center; gap: 15px; }
+        .slider-group label { min-width: 160px; font-weight: 600; }
+        input[type=range] { flex-grow: 1; accent-color: var(--primary); }
+
+        /* Fence Visualization */
+        .fence-viz { display: flex; align-items: center; justify-content: center; height: 100px; margin: 40px 0; background: #f8fafc; border-radius: 8px; padding: 0 20px; border: 1px dashed #cbd5e1; }
+        .post { width: 8px; height: 60px; background: #78350f; border-radius: 2px; position: relative; }
+        .gap-line { height: 4px; background: #d1d5db; flex-grow: 1; position: relative; }
+
+        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
+        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
+        
+        .logic-card { background: #ecfdf5; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid var(--success); }
+        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
+        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
+        .trap-val { color: var(--trap); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 14: Interval Logic</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "PLUS ONE" PRINCIPLE</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>This module exposes the "Simple Division" error. We assume that if we have a 10m fence with a post every 2m, we need 5 posts. We are forgetting the <strong>Starting Post</strong> at 0 meters.</p>
+        
+        <div class="xray-examples">
+            <strong>Look for these wordings in the exam:</strong>
+            <div class="example-item">1. "A 20m road has lamp posts every 5m. How many posts are there?"</div>
+            <div class="example-item">2. "A tree is planted every 3m along a 30m path. How many trees are needed?"</div>
+            <div class="example-item">3. "A doctor sees a patient every 15 minutes for 1 hour. How many patients?"</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        <p>Look at your hand. You have 4 spaces between your fingers, but you have 5 fingers. In a straight line, there is always <strong>one more object than there are gaps.</strong></p>
+
+        
+
+        <div class="anatomy-callout">
+            <strong>The Formula:</strong><br>
+            (Total Length ÷ Gap Size) = Number of Gaps<br>
+            <strong>Number of Gaps + 1 = Number of Posts</strong>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <div class="slider-group">
+                <label>Fence Length (m): <span id="l-val">10</span></label>
+                <input type="range" id="len" min="2" max="40" value="10" step="2">
+            </div>
+            <div class="slider-group">
+                <label>Gap Size (m): <span id="g-val">2</span></label>
+                <input type="range" id="gap" min="1" max="10" value="2">
+            </div>
+        </div>
+
+        <div id="fence-visual" class="fence-viz"></div>
+
+        <div class="question-card" id="q-text"></div>
+
+        <button class="btn" onclick="toggleLogic()">Show Calculation Steps</button>
+
+        <div id="logic" class="logic-card">
+            <p><strong>Step 1 (Find Gaps):</strong> <span id="calc-gaps"></span></p>
+            <p><strong>Step 2 (The +1 Rule):</strong> <span id="calc-plus"></span></p>
+            <p><strong>Total Posts:</strong> <span id="calc-ans" style="font-weight:bold;"></span></p>
+        </div>
+    </div>
+
+    <div class="section saboteur-section">
+        <h2>Phase 4: The Saboteur</h2>
+        <div class="trap-item">
+            <span>The "Simple Division" Trap:</span>
+            <span class="trap-val" id="trap-div"></span>
+        </div>
+        <div class="trap-item">
+            <span>The "Off-by-Two" (Over-correction):</span>
+            <span class="trap-val" id="trap-two"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    const lIn = document.getElementById('len');
+    const gIn = document.getElementById('gap');
+    const visual = document.getElementById('fence-visual');
+
+    function update() {
+        const res = LogicProvider.getModule(14).generate(lIn.value, gIn.value);
+        
+        document.getElementById('l-val').innerText = res.inputs.length;
+        document.getElementById('g-val').innerText = res.inputs.gap;
+
+        // Visual Generation
+        visual.innerHTML = '<div class="post"></div>';
+        for(let i=0; i < res.answers.gaps; i++) {
+            visual.innerHTML += '<div class="gap-line"></div><div class="post"></div>';
+        }
+
+        document.getElementById('q-text').innerText = `A fence is ${res.inputs.length}m long. A post is placed every ${res.inputs.gap}m. How many posts are needed in a straight line?`;
+
+        document.getElementById('calc-gaps').innerText = `${res.inputs.length}m ÷ ${res.inputs.gap}m = ${res.answers.gaps} gaps.`;
+        document.getElementById('calc-plus').innerText = `${res.answers.gaps} gaps + 1 (The Start Post) = ${res.answers.correct}.`;
+        document.getElementById('calc-ans').innerText = res.answers.correct;
+
+        document.getElementById('trap-div').innerText = res.answers.traps.simpleDivision;
+        document.getElementById('trap-two').innerText = res.answers.traps.offByTwo;
+    }
+
+    function toggleLogic() {
+        const div = document.getElementById('logic');
+        div.style.display = div.style.display === 'none' ? 'block' : 'none';
+    }
+
+    [lIn, gIn].forEach(el => el.oninput = update);
+    update();
+</script>
+</body>
+</html>

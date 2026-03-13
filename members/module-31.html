@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 31: Sequences | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/reasoning-provider.js"></script>
+    <style>
+        :root { --primary: #7c2d12; --bg: #fff7ed; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #ffedd5; }
+        .seq-box { display: inline-block; width: 50px; height: 50px; line-height: 50px; text-align: center; background: #ffedd5; border: 2px solid #fdba74; border-radius: 8px; margin: 5px; font-weight: 700; color: var(--primary); }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 style="color:var(--primary); text-align:center;">Module 31: Sequence Logic</h1>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A sequence is just a pattern with a rule. To solve any sequence, find the <strong>"Jump"</strong> between the first two numbers and check if it stays the same.</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        
+        <p>The <strong>Term-to-Term</strong> rule is the instruction to get from one number to the next.</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <label>Start Number:</label><input type="number" id="start" value="3" style="width:100%; padding:10px; margin-bottom:10px;">
+        <label>The Jump (Rule):</label><input type="number" id="jump" value="4" style="width:100%; padding:10px; margin-bottom:20px;">
+        
+        <div id="seq-display" style="text-align:center; min-height:60px;"></div>
+        
+        <button onclick="toggle()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; margin-top:20px;">Reveal the Rule</button>
+        <div id="logic" style="display:none; text-align:center; margin-top:20px; font-weight:700; color:var(--primary);">
+            Rule: <span id="rule-text"></span>
+        </div>
+    </div>
+
+    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
+        <h2>Phase 4: The Saboteur</h2>
+        <p style="color: var(--trap); font-weight: 700;">The "First Jump" Trap: Assuming the rule is the same for the whole sequence based on only the first two numbers. Always check the third and fourth numbers to be sure!</p>
+    </div>
+</div>
+<script>
+    function update() {
+        const s = document.getElementById('start').value;
+        const j = document.getElementById('jump').value;
+        const res = ReasoningProvider.getModule(31).generate(s, j, 5);
+        const cont = document.getElementById('seq-display');
+        cont.innerHTML = '';
+        res.sequence.forEach(n => {
+            const div = document.createElement('div');
+            div.className = 'seq-box'; div.innerText = n;
+            cont.appendChild(div);
+        });
+        document.getElementById('rule-text').innerText = res.rule;
+    }
+    function toggle() { const d = document.getElementById('logic'); d.style.display = d.style.display==='none'?'block':'none'; }
+    document.querySelectorAll('input').forEach(i => i.oninput = update);
+    update();
+</script>
+</body>
+</html>

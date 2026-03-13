@@ -6,6 +6,78 @@
 const LogicProvider = {
     modules: {
 
+        // Module 24: Translation
+        24: {
+            name: "Translation Logic",
+            generate: (x, y, dx, dy) => {
+                const startX = parseInt(x);
+                const startY = parseInt(y);
+                const moveX = parseInt(dx);
+                const moveY = parseInt(dy);
+                return {
+                    inputs: { startX, startY, moveX, moveY },
+                    answers: {
+                        finalX: startX + moveX,
+                        finalY: startY + moveY,
+                        vector: `[${moveX}, ${moveY}]`
+                    }
+                };
+            }
+        },
+        
+        // Module 26: Rotational Symmetry
+        26: {
+            name: "Rotational Symmetry",
+            generate: (shapeType) => {
+                const library = {
+                    'square': { order: 4, angle: 90 },
+                    'rectangle': { order: 2, angle: 180 },
+                    'equilateral-triangle': { order: 3, angle: 120 },
+                    'parallelogram': { order: 2, angle: 180 }
+                };
+                return {
+                    inputs: { shape: shapeType },
+                    answers: library[shapeType]
+                };
+            }
+        },
+        
+        // Module 27: Perimeter
+        27: {
+            name: "Perimeter Calculation",
+            generate: (width, height, isTriangle) => {
+                const w = parseFloat(width);
+                const h = parseFloat(height);
+                // For simplicity in the engine, we treat triangle as right-angled for hypotenuse calc
+                const perimeter = isTriangle 
+                    ? (w + h + Math.sqrt(w*w + h*h)).toFixed(1) 
+                    : (2 * (w + h)).toFixed(1);
+                return {
+                    inputs: { w, h, isTriangle },
+                    answers: { total: perimeter }
+                };
+            }
+        },
+        
+        // Module 28: Area
+        28: {
+            name: "Area of Simple Shapes",
+            generate: (base, height, type) => {
+                const b = parseFloat(base);
+                const h = parseFloat(height);
+                const area = type === 'triangle' ? (0.5 * b * h) : (b * h);
+                return {
+                    inputs: { b, h, type },
+                    answers: {
+                        area: area.toFixed(1),
+                        traps: {
+                            noHalf: (b * h).toFixed(1) // Common triangle error
+                        }
+                    }
+                };
+            }
+        },
+
         // Module 19: Mean (Averages)
         19: {
             name: "The Mean Average",

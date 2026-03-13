@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 2: Rounding | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        h1, h2 { color: var(--primary); margin-top: 0; }
+        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
+        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
+        .engine-controls { display: grid; gap: 20px; background: #eff6ff; padding: 20px; border-radius: 8px; }
+        .slider-group { display: flex; align-items: center; gap: 15px; }
+        .slider-group label { min-width: 160px; font-weight: 600; }
+        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
+        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
+        .logic-card { background: #ecfdf5; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid #10b981; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 2: Rounding & Estimation</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "BOUNDARY" PRINCIPLE</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A "Type 1" thinker just looks at the whole number. A "Type 2" thinker identifies the <strong>Critical Digit</strong> (the one to the right of the rounding place) to decide whether to push the value up or let it rest.</p>
+        <div class="xray-examples">
+            <strong>Exam Wording Patterns:</strong>
+            <div class="example-item">1. "Round 456 to the nearest hundred."</div>
+            <div class="example-item">2. "Give your answer to 1 decimal place."</div>
+            <div class="example-item">3. "Estimate the total cost by rounding each item to the nearest pound."</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        
+        <div class="anatomy-callout" style="background: #eff6ff; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <strong>The Rule:</strong> If the digit is **5 or more**, round up. If it is **4 or less**, round down (keep the digit the same).
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <div class="slider-group"><label>Value: <span id="v-val"></span></label><input type="range" id="val" min="1" max="1000" value="456"></div>
+            <div class="slider-group"><label>Round to Nearest: <span id="p-val"></span></label><input type="range" id="place" min="10" max="100" step="90" value="100"></div>
+        </div>
+        <div class="question-card" id="q-text"></div>
+        <button class="btn" onclick="toggleLogic()">Show Rounding Logic</button>
+        <div id="logic" class="logic-card">
+            <p>Target Place: <span id="logic-p"></span></p>
+            <p><strong>Result: <span id="res-round"></span></strong></p>
+        </div>
+    </div>
+
+    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
+        <h2>Phase 4: The Saboteur</h2>
+        <p style="color: var(--trap); font-weight: 700;">The "Always Up" Trap: Thinking 4 rounds up because it's "close".</p>
+        <p>Trap Answer: <span id="trap-ans"></span></p>
+    </div>
+</div>
+<script>
+    function update() {
+        const res = LogicProvider.modules[2].generate(document.getElementById('val').value, document.getElementById('place').value);
+        document.getElementById('v-val').innerText = res.inputs.val;
+        document.getElementById('p-val').innerText = res.inputs.place;
+        document.getElementById('q-text').innerText = `Round ${res.inputs.val} to the nearest ${res.inputs.place}.`;
+        document.getElementById('logic-p').innerText = res.inputs.place;
+        document.getElementById('res-round').innerText = res.answers.correct;
+        document.getElementById('trap-ans').innerText = res.answers.traps.wrongPlace;
+    }
+    function toggleLogic() { const d = document.getElementById('logic'); d.style.display = d.style.display==='none'?'block':'none'; }
+    document.querySelectorAll('input').forEach(i => i.oninput = update);
+    update();
+</script>
+</body>
+</html>

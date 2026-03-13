@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 7: Area vs Perimeter | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        h1, h2 { color: var(--primary); margin-top: 0; }
+        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
+        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
+        .anatomy-callout { background: #ecfdf5; border-left: 5px solid #10b981; padding: 20px; border-radius: 4px; margin: 20px 0; }
+        .engine-controls { display: grid; gap: 20px; background: #f0fdf4; padding: 20px; border-radius: 8px; border: 1px solid #dcfce7; }
+        .slider-group { display: flex; align-items: center; gap: 15px; }
+        .slider-group label { min-width: 160px; font-weight: 600; }
+        input[type=range] { flex-grow: 1; accent-color: #10b981; }
+        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
+        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
+        .logic-card { background: #ecfdf5; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid #10b981; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 7: Area vs Perimeter</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "FENCE VS GRASS" PRINCIPLE</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A "Type 1" thinker mixes up the two formulas. A "Type 2" thinker visualizes the difference: Perimeter is the <strong>Walk</strong> around the edge; Area is the <strong>Space</strong> inside.</p>
+        <div class="xray-examples">
+            <strong>Exam Wording Patterns:</strong>
+            <div class="example-item">1. "How much fencing is needed for a garden 10m by 5m?" (Perimeter)</div>
+            <div class="example-item">2. "How many tiles are needed to cover a floor 4m by 6m?" (Area)</div>
+            <div class="example-item">3. "Find the total distance around the edge of a rectangle." (Perimeter)</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        
+        <div class="anatomy-callout">
+            <strong>Area:</strong> Length × Width (Units squared)<br>
+            <strong>Perimeter:</strong> (Length + Width) × 2 (Standard units)
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <div class="slider-group"><label>Length (cm): <span id="l-val"></span></label><input type="range" id="len" min="2" max="20" value="10"></div>
+            <div class="slider-group"><label>Width (cm): <span id="w-val"></span></label><input type="range" id="wid" min="2" max="20" value="5"></div>
+        </div>
+        <div class="question-card" id="q-text"></div>
+        <button class="btn" onclick="toggleLogic()">Show Formula Logic</button>
+        <div id="logic" class="logic-card">
+            <p><strong>Area (Space):</strong> <span id="ans-area"></span> cm²</p>
+            <p><strong>Perimeter (Edge):</strong> <span id="ans-peri"></span> cm</p>
+        </div>
+    </div>
+</div>
+<script>
+    function update() {
+        const res = LogicProvider.getModule(7).generate(document.getElementById('len').value, document.getElementById('wid').value);
+        document.getElementById('l-val').innerText = res.inputs.length;
+        document.getElementById('w-val').innerText = res.inputs.width;
+        document.getElementById('q-text').innerText = `A rectangle is ${res.inputs.length}cm long and ${res.inputs.width}cm wide. Calculate its Area and Perimeter.`;
+        document.getElementById('ans-area').innerText = `${res.inputs.length} × ${res.inputs.width} = ${res.answers.area}`;
+        document.getElementById('ans-peri').innerText = `2 × (${res.inputs.length} + ${res.inputs.width}) = ${res.answers.perimeter}`;
+    }
+    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
+    document.querySelectorAll('input').forEach(i => i.oninput = update);
+    update();
+</script>
+</body>
+</html>

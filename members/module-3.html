@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 3: Reverse Mean | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        h1, h2 { color: var(--primary); margin-top: 0; }
+        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
+        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
+        .engine-controls { display: grid; gap: 20px; background: #eff6ff; padding: 20px; border-radius: 8px; border: 1px solid #dbeafe; }
+        .slider-group { display: flex; align-items: center; gap: 15px; }
+        .slider-group label { min-width: 160px; font-weight: 600; }
+        input[type=range] { flex-grow: 1; accent-color: var(--primary); }
+        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
+        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
+        .logic-card { background: #ecfdf5; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid #10b981; }
+        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
+        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
+        .trap-val { color: var(--trap); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 3: Reverse Mean</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "HIDDEN TOTAL" PRINCIPLE</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A "Type 1" thinker looks at averages and tries to find the middle. A "Type 2" thinker knows that behind every average is a <strong>Total Sum</strong>. To find a missing value, you must find the new Total and subtract the old Total.</p>
+        <div class="xray-examples">
+            <strong>Exam Wording Patterns:</strong>
+            <div class="example-item">1. "The mean score of 4 tests is 70%. What must the 5th score be for an average of 75%?"</div>
+            <div class="example-item">2. "5 people have an average age of 20. When a 6th joins, the average is 21. How old is the 6th?"</div>
+            <div class="example-item">3. "The average weight of 3 boxes is 5kg. Adding a 4th box makes the average 6kg."</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        <p>You cannot compare means directly. You must convert them into <strong>Totals</strong>.</p>
+        
+        <div class="anatomy-callout" style="background: #f0fdf4; border-left: 5px solid #10b981; padding: 15px;">
+            <strong>Step 1:</strong> Old Mean × Old Count = Old Total.<br>
+            <strong>Step 2:</strong> New Mean × New Count = New Total.<br>
+            <strong>Step 3:</strong> New Total - Old Total = The Missing Value.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <div class="slider-group"><label>Current Count: <span id="n-val"></span></label><input type="range" id="n" min="1" max="10" value="4"></div>
+            <div class="slider-group"><label>Current Mean: <span id="m1-val"></span></label><input type="range" id="m1" min="10" max="100" value="70"></div>
+            <div class="slider-group"><label>Target Mean: <span id="m2-val"></span></label><input type="range" id="m2" min="10" max="100" value="80"></div>
+        </div>
+
+        <div class="question-card" id="q-text"></div>
+        <button class="btn" onclick="toggleLogic()">Show Calculation Steps</button>
+
+        <div id="logic" class="logic-card">
+            <p><strong>1. Old Total:</strong> <span id="old-tot"></span></p>
+            <p><strong>2. New Total:</strong> <span id="new-tot"></span></p>
+            <p><strong>3. Difference:</strong> <span id="diff-tot"></span></p>
+        </div>
+    </div>
+
+    <div class="section saboteur-section">
+        <h2>Phase 4: The Saboteur</h2>
+        <div class="trap-item"><span>The "Mean Difference" Trap (Target - Current):</span><span class="trap-val" id="trap-diff"></span></div>
+        <div class="trap-item"><span>The "Target Score" Trap (Just the target mean):</span><span class="trap-val" id="trap-target"></span></div>
+    </div>
+</div>
+
+<script>
+    function update() {
+        const res = LogicProvider.getModule(3).generate(document.getElementById('n').value, document.getElementById('m1').value, document.getElementById('m2').value);
+        document.getElementById('n-val').innerText = res.inputs.count;
+        document.getElementById('m1-val').innerText = res.inputs.currentMean;
+        document.getElementById('m2-val').innerText = res.inputs.targetMean;
+        
+        document.getElementById('q-text').innerText = `If the mean of ${res.inputs.count} scores is ${res.inputs.currentMean}, what must the next score be to make the mean ${res.inputs.targetMean}?`;
+        
+        const oldTotal = res.inputs.count * res.inputs.currentMean;
+        const newTotal = (parseInt(res.inputs.count) + 1) * res.inputs.targetMean;
+        document.getElementById('old-tot').innerText = `${res.inputs.count} × ${res.inputs.currentMean} = ${oldTotal}`;
+        document.getElementById('new-tot').innerText = `${parseInt(res.inputs.count) + 1} × ${res.inputs.targetMean} = ${newTotal}`;
+        document.getElementById('diff-tot').innerText = `${newTotal} - ${oldTotal} = ${res.answers.needed}`;
+        
+        document.getElementById('trap-diff').innerText = res.answers.traps.meanDiff;
+        document.getElementById('trap-target').innerText = res.answers.traps.justTarget;
+    }
+    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
+    document.querySelectorAll('input').forEach(i => i.oninput = update);
+    update();
+</script>
+</body>
+</html>

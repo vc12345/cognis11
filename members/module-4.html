@@ -7,48 +7,73 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="js/logic-provider.js"></script>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
+        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
         .container { max-width: 800px; margin: 0 auto; }
         .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        h1, h2 { color: var(--primary); margin-top: 0; }
+        
+        /* Anatomy Visualization */
+        .anatomy-box { background: #f1f5f9; border: 2px dashed #cbd5e1; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        
+        /* Engine Styling */
         .engine-controls { display: grid; gap: 20px; background: #fff7ed; padding: 20px; border-radius: 8px; border: 1px solid #ffedd5; }
         .slider-group { display: flex; align-items: center; gap: 15px; }
         .slider-group label { min-width: 150px; font-weight: 600; }
         input[type=range] { flex-grow: 1; accent-color: var(--accent); }
-        .work-viz { display: flex; align-items: flex-end; justify-content: space-around; height: 150px; margin: 30px 0; border-bottom: 2px solid #cbd5e1; }
-        .bar { width: 60px; background: #3b82f6; position: relative; transition: height 0.3s ease; }
+        
+        /* The Bar Model Viz */
+        .work-viz { display: flex; align-items: flex-end; justify-content: space-around; height: 150px; margin: 30px 0; border-bottom: 2px solid #cbd5e1; background: #f8fafc; padding: 10px; }
+        .bar { width: 60px; background: #3b82f6; position: relative; transition: height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .bar-label { position: absolute; top: -25px; width: 100%; text-align: center; font-size: 0.8rem; font-weight: bold; }
+        
         .question-card { background: white; border: 2px solid var(--primary); padding: 20px; border-radius: 8px; font-size: 1.2rem; text-align: center; font-style: italic; }
-        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 15px; }
-        .logic-card { background: #fef3c7; padding: 15px; border-radius: 8px; margin-top: 20px; display: none; }
+        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; width: 100%; margin-top: 15px; font-weight: 600; }
+        
+        .logic-card { background: #fef3c7; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid var(--accent); }
+        
+        /* Saboteur Styling */
+        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
+        .trap-item { background: white; padding: 10px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
+        .trap-val { color: var(--trap); font-weight: 700; font-size: 1.1rem; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 4: Inverse Proportion</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "WORK IS CONSTANT" RULE</p>
+        <h1 style="margin-bottom:5px;">Module 4: Inverse Proportion</h1>
+        <p style="color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">The "Work is Constant" Rule</p>
     </header>
 
     <div class="section">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In most math, when one number goes UP, the other goes UP. But in <strong>Inverse Proportion</strong>, they move in opposite directions. More hands = Less time.</p>
+        <p>A "System 1" brain thinks: <em>"If I double the workers, I double the days."</em> That's the trap. In reality, more people working means the job gets done <strong>faster</strong>. The numbers move in opposite directions.</p>
     </div>
 
     <div class="section">
-        <h2>Phase 2: The Engine</h2>
+        <h2>Phase 2: The Anatomy</h2>
+        <p>Think of work as a <strong>Fixed Area</strong>. If the job is to paint 20 walls, that number doesn't change. If you add more painters, each painter does less, and the time shrinks.</p>
+        
+        <div class="anatomy-box">
+            <strong>The Master Formula:</strong><br>
+            Workers × Days = Total Work Units (This number never changes!)
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
         <div class="engine-controls">
             <div class="slider-group">
-                <label>Original Builders: <span id="w1-val">2</span></label>
+                <label>Initial Workers: <span id="w1-val">2</span></label>
                 <input type="range" id="w1" min="1" max="10" value="2">
             </div>
             <div class="slider-group">
-                <label>Original Days: <span id="d1-val">10</span></label>
+                <label>Initial Days: <span id="d1-val">10</span></label>
                 <input type="range" id="d1" min="1" max="20" value="10">
             </div>
             <div class="slider-group">
-                <label>New Builders: <span id="w2-val">4</span></label>
+                <label>New Workers: <span id="w2-val">4</span></label>
                 <input type="range" id="w2" min="1" max="10" value="4">
             </div>
         </div>
@@ -60,12 +85,26 @@
 
         <div class="question-card" id="q-text"></div>
 
-        <button class="btn" onclick="document.getElementById('logic').style.display='block'">Expose the Invariant</button>
+        <button class="btn" onclick="toggleLogic()">Expose the Calculation</button>
 
         <div id="logic" class="logic-card">
-            <p><strong>The Secret:</strong> The "Total Work" never changes. </p>
-            <p id="total-work-text"></p>
-            <p id="final-calc-text"></p>
+            <p><strong>Step 1 (Find Total Work):</strong> <span id="total-work-text"></span></p>
+            <p><strong>Step 2 (Apply to New Team):</strong> <span id="final-calc-text"></span></p>
+            <p><strong>Result:</strong> <span id="correct-ans" style="font-weight: 700; font-size: 1.2rem;"></span></p>
+        </div>
+    </div>
+
+    <div class="section saboteur-section">
+        <h2>Phase 4: The Saboteur</h2>
+        <p>These are the "Trap" answers you will see in the 11+. A fast-thinker will pick these immediately. Recognize them so you can avoid them.</p>
+        
+        <div class="trap-item">
+            <span>The "Double-Double" Trap (Linear logic):</span>
+            <span class="trap-val" id="trap-linear"></span>
+        </div>
+        <div class="trap-item">
+            <span>The "Subtraction" Trap (Thinking 10 days - 2 workers):</span>
+            <span class="trap-val" id="trap-sub"></span>
         </div>
     </div>
 </div>
@@ -78,18 +117,31 @@
     function update() {
         const res = LogicProvider.getModule(4).generate(w1In.value, d1In.value, w2In.value);
         
+        // Update Labels
         document.getElementById('w1-val').innerText = res.inputs.workers;
         document.getElementById('d1-val').innerText = res.inputs.days;
         document.getElementById('w2-val').innerText = res.inputs.newWorkers;
 
-        // Visuals: Height represents days, Width represents workers (abstracted)
+        // Visuals (Scaling heights for display)
         document.getElementById('bar1').style.height = (res.inputs.days * 6) + 'px';
         document.getElementById('bar2').style.height = (res.answers.correct * 6) + 'px';
 
+        // Update Question Text
         document.getElementById('q-text').innerText = `If ${res.inputs.workers} builders take ${res.inputs.days} days to build a wall, how many days will it take ${res.inputs.newWorkers} builders?`;
 
-        document.getElementById('total-work-text').innerText = `Total Work = ${res.inputs.workers} workers × ${res.inputs.days} days = ${res.inputs.totalWorkUnits} "Work Units".`;
-        document.getElementById('final-calc-text').innerText = `New Time = ${res.inputs.totalWorkUnits} Work Units ÷ ${res.inputs.newWorkers} builders = ${res.answers.correct} Days.`;
+        // Update Logic Calculations
+        document.getElementById('total-work-text').innerText = `${res.inputs.workers} workers × ${res.inputs.days} days = ${res.inputs.totalWorkUnits} units of work.`;
+        document.getElementById('final-calc-text').innerText = `${res.inputs.totalWorkUnits} units ÷ ${res.inputs.newWorkers} new workers = ${res.answers.correct} days.`;
+        document.getElementById('correct-ans').innerText = `${res.answers.correct} Days`;
+
+        // Update Saboteur Traps
+        document.getElementById('trap-linear').innerText = res.answers.traps.linearMore;
+        document.getElementById('trap-sub').innerText = res.answers.traps.subtraction;
+    }
+
+    function toggleLogic() {
+        const div = document.getElementById('logic');
+        div.style.display = div.style.display === 'none' ? 'block' : 'none';
     }
 
     [w1In, d1In, w2In].forEach(el => el.oninput = update);

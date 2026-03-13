@@ -71,18 +71,23 @@ const LogicProvider = {
 
         // Module 4: Inverse Proportion (Work/Rate)
         4: {
-            name: "Invariance (Work/Rate)",
-            generate: (workers, days, targetWorkers) => {
-                const totalWorkUnits = workers * days;
-                const targetDays = totalWorkUnits / targetWorkers;
+            name: "Inverse Proportion",
+            generate: (workers, days, newWorkers) => {
+                const w1 = parseInt(workers);
+                const d1 = parseInt(days);
+                const w2 = parseInt(newWorkers);
+                
+                // The "Total Work" is the invariant
+                const totalWorkUnits = w1 * d1;
+                const correctDays = totalWorkUnits / w2;
 
                 return {
-                    inputs: { workers, days, targetWorkers },
+                    inputs: { workers: w1, days: d1, newWorkers: w2, totalWorkUnits },
                     answers: {
-                        correct: targetDays,
+                        correct: parseFloat(correctDays.toFixed(1)),
                         traps: {
-                            linearMore: (days / workers) * targetWorkers, // Thought more workers = more days
-                            linearLess: (workers / targetWorkers) * days  // Direct proportion error
+                            linearMore: parseFloat(((d1 / w1) * w2).toFixed(1)), // Double workers = double days
+                            subtraction: d1 - (w2 - w1) // Just subtracted the difference in workers
                         }
                     }
                 };

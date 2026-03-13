@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 24: Translation | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
+        .grid-sim { height: 200px; width: 200px; border: 2px solid #334155; position: relative; margin: 20px auto; background-size: 20px 20px; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); }
+        .shape { width: 40px; height: 40px; background: #3b82f6; position: absolute; transition: all 0.5s; opacity: 0.6; }
+        .engine-controls { background: #f1f5f9; padding: 20px; border-radius: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Module 24: Translation</h1>
+    
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>Translation is a "slide." The shape does not turn, flip, or change size. It simply moves from one spot to another based on a <strong>Vector</strong>.</p>
+        <div style="background:#f1f5f9; padding:15px; border-left: 5px solid #64748b;">
+            "Translate shape A by the vector $\begin{pmatrix} 3 \\ -2 \end{pmatrix}$."
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        
+        <p>Vectors are written as $\begin{pmatrix} x \\ y \end{pmatrix}$. The top number ($x$) moves it left/right. The bottom number ($y$) moves it up/down.</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <div><label>Move Right (+)/Left (-): <span id="dx-v"></span></label><input type="range" id="dx" min="-4" max="4" value="2" style="width:100%"></div>
+            <div><label>Move Up (+)/Down (-): <span id="dy-v"></span></label><input type="range" id="dy" min="-4" max="4" value="-1" style="width:100%"></div>
+        </div>
+        <div class="grid-sim">
+            <div id="box" class="shape" style="left:20px; top:140px;"></div>
+            <div id="target" class="shape" style="border: 2px dashed #1e3a8a; background: transparent; left:20px; top:140px;"></div>
+        </div>
+        <p style="text-align:center; font-weight:700;">Vector: $\begin{pmatrix} <span id="vec-x"></span> \\ <span id="vec-y"></span> \end{pmatrix}$</p>
+    </div>
+
+    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
+        <h2>Phase 4: The Saboteur</h2>
+        <p style="color: var(--trap); font-weight: 700;">The "Inversion" Trap: Moving 3 left when the vector says 3 (positive). Always double-check your signs!</p>
+    </div>
+</div>
+<script>
+    function update() {
+        const dx = document.getElementById('dx').value;
+        const dy = document.getElementById('dy').value;
+        document.getElementById('dx-v').innerText = dx;
+        document.getElementById('dy-v').innerText = dy;
+        document.getElementById('vec-x').innerText = dx;
+        document.getElementById('vec-y').innerText = dy;
+        const target = document.getElementById('target');
+        // Initial pos 20, 140. Each grid unit is 20px.
+        target.style.left = (20 + (dx * 20)) + 'px';
+        target.style.top = (140 - (dy * 20)) + 'px';
+    }
+    document.querySelectorAll('input').forEach(i => i.oninput = update);
+    update();
+</script>
+</body>
+</html>

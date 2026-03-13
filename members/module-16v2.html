@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 16: The More Than Trap | Cognis11</title>
+    <title>Module 16v2: The More Than Trap | Cognis11</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="../js/logic-provider.js"></script>
     <style>
@@ -29,7 +29,7 @@
 <body>
 <div class="container">
     <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 16: The "More Than" Trap</h1>
+        <h1>Module 16v2: The "More Than" Trap</h1>
         <p style="color: var(--accent); font-weight: 700;">THE "TAKE AWAY THEN SHARE" PRINCIPLE</p>
     </header>
 
@@ -82,7 +82,7 @@
 </div>
 <script>
     function update() {
-        const res = LogicProvider.getModule(16).generate(document.getElementById('total').value, document.getElementById('diff').value);
+        const res = LogicProvider.getModule(16v2).generate(document.getElementById('total').value, document.getElementById('diff').value);
         document.getElementById('t-val').innerText = res.inputs.total;
         document.getElementById('d-val').innerText = res.inputs.difference;
         document.getElementById('q-text').innerText = `Two people have ${res.inputs.total} items. Person A has ${res.inputs.difference} more than Person B. How many does Person B have?`;

@@ -93,25 +93,26 @@ const LogicProvider = {
         11: {
             name: "Shared Ratios",
             generate: (ratioA, ratioB, total) => {
-                const totalParts = ratioA + ratioB;
-                // Adjust total to be divisible by totalParts
-                const adjTotal = total + (totalParts - (total % totalParts)) % totalParts;
-                const onePart = adjTotal / totalParts;
+                const totalParts = parseInt(ratioA) + parseInt(ratioB);
+                // Snap total to the nearest multiple of totalParts so it's always "clean"
+                const adjTotal = Math.round(total / totalParts) * totalParts;
+                const onePartValue = adjTotal / totalParts;
 
                 return {
-                    inputs: { ratioA, ratioB, total: adjTotal },
+                    inputs: { ratioA, ratioB, total: adjTotal, totalParts },
                     answers: {
-                        partA: onePart * ratioA,
-                        partB: onePart * ratioB,
-                        correct: onePart * ratioB, // Usually asks for larger/smaller
+                        partA: onePartValue * ratioA,
+                        partB: onePartValue * ratioB,
+                        onePart: onePartValue,
                         traps: {
-                            divByOneSide: adjTotal / ratioA, // Divided by part, not sum
-                            forgotOnePart: onePart           // Stopped at the value of 1 part
+                            divByA: Math.round(adjTotal / ratioA), // Divided by only one side
+                            simpleSplit: adjTotal / 2,            // Ignored the ratio entirely
+                            totalAsPart: adjTotal                  // Used total as a single part
                         }
                     }
                 };
             }
-        }
+        },
     },
 
     // Helper to fetch a specific module's logic

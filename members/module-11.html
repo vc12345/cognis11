@@ -7,23 +7,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="js/logic-provider.js"></script>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --success: #065f46; --bg: #f8fafc; --text: #0f172a; }
+        :root { --primary: #1e3a8a; --accent: #b45309; --success: #065f46; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
         .container { max-width: 800px; margin: 0 auto; }
         .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; }
         h1, h2 { color: var(--primary); margin-top: 0; }
+        
+        .anatomy-callout { background: #eff6ff; border-left: 5px solid #3b82f6; padding: 20px; border-radius: 4px; margin: 20px 0; }
+        
         .engine-controls { display: grid; gap: 20px; background: #f0fdf4; padding: 20px; border-radius: 8px; border: 1px solid #dcfce7; }
         .slider-group { display: flex; align-items: center; gap: 15px; }
-        .slider-group label { min-width: 120px; font-weight: 600; }
+        .slider-group label { min-width: 130px; font-weight: 600; }
         input[type=range] { flex-grow: 1; accent-color: var(--success); }
-        .ratio-display { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 30px 0; min-height: 40px; }
-        .box { width: 35px; height: 35px; border: 2px solid white; border-radius: 6px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        
+        .ratio-display { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 30px 0; min-height: 45px; }
+        .box { width: 35px; height: 35px; border: 2px solid white; border-radius: 6px; transition: transform 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .box-a { background: #3b82f6; }
         .box-b { background: #10b981; }
+        
         .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
         .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; transition: background 0.2s; }
-        .btn:hover { background: #1e40af; }
-        .logic-step { padding: 10px; border-left: 4px solid #3b82f6; background: #eff6ff; margin-bottom: 10px; font-weight: 500; }
+        
+        .logic-card { background: #ecfdf5; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border: 1px solid #a7f3d0; }
+        
+        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
+        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
+        .trap-val { color: var(--trap); font-weight: 700; font-size: 1.1rem; }
     </style>
 </head>
 <body>
@@ -36,26 +45,37 @@
 
     <div class="section">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A ratio like <strong>3:5</strong> looks like two separate numbers. But to solve it, you must see the <strong>Total Parts</strong>. Think of a ratio as a chocolate bar: if you have 3 squares and I have 5, the bar had 8 squares total.</p>
-        
+        <p>Questions about "Sharing" or "Ratios" always look like two separate numbers (3:5). But to a Type 2 mind, the numbers aren't 3 and 5. The number is <strong>8</strong> (the total parts).</p>
     </div>
 
     <div class="section">
-        <h2>Phase 2: The Engine</h2>
-        <p>Adjust the sliders to change the ratio and the total quantity. Watch how the boxes update to show the "Hidden Whole."</p>
+        <h2>Phase 2: The Anatomy</h2>
+        <p>Imagine a chocolate bar. If the ratio is <strong>2:3</strong>, the bar is split into 5 equal squares. To find the value of one square, you must divide the total by the <strong>sum of the ratio</strong>.</p>
         
+        
+
+        <div class="anatomy-callout">
+            <strong>The Master Plan:</strong><br>
+            1. Add the ratio together (Total Parts).<br>
+            2. Total Amount ÷ Total Parts = Value of 1 Part.<br>
+            3. Multiply by the part you need.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
         <div class="engine-controls">
             <div class="slider-group">
                 <label>Ratio A (Blue): <span id="ra-val">3</span></label>
-                <input type="range" id="ratioA" min="1" max="12" value="3">
+                <input type="range" id="ratioA" min="1" max="10" value="3">
             </div>
             <div class="slider-group">
                 <label>Ratio B (Green): <span id="rb-val">5</span></label>
-                <input type="range" id="ratioB" min="1" max="12" value="5">
+                <input type="range" id="ratioB" min="1" max="10" value="5">
             </div>
             <div class="slider-group">
-                <label>Total Amount: <span id="total-val">160</span></label>
-                <input type="range" id="total" min="20" max="480" value="160">
+                <label>Total Marbles: <span id="total-val">160</span></label>
+                <input type="range" id="total" min="20" max="400" value="160">
             </div>
         </div>
 
@@ -63,12 +83,26 @@
 
         <div class="question-card" id="q-text"></div>
 
-        <button class="btn" onclick="toggleLogic()">Expose the Skeleton</button>
+        <button class="btn" onclick="toggleLogic()">Show Calculation Steps</button>
 
-        <div id="logic-steps" style="display:none; margin-top: 25px;">
-            <div class="logic-step">1. Find Total Parts: <span id="step1"></span></div>
-            <div class="logic-step">2. Find 1 Part: <span id="step2"></span></div>
-            <div class="logic-step">3. Solve for Green: <span id="step3"></span></div>
+        <div id="logic" class="logic-card">
+            <p><strong>1. Sum of Ratio:</strong> <span id="calc-sum"></span></p>
+            <p><strong>2. Value of 1 Box:</strong> <span id="calc-one"></span></p>
+            <p><strong>3. Result for Green:</strong> <span id="calc-final"></span></p>
+        </div>
+    </div>
+
+    <div class="section saboteur-section">
+        <h2>Phase 4: The Saboteur</h2>
+        <p>A "Type 1" fast-thinker will fall for these traps because they don't look for the "Hidden Whole."</p>
+        
+        <div class="trap-item">
+            <span>The "One-Side" Trap (Dividing only by Ratio A):</span>
+            <span class="trap-val" id="trap-div-a"></span>
+        </div>
+        <div class="trap-item">
+            <span>The "Lazy Half" Trap (Just dividing total by 2):</span>
+            <span class="trap-val" id="trap-half"></span>
         </div>
     </div>
 </div>
@@ -80,29 +114,29 @@
     const visual = document.getElementById('ratio-visual');
 
     function update() {
+        // Calling your updated LogicProvider
         const res = LogicProvider.getModule(11).generate(raIn.value, rbIn.value, tIn.value);
         
-        // Update Labels
         document.getElementById('ra-val').innerText = res.inputs.ratioA;
         document.getElementById('rb-val').innerText = res.inputs.ratioB;
         document.getElementById('total-val').innerText = res.inputs.total;
 
-        // Build Visual Boxes
         visual.innerHTML = '';
         for(let i=0; i<res.inputs.ratioA; i++) visual.innerHTML += '<div class="box box-a"></div>';
         for(let i=0; i<res.inputs.ratioB; i++) visual.innerHTML += '<div class="box box-b"></div>';
 
-        // Update Text
-        document.getElementById('q-text').innerText = `A bag has Blue and Green marbles in a ratio of ${res.inputs.ratioA}:${res.inputs.ratioB}. There are ${res.inputs.total} marbles in total. How many Green marbles are there?`;
+        document.getElementById('q-text').innerText = `A bag has Blue and Green marbles in a ratio of ${res.inputs.ratioA}:${res.inputs.ratioB}. If there are ${res.inputs.total} marbles total, how many are Green?`;
 
-        // Update Logic
-        document.getElementById('step1').innerText = `${res.inputs.ratioA} + ${res.inputs.ratioB} = ${res.inputs.totalParts} total boxes.`;
-        document.getElementById('step2').innerText = `${res.inputs.total} ÷ ${res.inputs.totalParts} = ${res.answers.onePart} per box.`;
-        document.getElementById('step3').innerText = `${res.answers.onePart} × ${res.inputs.ratioB} = ${res.answers.partB}.`;
+        document.getElementById('calc-sum').innerText = `${res.inputs.ratioA} + ${res.inputs.ratioB} = ${res.inputs.totalParts} parts total.`;
+        document.getElementById('calc-one').innerText = `${res.inputs.total} ÷ ${res.inputs.totalParts} = ${res.answers.onePart} per part.`;
+        document.getElementById('calc-final').innerText = `${res.answers.onePart} × ${res.inputs.ratioB} = ${res.answers.partB} Green marbles.`;
+
+        document.getElementById('trap-div-a').innerText = res.answers.traps.divByA;
+        document.getElementById('trap-half').innerText = res.answers.traps.simpleSplit;
     }
 
     function toggleLogic() {
-        const div = document.getElementById('logic-steps');
+        const div = document.getElementById('logic');
         div.style.display = div.style.display === 'none' ? 'block' : 'none';
     }
 

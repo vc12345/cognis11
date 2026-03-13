@@ -6,6 +6,89 @@
 const LogicProvider = {
     modules: {
 
+        // Module 13: Ratio Sharing
+        13: {
+            name: "Ratio Sharing",
+            generate: (a, b, total) => {
+                const rA = parseInt(a);
+                const rB = parseInt(b);
+                const val = parseInt(total);
+                const onePart = val / (rA + rB);
+                return {
+                    inputs: { a: rA, b: rB, total: val },
+                    answers: {
+                        partA: (rA * onePart).toFixed(2),
+                        partB: (rB * onePart).toFixed(2),
+                        onePart: onePart.toFixed(2),
+                        traps: {
+                            divideByOne: (val / rA).toFixed(2),
+                            multiplyDirect: (val * rA)
+                        }
+                    }
+                };
+            }
+        },
+        
+        // Module 15: Venn Diagram Overlap
+        15: {
+            name: "Venn Overlap",
+            generate: (a, b, total) => {
+                const gA = parseInt(a);
+                const gB = parseInt(b);
+                const t = parseInt(total);
+                const overlap = (gA + gB) - t;
+                return {
+                    inputs: { groupA: gA, groupB: gB, total: t },
+                    answers: {
+                        both: overlap,
+                        onlyA: gA - overlap,
+                        onlyB: gB - overlap,
+                        traps: { sum: gA + gB, diff: Math.abs(gA - gB) }
+                    }
+                };
+            }
+        },
+        
+        // Module 7: Area vs Perimeter
+        7: {
+            name: "Area vs Perimeter",
+            generate: (length, width) => {
+                const l = parseInt(length);
+                const w = parseInt(width);
+                return {
+                    inputs: { length: l, width: w },
+                    answers: {
+                        area: l * w,
+                        perimeter: 2 * (l + w),
+                        traps: {
+                            confused: l + w,
+                            areaPerimSwap: "Check formula"
+                        }
+                    }
+                };
+            }
+        },
+        
+        // Module 18: Probability (The "Not" Principle)
+        18: {
+            name: "Probability Not",
+            generate: (numerator, denominator) => {
+                const n = parseInt(numerator);
+                const d = parseInt(denominator);
+                return {
+                    inputs: { win: n, total: d },
+                    answers: {
+                        probNot: (d - n) + "/" + d,
+                        decimal: ((d - n) / d).toFixed(2),
+                        traps: {
+                            justNumerator: n,
+                            inverted: d + "/" + n
+                        }
+                    }
+                };
+            }
+        },
+
         // Module 5: Percentage Increase/Decrease
         5: {
             name: "Percentage Change",

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 6: Fractions of Amounts | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        .engine-controls { background: #fff7ed; padding: 20px; border-radius: 8px; border: 1px solid #ffedd5; }
+        .question-card { border: 2px solid var(--primary); padding: 25px; border-radius: 8px; text-align: center; font-style: italic; margin: 20px 0; background: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 6: Fractions of Amounts</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "UNIT FRACTION" PRINCIPLE</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <div class="xray-examples">
+            <p>1. "Find 3/4 of 20 sweets."</p>
+            <p>2. "A cake weighs 800g. If 2/5 is flour, how many grams of flour are there?"</p>
+            <p>3. "Two-thirds of a class of 30 are girls. How many girls are there?"</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        
+        <p><strong>The Golden Rule:</strong> Divide by the Bottom (Denominator), then Multiply by the Top (Numerator).</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <label>Numerator: <span id="n-val"></span></label><input type="range" id="num" min="1" max="5" value="3" style="width:100%"><br>
+            <label>Denominator: <span id="d-val"></span></label><input type="range" id="den" min="2" max="10" value="4" style="width:100%"><br>
+            <label>Total: <span id="t-val"></span></label><input type="range" id="tot" min="20" max="200" step="20" value="80" style="width:100%">
+        </div>
+        <div class="question-card" id="q-text"></div>
+        <div id="logic" style="background:#ecfdf5; padding:20px; border-radius:8px;">
+            <p>1. Find 1 unit: <span id="step1"></span></p>
+            <p>2. Multiply by numerator: <span id="step2"></span></p>
+        </div>
+    </div>
+
+    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
+        <h2>Phase 4: The Saboteur</h2>
+        <p style="color: var(--trap); font-weight: 700;">The "Just Divide" Trap: Calculating only 1 unit and forgetting to multiply by the numerator.</p>
+        <p>Trap Answer: <span id="trap-ans"></span></p>
+    </div>
+</div>
+<script>
+    function update() {
+        const res = LogicProvider.modules[6].generate(document.getElementById('num').value, document.getElementById('den').value, document.getElementById('tot').value);
+        document.getElementById('n-val').innerText = res.inputs.num;
+        document.getElementById('d-val').innerText = res.inputs.den;
+        document.getElementById('t-val').innerText = res.inputs.total;
+        document.getElementById('q-text').innerText = `What is ${res.inputs.num}/${res.inputs.den} of ${res.inputs.total}?`;
+        document.getElementById('step1').innerText = `${res.inputs.total} ÷ ${res.inputs.den} = ${res.answers.onePart}`;
+        document.getElementById('step2').innerText = `${res.answers.onePart} × ${res.inputs.num} = ${res.answers.result}`;
+        document.getElementById('trap-ans').innerText = res.answers.traps.justDiv;
+    }
+    document.querySelectorAll('input').forEach(i => i.oninput = update);
+    update();
+</script>
+</body>
+</html>

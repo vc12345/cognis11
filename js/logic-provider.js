@@ -6,6 +6,99 @@
 const LogicProvider = {
     modules: {
 
+        // Module 19: Mean (Averages)
+        19: {
+            name: "The Mean Average",
+            generate: (listString) => {
+                const nums = listString.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+                const sum = nums.reduce((a, b) => a + b, 0);
+                const mean = sum / nums.length;
+                return {
+                    inputs: { list: nums, count: nums.length, sum: sum },
+                    answers: {
+                        mean: mean.toFixed(2),
+                        traps: {
+                            median: "Middle value (if sorted)",
+                            range: Math.max(...nums) - Math.min(...nums)
+                        }
+                    }
+                };
+            }
+        },
+       
+        // Module 20: Range & Spread
+        20: {
+            name: "Range & Spread",
+            generate: (listString) => {
+                const nums = listString.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+                const max = Math.max(...nums);
+                const min = Math.min(...nums);
+                return {
+                    inputs: { max, min },
+                    answers: {
+                        range: max - min,
+                        traps: {
+                            sum: max + min,
+                            onlyMax: max
+                        }
+                    }
+                };
+            }
+        },
+       
+        // Module 21: Pie Charts (Angles)
+        21: {
+            name: "Pie Chart Angles",
+            generate: (value, total) => {
+                const v = parseFloat(value);
+                const t = parseFloat(total);
+                // Angle = (Value / Total) * 360
+                const angle = (v / t) * 360;
+                return {
+                    inputs: { value: v, total: t },
+                    answers: {
+                        angle: angle.toFixed(1),
+                        multiplier: (360 / t).toFixed(2)
+                    }
+                };
+            }
+        },
+       
+        // Module 23: Co-ordinates (4 Quadrants)
+        23: {
+            name: "Coordinate Translation",
+            generate: (x, y, moveX, moveY) => {
+                const newX = parseInt(x) + parseInt(moveX);
+                const newY = parseInt(y) + parseInt(moveY);
+                return {
+                    inputs: { x, y, moveX, moveY },
+                    answers: {
+                        newPoint: `(${newX}, ${newY})`,
+                        traps: {
+                            swapped: `(${newY}, ${newX})`,
+                            signError: `(${parseInt(x) - parseInt(moveX)}, ${parseInt(y) - parseInt(moveY)})`
+                        }
+                    }
+                };
+            }
+        },
+       
+        // Module 25: Reflection
+        25: {
+            name: "Reflection Logic",
+            generate: (x, y, axis) => {
+                // Reflect over x-axis: (x, -y) | Reflect over y-axis: (-x, y)
+                const refX = axis === 'x' ? x : -x;
+                const refY = axis === 'x' ? -y : y;
+                return {
+                    inputs: { x, y, axis },
+                    answers: {
+                        reflected: `(${refX}, ${refY})`
+                    }
+                };
+            }
+        },
+
         // Module 2: Rounding & Estimation
         2: {
             name: "Rounding & Estimation",

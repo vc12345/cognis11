@@ -6,6 +6,109 @@
 const LogicProvider = {
     modules: {
 
+        // Module 5: Percentage Increase/Decrease
+        5: {
+            name: "Percentage Change",
+            generate: (original, percent) => {
+                const o = parseInt(original);
+                const p = parseInt(percent);
+                const change = (o * p) / 100;
+                return {
+                    inputs: { original: o, percent: p },
+                    answers: {
+                        increase: o + change,
+                        decrease: o - change,
+                        change: change,
+                        traps: {
+                            justAdd: o + p, // Added the percent as a whole number
+                            lazyChange: p   // Thought the answer was just the percentage
+                        }
+                    }
+                };
+            }
+        },
+        
+        // Module 9: Average Speed (The DST Triangle)
+        9: {
+            name: "Average Speed",
+            generate: (distance, time) => {
+                const d = parseInt(distance);
+                const t = parseInt(time);
+                const speed = d / t;
+                return {
+                    inputs: { distance: d, time: t },
+                    answers: {
+                        speed: speed.toFixed(1),
+                        traps: {
+                            inverse: (t / d).toFixed(2), // Time divided by distance
+                            multiplied: d * t            // Thought speed was D x T
+                        }
+                    }
+                };
+            }
+        },
+        
+        // Module 12: Reverse Percentages (The "Back to 100" Trap)
+        12: {
+            name: "Reverse Percentages",
+            generate: (finalValue, percentChange) => {
+                const f = parseInt(finalValue);
+                const p = parseInt(percentChange);
+                const original = f / (1 + (p / 100));
+                return {
+                    inputs: { finalValue: f, percentChange: p },
+                    answers: {
+                        correct: Math.round(original),
+                        traps: {
+                            forwardApply: f - (f * (p / 100)), // Tried to take % off the NEW price
+                            justSub: f - p                    // Just subtracted the number
+                        }
+                    }
+                };
+            }
+        },
+        
+        // Module 22: Missing Lengths (Compound Shapes)
+        22: {
+            name: "Missing Lengths",
+            generate: (totalLength, partialLength) => {
+                const t = parseInt(totalLength);
+                const p = parseInt(partialLength);
+                return {
+                    inputs: { total: t, part: p },
+                    answers: {
+                        missing: t - p,
+                        traps: {
+                            totalRepeat: t,
+                            added: t + p
+                        }
+                    }
+                };
+            }
+        },
+        
+        // Module 3: Mean Average (The Reverse Mean)
+        3: {
+            name: "Reverse Mean",
+            generate: (count, currentMean, newMean) => {
+                const n = parseInt(count);
+                const m1 = parseInt(currentMean);
+                const m2 = parseInt(newMean);
+                const currentTotal = n * m1;
+                const targetTotal = (n + 1) * m2;
+                return {
+                    inputs: { count: n, currentMean: m1, targetMean: m2 },
+                    answers: {
+                        needed: targetTotal - currentTotal,
+                        traps: {
+                            meanDiff: m2 - m1,
+                            justTarget: m2
+                        }
+                    }
+                };
+            }
+        },
+
         // Module 14: Interval Logic
         14: {
             name: "Interval Logic",

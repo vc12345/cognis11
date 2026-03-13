@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 28: Area | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
+        .area-box { background: #dcfce7; border: 1px solid #166534; margin: 20px auto; position: relative; }
+        .triangle-visual { width: 0; height: 0; border-left: 50px solid transparent; border-right: 50px solid transparent; border-bottom: 100px solid #dcfce7; margin: 20px auto; position: relative; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Module 28: Area (Rectangles & Triangles)</h1>
+    
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>Area is the <strong>space inside</strong> a shape. It is measured in square units ($cm^2$, $m^2$).</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        [Image comparing the area of a rectangle ($Area = l \times w$) and a triangle ($Area = \frac{1}{2} \times b \times h$), showing the triangle as exactly half of the rectangle]
+        <div style="background:#f0fdf4; padding:15px; border-radius:8px;">
+            <strong>Rectangle:</strong> Base $\times$ Height<br>
+            <strong>Triangle:</strong> $\frac{1}{2} \times$ Base $\times$ Height
+        </div>
+    </div>
+
+    <div class="section">
+        <select id="type" style="width:100%; padding:10px; margin-bottom:10px;">
+            <option value="rectangle">Rectangle</option>
+            <option value="triangle">Triangle</option>
+        </select>
+        <label>Base: <span id="b-v"></span>cm</label><input type="range" id="b" min="10" max="60" value="40" style="width:100%"><br>
+        <label>Height: <span id="h-v"></span>cm</label><input type="range" id="h" min="10" max="60" value="30" style="width:100%">
+        <div id="viz" class="area-box" style="width:120px; height:90px; display:flex; align-items:center; justify-content:center;">
+            Area: <span id="ans"></span>$cm^2$
+        </div>
+    </div>
+
+    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
+        <h2>Phase 4: The Saboteur</h2>
+        <p style="color: var(--trap); font-weight: 700;">The "Half-Forgotten" Triangle: Forgetting to divide by 2 when calculating a triangle's area. A triangle is always half of a rectangle with the same base and height!</p>
+    </div>
+</div>
+<script>
+    function update() {
+        const b = document.getElementById('b').value;
+        const h = document.getElementById('h').value;
+        const type = document.getElementById('type').value;
+        const res = LogicProvider.getModule(28).generate(b, h, type);
+        document.getElementById('b-v').innerText = b;
+        document.getElementById('h-v').innerText = h;
+        document.getElementById('ans').innerText = res.answers.area;
+        const viz = document.getElementById('viz');
+        viz.style.width = (b * 2) + 'px';
+        viz.style.height = (h * 2) + 'px';
+        viz.style.clipPath = type === 'triangle' ? 'polygon(50% 0%, 0% 100%, 100% 100%)' : 'none';
+    }
+    document.querySelectorAll('input, select').forEach(i => i.onchange = i.oninput = update);
+    update();
+</script>
+</body>
+</html>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Module 16: The More Than Trap | Cognis11</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="js/logic-provider.js"></script>
     <style>
         :root {
             --primary: #1a365d; /* Deep Navy - Elite/Trust */
@@ -213,20 +214,28 @@
     const logicBox = document.getElementById('logic-box');
 
     function update() {
-        let t = parseInt(tInput.value);
-        let d = parseInt(dInput.value);
-        
-        // Ensure difference is always less than total and maintains parity
-        if (d >= t) d = t - 2;
-        if ((t - d) % 2 !== 0) t++; 
+    // 1. Get the raw values from your sliders
+    let t = parseInt(tInput.value);
+    let d = parseInt(dInput.value);
 
-        tVal.innerText = t;
-        dVal.innerText = d;
-        
-        qText.innerText = `A total of ${t} artifacts were discovered. There were ${d} more Silver coins than Gold coins. How many Gold coins were there?`;
-        
-        logicBox.innerText = `Logic: (${t} Total - ${d} Extra) = ${t-d}. Half of ${t-d} is ${(t-d)/2}. Gold Coins = ${(t-d)/2}.`;
-    }
+    // 2. USE THE LOGIC PROVIDER (This is the "Brain" call)
+    const result = LogicProvider.getModule(16).generate(t, d);
+
+    // 3. Update the UI with the LogicProvider's "Clean" numbers
+    // (The LogicProvider ensures the numbers are mathematically sound)
+    tVal.innerText = result.inputs.total;
+    dVal.innerText = result.inputs.difference;
+    
+    qText.innerText = `A total of ${result.inputs.total} artifacts were discovered. There were ${result.inputs.difference} more Silver coins than Gold coins. How many Gold coins were there?`;
+    
+    // 4. Update the Logic Box using the calculated answer
+    logicBox.innerText = `Logic: (${result.inputs.total} Total - ${result.inputs.difference} Extra) = ${result.inputs.total - result.inputs.difference}. Half of that is ${result.answers.correct}. Gold Coins = ${result.answers.correct}.`;
+    
+    // 5. Update the Saboteur Traps automatically
+    // This part shows the child the specific "Fake" answers they should look out for
+    console.log("System 1 Snap Trap:", result.answers.traps.snap);
+    console.log("Lazy Half Trap:", result.answers.traps.lazyHalf);
+}
 
     function toggleLogic() {
         logicBox.style.display = logicBox.style.display === 'none' ? 'block' : 'none';

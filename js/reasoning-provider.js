@@ -1,5 +1,41 @@
 const ReasoningProvider = {
     modules: {
+
+        // Module 32: Data Interpretation (Tables)
+        32: {
+            name: "Data Table Logic",
+            generate: (rows) => {
+                // Generates a comparison between two items in a table
+                const data = [
+                    { name: "Product A", price: 12, sales: 50 },
+                    { name: "Product B", price: 15, sales: 30 },
+                    { name: "Product C", price: 10, sales: 80 }
+                ];
+                return {
+                    table: data,
+                    questions: {
+                        totalSales: data.reduce((sum, item) => sum + item.sales, 0),
+                        diffPrice: Math.abs(data[0].price - data[1].price)
+                    }
+                };
+            }
+        },
+        
+        // Module 33: Logical Deduction
+        33: {
+            name: "Elimination Logic",
+            generate: () => {
+                return {
+                    clues: [
+                        "The circle is not red.",
+                        "The blue shape is not a square.",
+                        "The red shape is a triangle."
+                    ],
+                    solution: "Red Triangle, Blue Circle, Green Square"
+                };
+            }
+        },
+            
         // Module 29: The "Change" Problem (Multi-step Money)
         29: {
             name: "Multi-Step Money",

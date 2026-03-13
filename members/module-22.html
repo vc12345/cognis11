@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 22: Missing Lengths | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        h1, h2 { color: var(--primary); margin-top: 0; }
+        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
+        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
+        .engine-controls { display: grid; gap: 20px; background: #f0fdf4; padding: 20px; border-radius: 8px; border: 1px solid #dcfce7; }
+        .slider-group { display: flex; align-items: center; gap: 15px; }
+        .slider-group label { min-width: 160px; font-weight: 600; }
+        input[type=range] { flex-grow: 1; accent-color: var(--primary); }
+        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
+        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
+        .logic-card { background: #ecfdf5; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid var(--success); }
+        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
+        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
+        .trap-val { color: var(--trap); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 22: Missing Lengths</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "PARALLEL PARTNERS" PRINCIPLE</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A "Type 1" thinker sees a shape and gets overwhelmed by the lines. A "Type 2" thinker only looks at lines going in the same direction. Parallel lines must add up to their partner.</p>
+        <div class="xray-examples">
+            <strong>Exam Wording Patterns:</strong>
+            <div class="example-item">1. "Calculate the perimeter of this L-shaped room."</div>
+            <div class="example-item">2. "Side $x$ is missing. Given the total length is 12cm and part is 5cm, find $x$."</div>
+            <div class="example-item">3. "Find the missing vertical length in this compound shape."</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        <p>In an L-shape, the "Long" side is always equal to the sum of the two "Short" parallel sides.</p>
+        
+        <div class="anatomy-callout" style="background: #eff6ff; border-left: 5px solid #3b82f6; padding: 15px;">
+            <strong>Vertical Logic:</strong> Top Short + Bottom Short = Long Vertical.<br>
+            <strong>Horizontal Logic:</strong> Left Short + Right Short = Long Horizontal.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <div class="slider-group">
+                <label>Total Length (cm): <span id="t-val">20</span></label>
+                <input type="range" id="total" min="10" max="100" value="20">
+            </div>
+            <div class="slider-group">
+                <label>Known Part (cm): <span id="p-val">8</span></label>
+                <input type="range" id="part" min="1" max="19" value="8">
+            </div>
+        </div>
+
+        <div class="question-card" id="q-text"></div>
+        <button class="btn" onclick="toggleLogic()">Show Calculation</button>
+
+        <div id="logic" class="logic-card" style="display:none; background:#f0fdf4; padding:15px; border-radius:8px; margin-top:15px;">
+            <p><strong>Logic:</strong> Total Length - Known Part = Missing Length</p>
+            <p><span id="calc-text"></span></p>
+        </div>
+    </div>
+
+    <div class="section saboteur-section">
+        <h2>Phase 4: The Saboteur</h2>
+        <div class="trap-item">
+            <span>The "Addition" Trap (Thinking sides are separate):</span>
+            <span class="trap-val" id="trap-add"></span>
+        </div>
+        <div class="trap-item">
+            <span>The "Repeat" Trap (Thinking parallel sides are the same):</span>
+            <span class="trap-val" id="trap-rep"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    function update() {
+        const res = LogicProvider.getModule(22).generate(document.getElementById('total').value, document.getElementById('part').value);
+        document.getElementById('t-val').innerText = res.inputs.total;
+        document.getElementById('p-val').innerText = res.inputs.part;
+        document.getElementById('q-text').innerText = `A compound shape has a total vertical side of ${res.inputs.total}cm. One of the smaller vertical parts is ${res.inputs.part}cm. Find the missing vertical length.`;
+        document.getElementById('calc-text').innerText = `${res.inputs.total} - ${res.inputs.part} = ${res.answers.missing}cm`;
+        document.getElementById('trap-add').innerText = res.answers.traps.added;
+        document.getElementById('trap-rep').innerText = res.answers.traps.totalRepeat;
+    }
+    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
+    document.querySelectorAll('input').forEach(i => i.oninput = update);
+    update();
+</script>
+</body>
+</html>

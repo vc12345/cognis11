@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 25: Reflection | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        h1, h2 { color: var(--primary); margin-top: 0; }
+        .mirror-stage { display: flex; justify-content: center; align-items: center; gap: 40px; padding: 40px; background: #f1f5f9; border-radius: 12px; margin: 20px 0; }
+        .shape-orig { width: 80px; height: 80px; background: var(--primary); clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%); }
+        .shape-ref { width: 80px; height: 80px; background: var(--primary); clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%); opacity: 0.4; transition: transform 0.5s; }
+        .mirror-line { width: 4px; height: 150px; background: #94a3b8; border-radius: 2px; }
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 25: Reflection</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "MIRROR" PRINCIPLE</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A "Type 1" thinker slides the shape (Translation). A "Type 2" thinker flips the shape. In a reflection, the image is **reversed** and the **same distance** from the mirror line as the original.</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        [Image showing a complex shape being reflected across a horizontal axis to demonstrate the flip and equidistant points]
+        <div style="background:#f0fdf4; padding:15px; border-radius:8px;">
+            <strong>Key Check:</strong> Pick a corner on the original. Count the squares to the mirror line. The same corner on the reflection MUST be the same number of squares away on the other side.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <p>Toggle the mirror axis to see how the reflection "flips."</p>
+        <div class="mirror-stage">
+            <div class="shape-orig"></div>
+            <div id="m-line" class="mirror-line"></div>
+            <div id="m-shape" class="shape-ref" style="transform: scaleX(-1);"></div>
+        </div>
+        <div class="btn-group">
+            <button class="btn" onclick="setRef('vertical')">Vertical Mirror (Flip X)</button>
+            <button class="btn" style="background:#64748b" onclick="setRef('horizontal')">Horizontal Mirror (Flip Y)</button>
+        </div>
+    </div>
+
+    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
+        <h2>Phase 4: The Saboteur</h2>
+        <p style="color: var(--trap); font-weight: 700;">The "Slide" Trap: Drawing the exact same shape on the other side of the line without flipping it. If you can't "fold" the paper along the mirror line and have the shapes match, it's a slide, not a reflection.</p>
+    </div>
+</div>
+<script>
+    function setRef(mode) {
+        const shape = document.getElementById('m-shape');
+        const line = document.getElementById('m-line');
+        const stage = document.querySelector('.mirror-stage');
+        if(mode === 'vertical') {
+            shape.style.transform = 'scaleX(-1)';
+            line.style.width = '4px'; line.style.height = '150px';
+            stage.style.flexDirection = 'row';
+        } else {
+            shape.style.transform = 'scaleY(-1)';
+            line.style.width = '150px'; line.style.height = '4px';
+            stage.style.flexDirection = 'column';
+        }
+    }
+</script>
+</body>
+</html>

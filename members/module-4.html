@@ -5,28 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Module 4: Inverse Proportion | Cognis11</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="..js/logic-provider.js"></script>
+    <script src="../js/logic-provider.js"></script>
     <style>
         :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
         .container { max-width: 800px; margin: 0 auto; }
         .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
         h1, h2 { color: var(--primary); margin-top: 0; }
-        
         .anatomy-callout { background: #fff7ed; border-left: 5px solid #f97316; padding: 20px; border-radius: 4px; margin: 20px 0; }
-        
         .engine-controls { display: grid; gap: 20px; background: #fff7ed; padding: 20px; border-radius: 8px; border: 1px solid #ffedd5; }
         .slider-group { display: flex; align-items: center; gap: 15px; }
         .slider-group label { min-width: 160px; font-weight: 600; }
         input[type=range] { flex-grow: 1; accent-color: var(--accent); }
-        
         .work-viz { display: flex; align-items: flex-end; justify-content: space-around; height: 160px; margin: 30px 0; border-bottom: 2px solid #cbd5e1; background: #fdfcfb; padding: 10px; }
         .bar { width: 70px; background: #3b82f6; position: relative; transition: height 0.4s ease; border-radius: 4px 4px 0 0; }
         .bar-label { position: absolute; top: -25px; width: 100%; text-align: center; font-size: 0.8rem; font-weight: bold; }
-        
         .question-card { background: white; border: 2px solid var(--primary); padding: 20px; border-radius: 8px; font-size: 1.2rem; text-align: center; font-style: italic; }
         .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-weight: 600; margin-top: 15px; }
-        
         .logic-card { background: #fef3c7; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid var(--accent); }
         .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
         .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
@@ -42,13 +37,15 @@
 
     <div class="section">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "System 1" brain expects things to be linear: "If I double the workers, I double the days." But common sense says more workers = <strong>less</strong> time. The logic is inverted.</p>
+        <p>A "System 1" brain expects things to be linear: <em>"If I double the workers, I double the days."</em> But common sense says more workers = <strong>less</strong> time. The logic is inverted.</p>
     </div>
 
     <div class="section">
         <h2>Phase 2: The Anatomy</h2>
         <p>Think of work as a rectangle. The Area (Total Work) stays the same. If the width (workers) gets bigger, the height (days) <strong>must</strong> get shorter to keep the area constant.</p>
         
+        
+
         <div class="anatomy-callout">
             <strong>The Constant:</strong> Workers × Days = Total Work Units.<br>
             If you change the workers, you must divide that same Total Work by the new number of workers.
@@ -59,15 +56,15 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-controls">
             <div class="slider-group">
-                <label>Original Builders: <span id="w1-val">2</span></label>
+                <label>Original Builders: <span id="w1-val"></span></label>
                 <input type="range" id="w1" min="1" max="10" value="2">
             </div>
             <div class="slider-group">
-                <label>Original Days: <span id="d1-val">10</span></label>
+                <label>Original Days: <span id="d1-val"></span></label>
                 <input type="range" id="d1" min="1" max="20" value="10">
             </div>
             <div class="slider-group">
-                <label>New Builders: <span id="w2-val">4</span></label>
+                <label>New Builders: <span id="w2-val"></span></label>
                 <input type="range" id="w2" min="1" max="10" value="4">
             </div>
         </div>
@@ -92,11 +89,11 @@
         <h2>Phase 4: The Saboteur</h2>
         <div class="trap-item">
             <span>The "Double-Double" Trap (Linear):</span>
-            <span id="trap-linear" style="color:red; font-weight:bold;"></span>
+            <span id="trap-linear" style="color:var(--trap); font-weight:bold;"></span>
         </div>
         <div class="trap-item">
             <span>The Subtraction Trap:</span>
-            <span id="trap-sub" style="color:red; font-weight:bold;"></span>
+            <span id="trap-sub" style="color:var(--trap); font-weight:bold;"></span>
         </div>
     </div>
 </div>
@@ -107,8 +104,10 @@
     const w2In = document.getElementById('w2');
 
     function update() {
+        // Module ID 4
         const res = LogicProvider.getModule(4).generate(w1In.value, d1In.value, w2In.value);
         
+        // Update Labels
         document.getElementById('w1-val').innerText = res.inputs.workers;
         document.getElementById('d1-val').innerText = res.inputs.days;
         document.getElementById('w2-val').innerText = res.inputs.newWorkers;
@@ -117,14 +116,15 @@
         document.getElementById('bar1').style.height = (res.inputs.days * 7) + 'px';
         document.getElementById('bar2').style.height = (res.answers.correct * 7) + 'px';
 
+        // Question Text
         document.getElementById('q-text').innerText = `If ${res.inputs.workers} builders take ${res.inputs.days} days, how many days will it take ${res.inputs.newWorkers} builders?`;
 
-        // Sync with IDs
+        // Step Calculations
         document.getElementById('total-work-text').innerText = `${res.inputs.workers} × ${res.inputs.days} = ${res.inputs.totalWorkUnits} Work Units.`;
         document.getElementById('final-calc-text').innerText = `${res.inputs.totalWorkUnits} ÷ ${res.inputs.newWorkers} = ${res.answers.correct} Days.`;
         document.getElementById('correct-ans').innerText = res.answers.correct;
 
-        // Saboteur
+        // Saboteur Traps
         document.getElementById('trap-linear').innerText = res.answers.traps.linearMore;
         document.getElementById('trap-sub').innerText = res.answers.traps.subtraction;
     }

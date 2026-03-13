@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 9: Average Speed | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        h1, h2 { color: var(--primary); margin-top: 0; }
+        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
+        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
+        .anatomy-callout { background: #fff7ed; border-left: 5px solid #f97316; padding: 20px; border-radius: 4px; margin: 20px 0; }
+        .engine-controls { display: grid; gap: 20px; background: #fff7ed; padding: 20px; border-radius: 8px; border: 1px solid #ffedd5; }
+        .slider-group { display: flex; align-items: center; gap: 15px; }
+        .slider-group label { min-width: 160px; font-weight: 600; }
+        input[type=range] { flex-grow: 1; accent-color: var(--accent); }
+        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
+        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
+        .logic-card { background: #fef3c7; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid var(--accent); }
+        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
+        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
+        .trap-val { color: var(--trap); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 9: Average Speed</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "RATIO OF CHANGE" PRINCIPLE</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A "Type 1" thinker sees two numbers and wants to multiply them. A "Type 2" thinker understands that speed is a description of how much distance is covered per 1 unit of time.</p>
+        <div class="xray-examples">
+            <strong>Exam Wording Patterns:</strong>
+            <div class="example-item">1. "A car travels 150 miles in 3 hours. What is its speed?"</div>
+            <div class="example-item">2. "Calculate the average speed of a cyclist who covers 40km in 2 hours."</div>
+            <div class="example-item">3. "A plane flies from London to Paris (340 miles) in 45 minutes. Find the mph."</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        <p>Speed is the "Bridge" between Distance and Time. You can use the DST Triangle to decide which operation to use.</p>
+        
+
+[Image of the Distance Speed Time triangle formula]
+
+        <div class="anatomy-callout">
+            <strong>The Formula:</strong> Speed = Distance ÷ Time.<br>
+            If you have miles and hours, your answer will be in Miles Per Hour (mph).
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <div class="slider-group">
+                <label>Distance (miles): <span id="d-val">100</span></label>
+                <input type="range" id="dist" min="10" max="1000" value="100" step="10">
+            </div>
+            <div class="slider-group">
+                <label>Time (hours): <span id="t-val">2</span></label>
+                <input type="range" id="time" min="1" max="24" value="2">
+            </div>
+        </div>
+
+        <div class="question-card" id="q-text"></div>
+        <button class="btn" onclick="toggleLogic()">Show DST Logic</button>
+
+        <div id="logic" class="logic-card">
+            <p><strong>Logic:</strong> Speed = Distance / Time</p>
+            <p><strong>Calculation:</strong> <span id="calc-text"></span></p>
+            <p><strong>Result:</strong> <span id="res-speed" style="font-weight:bold;"></span> mph</p>
+        </div>
+    </div>
+
+    <div class="section saboteur-section">
+        <h2>Phase 4: The Saboteur</h2>
+        <div class="trap-item">
+            <span>The "Product" Trap (Dist × Time):</span>
+            <span class="trap-val" id="trap-mult"></span>
+        </div>
+        <div class="trap-item">
+            <span>The "Inverse" Trap (Time ÷ Dist):</span>
+            <span class="trap-val" id="trap-inv"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    function update() {
+        const res = LogicProvider.getModule(9).generate(document.getElementById('dist').value, document.getElementById('time').value);
+        document.getElementById('d-val').innerText = res.inputs.distance;
+        document.getElementById('t-val').innerText = res.inputs.time;
+        document.getElementById('q-text').innerText = `If a vehicle travels ${res.inputs.distance} miles in ${res.inputs.time} hours, what is its average speed?`;
+        
+        document.getElementById('calc-text').innerText = `${res.inputs.distance} ÷ ${res.inputs.time} = ${res.answers.speed}`;
+        document.getElementById('res-speed').innerText = res.answers.speed;
+        
+        document.getElementById('trap-mult').innerText = res.answers.traps.multiplied;
+        document.getElementById('trap-inv').innerText = res.answers.traps.inverse;
+    }
+    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
+    document.querySelectorAll('input').forEach(i => i.oninput = update);
+    update();
+</script>
+</body>
+</html>

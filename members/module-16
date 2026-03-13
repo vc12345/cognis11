@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 16: The More Than Trap | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d; /* Deep Navy - Elite/Trust */
+            --accent: #d97706; /* Amber - Focus/Caution */
+            --success: #059669; /* Emerald - Correct Logic */
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 20px;
+        }
+
+        h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 10px; }
+        .tagline { color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+        .section {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            margin-bottom: 30px;
+        }
+
+        h2 { border-left: 4px solid var(--primary); padding-left: 15px; color: var(--primary); }
+
+        /* The X-Ray Grid */
+        .x-ray-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .skeleton-card {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            border: 1px dashed #cbd5e1;
+        }
+
+        /* Animation Styles */
+        .anim-container {
+            text-align: center;
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        /* Engine Styles */
+        .engine-controls {
+            display: grid;
+            gap: 20px;
+            background: #fdf2f2;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #fee2e2;
+        }
+
+        input[type=range] { width: 100%; accent-color: var(--primary); }
+
+        .question-display {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid var(--primary);
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .btn:hover { opacity: 0.9; }
+
+        .saboteur-box {
+            border: 2px solid #fecaca;
+            background: #fff5f5;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .trap-input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+
+        @media (max-width: 600px) { .x-ray-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="tagline">System 2 Master Module 16</div>
+        <h1>The "More Than" Trap</h1>
+        <p>Turning a speed-trap into a logical certainty.</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>Type 2 minds don't look at numbers first. They look at <strong>intent</strong>. These three questions are identical skeletons wearing different clothes.</p>
+        <div class="x-ray-grid">
+            <div class="skeleton-card"><strong>A:</strong> Total: £120. Coat is £100 more than Hat. Hat = ?</div>
+            <div class="skeleton-card"><strong>B:</strong> Total: 50 kids. 10 more Boys than Girls. Girls = ?</div>
+            <div class="skeleton-card"><strong>C:</strong> Total: 80cm. A is 20cm longer than B. B = ?</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        <p>The "System 1 Snap" tells you to just subtract the difference. <strong>That is the trap.</strong> If you take the extra away, you are left with two equal parts.</p>
+        
+        <div class="anim-container">
+            <svg width="100%" height="200" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+                <rect x="50" y="40" width="80" height="30" fill="#3b82f6" rx="4" />
+                <text x="65" y="60" fill="white" font-size="12">Part 1</text>
+                
+                <rect x="50" y="80" width="80" height="30" fill="#10b981" rx="4" />
+                <rect x="130" y="80" width="120" height="30" fill="#f59e0b" rx="4">
+                    <animate attributeName="width" from="0" to="120" dur="2s" repeatCount="indefinite" />
+                </rect>
+                <text x="65" y="100" fill="white" font-size="12">Part 2</text>
+                <text x="140" y="100" fill="white" font-size="10">The "Extra"</text>
+
+                <path d="M 50 140 L 300 140" stroke="white" stroke-width="2" />
+                <text x="140" y="160" fill="white" font-size="14">Step: (Total - Extra) ÷ 2</text>
+            </svg>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <p>Adjust the sliders to build your own 11+ question. See how the logic holds up regardless of the scale.</p>
+        
+        <div class="engine-controls">
+            <div>
+                <label>Total Quantity: <span id="t-val">100</span></label>
+                <input type="range" id="total" min="20" max="500" value="100">
+            </div>
+            <div>
+                <label>The Difference ("More Than"): <span id="d-val">20</span></label>
+                <input type="range" id="diff" min="2" max="100" value="20">
+            </div>
+        </div>
+
+        <div class="question-display" id="q-text">
+            A total of 100 items were found. There were 20 more of Item A than Item B. How many of Item B were there?
+        </div>
+        
+        <div id="logic-box" style="margin-top:20px; display:none; color: var(--success); font-weight:bold;">
+            Logic: (100 - 20) = 80. Half of 80 is 40. Smallest = 40.
+        </div>
+        <button class="btn" style="margin-top:20px;" onclick="toggleLogic()">Show/Hide Logic</button>
+    </div>
+
+    <div class="section saboteur-box">
+        <h2>Phase 4: The Saboteur</h2>
+        <p>If you were the test maker, how would you trick a tired student? Create the "Fake" answers for a question where <strong>Total = 100</strong> and <strong>Diff = 40</strong>.</p>
+        
+        <div style="margin-top:15px;">
+            <p>1. The "Subtraction Snap" (100 - 40): <input type="text" class="trap-input" placeholder="?"></p>
+            <p>2. The "Lazy Half" (100 ÷ 2): <input type="text" class="trap-input" placeholder="?"></p>
+            <p>3. The "Wrong Item" (The larger one): <input type="text" class="trap-input" placeholder="?"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const tInput = document.getElementById('total');
+    const dInput = document.getElementById('diff');
+    const tVal = document.getElementById('t-val');
+    const dVal = document.getElementById('d-val');
+    const qText = document.getElementById('q-text');
+    const logicBox = document.getElementById('logic-box');
+
+    function update() {
+        let t = parseInt(tInput.value);
+        let d = parseInt(dInput.value);
+        
+        // Ensure difference is always less than total and maintains parity
+        if (d >= t) d = t - 2;
+        if ((t - d) % 2 !== 0) t++; 
+
+        tVal.innerText = t;
+        dVal.innerText = d;
+        
+        qText.innerText = `A total of ${t} artifacts were discovered. There were ${d} more Silver coins than Gold coins. How many Gold coins were there?`;
+        
+        logicBox.innerText = `Logic: (${t} Total - ${d} Extra) = ${t-d}. Half of ${t-d} is ${(t-d)/2}. Gold Coins = ${(t-d)/2}.`;
+    }
+
+    function toggleLogic() {
+        logicBox.style.display = logicBox.style.display === 'none' ? 'block' : 'none';
+    }
+
+    tInput.oninput = update;
+    dInput.oninput = update;
+</script>
+
+</body>
+</html>

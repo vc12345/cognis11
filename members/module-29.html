@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 29: Money Reasoning | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/reasoning-provider.js"></script>
+    <style>
+        :root { --primary: #065f46; --accent: #0891b2; --bg: #f0fdfa; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #ccfbf1; }
+        .logic-card { background: #f0fdfa; border-left: 5px solid #10b981; padding: 20px; margin-top: 20px; display: none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header style="text-align:center; margin-bottom:40px;">
+        <h1 style="color:var(--primary)">Module 29: Multi-Step Money</h1>
+        <p style="font-weight:700; color:var(--accent)">PILLAR 2: REASONING</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>In Reasoning, we look for the <strong>"Hidden Question."</strong> Most students see numbers and jump to one calculation. A Type 2 thinker asks: "What do I need to know <em>before</em> I can find the final answer?"</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        
+        <p>The "Total" (Payment) must equal the "Parts" (Items + Change).</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <label>Item Price: £<span id="p-v"></span></label><input type="range" id="price" min="0.5" max="5" step="0.5" value="1.5" style="width:100%"><br>
+        <label>Quantity: <span id="q-v"></span></label><input type="range" id="qty" min="1" max="10" value="3" style="width:100%"><br>
+        <label>Payment: £<span id="pay-v"></span></label><input type="range" id="pay" min="5" max="50" step="5" value="10" style="width:100%">
+        
+        <div style="font-size: 1.2rem; text-align: center; margin: 20px 0; padding:15px; background:#f8fafc; border-radius:8px;" id="scenario"></div>
+        
+        <button onclick="toggleLogic()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:700;">Show Reasoning Steps</button>
+        <div id="logic" class="logic-card">
+            <p id="step1"></p><p id="step2"></p>
+            <h3 style="color:var(--primary)">Final Change: £<span id="final-ans"></span></h3>
+        </div>
+    </div>
+
+    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
+        <h2>Phase 4: The Saboteur</h2>
+        <p style="color: var(--trap); font-weight: 700;">The "Half-Way" Trap: Calculating the total cost and stopping there, forgetting the question asked for the <em>change</em>. Always re-read the last sentence!</p>
+    </div>
+</div>
+<script>
+    function update() {
+        const p = document.getElementById('price').value;
+        const q = document.getElementById('qty').value;
+        const pay = document.getElementById('pay').value;
+        const res = ReasoningProvider.getModule(29).generate(p, q, pay);
+        document.getElementById('p-v').innerText = p; document.getElementById('q-v').innerText = q; document.getElementById('pay-v').innerText = pay;
+        document.getElementById('scenario').innerText = `Problem: I buy ${q} items at £${p} each. I pay with a £${pay} note. How much change?`;
+        document.getElementById('step1').innerText = "Step 1: " + res.steps.step1;
+        document.getElementById('step2').innerText = "Step 2: " + res.steps.step2;
+        document.getElementById('final-ans').innerText = res.answers.change;
+    }
+    function toggleLogic() { const d = document.getElementById('logic'); d.style.display = d.style.display==='none'?'block':'none'; }
+    document.querySelectorAll('input').forEach(i => i.oninput = update);
+    update();
+</script>
+</body>
+</html>

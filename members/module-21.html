@@ -6,53 +6,83 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="../js/logic-provider.js"></script>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
+        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
         .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        .chart-sim { width: 150px; height: 150px; border-radius: 50%; background: conic-gradient(#3b82f6 var(--ang), #e2e8f0 0); margin: 20px auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        h1, h2 { color: var(--primary); margin-top: 0; }
+        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
+        .anatomy-callout { background: #fdf2f8; border-left: 5px solid #db2777; padding: 20px; border-radius: 4px; margin: 20px 0; }
+        .engine-controls { display: grid; gap: 20px; background: #fdf2f8; padding: 20px; border-radius: 8px; border: 1px solid #fbcfe8; }
+        .slider-group { display: flex; align-items: center; gap: 15px; }
+        .slider-group label { min-width: 160px; font-weight: 600; }
+        .chart-sim { width: 150px; height: 150px; border-radius: 50%; background: conic-gradient(#db2777 var(--ang), #e2e8f0 0); margin: 20px auto; border: 2px solid #334155; }
+        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
+        .logic-card { background: #fdf2f8; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border: 1px solid #fbcfe8; }
+        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Module 21: Pie Chart Angles</h1>
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 21: Pie Chart Angles</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "MAGIC 360" PRINCIPLE</p>
+    </header>
+
     <div class="section">
         <h2>Phase 1: The X-Ray</h2>
-        <p>The "Trap" in pie charts is confusing the <strong>frequency</strong> (number of people) with the <strong>degrees</strong> (angle). Always remember: the total of a pie chart is ALWAYS $360^\circ$.</p>
+        <p>A "Type 1" thinker confuses people with degrees. A "Type 2" thinker knows that the circle is a fixed $360^\circ$ and uses the **Multiplier** to convert frequency into angles.</p>
+        <div class="xray-examples">
+            <strong>Exam Wording Patterns:</strong>
+            <div class="example-item">1. "Show this data in a pie chart."</div>
+            <div class="example-item">2. "Calculate the angle for the 'Red' category."</div>
+            <div class="example-item">3. "If 10 people are represented by $60^\circ$, how many people in total?"</div>
+        </div>
     </div>
 
     <div class="section">
         <h2>Phase 2: The Anatomy</h2>
         
-        <div style="background:#fffbeb; padding:15px; border-radius:8px;">
-            <strong>Formula:</strong> $(\text{Value} \div \text{Total}) \times 360 = \text{Angle}$
+        <div class="anatomy-callout">
+            <strong>The Formula:</strong><br>
+            (Value ÷ Total Frequency) × 360 = Angle in Degrees.
         </div>
     </div>
 
     <div class="section">
-        <label>Total People: <span id="t-val"></span></label>
-        <input type="range" id="tot" min="10" max="360" value="60" style="width:100%"><br><br>
-        <label>Value (Category A): <span id="v-val"></span></label>
-        <input type="range" id="val" min="1" max="60" value="10" style="width:100%">
-        
-        <div id="pie" class="chart-sim" style="--ang: 60deg"></div>
-        
-        <div style="text-align:center; font-size:1.2rem;">
-            Angle for Category A = <span id="res-ang" style="color:var(--accent); font-weight:700;"></span>
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <div class="slider-group"><label>Category Count: <span id="v-val"></span></label><input type="range" id="val" min="1" max="50" value="10"></div>
+            <div class="slider-group"><label>Total People: <span id="t-val"></span></label><input type="range" id="tot" min="10" max="200" value="60"></div>
         </div>
+        <div id="pie" class="chart-sim" style="--ang: 60deg"></div>
+        <button class="btn" onclick="toggleLogic()">Show Angle Logic</button>
+        <div id="logic" class="logic-card">
+            <p>1. Fraction of total: <span id="calc-frac"></span></p>
+            <p>2. Multiplier (360 ÷ Total): <span id="calc-mult"></span></p>
+            <p><strong>Result: <span id="res-ang"></span>°</strong></p>
+        </div>
+    </div>
+
+    <div class="section saboteur-section">
+        <h2>Phase 4: The Saboteur</h2>
+        <p style="color: var(--trap); font-weight: 700;">The "100% Trap": Trying to make the angles add up to 100 instead of 360. Remember: Pie charts are about circles ($360^\circ$), not percentages ($100\%$), unless specified!</p>
     </div>
 </div>
 <script>
     function update() {
-        const val = document.getElementById('val').value;
-        const tot = document.getElementById('tot').value;
-        const res = LogicProvider.modules[21].generate(val, tot);
-        document.getElementById('t-val').innerText = tot;
+        const val = parseInt(document.getElementById('val').value);
+        const tot = parseInt(document.getElementById('tot').value);
+        if(val > tot) { document.getElementById('val').value = tot; }
+        const res = LogicProvider.getModule(21).generate(val, tot);
         document.getElementById('v-val').innerText = val;
-        document.getElementById('res-ang').innerText = res.answers.angle + '°';
+        document.getElementById('t-val').innerText = tot;
+        document.getElementById('calc-frac').innerText = `${val} / ${tot}`;
+        document.getElementById('calc-mult').innerText = res.answers.multiplier;
+        document.getElementById('res-ang').innerText = res.answers.angle;
         document.getElementById('pie').style.setProperty('--ang', res.answers.angle + 'deg');
-        document.getElementById('val').max = tot;
     }
+    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
     document.querySelectorAll('input').forEach(i => i.oninput = update);
     update();
 </script>

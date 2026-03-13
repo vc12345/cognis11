@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 18: Probability | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        h1, h2 { color: var(--primary); margin-top: 0; }
+        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
+        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
+        .engine-controls { display: grid; gap: 20px; background: #e0f2fe; padding: 20px; border-radius: 8px; border: 1px solid #bae6fd; }
+        .slider-group { display: flex; align-items: center; gap: 15px; }
+        .slider-group label { min-width: 160px; font-weight: 600; }
+        input[type=range] { flex-grow: 1; accent-color: #0369a1; }
+        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
+        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
+        .logic-card { background: #e0f2fe; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid #0369a1; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 18: Probability</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "COMPLEMENTARY" PRINCIPLE</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A "Type 1" thinker calculates the chance of something <em>happening</em> when the question asks for the chance it <em>doesn't</em>. A "Type 2" thinker always reads the word <strong>NOT</strong> carefully.</p>
+        <div class="xray-examples">
+            <strong>Exam Wording Patterns:</strong>
+            <div class="example-item">1. "The chance of winning a race is 1/5. What is the chance of NOT winning?"</div>
+            <div class="example-item">2. "The probability it rains is 0.3. What is the probability it stays dry?"</div>
+            <div class="example-item">3. "A bag has 3 red and 7 blue marbles. Find the probability of NOT picking red."</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        
+        <div class="anatomy-callout" style="background: #e0f2fe; border-left: 5px solid #0369a1; padding: 20px;">
+            <strong>The Law of 1:</strong><br>
+            All probabilities in a scenario must add up to 1.<br>
+            Probability of NOT = 1 - (Probability of IT).
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <div class="slider-group"><label>Numerator (Win): <span id="n-val"></span></label><input type="range" id="num" min="1" max="9" value="1"></div>
+            <div class="slider-group"><label>Denominator (Total): <span id="d-val"></span></label><input type="range" id="den" min="10" max="20" value="10"></div>
+        </div>
+        <div class="question-card" id="q-text"></div>
+        <button class="btn" onclick="toggleLogic()">Show Probability Logic</button>
+        <div id="logic" class="logic-card">
+            <p>1. Total Chance = 1 (or <span id="total-frac"></span>)</p>
+            <p>2. Chance of NOT = 1 - (<span id="win-frac"></span>)</p>
+            <p><strong>Answer: <span id="ans-not"></span></strong></p>
+        </div>
+    </div>
+</div>
+<script>
+    function update() {
+        const res = LogicProvider.getModule(18).generate(document.getElementById('num').value, document.getElementById('den').value);
+        document.getElementById('n-val').innerText = res.inputs.win;
+        document.getElementById('d-val').innerText = res.inputs.total;
+        document.getElementById('q-text').innerText = `If the probability of winning a prize is ${res.inputs.win}/${res.inputs.total}, what is the probability of NOT winning?`;
+        document.getElementById('total-frac').innerText = `${res.inputs.total}/${res.inputs.total}`;
+        document.getElementById('win-frac').innerText = `${res.inputs.win}/${res.inputs.total}`;
+        document.getElementById('ans-not').innerText = res.answers.probNot;
+    }
+    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
+    document.querySelectorAll('input').forEach(i => i.oninput = update);
+    update();
+</script>
+</body>
+</html>

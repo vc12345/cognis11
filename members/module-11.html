@@ -7,59 +7,102 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="js/logic-provider.js"></script>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --success: #065f46; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
         body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
         .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
         h1, h2 { color: var(--primary); margin-top: 0; }
+        
+        /* Anatomy Callout */
+        .anatomy-callout { background: #eff6ff; border-left: 5px solid #3b82f6; padding: 20px; border-radius: 4px; margin: 20px 0; font-weight: 500; }
+        
+        /* Engine Styling */
         .engine-controls { display: grid; gap: 20px; background: #f0fdf4; padding: 20px; border-radius: 8px; border: 1px solid #dcfce7; }
         .slider-group { display: flex; align-items: center; gap: 15px; }
-        .slider-group label { min-width: 140px; font-weight: 600; }
+        .slider-group label { min-width: 150px; font-weight: 600; }
         input[type=range] { flex-grow: 1; accent-color: var(--success); }
+        
+        /* Bar Model Viz */
         .ratio-display { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 30px 0; min-height: 45px; }
-        .box { width: 35px; height: 35px; border: 2px solid white; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .box-a { background: #3b82f6; }
-        .box-b { background: #10b981; }
+        .box { width: 35px; height: 35px; border: 2px solid white; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .box-a { background: #3b82f6; } /* Blue */
+        .box-b { background: #10b981; } /* Green */
+        
         .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
         .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
+        
         .logic-card { background: #ecfdf5; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border: 1px solid #a7f3d0; }
+        
+        /* Saboteur Styling */
         .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
-        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; }
-        .trap-val { color: var(--trap); font-weight: 700; }
+        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
+        .trap-val { color: var(--trap); font-weight: 700; font-size: 1.1rem; }
     </style>
 </head>
 <body>
+
 <div class="container">
     <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 11: Shared Ratios</h1>
-        <p style="color: var(--accent); font-weight: 700;">PHASE 3: THE ENGINE</p>
+        <h1 style="margin-bottom:5px;">Module 11: Shared Ratios</h1>
+        <p style="color: var(--accent); font-weight: 700; text-transform: uppercase;">The "Hidden Whole" Principle</p>
     </header>
 
     <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>In a ratio problem, the question gives you two parts (like 3:5), but the <strong>logic</strong> requires a third number: the sum of those parts. A Type 2 mind immediately looks for the "Hidden Whole."</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        <p>Think of a ratio as a set of equal-sized boxes. If the ratio is 3:5, there are 8 boxes total. To find what's inside one box, you must divide the total amount by the total number of boxes.</p>
+        
+        <div class="anatomy-callout">
+            1. <strong>Add:</strong> Part A + Part B = Total Parts<br>
+            2. <strong>Divide:</strong> Total Value ÷ Total Parts = Value of 1 Box<br>
+            3. <strong>Multiply:</strong> Value of 1 Box × Requested Part = Answer
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
         <div class="engine-controls">
-            <div class="slider-group"><label>Ratio A (Blue): <span id="ra-val">3</span></label>
-                <input type="range" id="ratioA" min="1" max="10" value="3"></div>
-            <div class="slider-group"><label>Ratio B (Green): <span id="rb-val">5</span></label>
-                <input type="range" id="ratioB" min="1" max="10" value="5"></div>
-            <div class="slider-group"><label>Total: <span id="total-val">160</span></label>
-                <input type="range" id="total" min="20" max="400" value="160"></div>
+            <div class="slider-group">
+                <label>Ratio A (Blue): <span id="ra-val">3</span></label>
+                <input type="range" id="ratioA" min="1" max="10" value="3">
+            </div>
+            <div class="slider-group">
+                <label>Ratio B (Green): <span id="rb-val">5</span></label>
+                <input type="range" id="ratioB" min="1" max="10" value="5">
+            </div>
+            <div class="slider-group">
+                <label>Total Marbles: <span id="total-val">160</span></label>
+                <input type="range" id="total" min="20" max="400" value="160">
+            </div>
         </div>
 
         <div id="ratio-visual" class="ratio-display"></div>
         <div class="question-card" id="q-text"></div>
+
         <button class="btn" onclick="toggleLogic()">Show Calculation Steps</button>
 
         <div id="logic" class="logic-card">
-            <p><strong>1. Sum:</strong> <span id="calc-sum"></span></p>
-            <p><strong>2. 1 Part:</strong> <span id="calc-one"></span></p>
-            <p><strong>3. Result:</strong> <span id="calc-final"></span></p>
+            <p><strong>1. Sum of Ratio:</strong> <span id="calc-sum"></span></p>
+            <p><strong>2. Value of 1 Box:</strong> <span id="calc-one"></span></p>
+            <p><strong>3. Result for Green:</strong> <span id="calc-final"></span></p>
         </div>
     </div>
 
     <div class="section saboteur-section">
         <h2>Phase 4: The Saboteur</h2>
-        <div class="trap-item"><span>The "One-Side" Trap:</span> <span class="trap-val" id="trap-div-a"></span></div>
-        <div class="trap-item"><span>The "Lazy Half" Trap:</span> <span class="trap-val" id="trap-half"></span></div>
+        <p>A "Type 1" brain will try to divide the total by just one side of the ratio. Here are the traps:</p>
+        <div class="trap-item">
+            <span>The "One-Side" Trap (Dividing by Blue only):</span>
+            <span class="trap-val" id="trap-div-a"></span>
+        </div>
+        <div class="trap-item">
+            <span>The "Lazy Half" Trap (Dividing by 2):</span>
+            <span class="trap-val" id="trap-half"></span>
+        </div>
     </div>
 </div>
 
@@ -71,6 +114,7 @@
 
     function update() {
         const res = LogicProvider.getModule(11).generate(raIn.value, rbIn.value, tIn.value);
+        
         document.getElementById('ra-val').innerText = res.inputs.ratioA;
         document.getElementById('rb-val').innerText = res.inputs.ratioB;
         document.getElementById('total-val').innerText = res.inputs.total;
@@ -79,11 +123,14 @@
         for(let i=0; i<res.inputs.ratioA; i++) visual.innerHTML += '<div class="box box-a"></div>';
         for(let i=0; i<res.inputs.ratioB; i++) visual.innerHTML += '<div class="box box-b"></div>';
 
-        document.getElementById('q-text').innerText = `A bag has Blue and Green marbles in a ratio of ${res.inputs.ratioA}:${res.inputs.ratioB}. Total: ${res.inputs.total}. How many are Green?`;
-        document.getElementById('calc-sum').innerText = `${res.inputs.ratioA} + ${res.inputs.ratioB} = ${res.inputs.totalParts}`;
-        document.getElementById('calc-one').innerText = `${res.inputs.total} ÷ ${res.inputs.totalParts} = ${res.answers.onePart}`;
-        document.getElementById('calc-final').innerText = `${res.answers.onePart} × ${res.inputs.ratioB} = ${res.answers.partB}`;
+        document.getElementById('q-text').innerText = `A bag has Blue and Green marbles in a ratio of ${res.inputs.ratioA}:${res.inputs.ratioB}. Total marbles: ${res.inputs.total}. How many are Green?`;
 
+        // Engine IDs synced with HTML
+        document.getElementById('calc-sum').innerText = `${res.inputs.ratioA} + ${res.inputs.ratioB} = ${res.inputs.totalParts} total parts.`;
+        document.getElementById('calc-one').innerText = `${res.inputs.total} ÷ ${res.inputs.totalParts} = ${res.answers.onePart} per box.`;
+        document.getElementById('calc-final').innerText = `${res.answers.onePart} × ${res.inputs.ratioB} = ${res.answers.partB} Green marbles.`;
+
+        // Saboteur IDs synced with HTML
         document.getElementById('trap-div-a').innerText = res.answers.traps.divByA;
         document.getElementById('trap-half').innerText = res.answers.traps.simpleSplit;
     }

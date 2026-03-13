@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 10: Scaling Ratios | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        .engine-controls { background: #fefce8; padding: 20px; border-radius: 8px; border: 1px solid #fef08a; }
+        .question-card { border: 2px solid var(--primary); padding: 25px; border-radius: 8px; text-align: center; font-style: italic; margin: 20px 0; background: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 10: Scaling Ratios</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "MULTIPLIER" PRINCIPLE</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <div class="xray-examples">
+            <p>1. "A recipe for 2 people uses 100g flour. How much flour for 6 people?"</p>
+            <p>2. "The ratio of cats to dogs is 2:5. If there are 10 cats, how many dogs?"</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        
+        <p><strong>The Golden Rule:</strong> Find the Scale Factor (Multiplier) by dividing the new value by the old value. Apply that same multiplier to the other side.</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <label>Original A: <span id="a-val"></span></label><input type="range" id="ra" min="1" max="10" value="2" style="width:100%"><br>
+            <label>Original B: <span id="b-val"></span></label><input type="range" id="rb" min="1" max="10" value="5" style="width:100%"><br>
+            <label>New A: <span id="na-val"></span></label><input type="range" id="nra" min="10" max="50" step="10" value="10" style="width:100%">
+        </div>
+        <div class="question-card" id="q-text"></div>
+        <div style="background:#ecfdf5; padding:20px; border-radius:8px;">
+            <p>Multiplier: <span id="logic-f"></span></p>
+            <p><strong>New B = <span id="res-b"></span></strong></p>
+        </div>
+    </div>
+</div>
+<script>
+    function update() {
+        const res = LogicProvider.modules[10].generate(document.getElementById('ra').value, document.getElementById('rb').value, document.getElementById('nra').value);
+        document.getElementById('a-val').innerText = res.inputs.a;
+        document.getElementById('b-val').innerText = res.inputs.b;
+        document.getElementById('na-val').innerText = res.inputs.tA;
+        document.getElementById('q-text').innerText = `If ${res.inputs.a} units of A corresponds to ${res.inputs.b} units of B, how many B units correspond to ${res.inputs.tA} of A?`;
+        document.getElementById('logic-f').innerText = `${res.inputs.tA} ÷ ${res.inputs.a} = ${res.answers.factor}`;
+        document.getElementById('res-b').innerText = res.answers.resultB;
+    }
+    document.querySelectorAll('input').forEach(i => i.oninput = update);
+    update();
+</script>
+</body>
+</html>

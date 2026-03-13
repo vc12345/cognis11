@@ -6,6 +6,28 @@
 const LogicProvider = {
     modules: {
 
+        // Module 16v2: The More Than Trap
+        16v2: {
+            name: "More Than Trap v2",
+            generate: (total, difference) => {
+                const t = parseInt(total);
+                const d = parseInt(difference);
+                const smaller = (t - d) / 2;
+                const larger = smaller + d;
+                return {
+                    inputs: { total: t, difference: d },
+                    answers: {
+                        smaller: smaller,
+                        larger: larger,
+                        traps: {
+                            simpleHalf: t / 2,
+                            halfAndAdd: (t / 2) + d
+                        }
+                    }
+                };
+            }
+        },
+
         // Module 13: Ratio Sharing
         13: {
             name: "Ratio Sharing",

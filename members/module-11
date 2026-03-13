@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 11: Shared Ratios | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --success: #065f46; --bg: #f8fafc; --text: #0f172a; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        h1, h2 { color: var(--primary); margin-top: 0; }
+        .engine-controls { display: grid; gap: 20px; background: #f0fdf4; padding: 20px; border-radius: 8px; border: 1px solid #dcfce7; }
+        .slider-group { display: flex; align-items: center; gap: 15px; }
+        .slider-group label { min-width: 120px; font-weight: 600; }
+        input[type=range] { flex-grow: 1; accent-color: var(--success); }
+        .ratio-display { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 30px 0; min-height: 40px; }
+        .box { width: 35px; height: 35px; border: 2px solid white; border-radius: 6px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .box-a { background: #3b82f6; }
+        .box-b { background: #10b981; }
+        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
+        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; transition: background 0.2s; }
+        .btn:hover { background: #1e40af; }
+        .logic-step { padding: 10px; border-left: 4px solid #3b82f6; background: #eff6ff; margin-bottom: 10px; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1 style="margin-bottom:5px;">Module 11: Shared Ratios</h1>
+        <p style="color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">The "Hidden Whole" Principle</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A ratio like <strong>3:5</strong> looks like two separate numbers. But to solve it, you must see the <strong>Total Parts</strong>. Think of a ratio as a chocolate bar: if you have 3 squares and I have 5, the bar had 8 squares total.</p>
+        
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Engine</h2>
+        <p>Adjust the sliders to change the ratio and the total quantity. Watch how the boxes update to show the "Hidden Whole."</p>
+        
+        <div class="engine-controls">
+            <div class="slider-group">
+                <label>Ratio A (Blue): <span id="ra-val">3</span></label>
+                <input type="range" id="ratioA" min="1" max="12" value="3">
+            </div>
+            <div class="slider-group">
+                <label>Ratio B (Green): <span id="rb-val">5</span></label>
+                <input type="range" id="ratioB" min="1" max="12" value="5">
+            </div>
+            <div class="slider-group">
+                <label>Total Amount: <span id="total-val">160</span></label>
+                <input type="range" id="total" min="20" max="480" value="160">
+            </div>
+        </div>
+
+        <div id="ratio-visual" class="ratio-display"></div>
+
+        <div class="question-card" id="q-text"></div>
+
+        <button class="btn" onclick="toggleLogic()">Expose the Skeleton</button>
+
+        <div id="logic-steps" style="display:none; margin-top: 25px;">
+            <div class="logic-step">1. Find Total Parts: <span id="step1"></span></div>
+            <div class="logic-step">2. Find 1 Part: <span id="step2"></span></div>
+            <div class="logic-step">3. Solve for Green: <span id="step3"></span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const raIn = document.getElementById('ratioA');
+    const rbIn = document.getElementById('ratioB');
+    const tIn = document.getElementById('total');
+    const visual = document.getElementById('ratio-visual');
+
+    function update() {
+        const res = LogicProvider.getModule(11).generate(raIn.value, rbIn.value, tIn.value);
+        
+        // Update Labels
+        document.getElementById('ra-val').innerText = res.inputs.ratioA;
+        document.getElementById('rb-val').innerText = res.inputs.ratioB;
+        document.getElementById('total-val').innerText = res.inputs.total;
+
+        // Build Visual Boxes
+        visual.innerHTML = '';
+        for(let i=0; i<res.inputs.ratioA; i++) visual.innerHTML += '<div class="box box-a"></div>';
+        for(let i=0; i<res.inputs.ratioB; i++) visual.innerHTML += '<div class="box box-b"></div>';
+
+        // Update Text
+        document.getElementById('q-text').innerText = `A bag has Blue and Green marbles in a ratio of ${res.inputs.ratioA}:${res.inputs.ratioB}. There are ${res.inputs.total} marbles in total. How many Green marbles are there?`;
+
+        // Update Logic
+        document.getElementById('step1').innerText = `${res.inputs.ratioA} + ${res.inputs.ratioB} = ${res.inputs.totalParts} total boxes.`;
+        document.getElementById('step2').innerText = `${res.inputs.total} ÷ ${res.inputs.totalParts} = ${res.answers.onePart} per box.`;
+        document.getElementById('step3').innerText = `${res.answers.onePart} × ${res.inputs.ratioB} = ${res.answers.partB}.`;
+    }
+
+    function toggleLogic() {
+        const div = document.getElementById('logic-steps');
+        div.style.display = div.style.display === 'none' ? 'block' : 'none';
+    }
+
+    [raIn, rbIn, tIn].forEach(el => el.oninput = update);
+    update();
+</script>
+
+</body>
+</html>

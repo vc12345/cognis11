@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 15: Venn Diagram Overlap | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        h1, h2 { color: var(--primary); margin-top: 0; }
+        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
+        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
+        .anatomy-callout { background: #fdf2f8; border-left: 5px solid #db2777; padding: 20px; border-radius: 4px; margin: 20px 0; }
+        .engine-controls { display: grid; gap: 20px; background: #fdf2f8; padding: 20px; border-radius: 8px; border: 1px solid #fbcfe8; }
+        .slider-group { display: flex; align-items: center; gap: 15px; }
+        .slider-group label { min-width: 160px; font-weight: 600; }
+        input[type=range] { flex-grow: 1; accent-color: #db2777; }
+        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
+        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
+        .logic-card { background: #fdf2f8; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid #db2777; }
+        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
+        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 15: Venn Overlap</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "SUM VS TOTAL" PRINCIPLE</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A "Type 1" thinker adds the groups together and assumes that's the total. A "Type 2" thinker knows that if the groups add up to more than the total people, that extra amount <em>must</em> be the people counted twice (the overlap).</p>
+        <div class="xray-examples">
+            <strong>Exam Wording Patterns:</strong>
+            <div class="example-item">1. "In a class of 30, 20 like Pizza and 15 like Burger. How many like both?"</div>
+            <div class="example-item">2. "Of 50 students, 40 play Tennis and 25 play Football. How many play both?"</div>
+            <div class="example-item">3. "12 children study French, 10 study Spanish. Total class size is 18. Find the overlap."</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        
+        <div class="anatomy-callout">
+            <strong>The Formula:</strong><br>
+            (Group A + Group B) - Total Students = Overlap (Both)
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <div class="slider-group"><label>Group A Count: <span id="ga-val"></span></label><input type="range" id="ga" min="5" max="50" value="20"></div>
+            <div class="slider-group"><label>Group B Count: <span id="gb-val"></span></label><input type="range" id="gb" min="5" max="50" value="15"></div>
+            <div class="slider-group"><label>Total People: <span id="t-val"></span></label><input type="range" id="tot" min="20" max="60" value="30"></div>
+        </div>
+        <div class="question-card" id="q-text"></div>
+        <button class="btn" onclick="toggleLogic()">Show Venn Logic</button>
+        <div id="logic" class="logic-card">
+            <p>1. Sum of Groups = <span id="calc-sum"></span></p>
+            <p>2. Excess (Overlap) = <span id="calc-over"></span></p>
+            <p><strong>Result: <span id="ans-both"></span> like BOTH.</strong></p>
+        </div>
+    </div>
+
+    <div class="section saboteur-section">
+        <h2>Phase 4: The Saboteur</h2>
+        <div class="trap-item"><span>The "Total Sum" Trap:</span> <span class="trap-val" id="trap-sum"></span></div>
+    </div>
+</div>
+<script>
+    function update() {
+        const res = LogicProvider.getModule(15).generate(document.getElementById('ga').value, document.getElementById('gb').value, document.getElementById('tot').value);
+        document.getElementById('ga-val').innerText = res.inputs.groupA;
+        document.getElementById('gb-val').innerText = res.inputs.groupB;
+        document.getElementById('t-val').innerText = res.inputs.total;
+        document.getElementById('q-text').innerText = `In a group of ${res.inputs.total}, ${res.inputs.groupA} like A and ${res.inputs.groupB} like B. How many like BOTH?`;
+        document.getElementById('calc-sum').innerText = `${res.inputs.groupA} + ${res.inputs.groupB} = ${parseInt(res.inputs.groupA) + parseInt(res.inputs.groupB)}`;
+        document.getElementById('calc-over').innerText = `${parseInt(res.inputs.groupA) + parseInt(res.inputs.groupB)} - ${res.inputs.total} = ${res.answers.both}`;
+        document.getElementById('ans-both').innerText = res.answers.both;
+        document.getElementById('trap-sum').innerText = res.answers.traps.sum;
+    }
+    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
+    document.querySelectorAll('input').forEach(i => i.oninput = update);
+    update();
+</script>
+</body>
+</html>

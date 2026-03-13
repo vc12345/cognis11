@@ -6,6 +6,31 @@
 const LogicProvider = {
     modules: {
 
+        // Module 14: Interval Logic
+        14: {
+            name: "Interval Logic",
+            generate: (length, gap) => {
+                const l = parseInt(length) || 10;
+                const g = parseInt(gap) || 2;
+                
+                const gapsCount = Math.floor(l / g);
+                const correctPosts = gapsCount + 1;
+
+                return {
+                    inputs: { length: l, gap: g },
+                    answers: {
+                        gaps: gapsCount,
+                        correct: correctPosts,
+                        traps: {
+                            simpleDivision: gapsCount, // Forgot the starting post
+                            offByTwo: gapsCount + 2,   // Over-corrected
+                            perimeter: gapsCount       // Confused a line with a circle
+                        }
+                    }
+                };
+            }
+        },
+
         // Module 1: Unitary Method
         1: {
             name: "Unitary Method",

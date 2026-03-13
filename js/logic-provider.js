@@ -5,6 +5,32 @@
 
 const LogicProvider = {
     modules: {
+
+        // Module 1: Unitary Method
+        1: {
+            name: "Unitary Method",
+            generate: (quantity, totalCost, targetQuantity) => {
+                const q1 = parseInt(quantity) || 1;
+                const c1 = parseFloat(totalCost) || 1;
+                const q2 = parseInt(targetQuantity) || 1;
+                
+                const unitPrice = c1 / q1;
+                const finalPrice = unitPrice * q2;
+
+                return {
+                    inputs: { quantity: q1, totalCost: c1, targetQuantity: q2 },
+                    answers: {
+                        unit: unitPrice.toFixed(2),
+                        correct: finalPrice.toFixed(2),
+                        traps: {
+                            upscaleOnly: (c1 * q2).toFixed(2),
+                            inverse: ((q1 / c1) * q2).toFixed(2)
+                        }
+                    }
+                };
+            }
+        },
+        
         // Module 16: The More Than Trap
         16: {
             name: "The More Than Trap",

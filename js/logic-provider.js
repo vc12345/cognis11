@@ -6,6 +6,112 @@
 const LogicProvider = {
     modules: {
 
+        // Module 2: Rounding & Estimation
+        2: {
+            name: "Rounding & Estimation",
+            generate: (num, place) => {
+                const n = parseFloat(num);
+                const p = parseInt(place); // 10, 100, or 0.1
+                const correct = Math.round(n / p) * p;
+                return {
+                    inputs: { val: n, place: p },
+                    answers: {
+                        correct: correct.toFixed(p < 1 ? 1 : 0),
+                        traps: {
+                            roundDown: (Math.floor(n / p) * p).toFixed(p < 1 ? 1 : 0),
+                            wrongPlace: Math.round(n / (p * 10)) * (p * 10)
+                        }
+                    }
+                };
+            }
+        },
+        
+        // Module 6: Fractions of Amounts
+        6: {
+            name: "Fractions of Amounts",
+            generate: (num, den, total) => {
+                const n = parseInt(num);
+                const d = parseInt(den);
+                const t = parseInt(total);
+                const onePart = t / d;
+                const result = onePart * n;
+                return {
+                    inputs: { num: n, den: d, total: t },
+                    answers: {
+                        onePart: onePart,
+                        result: result,
+                        traps: {
+                            flipped: (t / n) * d,
+                            justDiv: t / d
+                        }
+                    }
+                };
+            }
+        },
+        
+        // Module 8: FDP Equivalents
+        8: {
+            name: "FDP Equivalents",
+            generate: (decimal) => {
+                const d = parseFloat(decimal);
+                return {
+                    inputs: { decimal: d },
+                    answers: {
+                        percent: (d * 100).toFixed(0) + "%",
+                        fraction: (d * 100) + "/100",
+                        traps: {
+                            placeValueError: (d * 10).toFixed(0) + "%",
+                            zeroError: (d * 1000).toFixed(0) + "%"
+                        }
+                    }
+                };
+            }
+        },
+       
+        // Module 10: Scaling Ratios
+        10: {
+            name: "Scaling Ratios",
+            generate: (valA, valB, targetA) => {
+                const a = parseInt(valA);
+                const b = parseInt(valB);
+                const tA = parseInt(targetA);
+                const factor = tA / a;
+                const resultB = b * factor;
+                return {
+                    inputs: { a, b, tA },
+                    answers: {
+                        factor: factor,
+                        resultB: resultB,
+                        traps: {
+                            additive: b + (tA - a),
+                            inverted: b / factor
+                        }
+                    }
+                };
+            }
+        },
+        
+        // Module 17: Time Durations
+        17: {
+            name: "Time Durations",
+            generate: (h, m, duration) => {
+                const startMins = (parseInt(h) * 60) + parseInt(m);
+                const endMins = startMins + parseInt(duration);
+                const endH = Math.floor(endMins / 60) % 24;
+                const endM = endMins % 60;
+                return {
+                    inputs: { h, m, duration },
+                    answers: {
+                        endTime: `${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}`,
+                        traps: {
+                            decimalTime: (startMins + parseInt(duration)) / 100, // Thinking 60 mins = 100
+                            hourOnly: (parseInt(h) + Math.floor(duration/60)) + ":" + m
+                        }
+                    }
+                };
+            }
+        },
+
         // Module 16v2: The More Than Trap
         16v2: {
             name: "More Than Trap v2",

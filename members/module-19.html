@@ -6,58 +6,79 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="../js/logic-provider.js"></script>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; line-height: 1.6; }
+        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
         .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        .question-card { border: 2px solid var(--primary); padding: 25px; border-radius: 8px; text-align: center; font-style: italic; margin: 20px 0; }
-        .logic-card { background: #f0fdf4; padding: 20px; border-radius: 8px; border-left: 5px solid #22c55e; display:none; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        h1, h2 { color: var(--primary); margin-top: 0; }
+        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
+        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
+        .anatomy-callout { background: #eff6ff; border-left: 5px solid #3b82f6; padding: 20px; border-radius: 4px; margin: 20px 0; }
+        .engine-controls { background: #f0fdf4; padding: 20px; border-radius: 8px; border: 1px solid #dcfce7; }
+        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
+        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
+        .logic-card { background: #ecfdf5; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border: 1px solid #a7f3d0; }
+        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Module 19: The Mean (Average)</h1>
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 19: The Mean</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "BALANCE" PRINCIPLE</p>
+    </header>
+
     <div class="section">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "Type 1" thinker confuses the Mean with the Median. A "Type 2" thinker remembers: **"Mean is Mean"** because it makes you do the most work (Adding and then Dividing).</p>
-        <div style="background:#f1f5f9; padding:15px; border-radius:8px;">
-            <p>1. "Find the mean of 4, 7, and 10."</p>
-            <p>2. "The mean of 4 numbers is 10. What is their total?"</p>
+        <p>A "Type 1" thinker confuses Mean with Median. A "Type 2" thinker knows that the Mean is the "Share Fairly" result—what everyone would have if we pooled everything and divided it equally.</p>
+        <div class="xray-examples">
+            <strong>Exam Wording Patterns:</strong>
+            <div class="example-item">1. "Calculate the mean of 5, 8, 12, and 15."</div>
+            <div class="example-item">2. "The mean weight of 4 boxes is 10kg. What is their total weight?"</div>
+            <div class="example-item">3. "Find the average score of the team."</div>
         </div>
     </div>
 
     <div class="section">
         <h2>Phase 2: The Anatomy</h2>
         
-        <div style="background:#eff6ff; padding:15px; border-radius:8px; margin:20px 0;">
-            <strong>Step 1:</strong> Sum (Add all numbers together).<br>
-            <strong>Step 2:</strong> Count (How many numbers are there?).<br>
-            <strong>Step 3:</strong> Divide (Sum ÷ Count).
+        <div class="anatomy-callout">
+            <strong>Step 1: Sum</strong> - Add all the values together.<br>
+            <strong>Step 2: Count</strong> - Count how many values there are.<br>
+            <strong>Step 3: Divide</strong> - Total Sum ÷ Count = Mean.
         </div>
     </div>
 
     <div class="section">
         <h2>Phase 3: The Engine</h2>
-        <label>Enter numbers (comma separated):</label>
-        <input type="text" id="num-input" value="10, 20, 30, 40" style="width:100%; padding:10px; margin:10px 0;">
-        <div class="question-card" id="q-text"></div>
-        <button onclick="toggleLogic()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer;">Calculate Mean</button>
-        <div id="logic" class="logic-card" style="margin-top:20px;">
-            <p>Total Sum: <span id="res-sum"></span></p>
-            <p>Number Count: <span id="res-count"></span></p>
-            <p><strong>Mean = <span id="res-mean"></span></strong></p>
+        <div class="engine-controls">
+            <label>Enter numbers (comma-separated):</label>
+            <input type="text" id="num-input" value="10, 20, 30, 40" style="width:100%; padding:10px; margin:10px 0; border: 1px solid #ccc; border-radius: 4px;">
         </div>
+        <div class="question-card" id="q-text">Find the mean of the numbers above.</div>
+        <button class="btn" onclick="toggleLogic()">Calculate Mean Logic</button>
+        <div id="logic" class="logic-card">
+            <p><strong>Step 1 (Sum):</strong> <span id="calc-sum"></span></p>
+            <p><strong>Step 2 (Count):</strong> <span id="calc-count"></span></p>
+            <p><strong>Final Answer:</strong> Mean is <span id="ans-mean"></span>.</p>
+        </div>
+    </div>
+
+    <div class="section saboteur-section">
+        <h2>Phase 4: The Saboteur</h2>
+        <p style="color: var(--trap); font-weight: 700;">The "Missing Zero" Trap: If a data set includes a '0', Type 1 thinkers often forget to count it as a value, leading to a division by the wrong number.</p>
     </div>
 </div>
 <script>
     function update() {
-        const res = LogicProvider.modules[19].generate(document.getElementById('num-input').value);
-        document.getElementById('q-text').innerText = `Find the mean of: ${res.inputs.list.join(', ')}`;
-        document.getElementById('res-sum').innerText = res.inputs.sum;
-        document.getElementById('res-count').innerText = res.inputs.count;
-        document.getElementById('res-mean').innerText = res.answers.mean;
+        const val = document.getElementById('num-input').value;
+        const res = LogicProvider.getModule(19).generate(val);
+        document.getElementById('q-text').innerText = `Calculate the mean of: ${res.inputs.list.join(', ')}`;
+        document.getElementById('calc-sum').innerText = res.inputs.sum;
+        document.getElementById('calc-count').innerText = res.inputs.count;
+        document.getElementById('ans-mean').innerText = res.answers.mean;
     }
-    function toggleLogic() { const d = document.getElementById('logic'); d.style.display = d.style.display==='none'?'block':'none'; }
+    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
     document.getElementById('num-input').oninput = update;
     update();
 </script>

@@ -1,12 +1,7 @@
-/**
- * Cognis11 Reasoning Provider
- * Handles multi-step logic for Pillar 2
- */
-
 const ReasoningProvider = {
     modules: {
-        // Module 1: The "Change" Problem (Multi-step Money)
-        1: {
+        // Module 29: The "Change" Problem (Multi-step Money)
+        29: {
             name: "Multi-Step Money",
             generate: (itemPrice, qty, payment) => {
                 const p = parseFloat(itemPrice);
@@ -14,7 +9,6 @@ const ReasoningProvider = {
                 const pay = parseFloat(payment);
                 const totalCost = p * q;
                 const change = pay - totalCost;
-                
                 return {
                     inputs: { itemPrice: p, qty: q, payment: pay },
                     steps: {
@@ -25,37 +19,33 @@ const ReasoningProvider = {
                 };
             }
         },
-        // Module 2: Inverse Operations (Reverse Thinking)
-        2: {
+        // Module 30: Inverse Operations (Reverse Thinking)
+        30: {
             name: "Reverse Thinking",
-            generate: (target, ops) => {
-                // Example ops: [{type: 'add', val: 5}, {type: 'mult', val: 2}]
-                let current = target;
-                const breakdown = [];
-                
-                // Work backwards
-                ops.slice().reverse().forEach(op => {
-                    const oldVal = current;
-                    if (op.type === 'add') {
-                        current -= op.val;
-                        breakdown.push(`Inverse of +${op.val} is -${op.val}: ${oldVal} - ${op.val} = ${current}`);
-                    } else if (op.type === 'mult') {
-                        current /= op.val;
-                        breakdown.push(`Inverse of ×${op.val} is ÷${op.val}: ${oldVal} ÷ ${op.val} = ${current}`);
-                    }
-                });
-                
+            generate: (target) => {
+                // Hardcoded logic for the interactive demo
+                const step2 = target / 2;
+                const step1 = step2 - 5;
                 return {
-                    inputs: { target, ops },
-                    breakdown: breakdown,
-                    finalInput: current
+                    target: target,
+                    steps: [
+                        { op: "÷ 2", res: step2 },
+                        { op: "- 5", res: step1 }
+                    ]
                 };
+            }
+        },
+        // Module 31: Number Sequences
+        31: {
+            name: "Sequence Logic",
+            generate: (start, jump, length) => {
+                let seq = [];
+                for(let i=0; i<length; i++) {
+                    seq.push(parseInt(start) + (i * parseInt(jump)));
+                }
+                return { sequence: seq, rule: `Add ${jump}` };
             }
         }
     },
-
-    // Helper to get module logic safely
-    getModule: function(id) {
-        return this.modules[id] || null;
-    }
+    getModule: function(id) { return this.modules[id] || null; }
 };

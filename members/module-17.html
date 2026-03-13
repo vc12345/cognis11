@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 17: Time Durations | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        .engine-controls { background: #fef2f2; padding: 20px; border-radius: 8px; border: 1px solid #fecaca; }
+        .time-display { font-size: 3rem; font-weight: 700; color: var(--primary); text-align: center; font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 17: Time Durations</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "NUMBER LINE" PRINCIPLE</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <div class="xray-examples">
+            <p>1. "A film starts at 14:30 and lasts 110 minutes. When does it end?"</p>
+            <p>2. "How many minutes are there between 09:15 and 10:05?"</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        
+        <p><strong>The Golden Rule:</strong> Don't treat time like decimals. Always jump to the **next whole hour** first to avoid calculation errors.</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <label>Start Hour: <span id="h-val"></span></label><input type="range" id="hour" min="0" max="23" value="14" style="width:100%"><br>
+            <label>Start Minute: <span id="m-val"></span></label><input type="range" id="min" min="0" max="59" value="30" style="width:100%"><br>
+            <label>Duration (mins): <span id="d-val"></span></label><input type="range" id="dur" min="10" max="300" step="5" value="110" style="width:100%">
+        </div>
+        <div class="section" style="margin-top:20px; text-align:center;">
+            <p>End Time:</p>
+            <div class="time-display" id="res-time"></div>
+        </div>
+    </div>
+
+    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
+        <h2>Phase 4: The Saboteur</h2>
+        <p style="color: #be123c; font-weight: 700;">The "Decimal Time" Trap: Adding 110 minutes to 14:30 and getting 15:40 (treating an hour as 100 minutes).</p>
+    </div>
+</div>
+<script>
+    function update() {
+        const res = LogicProvider.modules[17].generate(document.getElementById('hour').value, document.getElementById('min').value, document.getElementById('dur').value);
+        document.getElementById('h-val').innerText = res.inputs.h;
+        document.getElementById('m-val').innerText = res.inputs.m;
+        document.getElementById('d-val').innerText = res.inputs.duration;
+        document.getElementById('res-time').innerText = res.answers.endTime;
+    }
+    document.querySelectorAll('input').forEach(i => i.oninput = update);
+    update();
+</script>
+</body>
+</html>

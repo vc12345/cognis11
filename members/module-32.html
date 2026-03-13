@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 32: Data Tables | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/reasoning-provider.js"></script>
+    <style>
+        :root { --primary: #1e40af; --accent: #1d4ed8; --bg: #eff6ff; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #dbeafe; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #cbd5e1; padding: 12px; text-align: left; }
+        th { background: #f1f5f9; }
+        .highlight { background: #fef9c3; font-weight: 700; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 style="color:var(--primary); text-align:center;">Module 32: Data Interpretation</h1>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A "Type 1" thinker looks at a table and sees a wall of numbers. A "Type 2" thinker looks for **Intersection**. They find the right row, then the right column, and only then do they look at the number.</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        
+        <p>In reasoning exams, the question often asks for the <strong>Difference</strong> (Subtract) or the <strong>Total</strong> (Add) between two specific intersections.</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <p>Scenario: A shop sells 3 types of fruit. Use the table to answer the questions.</p>
+        <table>
+            <tr><th>Fruit</th><th>Price per kg</th><th>Stock Level</th></tr>
+            <tr id="r1"><td>Apples</td><td>£2.00</td><td>40kg</td></tr>
+            <tr id="r2"><td>Bananas</td><td>£1.50</td><td>60kg</td></tr>
+            <tr id="r3"><td>Cherries</td><td>£5.00</td><td>10kg</td></tr>
+        </table>
+        
+        <div style="background:#f8fafc; padding:20px; border-radius:8px;">
+            <p><strong>Question:</strong> How much more does 1kg of Cherries cost than 1kg of Apples?</p>
+            <button onclick="reveal(1)" style="padding:10px; background:var(--primary); color:white; border:none; border-radius:4px; cursor:pointer;">Reveal Logic</button>
+            <p id="ans1" style="display:none; margin-top:15px; color:var(--primary); font-weight:700;">
+                Logic: Cherries (£5.00) - Apples (£2.00) = £3.00
+            </p>
+        </div>
+    </div>
+
+    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
+        <h2>Phase 4: The Saboteur</h2>
+        <p style="color: var(--trap); font-weight: 700;">The "Wrong Row" Trap: Sliding your finger across the page and accidentally picking a number from the row above or below. Use a ruler or your pen to "lock" the row!</p>
+    </div>
+</div>
+<script>
+    function reveal(id) { document.getElementById('ans'+id).style.display = 'block'; }
+</script>
+</body>
+</html>

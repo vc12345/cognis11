@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 1: Unitary Method | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        h1, h2 { color: var(--primary); margin-top: 0; }
+        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
+        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
+        .anatomy-callout { background: #ecfdf5; border-left: 5px solid var(--success); padding: 20px; border-radius: 4px; margin: 20px 0; }
+        .engine-controls { display: grid; gap: 20px; background: #f0fdf4; padding: 20px; border-radius: 8px; border: 1px solid #dcfce7; }
+        .slider-group { display: flex; align-items: center; gap: 15px; }
+        .slider-group label { min-width: 160px; font-weight: 600; }
+        input[type=range] { flex-grow: 1; accent-color: var(--success); }
+        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
+        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
+        .logic-card { background: #f0fdf4; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid var(--success); }
+        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
+        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
+        .trap-val { color: var(--trap); font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 1: The Unitary Method</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "COST OF ONE" PRINCIPLE</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A "Type 1" brain tries to jump straight to the final answer. A "Type 2" brain stops and says: <strong>"I cannot find the price of many until I know the price of ONE."</strong></p>
+        
+        <div class="xray-examples">
+            <strong>Look for these wordings in the exam:</strong>
+            <div class="example-item">1. "If 5 apples cost £2.00, how much do 8 apples cost?"</div>
+            <div class="example-item">2. "A pack of 6 pens is £4.50. Calculate the cost of 10 pens."</div>
+            <div class="example-item">3. "12 tickets are sold for £144. Find the price for a group of 7."</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        <p>Think of it as a two-step bridge. You must walk down to the "Unit" (One) before you can climb up to the "Target."</p>
+        
+        
+
+        <div class="anatomy-callout">
+            <strong>Step 1: Divide</strong> (Total Cost ÷ Quantity) to find the price of 1.<br>
+            <strong>Step 2: Multiply</strong> (Price of 1 × New Quantity) to find the final answer.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <div class="slider-group">
+                <label>Initial Quantity: <span id="q1-val"></span></label>
+                <input type="range" id="q1" min="1" max="12" value="5">
+            </div>
+            <div class="slider-group">
+                <label>Total Cost (£): <span id="c1-val"></span></label>
+                <input type="range" id="c1" min="1" max="50" value="10">
+            </div>
+            <div class="slider-group">
+                <label>Target Quantity: <span id="q2-val"></span></label>
+                <input type="range" id="q2" min="1" max="20" value="8">
+            </div>
+        </div>
+
+        <div class="question-card" id="q-text"></div>
+
+        <button class="btn" onclick="toggleLogic()">Show Calculation Steps</button>
+
+        <div id="logic" class="logic-card">
+            <p><strong>Step 1 (Find the price of 1):</strong> £<span id="unit-price"></span></p>
+            <p><strong>Step 2 (Multiply for Target):</strong> £<span id="final-price"></span></p>
+        </div>
+    </div>
+
+    <div class="section saboteur-section">
+        <h2>Phase 4: The Saboteur</h2>
+        <div class="trap-item">
+            <span>The "Forgot to Divide" Trap:</span>
+            <span class="trap-val">£<span id="trap-upscale"></span></span>
+        </div>
+        <div class="trap-item">
+            <span>The "Inverse" Trap (Wrong way division):</span>
+            <span class="trap-val">£<span id="trap-inv"></span></span>
+        </div>
+    </div>
+</div>
+
+<script>
+    const q1In = document.getElementById('q1');
+    const c1In = document.getElementById('c1');
+    const q2In = document.getElementById('q2');
+
+    function update() {
+        const res = LogicProvider.getModule(1).generate(q1In.value, c1In.value, q2In.value);
+        
+        document.getElementById('q1-val').innerText = res.inputs.quantity;
+        document.getElementById('c1-val').innerText = res.inputs.totalCost;
+        document.getElementById('q2-val').innerText = res.inputs.targetQuantity;
+
+        document.getElementById('q-text').innerText = `If ${res.inputs.quantity} items cost £${res.inputs.totalCost}, how much do ${res.inputs.targetQuantity} items cost?`;
+
+        document.getElementById('unit-price').innerText = `${res.inputs.totalCost} ÷ ${res.inputs.quantity} = £${res.answers.unit}`;
+        document.getElementById('final-price').innerText = `£${res.answers.unit} × ${res.inputs.targetQuantity} = £${res.answers.correct}`;
+
+        document.getElementById('trap-upscale').innerText = res.answers.traps.upscaleOnly;
+        document.getElementById('trap-inv').innerText = res.answers.traps.inverse;
+    }
+
+    function toggleLogic() {
+        const div = document.getElementById('logic');
+        div.style.display = div.style.display === 'none' ? 'block' : 'none';
+    }
+
+    [q1In, c1In, q2In].forEach(el => el.oninput = update);
+    update();
+</script>
+</body>
+</html>

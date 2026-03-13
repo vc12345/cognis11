@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 26: Rotational Symmetry | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
+        .shape-box { height: 150px; display: flex; justify-content: center; align-items: center; margin: 20px 0; }
+        .poly { background: var(--primary); transition: transform 2s linear; }
+        .square { width: 80px; height: 80px; }
+        .rect { width: 120px; height: 60px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Module 26: Rotational Symmetry</h1>
+    
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>Rotational symmetry is about how many times a shape looks <strong>exactly the same</strong> during one full $360^\circ$ turn.</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        
+        <p>The "Order" is the number of times it fits. A square has order 4. A rectangle has order 2.</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <select id="stype" style="width:100%; padding:10px; margin-bottom:20px;">
+            <option value="square">Square</option>
+            <option value="rectangle">Rectangle</option>
+        </select>
+        <div class="shape-box">
+            <div id="drawing" class="poly square"></div>
+        </div>
+        <button onclick="rotate()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer;">Rotate 360°</button>
+        <p id="res-text" style="text-align:center; margin-top:15px; font-weight:700;"></p>
+    </div>
+
+    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
+        <h2>Phase 4: The Saboteur</h2>
+        <p style="color: #be123c; font-weight: 700;">The "Order 0" Trap: There is no such thing as Order 0. Every shape looks like itself after $360^\circ$, so the minimum order is 1.</p>
+    </div>
+</div>
+<script>
+    function rotate() {
+        const shape = document.getElementById('drawing');
+        const type = document.getElementById('stype').value;
+        const res = LogicProvider.getModule(26).generate(type);
+        shape.style.transform = 'rotate(360deg)';
+        document.getElementById('res-text').innerText = `Order: ${res.answers.order}`;
+        setTimeout(() => { shape.style.transition = 'none'; shape.style.transform = 'rotate(0deg)'; setTimeout(() => shape.style.transition = 'transform 2s linear', 50); }, 2100);
+    }
+    document.getElementById('stype').onchange = function() {
+        const d = document.getElementById('drawing');
+        d.className = 'poly ' + (this.value === 'square' ? 'square' : 'rect');
+    };
+</script>
+</body>
+</html>

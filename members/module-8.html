@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 8: FDP Equivalents | Cognis11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../js/logic-provider.js"></script>
+    <style>
+        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e2e8f0; }
+        .engine-controls { background: #f0f9ff; padding: 20px; border-radius: 8px; border: 1px solid #bae6fd; }
+        .fdp-box { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+        .box { flex: 1; padding: 20px; background: white; border: 2px solid var(--primary); border-radius: 8px; text-align: center; }
+        .box span { display: block; font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1>Module 8: FDP Equivalents</h1>
+        <p style="color: var(--accent); font-weight: 700;">THE "TRANSLATOR" PRINCIPLE</p>
+    </header>
+
+    <div class="section">
+        <h2>Phase 1: The X-Ray</h2>
+        <div class="xray-examples">
+            <p>1. "Write 0.75 as a percentage."</p>
+            <p>2. "Convert 1/4 into a decimal."</p>
+            <p>3. "Which is larger: 0.3 or 25%?"</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Phase 2: The Anatomy</h2>
+        [Image showing a comparison table of common Fractions, Decimals, and Percentages]
+        <p><strong>Conversion Rule:</strong> To turn a decimal into a percentage, multiply by 100 (move the decimal point 2 places to the right).</p>
+    </div>
+
+    <div class="section">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-controls">
+            <label>Decimal Value: <span id="d-val"></span></label>
+            <input type="range" id="dec" min="0.05" max="0.95" step="0.05" value="0.25" style="width:100%">
+        </div>
+        <div class="fdp-box">
+            <div class="box">Decimal<span id="res-d"></span></div>
+            <div class="box">Percentage<span id="res-p"></span></div>
+            <div class="box">Fraction<span id="res-f"></span></div>
+        </div>
+    </div>
+
+    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
+        <h2>Phase 4: The Saboteur</h2>
+        <p style="color: #be123c; font-weight: 700;">The "Missing Zero" Trap: Thinking 0.05 is 50% instead of 5%.</p>
+    </div>
+</div>
+<script>
+    function update() {
+        const res = LogicProvider.modules[8].generate(document.getElementById('dec').value);
+        document.getElementById('d-val').innerText = res.inputs.decimal;
+        document.getElementById('res-d').innerText = res.inputs.decimal;
+        document.getElementById('res-p').innerText = res.answers.percent;
+        document.getElementById('res-f').innerText = res.answers.fraction;
+    }
+    document.querySelectorAll('input').forEach(i => i.oninput = update);
+    update();
+</script>
+</body>
+</html>

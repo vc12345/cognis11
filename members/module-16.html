@@ -4,26 +4,27 @@
     <meta charset="UTF-8">
     <title>Module 16: The More Than Trap | Cognis11</title>
     <style>
-        :root { --blue: #002d5b; --gold: #c5a059; --light: #f4f7f9; --red: #d9534f; }
+        :root { --blue: #002d5b; --gold: #c5a059; --light: #f4f7f9; --trap: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 20px; color: #2c3e50; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        .header { background: var(--blue); color: white; padding: 20px 40px; border-bottom: 4px solid var(--gold); }
-        .phase { padding: 30px 40px; border-bottom: 1px solid #eee; }
-        .phase h2 { font-size: 0.8rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
-
-        /* The Anatomy: Dynamic Bar Model */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 20px 0; }
-        .bar-container { height: 40px; background: #cbd5e0; border-radius: 6px; display: flex; overflow: hidden; margin-bottom: 10px; transition: width 0.5s ease; }
-        .part-equal { background: var(--blue); height: 100%; transition: width 0.5s; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
-        .part-diff { background: var(--gold); height: 100%; transition: width 0.5s; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
-
-        /* Engine */
-        .engine-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        input { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: none; background: #2d3748; color: white; }
-        .trace { font-family: monospace; padding: 15px; background: rgba(255,255,255,0.05); border-left: 3px solid var(--gold); }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: var(--blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--gold); }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin: 0 0 15px 0; }
         
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 15px; }
-        .tier-card { background: var(--light); padding: 12px; border-radius: 8px; border-left: 4px solid var(--blue); font-size: 0.8rem; }
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .tier-card { background: var(--light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--blue); margin-bottom: 5px; font-size: 0.7rem; text-transform: uppercase; }
+
+        /* Graphics */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 20px 0; }
+        .bar-system { display: flex; flex-direction: column; gap: 20px; max-width: 500px; margin: auto; }
+        .bar-track { height: 45px; background: #e2e8f0; border-radius: 6px; display: flex; overflow: hidden; transition: width 0.5s ease; position: relative; }
+        .part-eq { background: var(--blue); height: 100%; transition: width 0.5s; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .part-diff { background: var(--gold); height: 100%; transition: width 0.5s, opacity 0.5s; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: none; background: #2d3748; color: white; margin-top: 5px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: monospace; border-left: 3px solid var(--gold); }
     </style>
 </head>
 <body>
@@ -32,64 +33,76 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p><strong>Topic Logic:</strong> To solve for two unknowns where only the sum and difference are known, we must <strong>level the playing field</strong>. By subtracting the "excess" (the gap), we create two equal parts that can be easily divided.</p>
+        <p><strong>Topic Logic:</strong> When we know the <strong>Sum</strong> of two numbers and the <strong>Difference</strong> between them, we must equalize the values by removing the "excess" before dividing.</p>
         <div class="question-tiers">
-            <div class="tier-card"><span>Entry (Y2)</span>"Sarah and Jo have 10 pens. Sarah has 2 more than Jo. How many does Jo have?"</div>
-            <div class="tier-card"><span>Standard (Y4)</span>"A coat and scarf cost £60. The coat is £20 more than the scarf. Find the scarf."</div>
-            <div class="tier-card)</span><span>Advanced (Y5)</span>"Perimeter is 40cm. Length is 4cm more than width. Find the area."</div>
+            <div class="tier-card"><span>Advanced Y2</span>"Ben and Sam have 10 stickers. Ben has 2 more than Sam. How many does Sam have?"</div>
+            <div class="tier-card"><span>Average Y4</span>"A hat and a coat cost £70. The coat is £30 more than the hat. What is the price of the hat?"</div>
+            <div class="tier-card"><span>Advanced Y5</span>"The perimeter of a rectangle is 48cm. The length is 4cm longer than the width. Find the area."</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div style="margin-bottom: 5px; font-weight: bold;">Person A (The Larger Share)</div>
-            <div class="bar-container" id="bar-a" style="width: 100%;">
-                <div class="part-equal" id="vis-a-eq" style="width: 70%;">?</div>
-                <div class="part-diff" id="vis-a-df" style="width: 30%;">+DIFF</div>
+            <div class="bar-system">
+                <div style="font-size: 0.8rem; font-weight: bold;">LARGE SHARE</div>
+                <div class="bar-track" id="bar-large">
+                    <div class="part-eq" id="vis-large-eq">?</div>
+                    <div class="part-diff" id="vis-diff">GAP</div>
+                </div>
+                <div style="font-size: 0.8rem; font-weight: bold;">SMALL SHARE</div>
+                <div class="bar-track" id="bar-small">
+                    <div class="part-eq" style="width: 100%" id="vis-small-eq">?</div>
+                </div>
             </div>
-            <div style="margin-bottom: 5px; font-weight: bold;">Person B (The Smaller Share)</div>
-            <div class="bar-container" id="bar-b" style="width: 70%;">
-                <div class="part-equal" style="width: 100%;" id="vis-b-eq">?</div>
-            </div>
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; font-style: italic;">Adjust the sliders below to see the "Leveling" logic in action.</p>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-grid">
+        <div class="engine-container">
             <div class="controls">
-                <label>Total Sum</label>
-                <input type="number" id="in-sum" value="100">
-                <label>Difference (The "More")</label>
-                <input type="number" id="in-diff" value="20">
+                <div class="control-group"><label>TOTAL SUM</label><input type="number" id="in-sum" value="100"></div>
+                <div class="control-group"><label>DIFFERENCE (GAP)</label><input type="number" id="in-diff" value="20"></div>
             </div>
-            <div class="trace" id="trace-box"></div>
+            <div class="trace-log" id="logic-trace"></div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap); border-radius: 8px; padding: 25px;">
+            <h2 style="color:var(--trap);">Phase 4: The Saboteur</h2>
+            <p><strong>The Trap:</strong> Taking the total (100) and dividing by 2 (50), then adding the gap (50 + 20 = 70).
+            <br><strong>The Error:</strong> 70 + 50 = 120. You've broken the total!
+            <br><strong>The Fix:</strong> <strong>(Sum - Difference) ÷ 2</strong>. Subtract the gap first to find the equal parts.</p>
         </div>
     </section>
 </div>
 
 <script>
+    const inputs = ['in-sum', 'in-diff'].map(id => document.getElementById(id));
     function update() {
-        const s = parseFloat(document.getElementById('in-sum').value) || 0;
-        const d = parseFloat(document.getElementById('in-diff').value) || 0;
-        const res = LogicProvider.modules.moreThan.calculate(s, d);
+        const s = parseFloat(inputs[0].value) || 0;
+        const d = parseFloat(inputs[1].value) || 0;
+        const res = LogicProvider.modules.moreThanTrap.calculate(s, d);
         
-        // Update Visuals
-        const eqPct = (res.smaller / res.larger) * 100;
-        const dfPct = (d / res.larger) * 100;
-        
-        document.getElementById('vis-a-eq').style.width = eqPct + "%";
-        document.getElementById('vis-a-df').style.width = dfPct + "%";
-        document.getElementById('bar-b').style.width = eqPct + "%";
-        
-        document.getElementById('vis-a-eq').innerText = res.smaller;
-        document.getElementById('vis-a-df').innerText = "+" + d;
-        document.getElementById('vis-b-eq').innerText = res.smaller;
+        // Dynamic Visuals
+        const largerTotal = parseFloat(res.larger);
+        const eqPct = (parseFloat(res.smaller) / largerTotal) * 100;
+        const dfPct = (d / largerTotal) * 100;
 
-        document.getElementById('trace-box').innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
+        document.getElementById('vis-large-eq').style.width = eqPct + "%";
+        document.getElementById('vis-diff').style.width = dfPct + "%";
+        document.getElementById('bar-small').style.width = eqPct + "%";
+        
+        document.getElementById('vis-large-eq').innerText = res.smaller;
+        document.getElementById('vis-diff').innerText = "+" + d;
+        document.getElementById('vis-small-eq').innerText = res.smaller;
+
+        document.getElementById('logic-trace').innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
     }
-    document.querySelectorAll('input').forEach(i => i.addEventListener('input', update));
+    inputs.forEach(i => i.addEventListener('input', update));
     window.onload = update;
 </script>
 </body>

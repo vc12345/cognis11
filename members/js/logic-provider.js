@@ -33,27 +33,54 @@ const LogicProvider = {
             }
         },
         
-        moreThan: {
+        moreThanTrap: {
             calculate: (total, diff) => {
-                const smaller = (total - diff) / 2;
-                const larger = smaller + diff;
+                const s = parseFloat(total) || 0;
+                const d = parseFloat(diff) || 0;
+                const smaller = (s - d) / 2;
+                const larger = smaller + d;
                 return {
-                    smaller, larger,
-                    steps: [`Total: ${total}`, `Gap: ${diff}`, `Levelled: ${total-diff}`, `Half: ${smaller}`]
+                    smaller: smaller.toFixed(1),
+                    larger: larger.toFixed(1),
+                    steps: [
+                        `1. Total sum is ${s}. The 'More Than' gap is ${d}.`,
+                        `2. Remove the gap: ${s} - ${d} = ${s - d}.`,
+                        `3. Divide by 2 to find equal parts: ${(s - d)} ÷ 2 = ${smaller.toFixed(1)}.`,
+                        `4. Smaller Share = ${smaller.toFixed(1)}.`,
+                        `5. Larger Share = ${smaller.toFixed(1)} + ${d} = ${larger.toFixed(1)}.`
+                    ]
                 };
             }
         },
         
         reverseOps: {
-            calculate: (res, op1T, op1V, op2T, op2V) => {
+            calculate: (final, o1t, o1v, o2t, o2v) => {
+                const f = parseFloat(final) || 0;
+                const v1 = parseFloat(o1v) || 0;
+                const v2 = parseFloat(o2v) || 0;
                 const inv = {add:'sub', sub:'add', mul:'div', div:'mul'};
-                const solve = (v, t, n) => {
-                    if(t==='add') return v-n; if(t==='sub') return v+n;
-                    if(t==='mul') return v/n; if(t==='div') return v*n;
+                const sym = {add:'+', sub:'-', mul:'×', div:'÷'};
+                
+                const solve = (val, t, n) => {
+                    if(t==='add') return val - n;
+                    if(t==='sub') return val + n;
+                    if(t==='mul') return val / n;
+                    if(t==='div') return val * n;
                 };
-                const mid = solve(res, op2T, op2V);
-                const start = solve(mid, op1T, op1V);
-                return { start, mid, steps: [`End: ${res}`, `Undo ${op2T}: ${mid}`, `Undo ${op1T}: ${start}`] };
+
+                const mid = solve(f, o2t, v2);
+                const start = solve(mid, o1t, v1);
+
+                return {
+                    start: start.toFixed(1),
+                    mid: mid.toFixed(1),
+                    steps: [
+                        `1. Start at the end with ${f}.`,
+                        `2. Reverse Op 2 (${sym[o2t]} ${v2}) → ${f} ${sym[inv[o2t]]} ${v2} = ${mid.toFixed(1)}.`,
+                        `3. Reverse Op 1 (${sym[o1t]} ${v1}) → ${mid.toFixed(1)} ${sym[inv[o1t]]} ${v1} = ${start.toFixed(1)}.`,
+                        `Result: The original number was ${start.toFixed(1)}.`
+                    ]
+                };
             }
         },
 

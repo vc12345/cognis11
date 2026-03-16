@@ -6,25 +6,27 @@
 const LogicProvider = {
     modules: {
 
-    unitary: {
-        calculate: (knownQty, knownValue, targetQty) => {
-            const unitValue = knownValue / knownQty;
-            const finalValue = unitValue * targetQty;
-            
-            return {
-                unitValue: unitValue.toFixed(2),
-                finalValue: finalValue.toFixed(2),
-                // Structural steps for the "Logic Trace"
-                steps: [
-                    { label: "The Known", text: `We know ${knownQty} units = £${knownValue}` },
-                    { label: "The Bridge", text: `1 unit = £${knownValue} ÷ ${knownQty} = £${unitValue.toFixed(2)}` },
-                    { label: "The Scale", text: `${targetQty} units = £${unitValue.toFixed(2)} × ${targetQty}` },
-                    { label: "The Target", text: `Total for ${targetQty} units is £${finalValue.toFixed(2)}` }
-                ]
-            };
+        unitary: {
+            calculate: (knownQty, knownValue, targetQty) => {
+                const unitValue = knownValue / knownQty;
+                const finalValue = unitValue * targetQty;
+                
+                return {
+                    unitValue: unitValue.toFixed(2),
+                    finalValue: finalValue.toFixed(2),
+                    // Structural steps for the "Logic Trace"
+                    steps: [
+                        { label: "The Known", text: `We know ${knownQty} units = £${knownValue}` },
+                        { label: "The Bridge", text: `1 unit = £${knownValue} ÷ ${knownQty} = £${unitValue.toFixed(2)}` },
+                        { label: "The Scale", text: `${targetQty} units = £${unitValue.toFixed(2)} × ${targetQty}` },
+                        { label: "The Target", text: `Total for ${targetQty} units is £${finalValue.toFixed(2)}` }
+                    ]
+                };
+            }
         }
-    },
-
+    }
+}
+/*
         // Module 24: Translation
         24: {
             name: "Translation Logic",
@@ -640,3 +642,5 @@ const LogicProvider = {
 if (typeof module !== 'undefined') {
     module.exports = LogicProvider;
 }
+
+        */

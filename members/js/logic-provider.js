@@ -1,6 +1,31 @@
 const LogicProvider = {
     modules: {
 
+        moreThanTrap: {
+            calculate: (total, difference) => {
+                const t = parseFloat(total) || 0;
+                const d = parseFloat(difference) || 0;
+
+                // The logic: Remove the gap to find the 'equalized' sum
+                const equalizedSum = t - d;
+                const smallerPart = equalizedSum / 2;
+                const largerPart = smallerPart + d;
+
+                return {
+                    smaller: smallerPart,
+                    larger: largerPart,
+                    equalized: equalizedSum,
+                    steps: [
+                        `Step 1: Identify the "Excess". One share is ${d} larger than the other.`,
+                        `Step 2: Snip off the excess. ${t} - ${d} = ${equalizedSum}.`,
+                        `Step 3: Share the remainder equally. ${equalizedSum} ÷ 2 = ${smallerPart}.`,
+                        `Step 4: You found the smaller share: ${smallerPart}.`,
+                        `Step 5: Add the excess back for the larger share: ${smallerPart} + ${d} = ${largerPart}.`
+                    ]
+                };
+            }
+        },
+
         reverseOps: {
             calculate: (finalResult, op1Type, op1Val, op2Type, op2Val) => {
                 const res = parseFloat(finalResult) || 0;

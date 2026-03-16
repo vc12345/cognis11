@@ -101,6 +101,32 @@
 
 <script src="js/logic-provider.js"></script>
 <script>
+    // Ensure LogicProvider exists if not loaded externally
+    window.LogicProvider = window.LogicProvider || { modules: {} };
+    
+    LogicProvider.modules.fractionsOfAmounts = {
+        calculate: (total, numerator, denominator) => {
+            const t = parseFloat(total) || 0;
+            const n = parseInt(numerator) || 0;
+            const d = parseInt(denominator) || 1;
+
+            if (d === 0) return { unitFraction: "0", result: "0", steps: ["Denominator cannot be zero."] };
+
+            const unitFraction = t / d;
+            const result = unitFraction * n;
+
+            return {
+                unitFraction: unitFraction.toFixed(2),
+                result: result.toFixed(2),
+                steps: [
+                    `Step 1: Find the value of one 'slice' (1/${d}). £${t} ÷ ${d} = £${unitFraction.toFixed(2)}.`,
+                    `Step 2: Find the value of ${n} 'slices'. £${unitFraction.toFixed(2)} × ${n} = £${result.toFixed(2)}.`,
+                    `Result: ${n}/${d} of £${t} is £${result.toFixed(2)}.`
+                ]
+            };
+        }
+    };
+
     const tIn = document.getElementById('t-in');
     const nIn = document.getElementById('n-in');
     const dIn = document.getElementById('d-in');
@@ -127,8 +153,6 @@
 
         uLab.innerText = `1/${den} = £${res.unitFraction}`;
         rLab.innerText = `${num}/${den} Total = £${res.result}`;
-
-        // Update Trace
         traceBox.innerHTML = res.steps.map(s => `<div class="trace-step">→ ${s}</div>`).join('');
     }
 

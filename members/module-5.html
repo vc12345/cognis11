@@ -2,113 +2,161 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module 5: Percentage Change | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 5: Direct Proportion | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
-        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
-        .anatomy-callout { background: #eff6ff; border-left: 5px solid #3b82f6; padding: 20px; border-radius: 4px; margin: 20px 0; }
-        .engine-controls { display: grid; gap: 20px; background: #f0fdf4; padding: 20px; border-radius: 8px; border: 1px solid #dcfce7; }
-        .slider-group { display: flex; align-items: center; gap: 15px; }
-        .slider-group label { min-width: 160px; font-weight: 600; }
-        input[type=range] { flex-grow: 1; accent-color: var(--success); }
-        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
-        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-        .logic-card { background: #ecfdf5; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border: 1px solid #a7f3d0; }
-        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
-        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
-        .trap-val { color: var(--trap); font-weight: 700; }
+        :root {
+            --cognis-blue: #002d5b;
+            --cognis-gold: #c5a059;
+            --cognis-light: #f4f7f9;
+            --trap-red: #d9534f;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; color: #2c3e50; padding: 40px 20px; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; }
+
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; margin-top: 0; letter-spacing: 2px; }
+
+        /* X-Ray Questions */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+
+        /* Anatomy: The Scaling Shadow */
+        .anatomy-display { margin: 30px 0; display: flex; align-items: center; justify-content: space-around; padding: 40px; background: #fff; border: 1px dashed #cbd5e0; border-radius: 8px; }
+        .shape-box { position: relative; border: 2px solid var(--cognis-blue); display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; font-weight: bold; background: rgba(0, 45, 91, 0.05); }
+        .shape-label { position: absolute; top: -25px; font-size: 0.75rem; color: var(--cognis-blue); font-weight: 800; }
+        .multiplier-arrow { font-size: 2rem; color: var(--cognis-gold); font-weight: bold; display: flex; flex-direction: column; align-items: center; }
+        .multiplier-arrow span { font-size: 0.8rem; text-transform: uppercase; margin-bottom: -10px; }
+
+        /* Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { margin-bottom: 20px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: none; font-size: 1rem; accent-color: var(--cognis-gold); }
+        .val-out { float: right; color: var(--cognis-gold); font-weight: bold; }
+        
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
+        .trace-step { margin-bottom: 10px; line-height: 1.4; color: #e2e8f0; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 5: Percentage Change</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "OPERATOR" PRINCIPLE</p>
-    </header>
+<div class="module-card">
+    <div class="header"><h1>Module 5: Direct Proportion (Scaling)</h1></div>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "Type 1" thinker treats a percentage like a standard number (e.g., £80 + 10% = £90). A "Type 2" thinker knows that 10% is not a value—it is an <em>operation</em> performed on the original amount.</p>
-        <div class="xray-examples">
-            <strong>Exam Wording Patterns:</strong>
-            <div class="example-item">1. "A bike normally costs £120 but is in a sale with 20% off."</div>
-            <div class="example-item">2. "Add 20% VAT to a plumbing bill of £300."</div>
-            <div class="example-item">3. "A house increases in value by 5% from its original £200,000 price."</div>
+        <p>Direct Proportion means the relationship between two values is fixed. If you double the quantity, you <strong>must</strong> double the value. They move in perfect sync.</p>
+        <div class="question-tiers">
+            <div class="tier-card">
+                <span>Adv Year 2 Level</span>
+                "If 2 stickers cost 10p, how much do 6 stickers cost?"
+            </div>
+            <div class="tier-card">
+                <span>Avg Year 4 Level</span>
+                "A recipe for 4 people uses 300g of sugar. How much sugar is needed for 10 people?"
+            </div>
+            <div class="tier-card">
+                <span>Adv Year 5 Level (11+)</span>
+                "On a map with a scale of 1:25,000, a road is 8cm long. What is the actual length in kilometers?"
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Think of the original amount as 100%. To find any other percentage, you should find a "Building Block" like 10% or 1% first.</p>
-        
-        <div class="anatomy-callout">
-            <strong>Step 1:</strong> Find the value of the percentage (Change).<br>
-            <strong>Step 2:</strong> Add it (Increase) or Subtract it (Decrease) from the 100% original.
+        <div class="anatomy-display">
+            <div class="shape-box" id="shape-orig" style="width: 60px; height: 60px;">
+                <div class="shape-label">Original</div>
+                <span id="orig-text">4</span>
+            </div>
+            <div class="multiplier-arrow">
+                <span>×<span id="mult-val">2.5</span></span>
+                →
+            </div>
+            <div class="shape-box" id="shape-target" style="width: 150px; height: 150px; border-color: var(--cognis-gold);">
+                <div class="shape-label" style="color:var(--cognis-gold)">Scaled</div>
+                <span id="target-text">10</span>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <div class="slider-group">
-                <label>Original Value (£): <span id="orig-val">80</span></label>
-                <input type="range" id="orig" min="10" max="1000" value="80" step="10">
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Original Quantity (e.g. People) <span class="val-out" id="q1-label">4</span></label>
+                    <input type="range" id="q1-in" min="1" max="20" value="4">
+                </div>
+                <div class="control-group">
+                    <label>Original Value (e.g. Grams) <span class="val-out" id="v1-label">300</span></label>
+                    <input type="range" id="v1-in" min="10" max="1000" step="10" value="300">
+                </div>
+                <div class="control-group">
+                    <label>Target Quantity <span class="val-out" id="q2-label">10</span></label>
+                    <input type="range" id="q2-in" min="1" max="50" value="10">
+                </div>
             </div>
-            <div class="slider-group">
-                <label>Percentage Change (%): <span id="perc-val">15</span></label>
-                <input type="range" id="perc" min="1" max="99" value="15">
-            </div>
+            <div class="trace-log" id="logic-trace"></div>
         </div>
+    </section>
 
-        <div class="question-card" id="q-text"></div>
-        <button class="btn" onclick="toggleLogic()">Show Calculation Steps</button>
-
-        <div id="logic" class="logic-card">
-            <p><strong>Step 1 (Find Change):</strong> <span id="calc-change"></span></p>
-            <p><strong>Step 2 (Increase):</strong> <span id="res-inc"></span></p>
-            <p><strong>Step 2 (Decrease):</strong> <span id="res-dec"></span></p>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 20px;">
+            <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Additive" Trap:</strong> If a recipe for 4 people is scaled to 6 people, students often see the "extra 2 people" and just add 2 to the ingredients. 
+            <br><br><strong>The Fix:</strong> Scaling is a <em>multiplication</em> game, not an addition game. If you add instead of multiply, the "taste" (ratio) of the recipe changes.</p>
         </div>
-    </div>
-
-    <div class="section saboteur-section">
-        <h2>Phase 4: The Saboteur</h2>
-        <div class="trap-item">
-            <span>The "Just Add" Trap (Original + Percent):</span>
-            <span class="trap-val">£<span id="trap-add"></span></span>
-        </div>
-        <div class="trap-item">
-            <span>The "Value Only" Trap (Forgot to Add/Sub):</span>
-            <span class="trap-val">£<span id="trap-lazy"></span></span>
-        </div>
-    </div>
+    </section>
 </div>
 
+<script src="js/logic-provider.js"></script>
 <script>
-    function update() {
-        const res = LogicProvider.getModule(5).generate(document.getElementById('orig').value, document.getElementById('perc').value);
-        document.getElementById('orig-val').innerText = res.inputs.original;
-        document.getElementById('perc-val').innerText = res.inputs.percent;
-        document.getElementById('q-text').innerText = `Calculate £${res.inputs.original} after a ${res.inputs.percent}% increase and decrease.`;
-        
-        document.getElementById('calc-change').innerText = `${res.inputs.percent}% of £${res.inputs.original} = £${res.answers.change.toFixed(2)}`;
-        document.getElementById('res-inc').innerText = `£${res.inputs.original} + £${res.answers.change.toFixed(2)} = £${res.answers.increase.toFixed(2)}`;
-        document.getElementById('res-dec').innerText = `£${res.inputs.original} - £${res.answers.change.toFixed(2)} = £${res.answers.decrease.toFixed(2)}`;
-        
-        document.getElementById('trap-add').innerText = res.answers.traps.justAdd;
-        document.getElementById('trap-lazy').innerText = res.answers.change.toFixed(2);
+    const q1In = document.getElementById('q1-in');
+    const v1In = document.getElementById('v1-in');
+    const q2In = document.getElementById('q2-in');
+    const traceBox = document.getElementById('logic-trace');
+    
+    // Anatomy Elements
+    const shapeOrig = document.getElementById('shape-orig');
+    const shapeTarget = document.getElementById('shape-target');
+    const multVal = document.getElementById('mult-val');
+    const origText = document.getElementById('orig-text');
+    const targetText = document.getElementById('target-text');
+
+    function refresh() {
+        const q1 = parseFloat(q1In.value);
+        const v1 = parseFloat(v1In.value);
+        const q2 = parseFloat(q2In.value);
+
+        document.getElementById('q1-label').innerText = q1;
+        document.getElementById('v1-label').innerText = v1;
+        document.getElementById('q2-label').innerText = q2;
+
+        const res = LogicProvider.modules.directProportion.calculate(q1, v1, q2);
+
+        // Update Anatomy
+        const baseSize = 50;
+        shapeOrig.style.width = `${baseSize}px`;
+        shapeOrig.style.height = `${baseSize}px`;
+        origText.innerText = q1;
+
+        const scaledSize = Math.min(250, baseSize * res.multiplier);
+        shapeTarget.style.width = `${scaledSize}px`;
+        shapeTarget.style.height = `${scaledSize}px`;
+        targetText.innerText = q2;
+        multVal.innerText = res.multiplier;
+
+        // Update Trace
+        traceBox.innerHTML = res.steps.map(s => `<div class="trace-step">→ ${s}</div>`).join('');
     }
-    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    [q1In, v1In, q2In].forEach(el => el.addEventListener('input', refresh));
+    window.onload = refresh;
 </script>
 </body>
 </html>

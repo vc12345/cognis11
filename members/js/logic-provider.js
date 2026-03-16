@@ -8,23 +8,19 @@ const LogicProvider = {
                 const duration = parseInt(addM) || 0;
         
                 const totalMins = (hStart * 60) + mStart + duration;
-                const finalH = Math.floor(totalMins / 60);
+                const finalH = Math.floor(totalMins / 60) % 24;
                 const finalM = totalMins % 60;
                 
                 const overflowed = (mStart + duration) >= 60;
                 const hoursCarried = Math.floor((mStart + duration) / 60);
         
                 return {
-                    totalMins,
-                    finalH: finalH % 24, // 24-hour clock
-                    finalM,
-                    overflowed,
-                    hoursCarried,
+                    totalMins, finalH, finalM, overflowed, hoursCarried,
                     steps: [
-                        `Step 1: Focus on the Minutes column first. ${mStart}m + ${duration}m = ${mStart + duration}m.`,
-                        overflowed ? `Step 2: OVERFLOW! ${mStart + duration}m is more than 60. Divide by 60 to find 'Carried Hours'.` : `Step 2: No overflow. Total minutes stay in the minutes column.`,
-                        overflowed ? `Step 3: ${mStart + duration} ÷ 60 = ${hoursCarried} hour(s) to carry, with ${finalM}m remaining.` : `Step 3: Final check of the Hours column.`,
-                        `Result: ${finalH % 24}:${finalM.toString().padStart(2, '0')}`
+                        `1. Start with ${mStart}m. Add ${duration}m = ${mStart + duration}m total.`,
+                        overflowed ? `2. OVERFLOW: ${mStart + duration}m contains ${hoursCarried} hour(s).` : `2. Safe: Total minutes are under 60.`,
+                        `3. Carry ${hoursCarried} to Hours and keep ${finalM} as remaining minutes.`,
+                        `Final Time: ${finalH}:${finalM.toString().padStart(2, '0')}`
                     ]
                 };
             }

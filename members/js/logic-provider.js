@@ -1,6 +1,29 @@
 const LogicProvider = {
     modules: {
 
+        timeConv = {
+            calculate: (h, m, addM) => {
+                let totalMinutes = (parseInt(h) * 60) + parseInt(m) + parseInt(addM);
+                let newH = Math.floor(totalMinutes / 60);
+                let newM = totalMinutes % 60;
+                
+                // Handle 24-hour wrap
+                newH = newH % 24;
+        
+                return {
+                    h: newH,
+                    m: newM,
+                    formatted: `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`,
+                    steps: [
+                        `Step 1: Convert start time to total minutes. (${h}h × 60) + ${m}m = ${(h*60)+m}m.`,
+                        `Step 2: Add the duration. ${(h*60)+m}m + ${addM}m = ${totalMinutes}m.`,
+                        `Step 3: Convert back. ${totalMinutes} ÷ 60 = ${Math.floor(totalMinutes/60)}h and ${newM}m remaining.`,
+                        `Result: ${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`
+                    ]
+                };
+            }
+        },
+
         intervalLogic = {
             calculate: (numObjects, totalValue) => {
                 const n = parseInt(numObjects) || 0;

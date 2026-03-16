@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 2: Rounding & Estimation | Cognis11</title>
+    <title>Module 2: Shared Ratios | Cognis11</title>
     <style>
         :root {
             --cognis-blue: #002d5b;
             --cognis-gold: #c5a059;
             --cognis-light: #f4f7f9;
-            --trap-red: #d9534f;
+            --part-a: #2c3e50;
+            --part-b: #c5a059;
         }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #eaeff2; color: #2c3e50; padding: 40px 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; color: #2c3e50; padding: 40px 20px; }
         .module-card { max-width: 900px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
@@ -19,49 +20,39 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; margin-top: 0; letter-spacing: 2px; }
 
-        /* Anatomy: The Proximity Scale */
-        .anatomy-display { margin: 40px 0; position: relative; padding: 20px 0; }
-        .number-line { height: 4px; background: #cbd5e0; width: 100%; position: relative; display: flex; justify-content: space-between; align-items: center; }
-        .point { width: 12px; height: 12px; background: var(--cognis-blue); border-radius: 50%; position: relative; }
-        .point::after { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 0.9rem; }
-        #p-low::after { content: attr(data-val); }
-        #p-high::after { content: attr(data-val); }
-        
-        #midpoint-marker { position: absolute; height: 20px; width: 2px; background: #a0aec0; top: -8px; }
-        #midpoint-marker::after { content: attr(data-val); position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; color: #718096; }
-
-        #active-num { position: absolute; width: 16px; height: 16px; background: var(--cognis-gold); border: 3px solid white; border-radius: 50%; top: -9px; transition: left 0.3s ease; box-shadow: 0 0 10px rgba(197, 160, 89, 0.5); }
-        #active-num::after { content: attr(data-val); position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); font-weight: 900; color: var(--cognis-gold); background: #fff; padding: 2px 8px; border-radius: 4px; border: 1px solid #eee; }
+        /* Anatomy: The Ratio Strip */
+        .ratio-strip-container { margin: 30px 0; }
+        .strip { display: flex; height: 60px; width: 100%; border-radius: 8px; overflow: hidden; border: 2px solid var(--cognis-blue); }
+        .box { flex: 1; border-right: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; color: white; }
+        .box.a { background: var(--part-a); }
+        .box.b { background: var(--part-b); }
+        .total-bracket { text-align: center; padding-top: 10px; font-weight: 800; border-top: 2px solid #cbd5e0; margin-top: 5px; }
 
         /* Engine */
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .control-group { margin-bottom: 20px; }
         .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
-        .control-group input, .control-group select { width: 100%; padding: 10px; border-radius: 4px; border: none; }
+        .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: none; font-size: 1rem; }
         
         .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
-        .trace-step { margin-bottom: 10px; line-height: 1.4; }
+        .trace-step { margin-bottom: 10px; line-height: 1.4; color: #e2e8f0; }
     </style>
 </head>
 <body>
 
 <div class="module-card">
-    <div class="header"><h1>Module 2: Rounding & Estimation</h1></div>
+    <div class="header"><h1>Module 2: Shared Ratios (Total Known)</h1></div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Rounding isn't about numbers; it's about <strong>Limits</strong>. We ask: "Which neighbor is this value closer to?"</p>
+        <p>In a ratio, every "part" is the same size. To share a total, you must find out how many parts there are in <strong>total</strong> first. Think of it as a chocolate bar: how many squares do we have to snap off?</p>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="anatomy-display">
-            <div class="number-line">
-                <div id="p-low" class="point" data-val="0"></div>
-                <div id="midpoint-marker" style="left: 50%;" data-val="5"></div>
-                <div id="active-num" style="left: 70%;" data-val="7"></div>
-                <div id="p-high" class="point" data-val="10"></div>
-            </div>
+        <div class="ratio-strip-container">
+            <div class="strip" id="ratio-strip"></div>
+            <div class="total-bracket" id="total-display">Total: £100</div>
         </div>
     </section>
 
@@ -70,17 +61,16 @@
         <div class="engine-container">
             <div class="controls">
                 <div class="control-group">
-                    <label>Input Number</label>
-                    <input type="number" id="num-input" value="147">
+                    <label>Total Amount (£)</label>
+                    <input type="number" id="total-in" value="100">
                 </div>
                 <div class="control-group">
-                    <label>Round To Nearest...</label>
-                    <select id="place-input">
-                        <option value="10">10 (Tens)</option>
-                        <option value="100">100 (Hundreds)</option>
-                        <option value="1">1 (Whole Number)</option>
-                        <option value="0.1">0.1 (1 Decimal Place)</option>
-                    </select>
+                    <label>Ratio (Part A)</label>
+                    <input type="number" id="a-in" value="3">
+                </div>
+                <div class="control-group">
+                    <label>Ratio (Part B)</label>
+                    <input type="number" id="b-in" value="2">
                 </div>
             </div>
             <div class="trace-log" id="logic-trace"></div>
@@ -88,49 +78,51 @@
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 20px;">
-            <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Place Value Drift":</strong> When rounding 197 to the nearest 10, students often say 190 because they see the '9'. They forget the boundary is 200. Always check your neighbors first!</p>
+        <div style="background: #fff5f5; border: 2px solid #d9534f; border-radius: 8px; padding: 20px;">
+            <h2 style="color:#d9534f; margin-bottom:10px;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Single Part" Trap:</strong> Students often divide the total by only one side of the ratio (e.g., $100 \div 3$). <strong>Stop!</strong> You must divide by the <em>sum</em> of the ratio parts because the total covers the whole bar, not just one person's share.</p>
         </div>
     </section>
 </div>
 
 <script src="js/logic-provider.js"></script>
 <script>
-    const nIn = document.getElementById('num-input');
-    const pIn = document.getElementById('place-input');
+    const tIn = document.getElementById('total-in');
+    const aIn = document.getElementById('a-in');
+    const bIn = document.getElementById('b-in');
+    const strip = document.getElementById('ratio-strip');
+    const totalDisp = document.getElementById('total-display');
     const traceBox = document.getElementById('logic-trace');
-    
-    // Anatomy Elements
-    const pLow = document.getElementById('p-low');
-    const pHigh = document.getElementById('p-high');
-    const pMid = document.getElementById('midpoint-marker');
-    const pActive = document.getElementById('active-num');
 
     function refresh() {
-        const n = parseFloat(nIn.value) || 0;
-        const p = parseFloat(pIn.value);
+        const total = parseFloat(tIn.value) || 0;
+        const a = parseInt(aIn.value) || 1;
+        const b = parseInt(bIn.value) || 1;
 
-        // CALL: LogicProvider.modules.rounding.calculate
-        const res = LogicProvider.modules.rounding.calculate(n, p);
+        const res = LogicProvider.modules.sharedRatiosTotal.calculate(total, a, b);
 
         // Update Anatomy
-        pLow.setAttribute('data-val', res.lower);
-        pHigh.setAttribute('data-val', res.upper);
-        pMid.setAttribute('data-val', res.midpoint);
-        pActive.setAttribute('data-val', n);
+        strip.innerHTML = '';
+        totalDisp.innerText = `Total Amount: £${total}`;
         
-        // Calculate % position on the number line
-        let percent = ((n - res.lower) / (res.upper - res.lower)) * 100;
-        // Clamp for visuals
-        percent = Math.max(-5, Math.min(105, percent));
-        pActive.style.left = `${percent}%`;
+        for(let i=0; i<a; i++) {
+            const box = document.createElement('div');
+            box.className = 'box a';
+            box.innerText = `£${res.valuePerPart}`;
+            strip.appendChild(box);
+        }
+        for(let i=0; i<b; i++) {
+            const box = document.createElement('div');
+            box.className = 'box b';
+            box.innerText = `£${res.valuePerPart}`;
+            strip.appendChild(box);
+        }
 
         // Update Trace
         traceBox.innerHTML = res.steps.map(s => `<div class="trace-step">→ ${s}</div>`).join('');
     }
 
-    [nIn, pIn].forEach(el => el.addEventListener('input', refresh));
+    [tIn, aIn, bIn].forEach(el => el.addEventListener('input', refresh));
     window.onload = refresh;
 </script>
 </body>

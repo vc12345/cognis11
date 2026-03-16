@@ -2,67 +2,183 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 17: Time Durations | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 17: Reverse Operations | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        .engine-controls { background: #fef2f2; padding: 20px; border-radius: 8px; border: 1px solid #fecaca; }
-        .time-display { font-size: 3rem; font-weight: 700; color: var(--primary); text-align: center; font-variant-numeric: tabular-nums; }
+        :root {
+            --cognis-blue: #002d5b;
+            --cognis-gold: #c5a059;
+            --cognis-light: #f4f7f9;
+        }
+
+        body { font-family: sans-serif; background: var(--cognis-light); color: var(--cognis-blue); padding: 15px; }
+        
+        /* Simplified/Deteriorating Graphics style */
+        section { background: #fff; border: 1px solid #ccc; padding: 20px; margin-bottom: 15px; }
+        h2 { margin-top: 0; color: var(--cognis-blue); border-bottom: 1px solid var(--cognis-gold); }
+
+        .conveyor-belt {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            padding: 10px;
+            border: 2px dashed #999;
+        }
+
+        .node {
+            width: 80px;
+            height: 80px;
+            border: 2px solid var(--cognis-blue);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+            position: relative;
+        }
+
+        .arrow-container { text-align: center; flex-grow: 1; }
+        .arrow-forward { color: var(--cognis-blue); font-size: 20px; font-weight: bold; }
+        .arrow-backward { color: var(--cognis-gold); font-size: 20px; font-weight: bold; }
+
+        .engine-ui { display: flex; gap: 20px; }
+        .controls { flex: 1; border-right: 1px solid #eee; padding-right: 20px; }
+        .trace { flex: 1; background: #222; color: #0f0; padding: 15px; font-family: monospace; }
+
+        .saboteur-box { background: #fee; border-left: 5px solid #d9534f; padding: 15px; }
+        select, input { padding: 5px; margin: 5px 0; width: 100%; }
     </style>
 </head>
 <body>
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 17: Time Durations</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "NUMBER LINE" PRINCIPLE</p>
-    </header>
 
-    <div class="section">
+    <section id="phase1">
         <h2>Phase 1: The X-Ray</h2>
-        <div class="xray-examples">
-            <p>1. "A film starts at 14:30 and lasts 110 minutes. When does it end?"</p>
-            <p>2. "How many minutes are there between 09:15 and 10:05?"</p>
-        </div>
-    </div>
+        <p>In "Reverse Operations," we work from the <strong>Result</strong> back to the <strong>Start</strong>. Every action has an opposite equal reaction.</p>
+        <ul>
+            <li><strong>Entry (Y2):</strong> I think of a number. I add 7. The result is 15. What was my number?</li>
+            <li><strong>Standard (Y4):</strong> I think of a number. I multiply it by 4, then add 10. The result is 50. What was my number?</li>
+            <li><strong>Advanced (Y5):</strong> I think of a number. I divide by 2, subtract 5, then multiply by 3. The result is 15. What was my number?</li>
+        </ul>
+    </section>
 
-    <div class="section">
+    <section id="phase2">
         <h2>Phase 2: The Anatomy</h2>
-        
-        <p><strong>The Golden Rule:</strong> Don't treat time like decimals. Always jump to the **next whole hour** first to avoid calculation errors.</p>
-    </div>
+        <div class="conveyor-belt">
+            <div class="node"><small>START</small><b id="vis-start">?</b></div>
+            
+            <div class="arrow-container">
+                <div class="arrow-forward">→ <span id="vis-op1-f"></span> →</div>
+                <div class="arrow-backward">← <span id="vis-op1-b"></span> ←</div>
+            </div>
 
-    <div class="section">
+            <div class="node"><small>MID</small><b id="vis-mid">?</b></div>
+
+            <div class="arrow-container">
+                <div class="arrow-forward">→ <span id="vis-op2-f"></span> →</div>
+                <div class="arrow-backward">← <span id="vis-op2-b"></span> ←</div>
+            </div>
+
+            <div class="node" style="border-color: var(--cognis-gold);"><small>RESULT</small><b id="vis-res">20</b></div>
+        </div>
+    </section>
+
+    <section id="phase3">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <label>Start Hour: <span id="h-val"></span></label><input type="range" id="hour" min="0" max="23" value="14" style="width:100%"><br>
-            <label>Start Minute: <span id="m-val"></span></label><input type="range" id="min" min="0" max="59" value="30" style="width:100%"><br>
-            <label>Duration (mins): <span id="d-val"></span></label><input type="range" id="dur" min="10" max="300" step="5" value="110" style="width:100%">
-        </div>
-        <div class="section" style="margin-top:20px; text-align:center;">
-            <p>End Time:</p>
-            <div class="time-display" id="res-time"></div>
-        </div>
-    </div>
+        <div class="engine-ui">
+            <div class="controls">
+                <label>Final Result:</label>
+                <input type="number" id="in-res" value="20">
+                
+                <hr>
+                <label>Op 1 (First thing happened):</label>
+                <select id="in-op1-type">
+                    <option value="add">Add (+)</option>
+                    <option value="sub" selected>Subtract (-)</option>
+                    <option value="mul">Multiply (×)</option>
+                    <option value="div">Divide (÷)</option>
+                </select>
+                <input type="number" id="in-op1-val" value="5">
 
-    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
+                <label>Op 2 (Second thing happened):</label>
+                <select id="in-op2-type">
+                    <option value="add">Add (+)</option>
+                    <option value="sub">Subtract (-)</option>
+                    <option value="mul" selected>Multiply (×)</option>
+                    <option value="div">Divide (÷)</option>
+                </select>
+                <input type="number" id="in-op2-val" value="2">
+            </div>
+            <div class="trace" id="trace-output">
+                // Logic trace will appear here...
+            </div>
+        </div>
+    </section>
+
+    <section id="phase4" class="saboteur-box">
         <h2>Phase 4: The Saboteur</h2>
-        <p style="color: #be123c; font-weight: 700;">The "Decimal Time" Trap: Adding 110 minutes to 14:30 and getting 15:40 (treating an hour as 100 minutes).</p>
-    </div>
-</div>
+        <p><strong>The "Forward Chronology" Trap:</strong> Students often try to apply operations in the order they were written. If the problem says "multiply then add," they try to multiply the result! 
+        <br><br>
+        <strong>The Fix:</strong> The last thing that happened is the <strong>first</strong> thing you undo. If you put your socks on then your shoes, you must take your shoes off before you can take your socks off. <strong>Last in, First out.</strong></p>
+    </section>
+
 <script>
-    function update() {
-        const res = LogicProvider.modules[17].generate(document.getElementById('hour').value, document.getElementById('min').value, document.getElementById('dur').value);
-        document.getElementById('h-val').innerText = res.inputs.h;
-        document.getElementById('m-val').innerText = res.inputs.m;
-        document.getElementById('d-val').innerText = res.inputs.duration;
-        document.getElementById('res-time').innerText = res.answers.endTime;
+    // LogicProvider simulation (normally external)
+    const Logic = {
+        getInverse: (type) => {
+            const map = { 'add': 'sub', 'sub': 'add', 'mul': 'div', 'div': 'mul' };
+            return map[type];
+        },
+        getSymbol: (type) => {
+            const map = { 'add': '+', 'sub': '-', 'mul': '×', 'div': '÷' };
+            return map[type];
+        }
+    };
+
+    function runEngine() {
+        const res = parseFloat(document.getElementById('in-res').value);
+        const op1T = document.getElementById('in-op1-type').value;
+        const op1V = parseFloat(document.getElementById('in-op1-val').value);
+        const op2T = document.getElementById('in-op2-type').value;
+        const op2V = parseFloat(document.getElementById('in-op2-val').value);
+
+        // Calculate using logic from provider logic
+        // ((X op1V) op2V) = res
+        // Step 1: Undo Op 2
+        let mid;
+        if(op2T === 'add') mid = res - op2V;
+        else if(op2T === 'sub') mid = res + op2V;
+        else if(op2T === 'mul') mid = res / op2V;
+        else mid = res * op2V;
+
+        // Step 2: Undo Op 1
+        let start;
+        if(op1T === 'add') start = mid - op1V;
+        else if(op1T === 'sub') start = mid + op1V;
+        else if(op1T === 'mul') start = mid / op1V;
+        else start = mid * op1V;
+
+        // Update Visuals
+        document.getElementById('vis-res').innerText = res;
+        document.getElementById('vis-mid').innerText = mid.toFixed(1);
+        document.getElementById('vis-start').innerText = start.toFixed(1);
+        
+        document.getElementById('vis-op1-f').innerText = Logic.getSymbol(op1T) + op1V;
+        document.getElementById('vis-op1-b').innerText = Logic.getSymbol(Logic.getInverse(op1T)) + op1V;
+        document.getElementById('vis-op2-f').innerText = Logic.getSymbol(op2T) + op2V;
+        document.getElementById('vis-op2-b').innerText = Logic.getSymbol(Logic.getInverse(op2T)) + op2V;
+
+        // Update Trace
+        document.getElementById('trace-output').innerHTML = `
+            > STARTING AT END: ${res}<br>
+            > UNDOING OP 2 (${op2T}): ${res} ${Logic.getSymbol(Logic.getInverse(op2T))} ${op2V} = ${mid.toFixed(1)}<br>
+            > UNDOING OP 1 (${op1T}): ${mid.toFixed(1)} ${Logic.getSymbol(Logic.getInverse(op1T))} ${op1V} = ${start.toFixed(1)}<br>
+            > ORIGINAL NUMBER: ${start.toFixed(1)}
+        `;
     }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    // Listeners
+    document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', runEngine));
+    runEngine();
 </script>
 </body>
 </html>

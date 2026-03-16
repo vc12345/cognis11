@@ -2,24 +2,24 @@ const LogicProvider = {
     modules: {
 
         intervalLogic = {
-            calculate: (objects, totalTime) => {
-                const n = parseInt(objects) || 0;
-                const total = parseFloat(totalTime) || 0;
+            calculate: (numObjects, totalValue) => {
+                const n = parseInt(numObjects) || 0;
+                const total = parseFloat(totalValue) || 0;
         
-                // The Golden Rule: Gaps = Objects - 1
+                // The Rule: Gaps = Objects - 1
                 const gaps = Math.max(0, n - 1);
-                const intervalValue = gaps > 0 ? total / gaps : 0;
+                const intervalSize = gaps > 0 ? total / gaps : 0;
         
                 return {
                     gaps: gaps,
-                    interval: intervalValue.toFixed(2),
+                    interval: intervalSize.toFixed(2),
                     steps: [
-                        `Step 1: Identify the number of objects/events. You have ${n}.`,
-                        `Step 2: Apply the "Interval Rule." The number of gaps is always Objects - 1.`,
-                        `${n} objects - 1 = ${gaps} gaps.`,
-                        `Step 3: Distribute the total measure (${total}) across the gaps.`,
-                        `${total} ÷ ${gaps} = ${intervalValue.toFixed(2)} per interval.`,
-                        `Result: Each gap/interval is ${intervalValue.toFixed(2)} units long.`
+                        `Step 1: Count the objects. You have ${n} items.`,
+                        `Step 2: Identify the intervals. Rule: Gaps = Items - 1.`,
+                        `${n} items - 1 = ${gaps} gaps.`,
+                        `Step 3: Distribute the total (${total}) across the gaps.`,
+                        `${total} ÷ ${gaps} = ${intervalSize.toFixed(2)}.`,
+                        `Result: Each interval/gap is ${intervalSize.toFixed(2)} units.`
                     ]
                 };
             }

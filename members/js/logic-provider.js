@@ -1,6 +1,29 @@
 const LogicProvider = {
     modules: {
 
+        directProportion: {
+            calculate: (origQty, origVal, targetQty) => {
+                const q1 = parseFloat(origQty);
+                const v1 = parseFloat(origVal);
+                const q2 = parseFloat(targetQty);
+
+                // Find the multiplier (Scale Factor)
+                const multiplier = q2 / q1;
+                const result = v1 * multiplier;
+
+                return {
+                    multiplier: multiplier.toFixed(2),
+                    result: result.toFixed(2),
+                    steps: [
+                        `Step 1: Find the Scale Factor (Multiplier). Divide target by original (${q2} ÷ ${q1} = ${multiplier.toFixed(2)}).`,
+                        `Step 2: Understand that in Direct Proportion, both sides must grow by the same multiplier.`,
+                        `Step 3: Multiply the original value by the Scale Factor (${v1} × ${multiplier.toFixed(2)}).`,
+                        `Result: The new value is ${result.toFixed(2)}.`
+                    ]
+                };
+            }
+        },
+        
         inverseProportion: {
             calculate: (workers, time, newWorkers) => {
                 const w1 = parseInt(workers) || 1;

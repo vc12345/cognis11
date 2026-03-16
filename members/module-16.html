@@ -14,41 +14,37 @@
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         
-        /* Header & Phases */
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
         .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; margin-bottom: 15px; }
 
-        /* Phase 1: X-Ray Tiers */
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
         .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; line-height: 1.4; }
         .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
 
-        /* Phase 2: Anatomy Simulation */
+        /* Fixed Anatomy Simulation */
         .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; }
         .bar-system { display: flex; flex-direction: column; gap: 20px; max-width: 600px; margin: auto; }
         .bar-row { display: flex; align-items: center; gap: 15px; }
         .bar-label { width: 100px; font-weight: bold; font-size: 0.8rem; color: var(--cognis-blue); text-transform: uppercase; }
-        .bar-track { flex-grow: 1; height: 45px; background: #cbd5e0; border-radius: 6px; display: flex; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
         
-        .part-base { background: var(--cognis-blue); height: 100%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1rem; }
-        .part-diff { background: var(--cognis-gold); height: 100%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-left: 2px dashed rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1rem; }
+        /* The container for the bars now controls the shared scale */
+        .bar-track { height: 45px; display: flex; border-radius: 6px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); background: #eee; }
+        
+        .part-base { background: var(--cognis-blue); height: 100%; transition: width 0.4s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .part-diff { background: var(--cognis-gold); height: 100%; transition: width 0.4s ease; border-left: 2px dashed rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
 
-        /* Phase 3: Engine */
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .control-group { margin-bottom: 20px; }
-        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
         .control-group input { width: 100%; accent-color: var(--cognis-gold); }
         .val-display { font-size: 1.2rem; font-weight: bold; color: var(--cognis-gold); margin-left: 10px; }
         
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 4px solid var(--cognis-gold); min-height: 180px; line-height: 1.6; }
-        .step-item { margin-bottom: 8px; color: #a0aec0; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 4px solid var(--cognis-gold); line-height: 1.6; }
         .step-highlight { color: #7cfc00; font-weight: bold; }
 
-        /* Phase 4: Saboteur */
         .saboteur-box { background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 25px; }
-        .trap-warning { color: var(--trap-red); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; display: block; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -58,7 +54,7 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>The "More Than" Trap asks you to find values for two objects when you are given their <strong>Total (Sum)</strong> and the <strong>Gap (Difference)</strong> between them.</p>
+        <p><strong>Topic Logic:</strong> To find two unknown values when given a <strong>Sum</strong> and a <strong>Difference</strong>, we must equalize the values by "snipping off" the excess gap. This leaves two identical parts that can be divided perfectly.</p>
         <div class="question-tiers">
             <div class="tier-card"><span>Entry</span>Two friends have 12 stickers. Sarah has 4 more than Tom. How many does Tom have?</div>
             <div class="tier-card"><span>Standard</span>A tablet and a case cost £250. The tablet is £200 more than the case. Find the cost of the case.</div>
@@ -68,12 +64,12 @@
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Watch how we "snip" the difference to level the playing field, making both shares identical.</p>
+        <p>Watch how the <strong>Small Share</strong> acts as our base unit. The <strong>Large Share</strong> is simply that base unit plus the gold difference block.</p>
         <div class="simulation-area">
             <div class="bar-system">
                 <div class="bar-row">
                     <div class="bar-label">Large Share</div>
-                    <div class="bar-track">
+                    <div class="bar-track" id="track-a" style="width: 100%;">
                         <div id="vis-a-base" class="part-base">?</div>
                         <div id="vis-a-diff" class="part-diff">+DIFF</div>
                     </div>
@@ -94,7 +90,7 @@
             <div class="controls">
                 <div class="control-group">
                     <label>Total Sum <span class="val-display" id="out-sum">100</span></label>
-                    <input type="range" id="in-sum" min="20" max="500" value="100">
+                    <input type="range" id="in-sum" min="40" max="500" value="100">
                 </div>
                 <div class="control-group">
                     <label>Difference (The "More") <span class="val-display" id="out-diff">20</span></label>
@@ -107,40 +103,15 @@
 
     <section class="phase">
         <div class="saboteur-box">
-            <span class="trap-warning">Phase 4: The Saboteur — The "Type 1" Impulse</span>
-            <p><strong>The Trap:</strong> Dividing the total by 2 first, then adding the difference. If Total is 10 and Gap is 2, Type 1 logic says 10 ÷ 2 = 5, then 5 + 2 = 7. But 7 + 5 = 12, not 10!</p>
-            <p style="margin-bottom: 0;"><strong>The "Cognis" Fix:</strong> Level the playing field first. Subtract the difference to create two equal blocks, then divide. This ensures the total is preserved.</p>
+            <h2 style="color:var(--trap-red); font-size: 0.8rem;">Phase 4: The Saboteur — The "Type 1" Impulse</h2>
+            <p><strong>The Trap:</strong> Solving as 100 ÷ 2 = 50, then saying the shares are 50 and 70 (50+20). 
+            <br><strong>The Error:</strong> 70 + 50 = 120. You've increased the total by mistake!
+            <br><strong>The Fix:</strong> Level first. Subtract the gap (100 - 20 = 80), then divide (80 ÷ 2 = 40). The shares are 40 and 60. Total = 100. Correct!</p>
         </div>
     </section>
 </div>
 
 <script>
-    // LogicProvider update as requested
-    const LogicProvider = {
-        modules: {
-            moreThanTrap: {
-                calculate: (total, diff) => {
-                    const s = parseInt(total);
-                    const d = parseInt(diff);
-                    const equalized = s - d;
-                    const smaller = equalized / 2;
-                    const larger = smaller + d;
-
-                    return {
-                        s, d, equalized, smaller, larger,
-                        steps: [
-                            `1. Identify Total Sum: <span class="step-highlight">${s}</span>.`,
-                            `2. Identify Difference (Gap): <span class="step-highlight">${d}</span>.`,
-                            `3. Subtract Gap: ${s} - ${d} = <span class="step-highlight">${equalized}</span>.`,
-                            `4. Divide by 2: ${equalized} ÷ 2 = <span class="step-highlight">${smaller}</span> (Small Share).`,
-                            `5. Add Gap back: ${smaller} + ${d} = <span class="step-highlight">${larger}</span> (Large Share).`
-                        ]
-                    };
-                }
-            }
-        }
-    };
-
     const inSum = document.getElementById('in-sum');
     const inDiff = document.getElementById('in-diff');
     const trace = document.getElementById('trace-output');
@@ -154,36 +125,40 @@
         let s = parseInt(inSum.value);
         let d = parseInt(inDiff.value);
 
-        // Logic Constraint: Difference must be less than Sum
-        if (d >= s) { 
-            d = s - 2; 
-            inDiff.value = d; 
-        }
+        // Gap must be less than sum and maintain parity for clean division in examples
+        if (d >= s) { d = s - 10; inDiff.value = d; }
         
         document.getElementById('out-sum').innerText = s;
         document.getElementById('out-diff').innerText = d;
 
-        const res = LogicProvider.modules.moreThanTrap.calculate(s, d);
-
-        // Update Trace
-        trace.innerHTML = res.steps.map(step => `<div class="step-item">${step}</div>`).join('');
+        // The Logic
+        const equalized = s - d;
+        const smaller = equalized / 2;
+        const larger = smaller + d;
 
         // Visual Ratios
-        // The Large Share is 100% width of the track.
-        // The Base (Equal) part of the Large Share is (Smaller / Larger) %
-        const baseWidth = (res.smaller / res.larger) * 100;
-        const diffWidth = 100 - baseWidth;
+        // Track A (Large) is 100% of the bar-track width.
+        // The Base part (blue) is smaller/larger as a percentage.
+        const baseWidthRatio = (smaller / larger) * 100;
+        const diffWidthRatio = 100 - baseWidthRatio;
 
-        visABase.style.width = baseWidth + "%";
-        visADiff.style.width = diffWidth + "%";
+        visABase.style.width = baseWidthRatio + "%";
+        visADiff.style.width = diffWidthRatio + "%";
         
-        // The Small Share track width is relative to the Large Share track
-        trackB.style.width = baseWidth + "%";
+        // Track B (Small) only contains the base part, 
+        // so its width must match the blue part of Track A exactly.
+        trackB.style.width = baseWidthRatio + "%";
 
-        // Update Inner Labels
-        visABase.innerText = res.smaller;
-        visADiff.innerText = "+" + res.d;
-        visBBase.innerText = res.smaller;
+        visABase.innerText = smaller;
+        visADiff.innerText = "+" + d;
+        visBBase.innerText = smaller;
+
+        trace.innerHTML = [
+            `1. Start with Total: <span class="step-highlight">${s}</span>`,
+            `2. Subtract Gap: ${s} - ${d} = <span class="step-highlight">${equalized}</span>`,
+            `3. Divide by 2: ${equalized} ÷ 2 = <span class="step-highlight">${smaller}</span>`,
+            `Result: Smaller share is ${smaller}, Large is ${larger}.`
+        ].map(step => `<div>→ ${step}</div>`).join('');
     }
 
     inSum.oninput = update;

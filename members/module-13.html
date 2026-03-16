@@ -16,7 +16,7 @@
         .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
 
         /* Simulation Area */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 100px 20px; margin: 30px 0; position: relative; overflow: hidden; }
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 100px 0; margin: 30px 0; position: relative; overflow: hidden; width: 100%; }
         .track-line { height: 4px; background: #cbd5e0; width: 100%; position: absolute; top: 50%; left: 0; transform: translateY(-50%); }
         
         .tunnel-block { 
@@ -24,21 +24,22 @@
             left: 60%; 
             top: 50%; 
             transform: translate(-50%, -50%); 
-            height: 60px; 
-            background: rgba(71, 85, 105, 0.85); 
+            height: 70px; 
+            width: 250px;
+            background: rgba(71, 85, 105, 0.9); 
             border: 3px solid #1e293b; 
             z-index: 2; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             color: white; 
-            font-size: 0.7rem; 
+            font-size: 0.8rem; 
             font-weight: bold; 
         }
 
         .train-sprite { 
             position: absolute; 
-            left: 0; 
+            left: -200px; /* Start off-screen */
             top: 50%; 
             transform: translateY(-50%); 
             height: 30px; 
@@ -50,17 +51,16 @@
             color: white; 
             font-size: 0.6rem; 
             font-weight: bold; 
+            border-radius: 2px;
         }
 
-        .status-msg { position: absolute; top: 20px; width: 100%; text-align: center; font-weight: bold; color: var(--cognis-blue); }
-
+        .status-msg { position: absolute; top: 20px; width: 100%; text-align: center; font-weight: bold; color: var(--cognis-blue); font-size: 1.1rem; }
         .sim-btn { display: block; margin: 40px auto 0; background: var(--cognis-gold); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .control-group { margin-bottom: 15px; }
         .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
         .control-group input { width: 100%; padding: 8px; border-radius: 4px; border: none; font-size: 1rem; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); min-height: 150px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); min-height: 120px; }
     </style>
 </head>
 <body>
@@ -80,12 +80,12 @@
         <h2>Phase 2: The Anatomy</h2>
         
         <div class="simulation-area" id="sim-container">
-            <div id="status" class="status-msg">Click Start to Begin</div>
+            <div id="status" class="status-msg">Click Start</div>
             <div class="track-line"></div>
             <div id="tunnel-vis" class="tunnel-block">TUNNEL</div>
             <div id="train-vis" class="train-sprite">TRAIN</div>
         </div>
-        <button id="sim-btn" class="sim-btn" onclick="runSimulation()">Run Precision Simulation</button>
+        <button id="sim-btn" class="sim-btn" onclick="runSimulation()">Start Precision Simulation</button>
     </section>
 
     <section class="phase">
@@ -94,15 +94,11 @@
             <div class="controls">
                 <div class="control-group">
                     <label>Train Length (m)</label>
-                    <input type="number" id="train-len" value="200" oninput="initVisuals()">
+                    <input type="number" id="train-len" value="180" oninput="initVisuals()">
                 </div>
                 <div class="control-group">
                     <label>Tunnel Length (m)</label>
                     <input type="number" id="tunnel-len" value="400" oninput="initVisuals()">
-                </div>
-                <div class="control-group">
-                    <label>Speed (km/h)</label>
-                    <input type="number" id="speed-val" value="72">
                 </div>
             </div>
             <div id="logic-trace" class="trace-log">Adjust values to see logic...</div>
@@ -115,64 +111,67 @@
     const tunnel = document.getElementById('tunnel-vis');
     const status = document.getElementById('status');
     const simBtn = document.getElementById('sim-btn');
+    const container = document.getElementById('sim-container');
 
     function initVisuals() {
         const tLen = parseInt(document.getElementById('train-len').value) || 100;
         const tunLen = parseInt(document.getElementById('tunnel-len').value) || 100;
+        
         train.style.width = (tLen / 2) + 'px';
         tunnel.style.width = (tunLen / 2) + 'px';
-        train.style.transition = 'none';
-        train.style.left = '0px';
-        status.innerText = "System Ready";
         
-        const speed = parseInt(document.getElementById('speed-val').value) || 1;
-        const totalD = tLen + tunLen;
+        train.style.transition = 'none';
+        train.style.left = '-250px';
+        status.innerText = "Ready";
+        
         document.getElementById('logic-trace').innerHTML = `
-            <div>→ Total Distance: ${tLen}m + ${tunLen}m = ${totalD}m</div>
-            <div>→ Speed: ${(speed/3.6).toFixed(2)} m/s</div>
-            <div>→ Time to Clear: ${(totalD / (speed/3.6)).toFixed(1)}s</div>
+            <div>→ Travel starts when Nose enters.</div>
+            <div>→ Travel ends when Tail exits.</div>
+            <div>→ Total Distance = ${tLen}m + ${tunLen}m = ${tLen + tunLen}m.</div>
         `;
     }
 
     async function runSimulation() {
         simBtn.disabled = true;
-        const containerWidth = document.getElementById('sim-container').offsetWidth;
-        const trainWidth = train.offsetWidth;
-        const tunnelLeft = tunnel.offsetLeft;
-        const tunnelWidth = tunnel.offsetWidth;
-        const tunnelRight = tunnelLeft + tunnelWidth;
+        
+        // Use getBoundingClientRect for absolute coordinate precision relative to container
+        const cRect = container.getBoundingClientRect();
+        const tRect = tunnel.getBoundingClientRect();
+        
+        const tunnelEntryX = tRect.left - cRect.left;
+        const tunnelExitX = tRect.right - cRect.left;
+        const trainW = train.offsetWidth;
 
         // Reset
         train.style.transition = 'none';
-        train.style.left = '0px';
+        train.style.left = '-250px';
         await new Promise(r => setTimeout(r, 100));
 
-        // 1. Move until NOSE (right edge) touches ENTRY (tunnel left)
-        // Train left = tunnel left - train width
-        status.innerText = "Approaching Tunnel...";
-        train.style.transition = 'left 1.5s linear';
-        train.style.left = (tunnelLeft - trainWidth) + 'px';
-        await new Promise(r => setTimeout(r, 1500));
+        // 1. Approach: Stop when NOSE (left + width) == ENTRY
+        status.innerText = "Approaching...";
+        train.style.transition = 'left 1.2s ease-out';
+        train.style.left = (tunnelEntryX - trainW) + 'px';
+        await new Promise(r => setTimeout(r, 1300));
 
-        // PAUSE 1: Nose at Entry
+        // PAUSE 1
         status.innerText = "PAUSE: Nose at Entry (2s)";
         await new Promise(r => setTimeout(r, 2000));
 
-        // 2. Move until TAIL (left edge) touches EXIT (tunnel right)
-        status.innerText = "Passing Through...";
+        // 2. Through: Stop when TAIL (left) == EXIT
+        status.innerText = "Passing through tunnel...";
         train.style.transition = 'left 2s linear';
-        train.style.left = tunnelRight + 'px';
-        await new Promise(r => setTimeout(r, 2000));
+        train.style.left = tunnelExitX + 'px';
+        await new Promise(r => setTimeout(r, 2100));
 
-        // PAUSE 2: Tail at Exit
-        status.innerText = "PAUSE: Tail at Exit - Clear! (5s)";
+        // PAUSE 2
+        status.innerText = "PAUSE: Tail cleared Exit (5s)";
         await new Promise(r => setTimeout(r, 5000));
 
-        // 3. Final run-off if space remains
-        status.innerText = "Journey Continuing...";
-        train.style.transition = 'left 1s linear';
-        train.style.left = (containerWidth - trainWidth) + 'px';
-        await new Promise(r => setTimeout(r, 1000));
+        // 3. Continue to end
+        status.innerText = "Moving to destination...";
+        train.style.transition = 'left 1s ease-in';
+        train.style.left = (container.offsetWidth + 50) + 'px';
+        await new Promise(r => setTimeout(r, 1100));
 
         status.innerText = "Simulation Complete";
         simBtn.disabled = false;

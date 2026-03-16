@@ -1,6 +1,30 @@
 const LogicProvider = {
     modules: {
 
+        intervalLogic = {
+            calculate: (objects, totalTime) => {
+                const n = parseInt(objects) || 0;
+                const total = parseFloat(totalTime) || 0;
+        
+                // The Golden Rule: Gaps = Objects - 1
+                const gaps = Math.max(0, n - 1);
+                const intervalValue = gaps > 0 ? total / gaps : 0;
+        
+                return {
+                    gaps: gaps,
+                    interval: intervalValue.toFixed(2),
+                    steps: [
+                        `Step 1: Identify the number of objects/events. You have ${n}.`,
+                        `Step 2: Apply the "Interval Rule." The number of gaps is always Objects - 1.`,
+                        `${n} objects - 1 = ${gaps} gaps.`,
+                        `Step 3: Distribute the total measure (${total}) across the gaps.`,
+                        `${total} ÷ ${gaps} = ${intervalValue.toFixed(2)} per interval.`,
+                        `Result: Each gap/interval is ${intervalValue.toFixed(2)} units long.`
+                    ]
+                };
+            }
+        },
+
         trainTunnel = {
             calculate: (trainLen, tunnelLen, speedKmh) => {
                 const L1 = parseFloat(trainLen) || 0;

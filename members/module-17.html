@@ -4,32 +4,34 @@
     <meta charset="UTF-8">
     <title>Module 17: Reverse Operations | Cognis11</title>
     <style>
-        :root { --blue: #002d5b; --gold: #c5a059; --light: #f4f7f9; --trap: #d9534f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 20px; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
-        .header { background: var(--blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--gold); }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--blue); font-size: 0.85rem; }
-        .tier-card span { display: block; font-weight: bold; color: var(--blue); margin-bottom: 5px; font-size: 0.7rem; text-transform: uppercase; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.7rem; text-transform: uppercase; }
 
         /* Logic Rewinder Graphic */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 60px 20px; margin: 20px 0; display: flex; justify-content: space-around; align-items: center; position: relative; }
-        .node { width: 80px; height: 80px; border: 4px solid var(--blue); border-radius: 15px; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; transition: all 0.4s; }
-        .node small { font-size: 0.6rem; color: #718096; margin-bottom: 2px; }
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 60px 20px; margin: 30px 0; display: flex; justify-content: space-around; align-items: center; position: relative; }
+        .node { width: 80px; height: 80px; background: white; border: 4px solid var(--cognis-blue); border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; transition: all 0.4s; position: relative; z-index: 2; }
+        .node small { font-size: 0.6rem; color: #a0aec0; margin-bottom: 5px; }
+        
         .path { flex-grow: 1; height: 4px; background: #cbd5e0; margin: 0 -10px; position: relative; }
-        .op-box { position: absolute; top: -45px; left: 50%; transform: translateX(-50%); background: var(--blue); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; }
-        .inv-box { position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%); background: var(--gold); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; opacity: 0.3; transition: opacity 0.3s; }
-        .rewind-mode .inv-box { opacity: 1; font-weight: bold; border: 2px solid white; }
-        .rewind-mode .node { border-color: var(--gold); transform: scale(1.1); }
+        .op-badge { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); background: var(--cognis-blue); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; transition: all 0.3s; }
+        
+        .rewind-active .op-badge { background: var(--cognis-gold); transform: translateX(-50%) translateY(55px); }
+        .rewind-active .node { border-color: var(--cognis-gold); box-shadow: 0 0 15px rgba(197, 160, 89, 0.4); }
 
-        .action-btn { background: var(--gold); color: white; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; display: block; margin: 30px auto 0; text-transform: uppercase; }
+        .sim-btn { display: block; margin: 20px auto; background: var(--cognis-gold); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group select, .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: none; background: #2d3748; color: white; margin-top: 5px; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: monospace; border-left: 3px solid var(--gold); line-height: 1.8; }
+        .control-group select, .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: none; background: #2d3748; color: white; margin-top: 5px; font-size: 1rem; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -38,11 +40,11 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p><strong>Topic Logic:</strong> We use <strong>Inverse Functional Mapping</strong>. To find a hidden starting point, we must walk backwards from the result, flipping every operation sign and reversing the sequence of events.</p>
+        <p><strong>Topic Logic:</strong> Reverse Operations (Inverse functions) are like retracing your steps. To find where you started, you must walk backwards from the end, doing the <strong>exact opposite</strong> of every instruction in the <strong>opposite order</strong>.</p>
         <div class="question-tiers">
-            <div class="tier-card"><span>Advanced Y2</span>"I think of a number. I add 5 and get 12. What was my number?"</div>
-            <div class="tier-card"><span>Average Y4</span>"I multiply a number by 3, then subtract 4 to get 20. What was it?"</div>
-            <div class="tier-card"><span>Advanced Y5</span>"I square a number, add 4, then divide by 2 to get 10. Find the number."</div>
+            <div class="tier-card"><span>Entry (Year 2)</span>"I think of a number. I add 5 and get 12. What was my number?"</div>
+            <div class="tier-card"><span>Average (Year 4)</span>"I multiply a number by 3, then subtract 4. The result is 20. What was it?"</div>
+            <div class="tier-card"><span>Advanced (Year 5)</span>"I square a number, add 4, then divide by 2 to get 10. Find the number."</div>
         </div>
     </section>
 
@@ -50,77 +52,95 @@
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area" id="machine">
             <div class="node"><small>START</small><span id="v-start">?</span></div>
-            <div class="path"><div class="op-box" id="l-op1">+5</div><div class="inv-box" id="l-inv1">-5</div></div>
+            <div class="path"><div class="op-badge" id="v-op1">+5</div></div>
             <div class="node"><small>MID</small><span id="v-mid">?</span></div>
-            <div class="path"><div class="op-box" id="l-op2">×2</div><div class="inv-box" id="l-inv2">÷2</div></div>
-            <div class="node" style="border-color: var(--gold);"><small>RESULT</small><span id="v-res">20</span></div>
+            <div class="path"><div class="op-badge" id="v-op2">×2</div></div>
+            <div class="node" style="border-color: var(--cognis-gold);"><small>RESULT</small><span id="v-res">20</span></div>
         </div>
-        <button class="action-btn" onclick="toggleRewind()">Activate Rewind Logic</button>
+        <button class="sim-btn" onclick="runReverse()">Run Reverse Journey</button>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <div class="control-group"><label>Result</label><input type="number" id="in-res" value="20"></div>
+                <div class="control-group"><label>Final Result</label><input type="number" id="in-res" value="20"></div>
                 <div class="control-group">
-                    <label>Op 1</label>
+                    <label>Op 1 (Start)</label>
                     <select id="in-o1t"><option value="add">+</option><option value="sub">-</option><option value="mul">×</option><option value="div">÷</option></select>
                     <input type="number" id="in-o1v" value="5">
                 </div>
                 <div class="control-group">
-                    <label>Op 2</label>
+                    <label>Op 2 (End)</label>
                     <select id="in-o2t"><option value="mul">×</option><option value="div">÷</option><option value="add">+</option><option value="sub">-</option></select>
                     <input type="number" id="in-o2v" value="2">
                 </div>
             </div>
-            <div class="trace-log" id="logic-trace"></div>
+            <div class="trace-log" id="logic-trace">Initializing...</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap); border-radius: 8px; padding: 25px;">
-            <h2 style="color:var(--trap);">Phase 4: The Saboteur</h2>
-            <p><strong>The "Forward" Trap:</strong> Attempting to reverse Op 1 before Op 2 just because it was written first.
-            <br><strong>The Fix:</strong> Last In, First Out (LIFO). You must undo the <strong>last</strong> thing that happened before you can touch the first.</p>
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 25px;">
+            <h2 style="color:var(--trap-red);">Phase 4: The Saboteur</h2>
+            <p><strong>The "Clockwise" Trap:</strong> Attempting to reverse Op 1 before Op 2 because it was written first.
+            <br><strong>The Fix:</strong> Last In, First Out (LIFO). Think of putting on socks then shoes. To reverse, you <strong>must</strong> take off the shoes first!</p>
         </div>
     </section>
 </div>
 
 <script>
-    const elIds = ['in-res', 'in-o1t', 'in-o1v', 'in-o2t', 'in-o2v'];
-    const inputs = elIds.map(id => document.getElementById(id));
-    const syms = {add:'+', sub:'-', mul:'×', div:'÷'};
-    const invs = {add:'-', sub:'+', mul:'÷', div:'×'};
+    const LogicProvider = {
+        modules: {
+            reverseOps: {
+                calculate: (res, o1t, o1v, o2t, o2v) => {
+                    const f = parseFloat(res) || 0;
+                    const v1 = parseFloat(o1v) || 0;
+                    const v2 = parseFloat(o2v) || 0;
+                    const solve = (v, t, n) => {
+                        if(t==='add') return v - n; if(t==='sub') return v + n;
+                        if(t==='mul') return v / n; if(t==='div') return v * n;
+                    };
+                    const mid = solve(f, o2t, v2);
+                    const start = solve(mid, o1t, v1);
+                    return { start, mid, steps: [
+                        `Step 1: Start at ${f}.`,
+                        `Step 2: Reverse Op 2 to find Middle: ${mid}.`,
+                        `Step 3: Reverse Op 1 to find Start: ${start}.`
+                    ]};
+                }
+            }
+        }
+    };
 
-    function update() {
+    const inputs = ['in-res', 'in-o1t', 'in-o1v', 'in-o2t', 'in-o2v'].map(id => document.getElementById(id));
+    const syms = {add:'+', sub:'-', mul:'×', div:'÷'};
+    const machine = document.getElementById('machine');
+
+    function refresh() {
         const [res, o1t, o1v, o2t, o2v] = inputs.map(i => i.value);
-        const data = LogicProvider.modules.reverseOps.calculate(res, o1t, o1v, o2t, o2v);
-        
         document.getElementById('v-res').innerText = res;
+        document.getElementById('v-op1').innerText = syms[o1t] + o1v;
+        document.getElementById('v-op2').innerText = syms[o2t] + o2v;
         document.getElementById('v-mid').innerText = "?";
         document.getElementById('v-start').innerText = "?";
+        machine.classList.remove('rewind-active');
         
-        document.getElementById('l-op1').innerText = syms[o1t] + o1v;
-        document.getElementById('l-inv1').innerText = invs[o1t] + o1v;
-        document.getElementById('l-op2').innerText = syms[o2t] + o2v;
-        document.getElementById('l-inv2').innerText = invs[o2t] + o2v;
-
+        const data = LogicProvider.modules.reverseOps.calculate(res, o1t, o1v, o2t, o2v);
         document.getElementById('logic-trace').innerHTML = data.steps.map(s => `<div>→ ${s}</div>`).join('');
-        document.getElementById('machine').classList.remove('rewind-mode');
     }
 
-    function toggleRewind() {
+    function runReverse() {
+        machine.classList.add('rewind-active');
         const [res, o1t, o1v, o2t, o2v] = inputs.map(i => i.value);
         const data = LogicProvider.modules.reverseOps.calculate(res, o1t, o1v, o2t, o2v);
-        document.getElementById('machine').classList.add('rewind-mode');
         
-        setTimeout(() => { document.getElementById('v-mid').innerText = data.mid; }, 400);
-        setTimeout(() => { document.getElementById('v-start').innerText = data.start; }, 800);
+        setTimeout(() => { document.getElementById('v-mid').innerText = data.mid; }, 500);
+        setTimeout(() => { document.getElementById('v-start').innerText = data.start; }, 1000);
     }
 
-    inputs.forEach(i => i.addEventListener('input', update));
-    window.onload = update;
+    inputs.forEach(i => i.addEventListener('input', refresh));
+    window.onload = refresh;
 </script>
 </body>
 </html>

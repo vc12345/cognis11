@@ -2,65 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 10: Scaling Ratios | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 10: Constant Speed | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        .engine-controls { background: #fefce8; padding: 20px; border-radius: 8px; border: 1px solid #fef08a; }
-        .question-card { border: 2px solid var(--primary); padding: 25px; border-radius: 8px; text-align: center; font-style: italic; margin: 20px 0; background: white; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+
+        /* DST Triangle */
+        .triangle-container { display: flex; justify-content: center; margin: 40px 0; }
+        .dst-triangle { width: 0; height: 0; border-left: 100px solid transparent; border-right: 100px solid transparent; border-bottom: 180px solid var(--cognis-blue); position: relative; }
+        .dst-label { position: absolute; color: white; font-weight: bold; cursor: pointer; transition: opacity 0.3s; }
+        .label-d { top: 110px; left: -10px; font-size: 1.5rem; }
+        .label-s { top: 145px; left: -60px; }
+        .label-t { top: 145px; left: 40px; }
+        .dst-label.hidden { opacity: 0.2; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
     </style>
 </head>
 <body>
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 10: Scaling Ratios</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "MULTIPLIER" PRINCIPLE</p>
-    </header>
-
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 10: Constant Speed</h1></div>
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <div class="xray-examples">
-            <p>1. "A recipe for 2 people uses 100g flour. How much flour for 6 people?"</p>
-            <p>2. "The ratio of cats to dogs is 2:5. If there are 10 cats, how many dogs?"</p>
+        <div class="question-tiers">
+            <div class="tier-card"><span>Adv Year 2</span>"A toy car travels 10m in 2 seconds. How fast is it going?"</div>
+            <div class="tier-card"><span>Avg Year 4</span>"A train travels at 60mph for 3 hours. How far does it go?"</div>
+            <div class="tier-card"><span>Adv Year 5</span>"A cyclist travels 45km at a speed of 15km/h. How long does the journey take?"</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        
-        <p><strong>The Golden Rule:</strong> Find the Scale Factor (Multiplier) by dividing the new value by the old value. Apply that same multiplier to the other side.</p>
-    </div>
+        <div class="triangle-container">
+            <div class="dst-triangle">
+                <div class="dst-label label-d" id="btn-d">D</div>
+                <div class="dst-label label-s" id="btn-s">S</div>
+                <div class="dst-label label-t" id="btn-t">T</div>
+            </div>
+        </div>
+        <p style="text-align:center;">Click a letter in the triangle to solve for it!</p>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <label>Original A: <span id="a-val"></span></label><input type="range" id="ra" min="1" max="10" value="2" style="width:100%"><br>
-            <label>Original B: <span id="b-val"></span></label><input type="range" id="rb" min="1" max="10" value="5" style="width:100%"><br>
-            <label>New A: <span id="na-val"></span></label><input type="range" id="nra" min="10" max="50" step="10" value="10" style="width:100%">
+        <div class="engine-container">
+            <div class="controls">
+                <div id="input-fields"></div>
+                <p>Solving for: <strong id="solving-text" style="color:var(--cognis-gold)">Distance</strong></p>
+            </div>
+            <div class="trace-log" id="logic-trace"></div>
         </div>
-        <div class="question-card" id="q-text"></div>
-        <div style="background:#ecfdf5; padding:20px; border-radius:8px;">
-            <p>Multiplier: <span id="logic-f"></span></p>
-            <p><strong>New B = <span id="res-b"></span></strong></p>
-        </div>
-    </div>
+    </section>
 </div>
+
 <script>
-    function update() {
-        const res = LogicProvider.modules[10].generate(document.getElementById('ra').value, document.getElementById('rb').value, document.getElementById('nra').value);
-        document.getElementById('a-val').innerText = res.inputs.a;
-        document.getElementById('b-val').innerText = res.inputs.b;
-        document.getElementById('na-val').innerText = res.inputs.tA;
-        document.getElementById('q-text').innerText = `If ${res.inputs.a} units of A corresponds to ${res.inputs.b} units of B, how many B units correspond to ${res.inputs.tA} of A?`;
-        document.getElementById('logic-f').innerText = `${res.inputs.tA} ÷ ${res.inputs.a} = ${res.answers.factor}`;
-        document.getElementById('res-b').innerText = res.answers.resultB;
+    let currentTarget = 'd';
+    function updateInputs() {
+        const container = document.getElementById('input-fields');
+        const fields = {
+            d: '<label>Distance (km)</label><input type="number" id="val-d" value="120">',
+            s: '<label>Speed (km/h)</label><input type="number" id="val-s" value="60">',
+            t: '<label>Time (h)</label><input type="number" id="val-t" value="2">'
+        };
+        container.innerHTML = Object.keys(fields).filter(k => k !== currentTarget).map(k => fields[k]).join('');
+        document.querySelectorAll('input').forEach(i => i.addEventListener('input', calculate));
+        calculate();
     }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    function calculate() {
+        const d = document.getElementById('val-d')?.value || 0;
+        const s = document.getElementById('val-s')?.value || 0;
+        const t = document.getElementById('val-t')?.value || 0;
+        // logic call here...
+        const res = LogicProvider.modules.constantSpeed.calculate(d, s, t, currentTarget);
+        document.getElementById('logic-trace').innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
+    }
+
+    ['d', 's', 't'].forEach(id => {
+        document.getElementById('btn-' + id).addEventListener('click', () => {
+            currentTarget = id;
+            document.querySelectorAll('.dst-label').forEach(l => l.classList.remove('hidden'));
+            document.getElementById('btn-' + id).classList.add('hidden');
+            document.getElementById('solving-text').innerText = id === 'd' ? 'Distance' : id === 's' ? 'Speed' : 'Time';
+            updateInputs();
+        });
+    });
+    window.onload = updateInputs;
 </script>
 </body>
 </html>

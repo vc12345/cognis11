@@ -2,247 +2,161 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module 16: The More Than Trap | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 16: The "More Than" Trap | Cognis11</title>
     <style>
         :root {
-            --primary: #1a365d; /* Deep Navy - Elite/Trust */
-            --accent: #d97706; /* Amber - Focus/Caution */
-            --success: #059669; /* Emerald - Correct Logic */
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
+            --cognis-blue: #002d5b;
+            --cognis-gold: #c5a059;
+            --cognis-light: #f4f7f9;
+            --trap-red: #e74c3c;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--cognis-light); color: var(--cognis-blue); margin: 0; padding: 20px; }
+        .container { max-width: 850px; margin: auto; }
+        
+        section { background: white; padding: 25px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        h2 { border-bottom: 2px solid var(--cognis-gold); padding-bottom: 10px; margin-top: 0; }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 20px;
-        }
-
-        h1 { color: var(--primary); font-size: 2.5rem; margin-bottom: 10px; }
-        .tagline { color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-
-        .section {
-            background: var(--card);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            margin-bottom: 30px;
-        }
-
-        h2 { border-left: 4px solid var(--primary); padding-left: 15px; color: var(--primary); }
-
-        /* The X-Ray Grid */
-        .x-ray-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+        /* Phase 2: Visual Anchor - The Deteriorating/Simplified Graphic Style */
+        .partition-visual {
+            display: flex;
+            flex-direction: column;
             gap: 15px;
-            margin-top: 20px;
-        }
-        .skeleton-card {
-            background: #f1f5f9;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            border: 1px dashed #cbd5e1;
+            padding: 30px;
+            background: #fff;
+            border: 1px solid #ddd;
         }
 
-        /* Animation Styles */
-        .anim-container {
-            text-align: center;
-            background: #1e293b;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-        }
+        .bar-row { display: flex; align-items: center; height: 40px; }
+        .label { width: 100px; font-weight: bold; font-size: 0.9rem; }
+        .bar-track { flex-grow: 1; height: 100%; display: flex; background: #eee; border-radius: 4px; overflow: hidden; position: relative; }
+        
+        .part-base { background: var(--cognis-blue); height: 100%; transition: width 0.4s ease; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8rem; }
+        .part-diff { background: var(--cognis-gold); height: 100%; transition: width 0.4s ease; border-left: 2px dashed white; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.8rem; }
 
-        /* Engine Styles */
-        .engine-controls {
-            display: grid;
-            gap: 20px;
-            background: #fdf2f2;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #fee2e2;
-        }
+        /* Phase 3: Engine */
+        .engine-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .controls { background: var(--cognis-light); padding: 15px; border-radius: 6px; }
+        input[type="range"] { width: 100%; accent-color: var(--cognis-blue); }
+        
+        .trace-log { background: #1e1e1e; color: #7cfc00; padding: 15px; border-radius: 6px; font-family: 'Courier New', monospace; font-size: 0.85rem; height: 200px; overflow-y: auto; }
+        .step-item { margin-bottom: 10px; opacity: 0; transform: translateX(-10px); animation: slideIn 0.3s forwards; }
+        @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
 
-        input[type=range] { width: 100%; accent-color: var(--primary); }
-
-        .question-display {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            border: 2px solid var(--primary);
-            font-size: 1.2rem;
-            font-style: italic;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .btn {
-            background: var(--primary);
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: opacity 0.2s;
-        }
-        .btn:hover { opacity: 0.9; }
-
-        .saboteur-box {
-            border: 2px solid #fecaca;
-            background: #fff5f5;
-            padding: 20px;
-            border-radius: 12px;
-        }
-
-        .trap-input {
-            width: 80px;
-            padding: 8px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            margin-left: 10px;
-        }
-
-        @media (max-width: 600px) { .x-ray-grid { grid-template-columns: 1fr; } }
+        /* Phase 4: Saboteur */
+        .saboteur { border: 2px solid var(--trap-red); background: #fff5f5; }
+        .trap-warning { color: var(--trap-red); font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <div class="tagline">System 2 Master Module 16</div>
-        <h1>The "More Than" Trap</h1>
-        <p>Turning a speed-trap into a logical certainty.</p>
-    </header>
-
-    <div class="section">
+    <section id="phase-1">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Type 2 minds don't look at numbers first. They look at <strong>intent</strong>. These three questions are identical skeletons wearing different clothes.</p>
-        <div class="x-ray-grid">
-            <div class="skeleton-card"><strong>A:</strong> Total: £120. Coat is £100 more than Hat. Hat = ?</div>
-            <div class="skeleton-card"><strong>B:</strong> Total: 50 kids. 10 more Boys than Girls. Girls = ?</div>
-            <div class="skeleton-card"><strong>C:</strong> Total: 80cm. A is 20cm longer than B. B = ?</div>
+        <p>The <strong>"More Than" Trap</strong> asks you to find values for two people when you only know their <strong>Sum</strong> and the <strong>Gap</strong> between them.</p>
+        <div class="samples">
+            <p><strong>Tier 1 (Year 2):</strong> Two friends have 12 stickers. Sarah has 4 more than Tom. How many does Tom have?</p>
+            <p><strong>Tier 2 (Year 4):</strong> A tablet and a case cost £250. The tablet is £200 more than the case. Find the cost of the case.</p>
+            <p><strong>Tier 3 (Year 5+):</strong> In a 100m race, the winner finished 2.4 seconds ahead of the runner-up. Their combined time was 25 seconds. What was the winner's time?</p>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section id="phase-2">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The "System 1 Snap" tells you to just subtract the difference. <strong>That is the trap.</strong> If you take the extra away, you are left with two equal parts.</p>
-        
-        <div class="anim-container">
-            <svg width="100%" height="200" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
-                <rect x="50" y="40" width="80" height="30" fill="#3b82f6" rx="4" />
-                <text x="65" y="60" fill="white" font-size="12">Part 1</text>
-                
-                <rect x="50" y="80" width="80" height="30" fill="#10b981" rx="4" />
-                <rect x="130" y="80" width="120" height="30" fill="#f59e0b" rx="4">
-                    <animate attributeName="width" from="0" to="120" dur="2s" repeatCount="indefinite" />
-                </rect>
-                <text x="65" y="100" fill="white" font-size="12">Part 2</text>
-                <text x="140" y="100" fill="white" font-size="10">The "Extra"</text>
-
-                <path d="M 50 140 L 300 140" stroke="white" stroke-width="2" />
-                <text x="140" y="160" fill="white" font-size="14">Step: (Total - Extra) ÷ 2</text>
-            </svg>
+        <p>Watch how we "snip" the difference to make both shares identical.</p>
+        <div class="partition-visual">
+            <div class="bar-row">
+                <div class="label">Person A</div>
+                <div class="bar-track">
+                    <div id="vis-a-base" class="part-base">Equal</div>
+                    <div id="vis-a-diff" class="part-diff">Difference</div>
+                </div>
+            </div>
+            <div class="bar-row">
+                <div class="label">Person B</div>
+                <div class="bar-track">
+                    <div id="vis-b-base" class="part-base">Equal</div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section id="phase-3">
         <h2>Phase 3: The Engine</h2>
-        <p>Adjust the sliders to build your own 11+ question. See how the logic holds up regardless of the scale.</p>
-        
-        <div class="engine-controls">
-            <div>
-                <label>Total Quantity: <span id="t-val">100</span></label>
-                <input type="range" id="total" min="20" max="500" value="100">
+        <div class="engine-grid">
+            <div class="controls">
+                <label>Total Sum: <strong id="out-sum">100</strong></label>
+                <input type="range" id="in-sum" min="20" max="500" value="100">
+                
+                <label style="display:block; margin-top:20px;">Difference (The "More"): <strong id="out-diff">20</strong></label>
+                <input type="range" id="in-diff" min="2" max="100" value="20">
             </div>
-            <div>
-                <label>The Difference ("More Than"): <span id="d-val">20</span></label>
-                <input type="range" id="diff" min="2" max="100" value="20">
-            </div>
+            <div class="trace-log" id="trace-output">
+                </div>
         </div>
+    </section>
 
-        <div class="question-display" id="q-text">
-            A total of 100 items were found. There were 20 more of Item A than Item B. How many of Item B were there?
-        </div>
-        
-        <div id="logic-box" style="margin-top:20px; display:none; color: var(--success); font-weight:bold;">
-            Logic: (100 - 20) = 80. Half of 80 is 40. Smallest = 40.
-        </div>
-        <button class="btn" style="margin-top:20px;" onclick="toggleLogic()">Show/Hide Logic</button>
-    </div>
-
-    <div class="section saboteur-box">
+    <section id="phase-4" class="saboteur">
         <h2>Phase 4: The Saboteur</h2>
-        <p>If you were the test maker, how would you trick a tired student? Create the "Fake" answers for a question where <strong>Total = 100</strong> and <strong>Diff = 40</strong>.</p>
-        
-        <div style="margin-top:15px;">
-            <p>1. The "Subtraction Snap" (100 - 40): <input type="text" class="trap-input" placeholder="?"></p>
-            <p>2. The "Lazy Half" (100 ÷ 2): <input type="text" class="trap-input" placeholder="?"></p>
-            <p>3. The "Wrong Item" (The larger one): <input type="text" class="trap-input" placeholder="?"></p>
-        </div>
-    </div>
+        <p class="trap-warning">The "Type 1" Impulse:</p>
+        <p>Dividing the total by 2 first, then adding the difference. If Total is 10 and Gap is 2, Type 1 logic says: 10 ÷ 2 = 5. Then 5 + 2 = 7. But 7 + 5 = 12, not 10!</p>
+        <p><strong>The "Cognis" Fix:</strong> Always level the playing field. Subtract the difference first to create two equal blocks, then divide. This ensures the total stays consistent.</p>
+    </section>
 </div>
 
 <script>
-    const tInput = document.getElementById('total');
-    const dInput = document.getElementById('diff');
-    const tVal = document.getElementById('t-val');
-    const dVal = document.getElementById('d-val');
-    const qText = document.getElementById('q-text');
-    const logicBox = document.getElementById('logic-box');
+    const inSum = document.getElementById('in-sum');
+    const inDiff = document.getElementById('in-diff');
+    const trace = document.getElementById('trace-output');
+    
+    const visABase = document.getElementById('vis-a-base');
+    const visADiff = document.getElementById('vis-a-diff');
+    const visBBase = document.getElementById('vis-b-base');
 
     function update() {
-    // 1. Get the raw values from your sliders
-    let t = parseInt(tInput.value);
-    let d = parseInt(dInput.value);
+        let s = parseInt(inSum.value);
+        let d = parseInt(inDiff.value);
 
-    // 2. USE THE LOGIC PROVIDER (This is the "Brain" call)
-    const result = LogicProvider.getModule(16).generate(t, d);
+        // Logic Constraint: Diff must be less than Sum
+        if (d >= s) { d = s - 2; inDiff.value = d; }
+        
+        document.getElementById('out-sum').innerText = s;
+        document.getElementById('out-diff').innerText = d;
 
-    // 3. Update the UI with the LogicProvider's "Clean" numbers
-    // (The LogicProvider ensures the numbers are mathematically sound)
-    tVal.innerText = result.inputs.total;
-    dVal.innerText = result.inputs.difference;
-    
-    qText.innerText = `A total of ${result.inputs.total} artifacts were discovered. There were ${result.inputs.difference} more Silver coins than Gold coins. How many Gold coins were there?`;
-    
-    // 4. Update the Logic Box using the calculated answer
-    logicBox.innerText = `Logic: (${result.inputs.total} Total - ${result.inputs.difference} Extra) = ${result.inputs.total - result.inputs.difference}. Half of that is ${result.answers.correct}. Gold Coins = ${result.answers.correct}.`;
-    
-    // 5. Update the Saboteur Traps automatically
-    // This part shows the child the specific "Fake" answers they should look out for
-    console.log("System 1 Snap Trap:", result.answers.traps.snap);
-    console.log("Lazy Half Trap:", result.answers.traps.lazyHalf);
-}
+        // Calculate
+        const equalized = s - d;
+        const smaller = equalized / 2;
+        const larger = smaller + d;
 
-    function toggleLogic() {
-        logicBox.style.display = logicBox.style.display === 'none' ? 'block' : 'none';
+        // Update Visuals
+        const totalVisWidth = (larger / (larger + smaller)) * 100; // Relative to max possible
+        const baseWidth = (smaller / larger) * 100;
+        const diffWidth = (d / larger) * 100;
+
+        visABase.style.width = baseWidth + "%";
+        visADiff.style.width = diffWidth + "%";
+        visBBase.style.width = baseWidth + "%";
+        
+        visABase.innerText = smaller;
+        visADiff.innerText = "+" + d;
+        visBBase.innerText = smaller;
+
+        // Trace
+        const steps = [
+            `> TARGET TOTAL: ${s}`,
+            `> REMOVING EXCESS: ${s} - ${d} = ${equalized}`,
+            `> SPLITTING EQUAL PARTS: ${equalized} / 2 = ${smaller}`,
+            `> SMALLER SHARE: ${smaller}`,
+            `> LARGER SHARE: ${smaller} + ${d} = ${larger}`,
+            `> VERIFY: ${smaller} + ${larger} = ${s} [OK]`
+        ];
+
+        trace.innerHTML = steps.map(step => `<div class="step-item">${step}</div>`).join('');
     }
 
-    tInput.oninput = update;
-    dInput.oninput = update;
+    inSum.oninput = update;
+    inDiff.oninput = update;
+    update();
 </script>
 
 </body>

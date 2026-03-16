@@ -1,6 +1,40 @@
 const LogicProvider = {
     modules: {
 
+        bodmas: {
+            calculate: (expression) => {
+                // Expression format: [a, op1, b, op2, c]
+                // Example: [2, '+', 3, 'x', 10]
+                const a = parseFloat(expression[0]);
+                const op1 = expression[1];
+                const b = parseFloat(expression[2]);
+                const op2 = expression[3];
+                const c = parseFloat(expression[4]);
+
+                let steps = [];
+                let finalRes = 0;
+
+                // Simple check: is op2 higher priority than op1?
+                const priority = {'+':1, '-':1, 'x':2, '/':2};
+                
+                if (priority[op2] > priority[op1]) {
+                    const firstStep = eval(`${b} ${op2 === 'x' ? '*' : op2} ${c}`);
+                    finalRes = eval(`${a} ${op1 === 'x' ? '*' : op1} ${firstStep}`);
+                    steps.push(`1. Priority Check: ${op2} beats ${op1}.`);
+                    steps.push(`2. Solve ${b} ${op2} ${c} = ${firstStep}.`);
+                    steps.push(`3. Solve ${a} ${op1} ${firstStep} = ${finalRes}.`);
+                } else {
+                    const firstStep = eval(`${a} ${op1 === 'x' ? '*' : op1} ${b}`);
+                    finalRes = eval(`${firstStep} ${op2 === 'x' ? '*' : op2} ${c}`);
+                    steps.push(`1. Priority Check: ${op1} is equal/higher than ${op2}.`);
+                    steps.push(`2. Solve ${a} ${op1} ${b} = ${firstStep}.`);
+                    steps.push(`3. Solve ${firstStep} ${op2} ${c} = ${finalRes}.`);
+                }
+
+                return { finalRes, steps, priorityShift: priority[op2] > priority[op1] };
+            }
+        },
+
         timeConv: {
             calculate: (h, m, addM) => {
                 const hStart = parseInt(h) || 0;

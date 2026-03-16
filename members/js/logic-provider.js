@@ -1,6 +1,26 @@
 const LogicProvider = {
     modules: {
 
+        reversePercentage: {
+            calculate: (finalVal, percent, isIncrease) => {
+                const f = parseFloat(finalVal);
+                const p = parseFloat(percent);
+                const multiplier = isIncrease ? (1 + p / 100) : (1 - p / 100);
+                const original = f / multiplier;
+
+                return {
+                    multiplier: multiplier.toFixed(2),
+                    original: original.toFixed(2),
+                    steps: [
+                        `Step 1: Identify the Multiplier. ${isIncrease ? 'Increase' : 'Decrease'} of ${p}% is a multiplier of ${multiplier.toFixed(2)}.`,
+                        `Step 2: Understand the journey. Original × ${multiplier.toFixed(2)} = ${f}.`,
+                        `Step 3: Reverse the journey. ${f} ÷ ${multiplier.toFixed(2)} = Original.`,
+                        `Result: The original price was £${original.toFixed(2)}.`
+                    ]
+                };
+            }
+        },
+
         percentageChange: {
             calculate: (original, percent, isIncrease) => {
                 const start = parseFloat(original);

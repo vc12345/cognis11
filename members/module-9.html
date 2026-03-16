@@ -2,114 +2,140 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 9: Average Speed | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 9: Sequential Fractions | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
-        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
-        .anatomy-callout { background: #fff7ed; border-left: 5px solid #f97316; padding: 20px; border-radius: 4px; margin: 20px 0; }
-        .engine-controls { display: grid; gap: 20px; background: #fff7ed; padding: 20px; border-radius: 8px; border: 1px solid #ffedd5; }
-        .slider-group { display: flex; align-items: center; gap: 15px; }
-        .slider-group label { min-width: 160px; font-weight: 600; }
-        input[type=range] { flex-grow: 1; accent-color: var(--accent); }
-        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
-        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-        .logic-card { background: #fef3c7; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid var(--accent); }
-        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
-        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
-        .trap-val { color: var(--trap); font-weight: 700; }
+        :root {
+            --cognis-blue: #002d5b;
+            --cognis-gold: #c5a059;
+            --cognis-light: #f4f7f9;
+            --rem-color: #e2e8f0;
+            --slice1: #3182ce;
+            --slice2: #c53030;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; margin-top: 0; letter-spacing: 2px; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+
+        /* Anatomy: The Sequential Bar */
+        .anatomy-display { margin: 40px 0; display: flex; flex-direction: column; gap: 20px; align-items: center; }
+        .bar-stage { width: 100%; height: 50px; display: flex; border: 2px solid var(--cognis-blue); border-radius: 8px; overflow: hidden; background: #eee; position: relative; }
+        .bar-stage::before { content: attr(data-label); position: absolute; top: -20px; font-size: 0.7rem; font-weight: bold; color: #718096; }
+        
+        .segment { height: 100%; transition: width 0.4s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.8rem; }
+        .seg-1 { background: var(--slice1); }
+        .seg-rem { background: var(--rem-color); color: var(--cognis-blue); }
+        .seg-2 { background: var(--slice2); }
+        .seg-final { background: #48bb78; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { margin-bottom: 15px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
+        .control-group input { width: 100%; padding: 8px; border-radius: 4px; border: none; }
+        
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
+        .trace-step { margin-bottom: 10px; color: #e2e8f0; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 9: Average Speed</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "RATIO OF CHANGE" PRINCIPLE</p>
-    </header>
+<div class="module-card">
+    <div class="header"><h1>Module 9: Sequential Fractions</h1></div>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "Type 1" thinker sees two numbers and wants to multiply them. A "Type 2" thinker understands that speed is a description of how much distance is covered per 1 unit of time.</p>
-        <div class="xray-examples">
-            <strong>Exam Wording Patterns:</strong>
-            <div class="example-item">1. "A car travels 150 miles in 3 hours. What is its speed?"</div>
-            <div class="example-item">2. "Calculate the average speed of a cyclist who covers 40km in 2 hours."</div>
-            <div class="example-item">3. "A plane flies from London to Paris (340 miles) in 45 minutes. Find the mph."</div>
+        <p>The "Remainder" is the most important word in word problems. It triggers a <strong>Reset</strong>—the leftover amount becomes the new "Whole" for the next calculation.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><span>Adv Year 2</span>"Tom has 12 sweets. He eats 2. He gives half of what is left to Sue. How many does Sue get?"</div>
+            <div class="tier-card"><span>Avg Year 4</span>"A pizza has 12 slices. Dad eats $\frac{1}{3}$. Then Mom eats $\frac{1}{2}$ of the remainder. How many slices are left?"</div>
+            <div class="tier-card"><span>Adv Year 5</span>"A traveler has £600. They spend $\frac{1}{4}$ on a hotel and $\frac{2}{5}$ of the remainder on food. How much do they have left?"</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Speed is the "Bridge" between Distance and Time. You can use the DST Triangle to decide which operation to use.</p>
         
-
-[Image of the Distance Speed Time triangle formula]
-
-        <div class="anatomy-callout">
-            <strong>The Formula:</strong> Speed = Distance ÷ Time.<br>
-            If you have miles and hours, your answer will be in Miles Per Hour (mph).
+        <div class="anatomy-display">
+            <div class="bar-stage" id="stage1-bar" data-label="Stage 1: The First Cut">
+                <div class="segment seg-1" id="bar1-cut"></div>
+                <div class="segment seg-rem" id="bar1-rem">Remainder</div>
+            </div>
+            <div style="font-size: 1.5rem; color: var(--cognis-gold);">↓</div>
+            <div class="bar-stage" id="stage2-bar" data-label="Stage 2: Cutting the Remainder">
+                <div class="segment seg-2" id="bar2-cut"></div>
+                <div class="segment seg-final" id="bar2-final">Final Left</div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <div class="slider-group">
-                <label>Distance (miles): <span id="d-val">100</span></label>
-                <input type="range" id="dist" min="10" max="1000" value="100" step="10">
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Total Amount</label>
+                    <input type="number" id="t-in" value="600">
+                </div>
+                <div class="control-group">
+                    <label>First Fraction (n/d)</label>
+                    <div style="display:flex; gap:5px;">
+                        <input type="number" id="n1-in" value="1"> / <input type="number" id="d1-in" value="4">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Second Fraction (n/d of remainder)</label>
+                    <div style="display:flex; gap:5px;">
+                        <input type="number" id="n2-in" value="2"> / <input type="number" id="d2-in" value="5">
+                    </div>
+                </div>
             </div>
-            <div class="slider-group">
-                <label>Time (hours): <span id="t-val">2</span></label>
-                <input type="range" id="time" min="1" max="24" value="2">
-            </div>
+            <div class="trace-log" id="logic-trace"></div>
         </div>
+    </section>
 
-        <div class="question-card" id="q-text"></div>
-        <button class="btn" onclick="toggleLogic()">Show DST Logic</button>
-
-        <div id="logic" class="logic-card">
-            <p><strong>Logic:</strong> Speed = Distance / Time</p>
-            <p><strong>Calculation:</strong> <span id="calc-text"></span></p>
-            <p><strong>Result:</strong> <span id="res-speed" style="font-weight:bold;"></span> mph</p>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid #c53030; border-radius: 8px; padding: 20px;">
+            <h2 style="color:#c53030; margin-bottom:10px;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Totalist" Trap:</strong> Students often calculate both fractions from the original total (e.g., $\frac{1}{4}$ of 600 and $\frac{2}{5}$ of 600).
+            <br><br><strong>The Fix:</strong> Circle the word <strong>"Remainder"</strong>. It tells you that the first amount is GONE. You are now working with a smaller number.</p>
         </div>
-    </div>
-
-    <div class="section saboteur-section">
-        <h2>Phase 4: The Saboteur</h2>
-        <div class="trap-item">
-            <span>The "Product" Trap (Dist × Time):</span>
-            <span class="trap-val" id="trap-mult"></span>
-        </div>
-        <div class="trap-item">
-            <span>The "Inverse" Trap (Time ÷ Dist):</span>
-            <span class="trap-val" id="trap-inv"></span>
-        </div>
-    </div>
+    </section>
 </div>
 
+<script src="js/logic-provider.js"></script>
 <script>
-    function update() {
-        const res = LogicProvider.getModule(9).generate(document.getElementById('dist').value, document.getElementById('time').value);
-        document.getElementById('d-val').innerText = res.inputs.distance;
-        document.getElementById('t-val').innerText = res.inputs.time;
-        document.getElementById('q-text').innerText = `If a vehicle travels ${res.inputs.distance} miles in ${res.inputs.time} hours, what is its average speed?`;
-        
-        document.getElementById('calc-text').innerText = `${res.inputs.distance} ÷ ${res.inputs.time} = ${res.answers.speed}`;
-        document.getElementById('res-speed').innerText = res.answers.speed;
-        
-        document.getElementById('trap-mult').innerText = res.answers.traps.multiplied;
-        document.getElementById('trap-inv').innerText = res.answers.traps.inverse;
+    const inputs = ['t-in', 'n1-in', 'd1-in', 'n2-in', 'd2-in'].map(id => document.getElementById(id));
+    const traceBox = document.getElementById('logic-trace');
+    
+    function refresh() {
+        const [t, n1, d1, n2, d2] = inputs.map(i => parseFloat(i.value) || 1);
+        const res = LogicProvider.modules.sequentialFractions.calculate(t, n1, d1, n2, d2);
+
+        // Update Stage 1 Bar
+        const p1 = (res.amt1 / t) * 100;
+        document.getElementById('bar1-cut').style.width = p1 + '%';
+        document.getElementById('bar1-cut').innerText = '£' + res.amt1;
+        document.getElementById('bar1-rem').innerText = 'Rem: £' + res.remainder;
+
+        // Update Stage 2 Bar
+        const p2 = (res.amt2 / res.remainder) * 100;
+        document.getElementById('bar2-cut').style.width = p2 + '%';
+        document.getElementById('bar2-cut').innerText = '£' + res.amt2;
+        document.getElementById('bar2-final').innerText = 'End: £' + res.final;
+
+        traceBox.innerHTML = res.steps.map(s => `<div class="trace-step">→ ${s}</div>`).join('');
     }
-    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    inputs.forEach(i => i.addEventListener('input', refresh));
+    window.onload = refresh;
 </script>
 </body>
 </html>

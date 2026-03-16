@@ -1,6 +1,30 @@
 const LogicProvider = {
     modules: {
         
+        reverseMean: {
+            calculate: (count, currentMean, targetMean) => {
+                const n = parseInt(count);
+                const m1 = parseFloat(currentMean);
+                const m2 = parseFloat(targetMean);
+
+                const currentTotal = n * m1;
+                const targetTotal = (n + 1) * m2;
+                const needed = targetTotal - currentTotal;
+
+                return {
+                    currentTotal: currentTotal.toFixed(1),
+                    targetTotal: targetTotal.toFixed(1),
+                    needed: needed.toFixed(1),
+                    steps: [
+                        `Step 1: Find the current total sum (${n} items × ${m1}) = ${currentTotal.toFixed(1)}`,
+                        `Step 2: Find the required total for ${n + 1} items (${n + 1} × ${m2}) = ${targetTotal.toFixed(1)}`,
+                        `Step 3: Subtract the current from the target to find the missing piece.`,
+                        `Result: You need a score of ${needed.toFixed(1)}`
+                    ]
+                };
+            }
+        },
+        
         rounding: {
             calculate: (num, place) => {
                 const n = parseFloat(num);

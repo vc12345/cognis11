@@ -1,6 +1,29 @@
 const LogicProvider = {
     modules: {
 
+        sequentialFractions: {
+            calculate: (total, n1, d1, n2, d2) => {
+                const t = parseFloat(total);
+                const amt1 = (parseInt(n1) / parseInt(d1)) * t;
+                const remainder = t - amt1;
+                const amt2 = (parseInt(n2) / parseInt(d2)) * remainder;
+                const final = remainder - amt2;
+
+                return {
+                    amt1: amt1.toFixed(2),
+                    remainder: remainder.toFixed(2),
+                    amt2: amt2.toFixed(2),
+                    final: final.toFixed(2),
+                    steps: [
+                        `Step 1: Calculate the first slice. $\\frac{${n1}}{${d1}}$ of ${t} = ${amt1.toFixed(2)}.`,
+                        `Step 2: Find the REMAINDER. $ ${t} - ${amt1.toFixed(2)} = ${remainder.toFixed(2)} $.`,
+                        `Step 3: Calculate the second slice from that remainder. $\\frac{${n2}}{${d2}}$ of ${remainder.toFixed(2)} = ${amt2.toFixed(2)}.`,
+                        `Result: After both stages, ${final.toFixed(2)} remains.`
+                    ]
+                };
+            }
+        },
+
         fractionsOfAmounts: {
             calculate: (total, numerator, denominator) => {
                 const t = parseFloat(total);

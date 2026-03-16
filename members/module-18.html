@@ -2,82 +2,171 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 18: Probability | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 18: BODMAS | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
-        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
-        .engine-controls { display: grid; gap: 20px; background: #e0f2fe; padding: 20px; border-radius: 8px; border: 1px solid #bae6fd; }
-        .slider-group { display: flex; align-items: center; gap: 15px; }
-        .slider-group label { min-width: 160px; font-weight: 600; }
-        input[type=range] { flex-grow: 1; accent-color: #0369a1; }
-        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
-        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-        .logic-card { background: #e0f2fe; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid #0369a1; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        /* Phase 1 Tiers */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+
+        /* The Priority Sieve Anatomy */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; }
+        .sieve-container { width: 300px; border: 3px solid #cbd5e0; border-radius: 8px; overflow: hidden; }
+        .sieve-level { height: 60px; display: flex; align-items: center; justify-content: center; font-weight: bold; position: relative; border-bottom: 2px dashed #cbd5e0; background: white; }
+        .sieve-level.active { background: #fffbeb; border-color: var(--cognis-gold); }
+        .sieve-label { position: absolute; left: 10px; font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; }
+        
+        .op-token { padding: 5px 15px; background: var(--cognis-blue); color: white; border-radius: 4px; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); margin: 0 5px; }
+        .op-token.high { background: var(--cognis-gold); }
+
+        .equation-display { font-size: 2rem; font-weight: bold; margin-bottom: 30px; letter-spacing: 5px; color: var(--cognis-blue); }
+        .sim-btn { background: var(--cognis-gold); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
+
+        /* Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
+        .control-group input, .control-group select { width: 100%; padding: 10px; border-radius: 4px; border: none; background: #2d3748; color: white; font-size: 1.1rem; margin-bottom: 15px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); line-height: 1.6; }
     </style>
 </head>
 <body>
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 18: Probability</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "COMPLEMENTARY" PRINCIPLE</p>
-    </header>
+<div class="module-card">
+    <div class="header"><h1>Module 18: BODMAS (Order of Ops)</h1></div>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "Type 1" thinker calculates the chance of something <em>happening</em> when the question asks for the chance it <em>doesn't</em>. A "Type 2" thinker always reads the word <strong>NOT</strong> carefully.</p>
-        <div class="xray-examples">
-            <strong>Exam Wording Patterns:</strong>
-            <div class="example-item">1. "The chance of winning a race is 1/5. What is the chance of NOT winning?"</div>
-            <div class="example-item">2. "The probability it rains is 0.3. What is the probability it stays dry?"</div>
-            <div class="example-item">3. "A bag has 3 red and 7 blue marbles. Find the probability of NOT picking red."</div>
+        <p><strong>Topic Logic:</strong> Mathematics isn't always read left-to-right. We use <strong>Operational Hierarchy</strong>. Operations like Multiplication and Division have a higher "energy" or priority than Addition and Subtraction, so they must be resolved first regardless of their position.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><span>Entry (Year 2)</span>"What is 2 + 3 × 5?"</div>
+            <div class="tier-card"><span>Standard (Year 4)</span>"Solve: 50 - (10 + 5) × 2."</div>
+            <div class="tier-card"><span>Advanced (Year 5)</span>"Insert brackets to make this true: 5 + 3 × 10 - 2 = 32."</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        
-        <div class="anatomy-callout" style="background: #e0f2fe; border-left: 5px solid #0369a1; padding: 20px;">
-            <strong>The Law of 1:</strong><br>
-            All probabilities in a scenario must add up to 1.<br>
-            Probability of NOT = 1 - (Probability of IT).
-        </div>
-    </div>
+        <div class="simulation-area">
+            <div class="equation-display">
+                <span id="eq-a">2</span> <span id="eq-op1">+</span> <span id="eq-b">3</span> <span id="eq-op2">×</span> <span id="eq-c">10</span>
+            </div>
+            
+            <div class="sieve-container">
+                <div class="sieve-level" id="level-high">
+                    <span class="sieve-label">High Priority (× / ÷)</span>
+                    <div id="slot-high"></div>
+                </div>
+                <div class="sieve-level" id="level-low">
+                    <span class="sieve-label">Low Priority (+ / -)</span>
+                    <div id="slot-low"></div>
+                </div>
+            </div>
 
-    <div class="section">
+            <button class="sim-btn" onclick="runSieve()">Run Priority Sieve</button>
+        </div>
+    </section>
+
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <div class="slider-group"><label>Numerator (Win): <span id="n-val"></span></label><input type="range" id="num" min="1" max="9" value="1"></div>
-            <div class="slider-group"><label>Denominator (Total): <span id="d-val"></span></label><input type="range" id="den" min="10" max="20" value="10"></div>
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Value A</label><input type="number" id="in-a" value="2">
+                </div>
+                <div class="control-group">
+                    <label>Op 1</label>
+                    <select id="in-op1"><option value="+">+</option><option value="-">-</option><option value="x">×</option><option value="/">÷</option></select>
+                </div>
+                <div class="control-group">
+                    <label>Value B</label><input type="number" id="in-b" value="3">
+                </div>
+                <div class="control-group">
+                    <label>Op 2</label>
+                    <select id="in-op2"><option value="x">×</option><option value="/">÷</option><option value="+">+</option><option value="-">-</option></select>
+                </div>
+                <div class="control-group">
+                    <label>Value C</label><input type="number" id="in-c" value="10">
+                </div>
+            </div>
+            <div class="trace-log" id="logic-trace">Select operators to begin...</div>
         </div>
-        <div class="question-card" id="q-text"></div>
-        <button class="btn" onclick="toggleLogic()">Show Probability Logic</button>
-        <div id="logic" class="logic-card">
-            <p>1. Total Chance = 1 (or <span id="total-frac"></span>)</p>
-            <p>2. Chance of NOT = 1 - (<span id="win-frac"></span>)</p>
-            <p><strong>Answer: <span id="ans-not"></span></strong></p>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 25px;">
+            <h2 style="color:var(--trap-red);">Phase 4: The Saboteur</h2>
+            <p><strong>The "Reading Direction" Trap:</strong> Solving the equation from left to right like a sentence. 
+            <br><i>Example: In 2 + 3 × 10, a Type 1 thinker does 2+3=5, then 5×10=50.</i>
+            <br><br><strong>The Fix:</strong> Always scan for <strong>B</strong>rackets, then <strong>O</strong>rders, then <strong>DM</strong>. Only when those are gone do you settle the <strong>AS</strong>. The high-priority operations are "heavier" and must be settled first.</p>
         </div>
-    </div>
+    </section>
 </div>
+
 <script>
-    function update() {
-        const res = LogicProvider.getModule(18).generate(document.getElementById('num').value, document.getElementById('den').value);
-        document.getElementById('n-val').innerText = res.inputs.win;
-        document.getElementById('d-val').innerText = res.inputs.total;
-        document.getElementById('q-text').innerText = `If the probability of winning a prize is ${res.inputs.win}/${res.inputs.total}, what is the probability of NOT winning?`;
-        document.getElementById('total-frac').innerText = `${res.inputs.total}/${res.inputs.total}`;
-        document.getElementById('win-frac').innerText = `${res.inputs.win}/${res.inputs.total}`;
-        document.getElementById('ans-not').innerText = res.answers.probNot;
+    const inputIds = ['in-a', 'in-op1', 'in-b', 'in-op2', 'in-c'];
+    const inputs = inputIds.map(id => document.getElementById(id));
+    const trace = document.getElementById('logic-trace');
+
+    function refresh() {
+        const vals = inputs.map(i => i.value);
+        document.getElementById('eq-a').innerText = vals[0];
+        document.getElementById('eq-op1').innerText = vals[1];
+        document.getElementById('eq-b').innerText = vals[2];
+        document.getElementById('eq-op2').innerText = vals[3];
+        document.getElementById('eq-c').innerText = vals[4];
+
+        // Call logic provider
+        const result = LogicProvider.modules.bodmas.calculate(vals);
+        trace.innerHTML = result.steps.map(s => `<div>→ ${s}</div>`).join('');
+        
+        // Clear sieve for new run
+        document.getElementById('slot-high').innerHTML = '';
+        document.getElementById('slot-low').innerHTML = '';
+        document.getElementById('level-high').classList.remove('active');
+        document.getElementById('level-low').classList.remove('active');
     }
-    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    function runSieve() {
+        const vals = inputs.map(i => i.value);
+        const priority = {'+':1, '-':1, 'x':2, '/':2};
+        
+        const slotHigh = document.getElementById('slot-high');
+        const slotLow = document.getElementById('slot-low');
+        
+        slotHigh.innerHTML = '';
+        slotLow.innerHTML = '';
+
+        // Animate the "sorting" based on priority
+        setTimeout(() => {
+            if (priority[vals[1]] === 2) {
+                slotHigh.innerHTML += `<span class="op-token high">${vals[0]} ${vals[1]} ${vals[2]}</span>`;
+                document.getElementById('level-high').classList.add('active');
+            } else {
+                slotLow.innerHTML += `<span class="op-token">${vals[0]} ${vals[1]} ${vals[2]}</span>`;
+                document.getElementById('level-low').classList.add('active');
+            }
+        }, 300);
+
+        setTimeout(() => {
+            if (priority[vals[3]] === 2) {
+                slotHigh.innerHTML += `<span class="op-token high">${vals[2]} ${vals[3]} ${vals[4]}</span>`;
+                document.getElementById('level-high').classList.add('active');
+            } else {
+                slotLow.innerHTML += `<span class="op-token">${vals[2]} ${vals[3]} ${vals[4]}</span>`;
+                document.getElementById('level-low').classList.add('active');
+            }
+        }, 800);
+    }
+
+    inputs.forEach(i => i.addEventListener('input', refresh));
+    window.onload = refresh;
 </script>
 </body>
 </html>

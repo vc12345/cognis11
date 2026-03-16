@@ -1,6 +1,33 @@
 const LogicProvider = {
     modules: {
 
+        trainTunnel = {
+            calculate: (trainLen, tunnelLen, speedKmh) => {
+                const L1 = parseFloat(trainLen) || 0;
+                const L2 = parseFloat(tunnelLen) || 0;
+                const speed = parseFloat(speedKmh) || 1;
+
+                const totalDistMetres = L1 + L2;
+                const totalDistKm = totalDistMetres / 1000;
+                
+                // Time in hours = D / S
+                const timeHours = totalDistKm / speed;
+                const timeSeconds = timeHours * 3600;
+
+                return {
+                    totalDist: totalDistMetres,
+                    timeSeconds: timeSeconds.toFixed(1),
+                    steps: [
+                        `Step 1: Identify the "Total Distance". To completely clear the tunnel, the train must travel its own length PLUS the tunnel length.`,
+                        `Total Distance = ${L1}m (Train) + ${L2}m (Tunnel) = ${totalDistMetres}m.`,
+                        `Step 2: Convert speed to m/s or distance to km. ${speed} km/h = ${(speed / 3.6).toFixed(2)} m/s.`,
+                        `Step 3: Use Time = Distance ÷ Speed.`,
+                        `Result: Time taken to clear the tunnel is ${timeSeconds.toFixed(1)} seconds.`
+                    ]
+                };
+            }
+        },
+
         balancingEquations = {
             calculate: (a, b, c) => {
                 const coef = parseInt(a) || 1;

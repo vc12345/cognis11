@@ -3,22 +3,28 @@ const LogicProvider = {
 
         timeConv = {
             calculate: (h, m, addM) => {
-                let totalMinutes = (parseInt(h) * 60) + parseInt(m) + parseInt(addM);
-                let newH = Math.floor(totalMinutes / 60);
-                let newM = totalMinutes % 60;
+                const hStart = parseInt(h) || 0;
+                const mStart = parseInt(m) || 0;
+                const duration = parseInt(addM) || 0;
+        
+                const totalMins = (hStart * 60) + mStart + duration;
+                const finalH = Math.floor(totalMins / 60);
+                const finalM = totalMins % 60;
                 
-                // Handle 24-hour wrap
-                newH = newH % 24;
+                const overflowed = (mStart + duration) >= 60;
+                const hoursCarried = Math.floor((mStart + duration) / 60);
         
                 return {
-                    h: newH,
-                    m: newM,
-                    formatted: `${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`,
+                    totalMins,
+                    finalH: finalH % 24, // 24-hour clock
+                    finalM,
+                    overflowed,
+                    hoursCarried,
                     steps: [
-                        `Step 1: Convert start time to total minutes. (${h}h × 60) + ${m}m = ${(h*60)+m}m.`,
-                        `Step 2: Add the duration. ${(h*60)+m}m + ${addM}m = ${totalMinutes}m.`,
-                        `Step 3: Convert back. ${totalMinutes} ÷ 60 = ${Math.floor(totalMinutes/60)}h and ${newM}m remaining.`,
-                        `Result: ${String(newH).padStart(2, '0')}:${String(newM).padStart(2, '0')}`
+                        `Step 1: Focus on the Minutes column first. ${mStart}m + ${duration}m = ${mStart + duration}m.`,
+                        overflowed ? `Step 2: OVERFLOW! ${mStart + duration}m is more than 60. Divide by 60 to find 'Carried Hours'.` : `Step 2: No overflow. Total minutes stay in the minutes column.`,
+                        overflowed ? `Step 3: ${mStart + duration} ÷ 60 = ${hoursCarried} hour(s) to carry, with ${finalM}m remaining.` : `Step 3: Final check of the Hours column.`,
+                        `Result: ${finalH % 24}:${finalM.toString().padStart(2, '0')}`
                     ]
                 };
             }

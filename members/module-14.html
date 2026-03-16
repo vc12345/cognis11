@@ -11,17 +11,20 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        /* The X-Ray Tiers */
+        /* Module 12 Style X-Ray Tiers */
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
         .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
         .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
 
         /* Interval Visualizer */
         .visualizer-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 50px 20px; margin: 30px 0; text-align: center; }
-        .timeline { display: flex; align-items: center; justify-content: center; height: 60px; position: relative; max-width: 600px; margin: 0 auto; }
-        .post-marker { width: 10px; height: 50px; background: var(--cognis-blue); border-radius: 2px; z-index: 2; }
-        .gap-segment { height: 6px; background: var(--gap-blue); flex-grow: 1; z-index: 1; position: relative; transition: all 0.3s ease; }
-        .gap-segment::after { content: 'GAP'; position: absolute; top: 15px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; font-weight: bold; color: var(--gap-blue); }
+        .timeline { display: flex; align-items: center; justify-content: center; height: 80px; position: relative; max-width: 700px; margin: 0 auto; }
+        
+        .post-marker { width: 14px; height: 60px; background: var(--cognis-blue); border-radius: 3px; z-index: 2; position: relative; }
+        .post-marker::before { content: attr(data-label); position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; color: var(--cognis-blue); font-weight: bold; }
+        
+        .gap-segment { height: 8px; background: var(--gap-blue); flex-grow: 1; z-index: 1; position: relative; display: flex; align-items: center; justify-content: center; transition: flex-grow 0.3s ease; }
+        .gap-segment::after { content: 'GAP'; position: absolute; top: 15px; font-size: 0.6rem; font-weight: bold; color: var(--gap-blue); }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .control-group { margin-bottom: 15px; }
@@ -37,11 +40,11 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In 11+ exams, "Interval Logic" tests your ability to count the spaces <em>between</em> objects. The number of gaps is always one less than the number of items.</p>
+        <p>This module handles "Off-by-One" errors. When calculating distance or time for a series of events, remember: the value is held in the <strong>gaps</strong>, not the objects.</p>
         <div class="question-tiers">
-            <div class="tier-card"><span>Entry</span>"A clock strikes 4 times. There are 3 seconds between each strike. How long from the first to last strike?"</div>
-            <div class="tier-card"><span>Standard</span>"A straight fence is 20m long. Posts are placed every 5m. How many posts are needed in total?"</div>
-            <div class="tier-card"><span>Advanced</span>"A doctor gives a patient 5 pills to take every 30 mins. How long until all pills are taken?"</div>
+            <div class="tier-card"><span>Entry</span>"A clock strikes 4 times. There are 3 seconds between each strike. How long from start to finish?"</div>
+            <div class="tier-card"><span>Standard</span>"A straight fence is 30m long. Posts are placed every 6m. How many posts are used?"</div>
+            <div class="tier-card"><span>Advanced</span>"A doctor gives 6 pills to be taken every 45 mins. How long until the last pill is taken?"</div>
         </div>
     </section>
 
@@ -51,9 +54,9 @@
         <div class="visualizer-area">
             <div id="visual-row" class="timeline">
                 </div>
-            <div style="margin-top: 40px; display: flex; justify-content: center; gap: 20px;">
-                <div style="color: var(--cognis-blue); font-weight: bold;">Items: <span id="item-val">4</span></div>
-                <div style="color: var(--gap-blue); font-weight: bold;">Gaps: <span id="gap-val">3</span></div>
+            <div style="margin-top: 40px; display: flex; justify-content: center; gap: 30px;">
+                <div style="color: var(--cognis-blue); font-weight: bold; background: #e0e7ff; padding: 5px 15px; border-radius: 20px;">Objects (N): <span id="item-val">4</span></div>
+                <div style="color: #0369a1; font-weight: bold; background: #e0f2fe; padding: 5px 15px; border-radius: 20px;">Gaps (N-1): <span id="gap-val">3</span></div>
             </div>
         </div>
     </section>
@@ -63,49 +66,71 @@
         <div class="engine-container">
             <div class="controls">
                 <div class="control-group">
-                    <label>Number of Items (Posts/Chimes)</label>
-                    <input type="number" id="item-in" value="4" min="2" max="10" oninput="updateAll()">
+                    <label>Number of Objects (N)</label>
+                    <input type="number" id="item-in" value="4" min="2" max="8" oninput="updateAll()">
                 </div>
                 <div class="control-group">
-                    <label>Total Length/Time</label>
+                    <label>Total Time/Distance</label>
                     <input type="number" id="total-in" value="12" oninput="updateAll()">
                 </div>
             </div>
             <div class="trace-log" id="logic-trace">
-                </div>
+                Update inputs to calculate...
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid #d9534f; border-radius: 8px; padding: 20px;">
             <h2 style="color:#d9534f; margin-bottom:10px;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Zero-Start" Trap:</strong> Students often forget that the first item (post or chime) happens at "Time Zero." There is no gap <em>before</em> the first chime.
-            <br><br><strong>The Fix:</strong> Always sketch a quick diagram. If there are 5 objects, draw 5 dots and count the spaces. You will see there are only 4 spaces. $Gaps = N - 1$.</p>
+            <p><strong>The "Fence Post" Trap:</strong> If a 20m fence has posts every 5m, students often say 4 posts ($20 \div 5$).
+            <br><br><strong>The Fix:</strong> $20 \div 5$ gives you the number of <strong>gaps</strong>. You need an extra post at the very start (the "Zero" position). So, $4 \text{ gaps} + 1 = 5 \text{ posts}$.</p>
         </div>
     </section>
 </div>
 
 <script>
-    const logic = LogicProvider.modules.intervalLogic;
+    // Embedded Logic
+    const LocalIntervalLogic = {
+        calculate: (n, total) => {
+            const gaps = Math.max(0, n - 1);
+            const size = gaps > 0 ? total / gaps : 0;
+            return {
+                gaps,
+                size: size.toFixed(2),
+                steps: [
+                    `Objects: ${n}`,
+                    `Intervals (Gaps) = ${n} - 1 = ${gaps}`,
+                    `Total Value (${total}) ÷ ${gaps} gaps = ${size.toFixed(2)} per gap.`
+                ]
+            };
+        }
+    };
 
     function updateAll() {
         const n = parseInt(document.getElementById('item-in').value) || 2;
         const total = parseFloat(document.getElementById('total-in').value) || 0;
         
-        const res = logic.calculate(n, total);
+        const res = LocalIntervalLogic.calculate(n, total);
         
-        // Update UI Text
+        // Update Stats
         document.getElementById('item-val').innerText = n;
         document.getElementById('gap-val').innerText = res.gaps;
         document.getElementById('logic-trace').innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
         
-        // Update Visualizer
+        // Rebuild Visual Timeline
         const row = document.getElementById('visual-row');
         row.innerHTML = '';
-        for(let i=0; i<n; i++) {
-            row.innerHTML += '<div class="post-marker"></div>';
-            if(i < n - 1) {
-                row.innerHTML += '<div class="gap-segment"></div>';
+        for(let i=1; i<=n; i++) {
+            const post = document.createElement('div');
+            post.className = 'post-marker';
+            post.setAttribute('data-label', '#' + i);
+            row.appendChild(post);
+            
+            if(i < n) {
+                const gap = document.createElement('div');
+                gap.className = 'gap-segment';
+                row.appendChild(gap);
             }
         }
     }

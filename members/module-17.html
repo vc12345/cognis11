@@ -4,21 +4,28 @@
     <meta charset="UTF-8">
     <title>Module 17: Reverse Operations | Cognis11</title>
     <style>
-        :root { --blue: #002d5b; --gold: #c5a059; --light: #f4f7f9; --red: #d9534f; }
+        :root { --blue: #002d5b; --gold: #c5a059; --light: #f4f7f9; --trap: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 20px; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        .header { background: var(--blue); color: white; padding: 20px 40px; border-bottom: 4px solid var(--gold); }
-        .phase { padding: 30px 40px; border-bottom: 1px solid #eee; }
-        .phase h2 { font-size: 0.8rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: var(--blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--gold); }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
 
-        /* The Anatomy: Flow Nodes */
-        .simulation-area { display: flex; justify-content: space-around; align-items: center; background: #f8fafc; padding: 50px; border-radius: 12px; margin: 20px 0; }
-        .node { width: 60px; height: 60px; border: 3px solid var(--blue); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; background: white; }
-        .arrow { font-size: 1.5rem; color: var(--gold); font-weight: bold; }
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .tier-card { background: var(--light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--blue); margin-bottom: 5px; font-size: 0.7rem; text-transform: uppercase; }
 
-        .engine-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        input, select { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; background: #2d3748; color: white; border: none; }
-        .trace { font-family: monospace; padding: 15px; border-left: 3px solid var(--gold); background: rgba(255,255,255,0.05); }
+        /* Logic Machine Graphic */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 50px; margin: 20px 0; display: flex; justify-content: space-around; align-items: center; position: relative; }
+        .node { width: 70px; height: 70px; border: 3px solid var(--blue); background: white; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; z-index: 2; transition: all 0.3s; }
+        .node small { font-size: 0.6rem; color: #a0aec0; }
+        .connector { height: 4px; background: #cbd5e0; flex-grow: 1; margin: 0 -5px; position: relative; }
+        .op-badge { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); background: var(--blue); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; }
+        .inv-badge { position: absolute; bottom: -35px; left: 50%; transform: translateX(-50%); background: var(--gold); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group select, .control-group input { width: 100%; padding: 8px; border-radius: 4px; border: none; background: #2d3748; color: white; margin-top: 5px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: monospace; border-left: 3px solid var(--gold); }
     </style>
 </head>
 <body>
@@ -27,55 +34,76 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p><strong>Topic Logic:</strong> Reverse Operations (or Inverse functions) require us to work backward from a known result to a hidden starting point. The key is to **reverse the order** of events and **invert the operations** themselves (e.g., + becomes -).</p>
+        <p><strong>Topic Logic:</strong> Reverse Operations (or Inverse functions) require us to work backward from a known result to find a hidden starting point. Every action must be undone in **reverse order** using the **opposite operation**.</p>
         <div class="question-tiers">
-            <div class="tier-card"><span>Entry</span>"I add 5 to my number and get 12. What was it?"</div>
-            <div class="tier-card"><span>Standard</span>"I multiply by 2 then add 10 to get 30. Find the number."</div>
-            <div class="tier-card"><span>Advanced</span>"I square a number, add 4, then divide by 2 to get 10. Find the number."</div>
+            <div class="tier-card"><span>Advanced Y2</span>"I think of a number. I add 5 and get 12. What was my number?"</div>
+            <div class="tier-card"><span>Average Y4</span>"I think of a number. I multiply by 3 then subtract 4. The result is 20. Find my number."</div>
+            <div class="tier-card"><span>Advanced Y5</span>"A number is divided by 4, then 7 is added. The result is then squared to get 81. What was the number?"</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div class="node" id="v-start">?</div>
-            <div class="arrow" id="v-op1">→</div>
-            <div class="node" id="v-mid">?</div>
-            <div class="arrow" id="v-op2">→</div>
-            <div class="node" id="v-res" style="border-color: var(--gold);">20</div>
+            <div class="node"><small>START</small><span id="v-start">?</span></div>
+            <div class="connector"><div class="op-badge" id="v-op1">+5</div><div class="inv-badge" id="v-inv1">-5</div></div>
+            <div class="node"><small>MID</small><span id="v-mid">?</span></div>
+            <div class="connector"><div class="op-badge" id="v-op2">×2</div><div class="inv-badge" id="v-inv2">÷2</div></div>
+            <div class="node" style="border-color: var(--gold);"><small>RESULT</small><span id="v-res">20</span></div>
         </div>
-        <p style="text-align: center; color: var(--gold); font-weight: bold;">To find the START, move backwards (←) and flip the signs!</p>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-grid">
+        <div class="engine-container">
             <div class="controls">
-                <label>Final Result</label><input type="number" id="i-res" value="20">
-                <label>Step 1 Op</label><select id="i-o1t"><option value="add">+</option><option value="sub">-</option><option value="mul">×</option><option value="div">÷</option></select>
-                <input type="number" id="i-o1v" value="5">
-                <label>Step 2 Op</label><select id="i-o2t"><option value="mul">×</option><option value="div">÷</option><option value="add">+</option><option value="sub">-</option></select>
-                <input type="number" id="i-o2v" value="2">
+                <div class="control-group"><label>FINAL RESULT</label><input type="number" id="in-res" value="20"></div>
+                <div class="control-group">
+                    <label>OP 1</label>
+                    <select id="in-o1t"><option value="add">Add</option><option value="sub">Subtract</option><option value="mul">Multiply</option><option value="div">Divide</option></select>
+                    <input type="number" id="in-o1v" value="5">
+                </div>
+                <div class="control-group">
+                    <label>OP 2</label>
+                    <select id="in-o2t"><option value="mul">Multiply</option><option value="div">Divide</option><option value="add">Add</option><option value="sub">Subtract</option></select>
+                    <input type="number" id="in-o2v" value="2">
+                </div>
             </div>
-            <div class="trace" id="trace-box"></div>
+            <div class="trace-log" id="logic-trace"></div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap); border-radius: 8px; padding: 25px;">
+            <h2 style="color:var(--trap);">Phase 4: The Saboteur</h2>
+            <p><strong>The "Clockwise" Trap:</strong> Undoing operations in the order they were written (reversing Op 1 then Op 2).
+            <br><strong>The Fix:</strong> Last In, First Out. Imagine dressing: Socks, then Shoes. To reverse, you <strong>must</strong> take off the shoes first. Reverse the last operation first!</p>
         </div>
     </section>
 </div>
 
 <script>
+    const elIds = ['in-res', 'in-o1t', 'in-o1v', 'in-o2t', 'in-o2v'];
+    const inputs = elIds.map(id => document.getElementById(id));
+    const symbols = {add:'+', sub:'-', mul:'×', div:'÷'};
+    const invSym = {add:'-', sub:'+', mul:'÷', div:'×'};
+
     function update() {
-        const resVal = parseFloat(document.getElementById('i-res').value);
-        const data = LogicProvider.modules.reverseOps.calculate(
-            resVal,
-            document.getElementById('i-o1t').value, document.getElementById('i-o1v').value,
-            document.getElementById('i-o2t').value, document.getElementById('i-o2v').value
-        );
+        const [res, o1t, o1v, o2t, o2v] = inputs.map(i => i.value);
+        const data = LogicProvider.modules.reverseOps.calculate(res, o1t, o1v, o2t, o2v);
+        
         document.getElementById('v-start').innerText = data.start;
         document.getElementById('v-mid').innerText = data.mid;
-        document.getElementById('v-res').innerText = resVal;
-        document.getElementById('trace-box').innerHTML = data.steps.map(s => `<div>→ ${s}</div>`).join('');
+        document.getElementById('v-res').innerText = res;
+        
+        document.getElementById('v-op1').innerText = symbols[o1t] + o1v;
+        document.getElementById('v-inv1').innerText = invSym[o1t] + o1v;
+        document.getElementById('v-op2').innerText = symbols[o2t] + o2v;
+        document.getElementById('v-inv2').innerText = invSym[o2t] + o2v;
+
+        document.getElementById('logic-trace').innerHTML = data.steps.map(s => `<div>→ ${s}</div>`).join('');
     }
-    document.querySelectorAll('input, select').forEach(i => i.addEventListener('input', update));
+    inputs.forEach(i => i.addEventListener('input', update));
     window.onload = update;
 </script>
 </body>

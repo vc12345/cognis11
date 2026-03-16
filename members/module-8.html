@@ -2,70 +2,138 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 8: FDP Equivalents | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 8: Fractions of Amounts | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        .engine-controls { background: #f0f9ff; padding: 20px; border-radius: 8px; border: 1px solid #bae6fd; }
-        .fdp-box { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
-        .box { flex: 1; padding: 20px; background: white; border: 2px solid var(--primary); border-radius: 8px; text-align: center; }
-        .box span { display: block; font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+        :root {
+            --cognis-blue: #002d5b;
+            --cognis-gold: #c5a059;
+            --cognis-light: #f4f7f9;
+            --highlight: #3182ce;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; color: #2c3e50; padding: 40px 20px; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; }
+
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; margin-top: 0; letter-spacing: 2px; }
+
+        /* X-Ray Tiers */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+
+        /* Anatomy: The Fraction Bar */
+        .anatomy-display { margin: 30px 0; }
+        .fraction-bar { display: flex; height: 60px; border: 2px solid var(--cognis-blue); border-radius: 8px; overflow: hidden; background: white; }
+        .slice { flex: 1; border-right: 1px solid #cbd5e0; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; transition: all 0.3s ease; }
+        .slice:last-child { border-right: none; }
+        .slice.active { background: var(--highlight); color: white; }
+        .label-container { display: flex; justify-content: space-between; margin-top: 10px; font-weight: bold; color: var(--cognis-blue); }
+
+        /* Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { margin-bottom: 20px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: none; font-size: 1rem; }
+        
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
+        .trace-step { margin-bottom: 10px; line-height: 1.4; color: #e2e8f0; }
     </style>
 </head>
 <body>
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 8: FDP Equivalents</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "TRANSLATOR" PRINCIPLE</p>
-    </header>
 
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 8: Fractions of Amounts</h1></div>
+
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <div class="xray-examples">
-            <p>1. "Write 0.75 as a percentage."</p>
-            <p>2. "Convert 1/4 into a decimal."</p>
-            <p>3. "Which is larger: 0.3 or 25%?"</p>
+        <p>A fraction is an instruction: the <strong>Denominator</strong> (bottom) tells you how many equal groups to make. The <strong>Numerator</strong> (top) tells you how many of those groups to take.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><span>Adv Year 2</span>"Find 1/2 of 12 sweets."</div>
+            <div class="tier-card"><span>Avg Year 4</span>"A cake is cut into 5 equal pieces. If 3 pieces are eaten, and the whole cake weighed 500g, how much was eaten?"</div>
+            <div class="tier-card"><span>Adv Year 5</span>"A marathon is 40km. A runner has completed 5/8 of the race. How many kilometers are left to run?"</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        [Image showing a comparison table of common Fractions, Decimals, and Percentages]
-        <p><strong>Conversion Rule:</strong> To turn a decimal into a percentage, multiply by 100 (move the decimal point 2 places to the right).</p>
-    </div>
+        
+        <div class="anatomy-display">
+            <div class="fraction-bar" id="f-bar"></div>
+            <div class="label-container">
+                <div id="unit-label">1 Part = ?</div>
+                <div id="result-label">Total Selected = ?</div>
+            </div>
+        </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <label>Decimal Value: <span id="d-val"></span></label>
-            <input type="range" id="dec" min="0.05" max="0.95" step="0.05" value="0.25" style="width:100%">
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Total Amount (£)</label>
+                    <input type="number" id="t-in" value="100">
+                </div>
+                <div class="control-group">
+                    <label>Numerator (Take)</label>
+                    <input type="number" id="n-in" value="3">
+                </div>
+                <div class="control-group">
+                    <label>Denominator (Divide)</label>
+                    <input type="number" id="d-in" value="4">
+                </div>
+            </div>
+            <div class="trace-log" id="logic-trace"></div>
         </div>
-        <div class="fdp-box">
-            <div class="box">Decimal<span id="res-d"></span></div>
-            <div class="box">Percentage<span id="res-p"></span></div>
-            <div class="box">Fraction<span id="res-f"></span></div>
-        </div>
-    </div>
+    </section>
 
-    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
-        <h2>Phase 4: The Saboteur</h2>
-        <p style="color: #be123c; font-weight: 700;">The "Missing Zero" Trap: Thinking 0.05 is 50% instead of 5%.</p>
-    </div>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid #e53e3e; border-radius: 8px; padding: 20px;">
+            <h2 style="color:#e53e3e; margin-bottom:10px;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Upside Down" Trap:</strong> Students often get confused about which number to divide by. They might try to divide the total by the numerator.
+            <br><br><strong>The Fix:</strong> Remember the phrase: <strong>"Divide by the Bottom, Multiply by the Top."</strong> The denominator is the 'cutter' (it divides the shape), and the numerator is the 'collector'.</p>
+        </div>
+    </section>
 </div>
+
+<script src="js/logic-provider.js"></script>
 <script>
-    function update() {
-        const res = LogicProvider.modules[8].generate(document.getElementById('dec').value);
-        document.getElementById('d-val').innerText = res.inputs.decimal;
-        document.getElementById('res-d').innerText = res.inputs.decimal;
-        document.getElementById('res-p').innerText = res.answers.percent;
-        document.getElementById('res-f').innerText = res.answers.fraction;
+    const tIn = document.getElementById('t-in');
+    const nIn = document.getElementById('n-in');
+    const dIn = document.getElementById('d-in');
+    const fBar = document.getElementById('f-bar');
+    const uLab = document.getElementById('unit-label');
+    const rLab = document.getElementById('result-label');
+    const traceBox = document.getElementById('logic-trace');
+
+    function refresh() {
+        const total = parseFloat(tIn.value) || 0;
+        const num = parseInt(nIn.value) || 0;
+        const den = parseInt(dIn.value) || 1;
+
+        const res = LogicProvider.modules.fractionsOfAmounts.calculate(total, num, den);
+
+        // Update Anatomy
+        fBar.innerHTML = '';
+        for(let i=0; i<den; i++) {
+            const slice = document.createElement('div');
+            slice.className = i < num ? 'slice active' : 'slice';
+            slice.innerText = `£${res.unitFraction}`;
+            fBar.appendChild(slice);
+        }
+
+        uLab.innerText = `1/${den} = £${res.unitFraction}`;
+        rLab.innerText = `${num}/${den} Total = £${res.result}`;
+
+        // Update Trace
+        traceBox.innerHTML = res.steps.map(s => `<div class="trace-step">→ ${s}</div>`).join('');
     }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    [tIn, nIn, dIn].forEach(el => el.addEventListener('input', refresh));
+    window.onload = refresh;
 </script>
 </body>
 </html>

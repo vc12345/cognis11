@@ -3,14 +3,32 @@ const LogicProvider = {
 
         timeConv: {
             calculate: (h, m, addM) => {
-                const totalMins = (parseInt(h) * 60) + parseInt(m) + parseInt(addM);
-                const finalH = Math.floor(totalMins / 60) % 24;
-                const finalM = totalMins % 60;
-                const hoursCarried = Math.floor((parseInt(m) + parseInt(addM)) / 60);
+                const hStart = parseInt(h) || 0;
+                const mStart = parseInt(m) || 0;
+                const duration = parseInt(addM) || 0;
+                
+                // Total calculation
+                const totalMinsRaw = (hStart * 60) + mStart + duration;
+                const finalH = Math.floor(totalMinsRaw / 60) % 24;
+                const finalM = totalMinsRaw % 60;
+                
+                // Overflow logic for the visual simulation
+                const tempMins = mStart + duration;
+                const hoursToCarry = Math.floor(tempMins / 60);
+                const overflowActive = tempMins >= 60;
+
                 return {
-                    finalH, finalM, hoursCarried,
-                    overflow: (parseInt(m) + parseInt(addM)) >= 60,
-                    steps: [`Start: ${h}:${m}`, `Add ${addM}m`, `Total: ${totalMins}m`, `Result: ${finalH}:${finalM}`]
+                    finalH, 
+                    finalM, 
+                    hoursCarried: hoursToCarry,
+                    overflowed: overflowActive,
+                    currentMTotal: tempMins,
+                    steps: [
+                        `Step 1: Start time is ${hStart}:${mStart.toString().padStart(2, '0')}.`,
+                        `Step 2: Add ${duration} minutes to the minute column.`,
+                        overflowActive ? `Step 3: ${tempMins}m exceeds the 60m limit. Carry ${hoursToCarry}h.` : `Step 3: Total minutes (${tempMins}m) are within the limit.`,
+                        `Result: The final time is ${finalH}:${finalM.toString().padStart(2, '0')}.`
+                    ]
                 };
             }
         },

@@ -2,94 +2,202 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 13: Ratio Sharing | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 13: Solving for X | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
-        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
-        .anatomy-callout { background: #fffbeb; border-left: 5px solid #f59e0b; padding: 20px; border-radius: 4px; margin: 20px 0; }
-        .engine-controls { display: grid; gap: 20px; background: #fffbeb; padding: 20px; border-radius: 8px; border: 1px solid #fef3c7; }
-        .slider-group { display: flex; align-items: center; gap: 15px; }
-        .slider-group label { min-width: 160px; font-weight: 600; }
-        input[type=range] { flex-grow: 1; accent-color: #f59e0b; }
-        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
-        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-        .logic-card { background: #fffbeb; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid #f59e0b; }
-        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
-        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; --block-x: #3182ce; --block-1: #cbd5e0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+
+        /* The Balance Scale */
+        .scale-container { display: flex; flex-direction: column; align-items: center; margin: 40px 0; padding: 20px; background: #f8fafc; border-radius: 12px; border: 2px solid #e2e8f0; }
+        .scale-beam { width: 400px; height: 10px; background: var(--cognis-blue); margin-bottom: 60px; position: relative; border-radius: 5px; transition: transform 0.5s ease; }
+        .scale-fulcrum { width: 0; height: 0; border-left: 30px solid transparent; border-right: 30px solid transparent; border-bottom: 60px solid var(--cognis-gold); margin-top: -60px; z-index: 10; }
+        
+        .pan { position: absolute; top: 10px; width: 140px; min-height: 20px; border-bottom: 4px solid var(--cognis-blue); display: flex; flex-wrap: wrap; justify-content: center; align-content: flex-end; gap: 4px; padding-bottom: 5px; transition: all 0.5s ease; }
+        .pan-left { left: 0; transform: translateX(-20%); }
+        .pan-right { right: 0; transform: translateX(20%); }
+        
+        .block { width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; border-radius: 4px; color: white; transition: opacity 0.5s, transform 0.5s; }
+        .block-x { background: var(--block-x); width: 35px; }
+        .block-1 { background: var(--cognis-blue); }
+        .removing { opacity: 0; transform: translateY(-20px); }
+
+        .step-btn { display: block; margin: 20px auto 0; background: var(--cognis-gold); color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .step-btn:hover { background: #b08d4b; }
+        .step-btn:disabled { background: #cbd5e0; cursor: not-allowed; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .controls-row { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-size: 1.2rem; font-weight: bold; }
+        .controls-row input { width: 60px; padding: 8px; border-radius: 4px; border: none; font-size: 1rem; text-align: center; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); min-height: 100px; }
+        .trace-step { margin-bottom: 10px; color: #e2e8f0; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 13: Ratio Sharing</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "PARTS" PRINCIPLE</p>
-    </header>
+<div class="module-card">
+    <div class="header"><h1>Module 13: Solving for X</h1></div>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "Type 1" thinker divides the total by one side of the ratio. A "Type 2" thinker knows that the ratio represents "Parts"—so you must add the parts together before you divide.</p>
-        <div class="xray-examples">
-            <strong>Exam Wording Patterns:</strong>
-            <div class="example-item">1. "Share £60 between Ben and Jerry in the ratio 2:3."</div>
-            <div class="example-item">2. "A 50cm rope is cut in a ratio of 1:4. How long is the shortest piece?"</div>
-            <div class="example-item">3. "Ingredients are mixed in a ratio of 3 parts flour to 1 part sugar. Total weight is 400g."</div>
+        <p>An equation is a perfectly balanced seesaw. To find out what $x$ weighs, you must strip away the numbers. But the Golden Rule applies: <strong>Whatever you do to the left, you must do to the right.</strong></p>
+        <div class="question-tiers">
+            <div class="tier-card"><span>Entry</span>"$x + 7 = 15$. Find the value of $x$."</div>
+            <div class="tier-card"><span>Standard</span>"$3x + 4 = 19$. Solve for $x$."</div>
+            <div class="tier-card"><span>Advanced</span>"I think of a number, multiply it by 4, and add 6. The answer is 34. What was my number?"</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        
-        <div class="anatomy-callout">
-            <strong>Step 1: Add</strong> the parts (e.g., 2 + 3 = 5 total parts).<br>
-            <strong>Step 2: Divide</strong> (Total ÷ Total Parts) to find the value of 1 part.<br>
-            <strong>Step 3: Multiply</strong> (1 Part × Ratio Side) for each share.
+        <div class="scale-container">
+            <div class="scale-beam" id="beam">
+                <div class="pan pan-left" id="pan-left"></div>
+                <div class="pan pan-right" id="pan-right"></div>
+            </div>
+            <div class="scale-fulcrum"></div>
+            <button class="step-btn" id="next-step-btn" onclick="executeNextStep()">Load Equation</button>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <div class="slider-group"><label>Ratio A: <span id="ra-val"></span></label><input type="range" id="ra" min="1" max="10" value="2"></div>
-            <div class="slider-group"><label>Ratio B: <span id="rb-val"></span></label><input type="range" id="rb" min="1" max="10" value="3"></div>
-            <div class="slider-group"><label>Total Amount (£): <span id="tot-val"></span></label><input type="range" id="tot" min="10" max="1000" value="100" step="10"></div>
+        <div class="engine-container">
+            <div class="controls">
+                <p style="font-size: 0.8rem; color: #a0aec0; text-transform: uppercase;">Format: ax + b = c</p>
+                <div class="controls-row">
+                    <input type="number" id="a-in" value="2"> <span>x + </span>
+                    <input type="number" id="b-in" value="4"> <span>=</span>
+                    <input type="number" id="c-in" value="10">
+                </div>
+                <button class="step-btn" onclick="resetScale()" style="margin:0;">Set Equation</button>
+            </div>
+            <div class="trace-log" id="logic-trace">
+                </div>
         </div>
-        <div class="question-card" id="q-text"></div>
-        <button class="btn" onclick="toggleLogic()">Show Ratio Logic</button>
-        <div id="logic" class="logic-card">
-            <p>1. Total Parts = <span id="calc-parts"></span></p>
-            <p>2. Value of 1 Part = £<span id="calc-one"></span></p>
-            <p>3. A gets: £<span id="ans-a"></span> | B gets: £<span id="ans-b"></span></p>
-        </div>
-    </div>
+    </section>
 
-    <div class="section saboteur-section">
-        <h2>Phase 4: The Saboteur</h2>
-        <div class="trap-item"><span>The "Divide by One" Trap:</span> <span class="trap-val">£<span id="trap-one"></span></span></div>
-    </div>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 20px;">
+            <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Magic Moving" Trap:</strong> Students often just move a '+4' to the other side without changing its sign, ending up with $2x = 10 + 4$. 
+            <br><br><strong>The Fix:</strong> Numbers don't jump the equals sign. You are physically <em>subtracting</em> 4 from both sides to cancel it out on the left. If you add 4 blocks to the right instead of removing them, the scale crashes.</p>
+        </div>
+    </section>
 </div>
+
 <script>
-    function update() {
-        const res = LogicProvider.getModule(13).generate(document.getElementById('ra').value, document.getElementById('rb').value, document.getElementById('tot').value);
-        document.getElementById('ra-val').innerText = res.inputs.a;
-        document.getElementById('rb-val').innerText = res.inputs.b;
-        document.getElementById('tot-val').innerText = res.inputs.total;
-        document.getElementById('q-text').innerText = `Share £${res.inputs.total} in the ratio ${res.inputs.a}:${res.inputs.b}.`;
-        document.getElementById('calc-parts').innerText = `${res.inputs.a} + ${res.inputs.b} = ${parseInt(res.inputs.a) + parseInt(res.inputs.b)}`;
-        document.getElementById('calc-one').innerText = res.answers.onePart;
-        document.getElementById('ans-a').innerText = res.answers.partA;
-        document.getElementById('ans-b').innerText = res.answers.partB;
-        document.getElementById('trap-one').innerText = res.answers.traps.divideByOne;
+    // Embedded Logic Provider
+    window.LogicProvider = window.LogicProvider || { modules: {} };
+    LogicProvider.modules.balancingEquations = {
+        calculate: (a, b, c) => {
+            const coef = parseInt(a) || 1;
+            const constLeft = parseInt(b) || 0;
+            const constRight = parseInt(c) || 0;
+            const step1Right = constRight - constLeft;
+            const finalX = step1Right / coef;
+            return { coef, constLeft, constRight, step1Right, finalX,
+                steps: [
+                    `Equation: ${coef}x + ${constLeft} = ${constRight}`,
+                    `Subtract ${constLeft} from both sides to isolate the Xs.`,
+                    `${coef}x = ${step1Right}`,
+                    `Divide both sides by ${coef}.`,
+                    `x = ${finalX.toFixed(2)}`
+                ]
+            };
+        }
+    };
+
+    const inputs = ['a-in', 'b-in', 'c-in'].map(id => document.getElementById(id));
+    const panLeft = document.getElementById('pan-left');
+    const panRight = document.getElementById('pan-right');
+    const traceBox = document.getElementById('logic-trace');
+    const stepBtn = document.getElementById('next-step-btn');
+    const beam = document.getElementById('beam');
+
+    let currentRes = null;
+    let currentStep = 0;
+
+    function resetScale() {
+        const [a, b, c] = inputs.map(i => parseInt(i.value) || 0);
+        currentRes = LogicProvider.modules.balancingEquations.calculate(a, b, c);
+        
+        currentStep = 0;
+        traceBox.innerHTML = '';
+        beam.style.transform = 'rotate(0deg)';
+        stepBtn.innerText = "Step 1: Subtract Constants";
+        stepBtn.disabled = false;
+
+        // Render Initial Blocks
+        panLeft.innerHTML = '';
+        panRight.innerHTML = '';
+
+        for(let i=0; i<currentRes.coef; i++) {
+            panLeft.innerHTML += `<div class="block block-x">X</div>`;
+        }
+        for(let i=0; i<currentRes.constLeft; i++) {
+            panLeft.innerHTML += `<div class="block block-1 const-l">1</div>`;
+        }
+        // Limit rendering right blocks so UI doesn't explode if c=100
+        const displayRight = Math.min(currentRes.constRight, 30);
+        for(let i=0; i<displayRight; i++) {
+            panRight.innerHTML += `<div class="block block-1 const-r">1</div>`;
+        }
+        if(currentRes.constRight > 30) {
+            panRight.innerHTML += `<div style="font-size:0.7rem; font-weight:bold; color:#002d5b; width:100%; text-align:center;">+ ${currentRes.constRight - 30} more</div>`;
+        }
+        
+        logTrace(currentRes.steps[0]);
     }
-    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    function executeNextStep() {
+        if (currentStep === 0) {
+            // Step 1: Remove constants from both sides
+            logTrace(currentRes.steps[1]);
+            logTrace(currentRes.steps[2]);
+            
+            // Animate removal
+            document.querySelectorAll('.const-l').forEach(el => el.classList.add('removing'));
+            
+            const rightBlocks = document.querySelectorAll('.const-r');
+            for(let i=0; i<Math.min(currentRes.constLeft, rightBlocks.length); i++) {
+                rightBlocks[i].classList.add('removing');
+            }
+
+            setTimeout(() => {
+                document.querySelectorAll('.removing').forEach(el => el.remove());
+            }, 500);
+
+            stepBtn.innerText = "Step 2: Divide by Coef";
+            currentStep = 1;
+
+        } else if (currentStep === 1) {
+            // Step 2: Divide
+            logTrace(currentRes.steps[3]);
+            logTrace(currentRes.steps[4]);
+
+            // Visual simplification (leave 1 X and the final value)
+            panLeft.innerHTML = `<div class="block block-x">X</div>`;
+            panRight.innerHTML = `<div style="font-size:1.5rem; font-weight:bold; color:var(--cognis-blue); width:100%; text-align:center;">${currentRes.finalX.toFixed(2)}</div>`;
+            
+            stepBtn.innerText = "Equation Solved";
+            stepBtn.disabled = true;
+        }
+    }
+
+    function logTrace(text) {
+        traceBox.innerHTML += `<div class="trace-step">→ ${text}</div>`;
+    }
+
+    window.onload = resetScale;
 </script>
 </body>
 </html>

@@ -67,21 +67,26 @@ const LogicProvider = {
             }
         },
         
-        moreThanTrap: {
-            calculate: (total, diff) => {
+       moreThanTrap: {
+            calculate: (total, difference) => {
                 const t = parseFloat(total) || 0;
-                const d = parseFloat(diff) || 0;
-                const smaller = (t - d) / 2;
-                const larger = smaller + d;
+                const d = parseFloat(difference) || 0;
+
+                // The logic: Remove the gap to find the 'equalized' sum
+                const equalizedSum = t - d;
+                const smallerPart = equalizedSum / 2;
+                const largerPart = smallerPart + d;
+
                 return {
-                    smaller: smaller,
-                    larger: larger,
-                    equalPart: smaller,
+                    smaller: smallerPart,
+                    larger: largerPart,
+                    equalized: equalizedSum,
                     steps: [
-                        `1. We start with a total of ${t}.`,
-                        `2. We remove the 'More Than' gap of ${d}: ${t} - ${d} = ${t - d}.`,
-                        `3. Now we have two equal parts. Divide by 2: ${(t - d)} ÷ 2 = ${smaller}.`,
-                        `4. Jo (Smaller) = ${smaller}. Sarah (Larger) = ${smaller} + ${d} = ${larger}.`
+                        `Step 1: Identify the "Excess". One share is ${d} larger than the other.`,
+                        `Step 2: Snip off the excess. ${t} - ${d} = ${equalizedSum}.`,
+                        `Step 3: Share the remainder equally. ${equalizedSum} ÷ 2 = ${smallerPart}.`,
+                        `Step 4: You found the smaller share: ${smallerPart}.`,
+                        `Step 5: Add the excess back for the larger share: ${smallerPart} + ${d} = ${largerPart}.`
                     ]
                 };
             }

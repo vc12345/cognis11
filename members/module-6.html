@@ -2,73 +2,154 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 6: Fractions of Amounts | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 6: Percentage Multipliers | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        .engine-controls { background: #fff7ed; padding: 20px; border-radius: 8px; border: 1px solid #ffedd5; }
-        .question-card { border: 2px solid var(--primary); padding: 25px; border-radius: 8px; text-align: center; font-style: italic; margin: 20px 0; background: white; }
+        :root {
+            --cognis-blue: #002d5b;
+            --cognis-gold: #c5a059;
+            --cognis-light: #f4f7f9;
+            --increase-green: #27ae60;
+            --decrease-red: #d35400;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; color: #2c3e50; padding: 40px 20px; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; }
+
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; margin-top: 0; letter-spacing: 2px; }
+
+        /* X-Ray Tiers */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+
+        /* Anatomy: The Growth Bar */
+        .anatomy-display { margin: 40px 0; height: 120px; display: flex; flex-direction: column; justify-content: center; }
+        .bar-container { position: relative; height: 40px; background: #eee; border-radius: 4px; width: 100%; border: 1px solid #ddd; }
+        .base-bar { position: absolute; height: 100%; width: 60%; background: var(--cognis-blue); border-radius: 4px 0 0 4px; transition: width 0.4s ease; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem; font-weight: bold; }
+        .change-bar { position: absolute; height: 100%; left: 60%; background: var(--increase-green); border-radius: 0 4px 4px 0; transition: all 0.4s ease; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.75rem; font-weight: bold; }
+        .multiplier-tag { position: absolute; top: -35px; left: 50%; transform: translateX(-50%); background: var(--cognis-gold); color: white; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; }
+
+        /* Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { margin-bottom: 20px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .control-group input, .control-group select { width: 100%; padding: 10px; border-radius: 4px; border: none; font-size: 1rem; }
+        .val-out { float: right; color: var(--cognis-gold); font-weight: bold; }
+
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
+        .trace-step { margin-bottom: 10px; line-height: 1.4; color: #e2e8f0; }
     </style>
 </head>
 <body>
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 6: Fractions of Amounts</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "UNIT FRACTION" PRINCIPLE</p>
-    </header>
 
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 6: Percentage Increase & Decrease</h1></div>
+
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <div class="xray-examples">
-            <p>1. "Find 3/4 of 20 sweets."</p>
-            <p>2. "A cake weighs 800g. If 2/5 is flour, how many grams of flour are there?"</p>
-            <p>3. "Two-thirds of a class of 30 are girls. How many girls are there?"</p>
+        <p>Mastering percentages means moving away from "finding 10% and adding it." We use <strong>Multipliers</strong> to jump straight to the answer in one step.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><span>Adv Year 2</span>"A £20 teddy is on sale with 10% off. How much money is taken off the price?"</div>
+            <div class="tier-card"><span>Avg Year 4</span>"A bag of 40 marbles gets a '20% extra free' bonus. How many marbles are in the bag now?"</div>
+            <div class="tier-card"><span>Adv Year 5</span>"A shop increases all prices by 15%. If a game cost £40, what is the new price? Show the multiplier used."</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        
-        <p><strong>The Golden Rule:</strong> Divide by the Bottom (Denominator), then Multiply by the Top (Numerator).</p>
-    </div>
+        <div class="anatomy-display">
+            <div class="bar-container">
+                <div class="multiplier-tag" id="m-tag">Multiplier: 1.20</div>
+                <div class="base-bar" id="base-bar">100% (Original)</div>
+                <div class="change-bar" id="change-bar">+20%</div>
+            </div>
+        </div>
+        <p style="text-align:center; font-size:0.85rem; color:#667;">The total length represents the final value after the multiplier is applied.</p>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <label>Numerator: <span id="n-val"></span></label><input type="range" id="num" min="1" max="5" value="3" style="width:100%"><br>
-            <label>Denominator: <span id="d-val"></span></label><input type="range" id="den" min="2" max="10" value="4" style="width:100%"><br>
-            <label>Total: <span id="t-val"></span></label><input type="range" id="tot" min="20" max="200" step="20" value="80" style="width:100%">
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Original Value <span class="val-out" id="v-label">100</span></label>
+                    <input type="range" id="v-in" min="10" max="500" value="100">
+                </div>
+                <div class="control-group">
+                    <label>Action</label>
+                    <select id="type-in">
+                        <option value="inc">Increase (+)</option>
+                        <option value="dec">Decrease (-)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Percentage (%) <span class="val-out" id="p-label">20</span></label>
+                    <input type="range" id="p-in" min="1" max="99" value="20">
+                </div>
+            </div>
+            <div class="trace-log" id="logic-trace"></div>
         </div>
-        <div class="question-card" id="q-text"></div>
-        <div id="logic" style="background:#ecfdf5; padding:20px; border-radius:8px;">
-            <p>1. Find 1 unit: <span id="step1"></span></p>
-            <p>2. Multiply by numerator: <span id="step2"></span></p>
-        </div>
-    </div>
+    </section>
 
-    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
-        <h2>Phase 4: The Saboteur</h2>
-        <p style="color: var(--trap); font-weight: 700;">The "Just Divide" Trap: Calculating only 1 unit and forgetting to multiply by the numerator.</p>
-        <p>Trap Answer: <span id="trap-ans"></span></p>
-    </div>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid #d35400; border-radius: 8px; padding: 20px;">
+            <h2 style="color:#d35400; margin-bottom:10px;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Literal Addition" Trap:</strong> If a price is £50 and increases by 10%, students often just add the number 10 ($50 + 10 = £60$). 
+            <br><br><strong>The Fix:</strong> Percentages are <em>fractions of a specific amount</em>. Always turn the percentage into a decimal multiplier ($1.1$) before touching the original number.</p>
+        </div>
+    </section>
 </div>
+
+<script src="js/logic-provider.js"></script>
 <script>
-    function update() {
-        const res = LogicProvider.modules[6].generate(document.getElementById('num').value, document.getElementById('den').value, document.getElementById('tot').value);
-        document.getElementById('n-val').innerText = res.inputs.num;
-        document.getElementById('d-val').innerText = res.inputs.den;
-        document.getElementById('t-val').innerText = res.inputs.total;
-        document.getElementById('q-text').innerText = `What is ${res.inputs.num}/${res.inputs.den} of ${res.inputs.total}?`;
-        document.getElementById('step1').innerText = `${res.inputs.total} ÷ ${res.inputs.den} = ${res.answers.onePart}`;
-        document.getElementById('step2').innerText = `${res.answers.onePart} × ${res.inputs.num} = ${res.answers.result}`;
-        document.getElementById('trap-ans').innerText = res.answers.traps.justDiv;
+    const vIn = document.getElementById('v-in');
+    const pIn = document.getElementById('p-in');
+    const tIn = document.getElementById('type-in');
+    const traceBox = document.getElementById('logic-trace');
+    
+    const baseBar = document.getElementById('base-bar');
+    const changeBar = document.getElementById('change-bar');
+    const mTag = document.getElementById('m-tag');
+
+    function refresh() {
+        const val = parseFloat(vIn.value);
+        const per = parseFloat(pIn.value);
+        const isInc = tIn.value === 'inc';
+
+        document.getElementById('v-label').innerText = val;
+        document.getElementById('p-label').innerText = per + '%';
+
+        const res = LogicProvider.modules.percentageChange.calculate(val, per, isInc);
+
+        // Update Anatomy
+        const baseWidth = isInc ? 60 : (100 - per) * 0.8; // Adjust visually
+        const changeWidth = per * 0.8;
+
+        if(isInc) {
+            baseBar.style.width = `60%`;
+            baseBar.innerText = `Original (£${val})`;
+            changeBar.style.left = `60%`;
+            changeBar.style.width = `${per/2}%`;
+            changeBar.style.background = '#27ae60';
+            changeBar.innerText = `+${per}%`;
+        } else {
+            baseBar.style.width = `${60 - (per/2)}%`;
+            baseBar.innerText = `New (£${res.result})`;
+            changeBar.style.left = `${60 - (per/2)}%`;
+            changeBar.style.width = `${per/2}%`;
+            changeBar.style.background = '#d35400';
+            changeBar.innerText = `-${per}%`;
+        }
+        
+        mTag.innerText = `Multiplier: ${res.multiplier}`;
+        traceBox.innerHTML = res.steps.map(s => `<div class="trace-step">→ ${s}</div>`).join('');
     }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    [vIn, pIn, tIn].forEach(el => el.addEventListener('input', refresh));
+    window.onload = refresh;
 </script>
 </body>
 </html>

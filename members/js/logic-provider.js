@@ -2,81 +2,47 @@ const LogicProvider = {
     modules: {
 
         moreThanTrap: {
-            calculate: (total, difference) => {
+            calculate: (total, diff) => {
                 const t = parseFloat(total) || 0;
-                const d = parseFloat(difference) || 0;
-
-                // The logic: Remove the gap to find the 'equalized' sum
-                const equalizedSum = t - d;
-                const smallerPart = equalizedSum / 2;
-                const largerPart = smallerPart + d;
-
+                const d = parseFloat(diff) || 0;
+                const equalized = t - d;
+                const smaller = equalized / 2;
+                const larger = smaller + d;
                 return {
-                    smaller: smallerPart,
-                    larger: largerPart,
-                    equalized: equalizedSum,
+                    smaller, larger, equalized,
                     steps: [
-                        `Step 1: Identify the "Excess". One share is ${d} larger than the other.`,
-                        `Step 2: Snip off the excess. ${t} - ${d} = ${equalizedSum}.`,
-                        `Step 3: Share the remainder equally. ${equalizedSum} ÷ 2 = ${smallerPart}.`,
-                        `Step 4: You found the smaller share: ${smallerPart}.`,
-                        `Step 5: Add the excess back for the larger share: ${smallerPart} + ${d} = ${largerPart}.`
+                        `1. Identify the 'Extra': Person A has ${d} more.`,
+                        `2. Level the field: ${t} - ${d} = ${equalized}.`,
+                        `3. Split equal shares: ${equalized} ÷ 2 = ${smaller}.`,
+                        `4. Result: Smaller is ${smaller}, Larger is ${smaller} + ${d} = ${larger}.`
                     ]
                 };
             }
         },
-
+        
         reverseOps: {
-            calculate: (finalResult, op1Type, op1Val, op2Type, op2Val) => {
-                const res = parseFloat(finalResult) || 0;
-                const v1 = parseFloat(op1Val) || 0;
-                const v2 = parseFloat(op2Val) || 0;
-
-                // Step-by-step reversal
-                // Problem structure: ((X [op1] v1) [op2] v2) = res
+            calculate: (final, op1T, op1V, op2T, op2V) => {
+                const f = parseFloat(final) || 0;
+                const v1 = parseFloat(op1V) || 0;
+                const v2 = parseFloat(op2V) || 0;
                 
-                // Reverse Op 2 first
-                let afterOp1;
-                let step1Desc = "";
-                if (op2Type === 'add') {
-                    afterOp1 = res - v2;
-                    step1Desc = `Reverse +${v2} by subtracting: ${res} - ${v2} = ${afterOp1}`;
-                } else if (op2Type === 'sub') {
-                    afterOp1 = res + v2;
-                    step1Desc = `Reverse -${v2} by adding: ${res} + ${v2} = ${afterOp1}`;
-                } else if (op2Type === 'mul') {
-                    afterOp1 = res / v2;
-                    step1Desc = `Reverse ×${v2} by dividing: ${res} ÷ ${v2} = ${afterOp1}`;
-                } else {
-                    afterOp1 = res * v2;
-                    step1Desc = `Reverse ÷${v2} by multiplying: ${res} × ${v2} = ${afterOp1}`;
-                }
+                const invert = (t) => ({'add':'sub','sub':'add','mul':'div','div':'mul'}[t]);
+                const solve = (val, t, v) => {
+                    if(t === 'add') return val - v;
+                    if(t === 'sub') return val + v;
+                    if(t === 'mul') return val / v;
+                    if(t === 'div') return val * v;
+                };
 
-                // Reverse Op 1
-                let originalX;
-                let step2Desc = "";
-                if (op1Type === 'add') {
-                    originalX = afterOp1 - v1;
-                    step2Desc = `Reverse +${v1} by subtracting: ${afterOp1} - ${v1} = ${originalX}`;
-                } else if (op1Type === 'sub') {
-                    originalX = afterOp1 + v1;
-                    step2Desc = `Reverse -${v1} by adding: ${afterOp1} + ${v1} = ${originalX}`;
-                } else if (op1Type === 'mul') {
-                    originalX = afterOp1 / v1;
-                    step2Desc = `Reverse ×${v1} by dividing: ${afterOp1} ÷ ${v1} = ${originalX}`;
-                } else {
-                    originalX = afterOp1 * v1;
-                    step2Desc = `Reverse ÷${v1} by multiplying: ${afterOp1} × ${v1} = ${originalX}`;
-                }
+                const mid = solve(f, op2T, v2);
+                const start = solve(mid, op1T, v1);
 
                 return {
-                    original: originalX.toFixed(2),
-                    intermediate: afterOp1.toFixed(2),
+                    start, mid,
                     steps: [
-                        `Step 1: Start at the end with ${res}.`,
-                        `Step 2: ${step1Desc}.`,
-                        `Step 3: ${step2Desc}.`,
-                        `Result: The original number was ${originalX.toFixed(2)}.`
+                        `1. Reverse last step: ${f} ${invert(op2T)} ${v2} = ${mid}.`,
+                        `2. Reverse first step: ${mid} ${invert(op1T)} ${v1} = ${start}.`,
+                        `Result: The hidden number was ${start}.`
                     ]
                 };
             }

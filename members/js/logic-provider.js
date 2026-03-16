@@ -1,6 +1,29 @@
 const LogicProvider = {
     modules: {
 
+        constantSpeed: {
+            calculate: (d, s, t, solvingFor) => {
+                let dist = parseFloat(d);
+                let speed = parseFloat(s);
+                let time = parseFloat(t);
+                let result = 0;
+                let steps = [];
+
+                if (solvingFor === 'd') {
+                    result = speed * time;
+                    steps = [`Step 1: Identify Speed (${speed}) and Time (${time}).`, `Step 2: Multiply them ($S \times T$).`, `Result: Distance is ${result.toFixed(2)} km.`];
+                } else if (solvingFor === 's') {
+                    result = dist / time;
+                    steps = [`Step 1: Identify Distance (${dist}) and Time (${time}).`, `Step 2: Divide Distance by Time ($D \div T$).`, `Result: Speed is ${result.toFixed(2)} km/h.`];
+                } else {
+                    result = dist / speed;
+                    steps = [`Step 1: Identify Distance (${dist}) and Speed (${speed}).`, `Step 2: Divide Distance by Speed ($D \div S$).`, `Result: Time is ${result.toFixed(2)} hours.`];
+                }
+
+                return { result: result.toFixed(2), steps };
+            }
+        },
+
         sequentialFractions: {
             calculate: (total, n1, d1, n2, d2) => {
                 const t = parseFloat(total);

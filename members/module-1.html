@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Module 1: The Unitary Method | Cognis11</title>
     <style>
         :root {
@@ -10,157 +9,123 @@
             --cognis-gold: #c5a059;
             --cognis-light: #f4f7f9;
             --trap-red: #d9534f;
-            --white: #ffffff;
         }
-        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #e8ecef; color: #333; line-height: 1.6; margin: 0; padding: 20px; }
-        .module-container { max-width: 950px; margin: 0 auto; background: var(--white); border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); overflow: hidden; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #eaeff2; color: #2c3e50; padding: 40px 20px; }
+        .module-card { max-width: 900px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         
-        /* Header */
-        .mod-header { background: var(--cognis-blue); color: white; padding: 30px; border-bottom: 4px solid var(--cognis-gold); }
-        .mod-header h1 { margin: 0; font-size: 1.6rem; letter-spacing: 1px; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; }
 
-        /* Phases */
-        .phase { padding: 40px; border-bottom: 1px solid #eee; }
-        h2 { color: var(--cognis-blue); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; margin-top: 0; display: flex; align-items: center; }
-        h2::after { content: ""; flex: 1; height: 1px; background: #eee; margin-left: 15px; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; margin-top: 0; letter-spacing: 2px; }
 
-        /* Phase 1: X-Ray */
-        .dialects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .dialect-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-gold); font-style: italic; font-size: 0.9rem; }
+        /* Anatomy: The Dynamic Bar Model */
+        .anatomy-display { margin: 20px 0; text-align: center; }
+        .bar-wrapper { display: flex; width: 100%; max-width: 600px; height: 60px; border: 3px solid var(--cognis-blue); border-radius: 8px; margin: 0 auto; overflow: hidden; background: #fff; }
+        .bar-segment { flex: 1; border-right: 1px solid #cbd5e0; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; transition: all 0.2s ease; }
+        .bar-segment:last-child { border-right: none; }
+        .bar-segment.unit-focus { background: var(--cognis-gold); color: white; }
 
-        /* Phase 2: Anatomy */
-        .anatomy-viz { margin: 30px 0; text-align: center; }
-        .bar-model { display: flex; height: 60px; border: 3px solid var(--cognis-blue); border-radius: 8px; overflow: hidden; margin: 0 auto; max-width: 600px; }
-        .bar-slice { flex: 1; border-right: 1px solid #ccc; background: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; transition: all 0.3s ease; }
-        .bar-slice.active { background: var(--cognis-gold); color: white; border-right-color: var(--cognis-blue); }
-        .anatomy-label { margin-top: 15px; font-weight: bold; color: var(--cognis-blue); }
+        /* Engine: Logic & Trace */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .controls { display: flex; flex-direction: column; gap: 20px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .control-group input { width: 100%; cursor: pointer; accent-color: var(--cognis-gold); }
+        .control-group .val-out { float: right; color: var(--cognis-gold); font-weight: bold; }
 
-        /* Phase 3: Engine */
-        .engine-ui { background: #1a252f; color: white; border-radius: 12px; padding: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .sliders { display: flex; flex-direction: column; gap: 20px; }
-        .slider-group label { display: block; font-size: 0.75rem; color: #95a5a6; margin-bottom: 5px; text-transform: uppercase; }
-        input[type="range"] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
-        .val-display { font-weight: bold; color: var(--cognis-gold); float: right; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
+        .trace-step { margin-bottom: 10px; line-height: 1.4; opacity: 0.9; }
 
-        .logic-trace { background: rgba(255,255,255,0.05); border-radius: 8px; padding: 20px; border-left: 3px solid var(--cognis-gold); }
-        .trace-step { margin-bottom: 12px; font-family: 'Courier New', monospace; font-size: 0.95rem; }
-        .trace-step strong { color: var(--cognis-gold); display: block; font-size: 0.7rem; text-transform: uppercase; }
-
-        /* Phase 4: Saboteur */
-        .saboteur { background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 25px; }
-        .saboteur h3 { color: var(--trap-red); margin-top: 0; font-size: 1.1rem; }
+        .saboteur { background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 20px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div class="module-container">
-    <header class="mod-header">
-        <h1>Module 01: The Unitary Method</h1>
-    </header>
+<div class="module-card">
+    <div class="header"><h1>Module 1: The Unitary Method</h1></div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>This module tests your ability to find the <strong>Base Value (The One)</strong> before scaling up. Don't guess the jump; find the bridge.</p>
-        <div class="dialects">
-            <div class="dialect-card">"If 7 pencils cost £2.10, what is the cost of 10 pencils?"</div>
-            <div class="dialect-card">"A car travels 120 miles on 15 litres. How far on 20 litres?"</div>
-            <div class="dialect-card">"9 identical crates weigh 108kg. Find the weight of 5 crates."</div>
-        </div>
+        <p>The Unitary Method is the <strong>"Bridge to One."</strong> You cannot scale accurately until you find the value of a single unit.</p>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="anatomy-viz">
-            <div class="bar-model" id="bar-model">
-                </div>
-            <div class="anatomy-label" id="anatomy-label">1 Unit = £0.00</div>
+        <div class="anatomy-display">
+            <div class="bar-wrapper" id="bar-viz"></div>
+            <p id="anatomy-caption" style="margin-top:15px; font-weight:600;">Finding the "One"</p>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-ui">
-            <div class="sliders">
-                <div class="slider-group">
-                    <label>Known Quantity <span class="val-display" id="label-q">6</span></label>
-                    <input type="range" id="input-q" min="2" max="12" value="6">
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Known Quantity <span class="val-out" id="q-label">6</span></label>
+                    <input type="range" id="q-slider" min="2" max="12" value="6">
                 </div>
-                <div class="slider-group">
-                    <label>Known Total Value (£) <span class="val-display" id="label-v">60</span></label>
-                    <input type="range" id="input-v" min="10" max="200" step="10" value="60">
+                <div class="control-group">
+                    <label>Known Value (£) <span class="val-out" id="v-label">60</span></label>
+                    <input type="range" id="v-slider" min="10" max="300" step="10" value="60">
                 </div>
-                <div class="slider-group">
-                    <label>Target Quantity <span class="val-display" id="label-t">10</span></label>
-                    <input type="range" id="input-t" min="1" max="20" value="10">
+                <div class="control-group">
+                    <label>Target Quantity <span class="val-out" id="t-label">10</span></label>
+                    <input type="range" id="t-slider" min="1" max="20" value="10">
                 </div>
             </div>
-            
-            <div class="logic-trace" id="engine-trace">
-                </div>
+            <div class="trace-log" id="logic-trace"></div>
         </div>
     </section>
 
     <section class="phase">
         <div class="saboteur">
-            <h3>Phase 4: The Saboteur</h3>
-            <ul>
-                <li><strong>The Inverse Slip:</strong> Dividing quantity by cost (e.g., 6 ÷ £60) instead of cost by quantity. <em>Check: Is your unit price 10p or £10?</em></li>
-                <li><strong>The Additive Trap:</strong> Thinking "I have 4 more items, so I'll just add 4 to the price." <em>Ratios are multiplicative, never additive.</em></li>
-            </ul>
+            <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Inverse Split":</strong> Students often divide the <em>Quantity</em> by the <em>Price</em>. Always ask: "Is my answer the price of one item, or how many items I get for £1?"</p>
         </div>
     </section>
 </div>
 
 <script src="js/logic-provider.js"></script>
 <script>
-    // Map UI to LogicProvider.modules[1]
-    const qSlider = document.getElementById('input-q');
-    const vSlider = document.getElementById('input-v');
-    const tSlider = document.getElementById('input-t');
-    
-    const barModel = document.getElementById('bar-model');
-    const anatomyLabel = document.getElementById('anatomy-label');
-    const engineTrace = document.getElementById('engine-trace');
+    const qS = document.getElementById('q-slider');
+    const vS = document.getElementById('v-slider');
+    const tS = document.getElementById('t-slider');
+    const traceBox = document.getElementById('logic-trace');
+    const barViz = document.getElementById('bar-viz');
+    const anatomyCap = document.getElementById('anatomy-caption');
 
-    function syncUI() {
-        const q = qSlider.value;
-        const v = vSlider.value;
-        const t = tSlider.value;
+    function refresh() {
+        const q = parseInt(qS.value);
+        const v = parseInt(vS.value);
+        const t = parseInt(tS.value);
 
         // Update Labels
-        document.getElementById('label-q').innerText = q;
-        document.getElementById('label-v').innerText = `£${v}`;
-        document.getElementById('label-t').innerText = t;
+        document.getElementById('q-label').innerText = q;
+        document.getElementById('v-label').innerText = `£${v}`;
+        document.getElementById('t-label').innerText = t;
 
-        // Run Logic from your provider
-        const result = LogicProvider.modules[1].generate(q, v, t);
+        // CALL: LogicProvider.modules.unitary.calculate
+        const result = LogicProvider.modules.unitary.calculate(q, v, t);
 
-        // Update Anatomy (The Bar Model)
-        barModel.innerHTML = '';
+        // Update Anatomy (The Bar)
+        barViz.innerHTML = '';
         for(let i=0; i<q; i++) {
-            const slice = document.createElement('div');
-            slice.className = 'bar-slice' + (i === 0 ? ' active' : '');
-            if(i === 0) slice.innerText = `£${result.answers.unit}`;
-            barModel.appendChild(slice);
+            const seg = document.createElement('div');
+            seg.className = 'bar-segment' + (i === 0 ? ' unit-focus' : '');
+            if(i === 0) seg.innerText = `£${result.unitValue}`;
+            barViz.appendChild(seg);
         }
-        anatomyLabel.innerText = `The Bridge: 1 Unit = £${result.answers.unit}`;
+        anatomyCap.innerHTML = `Dividing the total (£${v}) into ${q} equal parts reveals the Unit Value: <span style="color:var(--cognis-gold)">£${result.unitValue}</span>`;
 
-        // Update Engine Trace
-        engineTrace.innerHTML = `
-            <div class="trace-step"><strong>The Known</strong> ${q} units = £${v}</div>
-            <div class="trace-step"><strong>The Bridge</strong> Divide by ${q} to find 1 unit: £${result.answers.unit}</div>
-            <div class="trace-step"><strong>The Scale</strong> Multiply by ${t} for the target: £${result.answers.unit} × ${t}</div>
-            <div class="trace-step" style="color:var(--cognis-gold)"><strong>Final Answer</strong> £${result.answers.correct}</div>
-        `;
+        // Update Engine (The Trace)
+        traceBox.innerHTML = result.steps.map(step => `<div class="trace-step">→ ${step}</div>`).join('');
     }
 
-    [qSlider, vSlider, tSlider].forEach(slider => {
-        slider.addEventListener('input', syncUI);
-    });
-
-    // Initial Trigger
-    window.onload = syncUI;
+    [qS, vS, tS].forEach(input => input.addEventListener('input', refresh));
+    
+    // Boot
+    window.onload = refresh;
 </script>
-
 </body>
 </html>

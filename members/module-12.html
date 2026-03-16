@@ -2,120 +2,99 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 12: Reverse Percentages | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 12: Relative Speed | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
-        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
-        .anatomy-callout { background: #fff1f2; border-left: 5px solid #f43f5e; padding: 20px; border-radius: 4px; margin: 20px 0; }
-        .engine-controls { display: grid; gap: 20px; background: #fff1f2; padding: 20px; border-radius: 8px; border: 1px solid #fecaca; }
-        .slider-group { display: flex; align-items: center; gap: 15px; }
-        .slider-group label { min-width: 160px; font-weight: 600; }
-        input[type=range] { flex-grow: 1; accent-color: #f43f5e; }
-        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
-        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-        .logic-card { background: #fef2f2; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid #f43f5e; }
-        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
-        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
-        .trap-val { color: var(--trap); font-weight: 700; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Animation Stage */
+        .track { height: 60px; background: #e2e8f0; border-radius: 30px; position: relative; margin: 40px 0; border: 2px solid #cbd5e0; overflow: hidden; }
+        .object { position: absolute; top: 10px; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; transition: left 0.5s ease-out; }
+        #obj1 { background: var(--cognis-blue); left: 5%; }
+        #obj2 { background: var(--cognis-gold); left: 85%; }
+        .gap-measure { position: absolute; top: 65px; width: 100%; text-align: center; font-size: 0.8rem; font-weight: bold; color: var(--cognis-blue); }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { margin-bottom: 15px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
+        .control-group input { width: 100%; padding: 8px; border-radius: 4px; border: none; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
     </style>
 </head>
 <body>
+<div class="module-card">
+    <div class="header"><h1>Module 12: Relative Speed</h1></div>
 
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 12: Reverse Percentages</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "BACK TO 100" PRINCIPLE</p>
-    </header>
-
-    <div class="section">
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>This is the most dangerous trap in the exam. A "Type 1" thinker sees a 10% increase and tries to "fix" it by taking 10% off the new price. A "Type 2" thinker knows the original 100% is gone and must be found again.</p>
-        <div class="xray-examples">
-            <strong>Exam Wording Patterns:</strong>
-            <div class="example-item">1. "After a 20% increase, a TV costs £240. What was the original price?"</div>
-            <div class="example-item">2. "A bag of sweets has 10% extra free. It now has 66 sweets. How many originally?"</div>
-            <div class="example-item">3. "A sale price is £45 after a 10% reduction. What was the price before?"</div>
+        <p>When two objects move towards each other, the distance between them shrinks at a rate equal to the <strong>sum</strong> of their speeds.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><span>Entry</span>"Two cars are 100 miles apart. Car A travels at 30mph, Car B at 20mph towards A. How long until they meet?"</div>
+            <div class="tier-card"><span>Standard</span>"A cyclist leaves London at 10km/h. A runner leaves Brighton (50km away) at 15km/h heading to London. When do they pass?"</div>
+            <div class="tier-card"><span>Advanced</span>"A train leaves at 4pm at 60mph. Another train leaves the destination 300 miles away at 4:30pm at 90mph. At what time do they meet?"</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The key is realizing that the <strong>Final Value</strong> is not 100%. If there was a 20% increase, the Final Value is 120%.</p>
         
-        <div class="anatomy-callout">
-            <strong>The Method:</strong><br>
-            1. Final Value ÷ (100 + Increase) = Value of 1%<br>
-            2. Value of 1% × 100 = Original Price (100%)
+        <div class="track">
+            <div id="obj1" class="object">A</div>
+            <div id="obj2" class="object">B</div>
         </div>
-    </div>
+        <div class="gap-measure" id="gap-text">Starting Gap: 100km</div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <div class="slider-group">
-                <label>Final Value (£): <span id="f-val">120</span></label>
-                <input type="range" id="final" min="50" max="2000" value="120" step="10">
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Distance Between (km)</label>
+                    <input type="number" id="dist-in" value="100">
+                </div>
+                <div class="control-group">
+                    <label>Object A Speed (km/h)</label>
+                    <input type="number" id="s1-in" value="30">
+                </div>
+                <div class="control-group">
+                    <label>Object B Speed (km/h)</label>
+                    <input type="number" id="s2-in" value="20">
+                </div>
             </div>
-            <div class="slider-group">
-                <label>Increase (%): <span id="p-val">20</span></label>
-                <input type="range" id="perc" min="1" max="50" value="20">
-            </div>
+            <div class="trace-log" id="logic-trace"></div>
         </div>
+    </section>
 
-        <div class="question-card" id="q-text"></div>
-        <button class="btn" onclick="toggleLogic()">Show Reverse Logic</button>
-
-        <div id="logic" class="logic-card">
-            <p><strong>Step 1:</strong> £<span id="f-copy"></span> represents <span id="p-new"></span>%.</p>
-            <p><strong>Step 2 (Find 1%):</strong> £<span id="f-copy2"></span> ÷ <span id="p-new2"></span> = £<span id="one-perc"></span></p>
-            <p><strong>Step 3 (Find 100%):</strong> £<span id="one-perc2"></span> × 100 = <strong>£<span id="res-orig"></span></strong></p>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid #d9534f; border-radius: 8px; padding: 20px;">
+            <h2 style="color:#d9534f; margin-bottom:10px;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Subtraction" Trap:</strong> Students often subtract speeds in "meeting" problems. 
+            <br><br><strong>The Fix:</strong> If objects are moving <em>towards</em> each other, they are helping each other close the gap. Help = Addition (+). You only subtract if one is <em>chasing</em> the other.</p>
         </div>
-    </div>
-
-    <div class="section saboteur-section">
-        <h2>Phase 4: The Saboteur</h2>
-        <div class="trap-item">
-            <span>The "Forward Apply" Trap (Taking % off the NEW price):</span>
-            <span class="trap-val">£<span id="trap-forward"></span></span>
-        </div>
-        <div class="trap-item">
-            <span>The "Just Subtract" Trap:</span>
-            <span class="trap-val">£<span id="trap-sub"></span></span>
-        </div>
-    </div>
+    </section>
 </div>
 
+<script src="js/logic-provider.js"></script>
 <script>
-    function update() {
-        const res = LogicProvider.getModule(12).generate(document.getElementById('final').value, document.getElementById('perc').value);
-        document.getElementById('f-val').innerText = res.inputs.finalValue;
-        document.getElementById('p-val').innerText = res.inputs.percentChange;
-        document.getElementById('q-text').innerText = `A product costs £${res.inputs.finalValue} after a ${res.inputs.percentChange}% increase. What was the original price?`;
-        
-        const newPerc = 100 + res.inputs.percentChange;
-        document.getElementById('f-copy').innerText = res.inputs.finalValue;
-        document.getElementById('p-new').innerText = newPerc;
-        document.getElementById('f-copy2').innerText = res.inputs.finalValue;
-        document.getElementById('p-new2').innerText = newPerc;
-        
-        const oneP = res.inputs.finalValue / newPerc;
-        document.getElementById('one-perc').innerText = oneP.toFixed(2);
-        document.getElementById('one-perc2').innerText = oneP.toFixed(2);
-        document.getElementById('res-orig').innerText = res.answers.correct;
-        
-        document.getElementById('trap-forward').innerText = res.answers.traps.forwardApply.toFixed(2);
-        document.getElementById('trap-sub').innerText = res.answers.traps.justSub;
+    const inputs = ['s1-in', 's2-in', 'dist-in'].map(id => document.getElementById(id));
+    const traceBox = document.getElementById('logic-trace');
+    const gapText = document.getElementById('gap-text');
+
+    function refresh() {
+        const [s1, s2, dist] = inputs.map(i => parseFloat(i.value) || 1);
+        const res = LogicProvider.modules.relativeSpeed.calculate(s1, s2, dist, true);
+
+        gapText.innerText = `Closing Gap: ${dist}km at ${res.rate}km/h`;
+        traceBox.innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
     }
-    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    inputs.forEach(i => i.addEventListener('input', refresh));
+    window.onload = refresh;
 </script>
 </body>
 </html>

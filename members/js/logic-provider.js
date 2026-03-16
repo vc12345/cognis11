@@ -1,6 +1,26 @@
 const LogicProvider = {
     modules: {
 
+        averageSpeed: {
+            calculate: (d1, t1, d2, t2) => {
+                const totalDist = parseFloat(d1) + parseFloat(d2);
+                const totalTime = parseFloat(t1) + parseFloat(t2);
+                const avgSpeed = totalDist / totalTime;
+
+                return {
+                    totalDist: totalDist.toFixed(2),
+                    totalTime: totalTime.toFixed(2),
+                    avgSpeed: avgSpeed.toFixed(2),
+                    steps: [
+                        `Step 1: Find Total Distance. ${d1} + ${d2} = ${totalDist.toFixed(2)} km.`,
+                        `Step 2: Find Total Time. ${t1} + ${t2} = ${totalTime.toFixed(2)} hours.`,
+                        `Step 3: Apply the Golden Rule. Divide Total Distance by Total Time (${totalDist.toFixed(2)} ÷ ${totalTime.toFixed(2)}).`,
+                        `Result: The Average Speed is ${avgSpeed.toFixed(2)} km/h.`
+                    ]
+                };
+            }
+        },
+
         constantSpeed: {
             calculate: (d, s, t, solvingFor) => {
                 let dist = parseFloat(d);

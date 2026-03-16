@@ -29,24 +29,22 @@ const LogicProvider = {
             calculate: (trainLen, tunnelLen, speedKmh) => {
                 const L1 = parseFloat(trainLen) || 0;
                 const L2 = parseFloat(tunnelLen) || 0;
-                const speed = parseFloat(speedKmh) || 1;
-
+                const speedKmhNum = parseFloat(speedKmh) || 1;
+        
                 const totalDistMetres = L1 + L2;
-                const totalDistKm = totalDistMetres / 1000;
-                
-                // Time in hours = D / S
-                const timeHours = totalDistKm / speed;
-                const timeSeconds = timeHours * 3600;
-
+                const speedMs = speedKmhNum / 3.6; // Convert km/h to m/s
+                const timeSeconds = totalDistMetres / speedMs;
+        
                 return {
                     totalDist: totalDistMetres,
+                    speedMs: speedMs.toFixed(2),
                     timeSeconds: timeSeconds.toFixed(1),
                     steps: [
-                        `Step 1: Identify the "Total Distance". To completely clear the tunnel, the train must travel its own length PLUS the tunnel length.`,
-                        `Total Distance = ${L1}m (Train) + ${L2}m (Tunnel) = ${totalDistMetres}m.`,
-                        `Step 2: Convert speed to m/s or distance to km. ${speed} km/h = ${(speed / 3.6).toFixed(2)} m/s.`,
-                        `Step 3: Use Time = Distance ÷ Speed.`,
-                        `Result: Time taken to clear the tunnel is ${timeSeconds.toFixed(1)} seconds.`
+                        `Step 1: Calculate 'Distance to Clear'. Total = Train (${L1}m) + Tunnel (${L2}m).`,
+                        `Total Distance = ${totalDistMetres}m.`,
+                        `Step 2: Convert Speed. ${speedKmhNum} km/h ÷ 3.6 = ${speedMs.toFixed(2)} m/s.`,
+                        `Step 3: Apply Time = Distance ÷ Speed (${totalDistMetres} ÷ ${speedMs.toFixed(2)}).`,
+                        `Result: The train clears the tunnel in ${timeSeconds.toFixed(1)} seconds.`
                     ]
                 };
             }

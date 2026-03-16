@@ -4,24 +4,36 @@
     <meta charset="UTF-8">
     <title>Module 12: Relative Speed | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        /* Animation Stage */
-        .track { height: 60px; background: #e2e8f0; border-radius: 30px; position: relative; margin: 40px 0; border: 2px solid #cbd5e0; overflow: hidden; }
-        .object { position: absolute; top: 10px; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; transition: left 0.5s ease-out; }
-        #obj1 { background: var(--cognis-blue); left: 5%; }
-        #obj2 { background: var(--cognis-gold); left: 85%; }
-        .gap-measure { position: absolute; top: 65px; width: 100%; text-align: center; font-size: 0.8rem; font-weight: bold; color: var(--cognis-blue); }
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+
+        /* The Proportional Track */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px 20px; margin: 30px 0; position: relative; }
+        .track-line { height: 8px; background: #cbd5e0; border-radius: 4px; position: relative; margin: 20px 0; }
+        
+        .vehicle { position: absolute; top: -16px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; z-index: 2; transition: left 2s ease-in-out; }
+        #veh-a { background: var(--cognis-blue); left: 0%; transform: translateX(-50%); }
+        #veh-b { background: var(--cognis-gold); left: 100%; transform: translateX(-50%); }
+        
+        .meeting-marker { position: absolute; top: -30px; height: 70px; width: 4px; background: #e53e3e; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+        .meeting-marker span { font-size: 0.7rem; color: #e53e3e; font-weight: bold; position: absolute; top: -20px; white-space: nowrap; }
+
+        .sim-btn { display: block; margin: 20px auto 0; background: var(--cognis-gold); color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .sim-btn:hover { background: #b08d4b; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .control-group { margin-bottom: 15px; }
         .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
-        .control-group input { width: 100%; padding: 8px; border-radius: 4px; border: none; }
+        .control-group input { width: 100%; padding: 8px; border-radius: 4px; border: none; font-size: 1rem; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
     </style>
 </head>
@@ -35,18 +47,26 @@
         <div class="question-tiers">
             <div class="tier-card"><span>Entry</span>"Two cars are 100 miles apart. Car A travels at 30mph, Car B at 20mph towards A. How long until they meet?"</div>
             <div class="tier-card"><span>Standard</span>"A cyclist leaves London at 10km/h. A runner leaves Brighton (50km away) at 15km/h heading to London. When do they pass?"</div>
-            <div class="tier-card"><span>Advanced</span>"A train leaves at 4pm at 60mph. Another train leaves the destination 300 miles away at 4:30pm at 90mph. At what time do they meet?"</div>
+            <div class="tier-card"><span>Advanced</span>"A train leaves at 4pm at 60mph. Another leaves the destination 300 miles away at 4:30pm at 90mph. At what time do they meet?"</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         
-        <div class="track">
-            <div id="obj1" class="object">A</div>
-            <div id="obj2" class="object">B</div>
+        <div class="simulation-area">
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; color: #718096;">
+                <span>Start A</span>
+                <span id="gap-label">Total Gap: 100 km</span>
+                <span>Start B</span>
+            </div>
+            <div class="track-line">
+                <div id="veh-a" class="vehicle">A</div>
+                <div id="veh-b" class="vehicle">B</div>
+                <div id="meet-mark" class="meeting-marker"><span>Impact Point</span></div>
+            </div>
+            <button class="sim-btn" onclick="runSimulation()">Simulate Meeting</button>
         </div>
-        <div class="gap-measure" id="gap-text">Starting Gap: 100km</div>
     </section>
 
     <section class="phase">
@@ -54,47 +74,105 @@
         <div class="engine-container">
             <div class="controls">
                 <div class="control-group">
-                    <label>Distance Between (km)</label>
+                    <label>Total Gap Distance (km)</label>
                     <input type="number" id="dist-in" value="100">
                 </div>
                 <div class="control-group">
                     <label>Object A Speed (km/h)</label>
-                    <input type="number" id="s1-in" value="30">
+                    <input type="number" id="s1-in" value="60">
                 </div>
                 <div class="control-group">
                     <label>Object B Speed (km/h)</label>
-                    <input type="number" id="s2-in" value="20">
+                    <input type="number" id="s2-in" value="40">
                 </div>
             </div>
-            <div class="trace-log" id="logic-trace"></div>
+            <div class="trace-log" id="logic-trace">
+                </div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid #d9534f; border-radius: 8px; padding: 20px;">
-            <h2 style="color:#d9534f; margin-bottom:10px;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Subtraction" Trap:</strong> Students often subtract speeds in "meeting" problems. 
-            <br><br><strong>The Fix:</strong> If objects are moving <em>towards</em> each other, they are helping each other close the gap. Help = Addition (+). You only subtract if one is <em>chasing</em> the other.</p>
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 20px;">
+            <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Middle Meet" Trap:</strong> Unless both objects are travelling at the exact same speed, they will <strong>never</strong> meet in the middle. 
+            <br><br><strong>The Fix:</strong> The impact point will always be closer to the starting point of the <em>slower</em> object. Visualizing this stops students from automatically dividing the total distance by 2.</p>
         </div>
     </section>
 </div>
 
-<script src="js/logic-provider.js"></script>
 <script>
+    // Embedded Logic Provider fallback
+    window.LogicProvider = window.LogicProvider || { modules: {} };
+    LogicProvider.modules.relativeSpeed = {
+        calculate: (s1, s2, dist) => {
+            const speed1 = parseFloat(s1) || 0;
+            const speed2 = parseFloat(s2) || 0;
+            const d = parseFloat(dist) || 0;
+            if (speed1 + speed2 === 0) return { rate: 0, timeH: 0, meetPtPct: 50, steps: ["Speeds cannot be zero."] };
+            const relativeRate = speed1 + speed2;
+            const timeToMeet = d / relativeRate;
+            const distA = speed1 * timeToMeet;
+            return {
+                rate: relativeRate.toFixed(2),
+                timeH: timeToMeet.toFixed(2),
+                timeM: (timeToMeet * 60).toFixed(0),
+                meetPtPct: (distA / d) * 100,
+                steps: [
+                    `Step 1: Calculate Combined Speed (${speed1} + ${speed2} = ${relativeRate} km/h).`,
+                    `Step 2: Time = Distance ÷ Speed (${d} ÷ ${relativeRate}).`,
+                    `Result: They meet in ${timeToMeet.toFixed(2)} hours.`,
+                    `Visual Check: Object A covers ${distA.toFixed(1)}km, meeting at ${(distA/d * 100).toFixed(0)}% of the track.`
+                ]
+            };
+        }
+    };
+
     const inputs = ['s1-in', 's2-in', 'dist-in'].map(id => document.getElementById(id));
     const traceBox = document.getElementById('logic-trace');
-    const gapText = document.getElementById('gap-text');
+    const vehA = document.getElementById('veh-a');
+    const vehB = document.getElementById('veh-b');
+    const meetMark = document.getElementById('meet-mark');
 
-    function refresh() {
-        const [s1, s2, dist] = inputs.map(i => parseFloat(i.value) || 1);
-        const res = LogicProvider.modules.relativeSpeed.calculate(s1, s2, dist, true);
+    let currentRes = null;
 
-        gapText.innerText = `Closing Gap: ${dist}km at ${res.rate}km/h`;
-        traceBox.innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
+    function calculateLogic() {
+        const [s1, s2, dist] = inputs.map(i => parseFloat(i.value) || 0);
+        document.getElementById('gap-label').innerText = `Total Gap: ${dist} km`;
+        currentRes = LogicProvider.modules.relativeSpeed.calculate(s1, s2, dist);
+        traceBox.innerHTML = currentRes.steps.map(s => `<div>→ ${s}</div>`).join('');
+        resetSimulation();
     }
 
-    inputs.forEach(i => i.addEventListener('input', refresh));
-    window.onload = refresh;
+    function resetSimulation() {
+        // Turn off transitions to snap back instantly
+        vehA.style.transition = 'none';
+        vehB.style.transition = 'none';
+        vehA.style.left = '0%';
+        vehB.style.left = '100%';
+        meetMark.style.opacity = '0';
+        
+        // Force reflow
+        void vehA.offsetWidth; 
+    }
+
+    function runSimulation() {
+        if (!currentRes) return;
+        
+        // Position the marker
+        meetMark.style.left = `${currentRes.meetPtPct}%`;
+        meetMark.style.opacity = '1';
+
+        // Turn transitions back on
+        vehA.style.transition = 'left 2s ease-in-out';
+        vehB.style.transition = 'left 2s ease-in-out';
+
+        // Move vehicles to the meeting percentage
+        vehA.style.left = `${currentRes.meetPtPct}%`;
+        vehB.style.left = `${currentRes.meetPtPct}%`;
+    }
+
+    inputs.forEach(i => i.addEventListener('input', calculateLogic));
+    window.onload = calculateLogic;
 </script>
 </body>
 </html>

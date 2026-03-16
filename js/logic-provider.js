@@ -6,6 +6,24 @@
 const LogicProvider = {
     modules: {
 
+        unitary: {
+            calculate: (knownQty, knownValue, targetQty) => {
+                const unitValue = knownValue / knownQty;
+                const finalValue = unitValue * targetQty;
+                return {
+                    unitValue: unitValue.toFixed(2),
+                    finalValue: finalValue.toFixed(2),
+                    steps: [
+                        `Identify the known relationship: ${knownQty} units = ${knownValue}.`,
+                        `The "Bridge to One": Divide the total value by the quantity (${knownValue} ÷ ${knownQty}) to find the value of a single unit.`,
+                        `Single unit value = ${unitValue.toFixed(2)}.`,
+                        `Scale to target: Multiply the single unit value by the target quantity (${unitValue.toFixed(2)} × ${targetQty}).`,
+                        `Final Result: ${finalValue.toFixed(2)}`
+                    ]
+                };
+            }
+        },
+
         // Module 24: Translation
         24: {
             name: "Translation Logic",

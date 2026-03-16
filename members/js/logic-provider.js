@@ -48,26 +48,26 @@ const LogicProvider = {
             }
         },
     
-        timeConv = {
+        timeConv: {
             calculate: (h, m, addM) => {
                 const hStart = parseInt(h) || 0;
                 const mStart = parseInt(m) || 0;
                 const duration = parseInt(addM) || 0;
-        
+                
                 const totalMins = (hStart * 60) + mStart + duration;
                 const finalH = Math.floor(totalMins / 60) % 24;
                 const finalM = totalMins % 60;
                 
                 const overflowed = (mStart + duration) >= 60;
                 const hoursCarried = Math.floor((mStart + duration) / 60);
-        
+
                 return {
                     totalMins, finalH, finalM, overflowed, hoursCarried,
                     steps: [
-                        `1. Start with ${mStart}m. Add ${duration}m = ${mStart + duration}m total.`,
-                        overflowed ? `2. OVERFLOW: ${mStart + duration}m contains ${hoursCarried} hour(s).` : `2. Safe: Total minutes are under 60.`,
-                        `3. Carry ${hoursCarried} to Hours and keep ${finalM} as remaining minutes.`,
-                        `Final Time: ${finalH}:${finalM.toString().padStart(2, '0')}`
+                        `1. Initial state: ${hStart}h ${mStart}m. Adding ${duration}m.`,
+                        `2. Minutes logic: ${mStart} + ${duration} = ${mStart + duration}m.`,
+                        overflowed ? `3. OVERFLOW! ${mStart + duration}m = ${hoursCarried}h and ${finalM}m.` : `3. No overflow: total minutes stay under 60.`,
+                        `Result: Final time is ${finalH}:${finalM.toString().padStart(2, '0')}.`
                     ]
                 };
             }

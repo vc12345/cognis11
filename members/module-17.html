@@ -4,32 +4,21 @@
     <meta charset="UTF-8">
     <title>Module 17: Reverse Operations | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        :root { --blue: #002d5b; --gold: #c5a059; --light: #f4f7f9; --red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 20px; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+        .header { background: var(--blue); color: white; padding: 20px 40px; border-bottom: 4px solid var(--gold); }
+        .phase { padding: 30px 40px; border-bottom: 1px solid #eee; }
+        .phase h2 { font-size: 0.8rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
 
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
-        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+        /* The Anatomy: Flow Nodes */
+        .simulation-area { display: flex; justify-content: space-around; align-items: center; background: #f8fafc; padding: 50px; border-radius: 12px; margin: 20px 0; }
+        .node { width: 60px; height: 60px; border: 3px solid var(--blue); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; background: white; }
+        .arrow { font-size: 1.5rem; color: var(--gold); font-weight: bold; }
 
-        /* Reverse Belt Simulation */
-        .belt-area { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 50px; border-radius: 12px; margin: 30px 0; position: relative; }
-        .node { width: 70px; height: 70px; background: white; border: 3px solid var(--cognis-blue); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; position: relative; z-index: 2; transition: all 0.5s; }
-        .op-bridge { flex-grow: 1; height: 4px; background: #cbd5e0; position: relative; margin: 0 -5px; }
-        .op-tag { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: var(--cognis-blue); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; transition: all 0.5s; }
-        
-        .rewind-active .op-tag { background: var(--cognis-gold); transform: translateX(-50%) translateY(55px); }
-        .rewind-active .node { border-color: var(--cognis-gold); }
-
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group select, .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: none; margin-top: 5px; background: #2d3748; color: white; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: monospace; border-left: 3px solid var(--cognis-gold); line-height: 1.8; }
-
-        .sim-btn { display: block; margin: 20px auto; background: var(--cognis-gold); color: white; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .engine-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        input, select { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; background: #2d3748; color: white; border: none; }
+        .trace { font-family: monospace; padding: 15px; border-left: 3px solid var(--gold); background: rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
@@ -38,82 +27,56 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
+        <p><strong>Topic Logic:</strong> Reverse Operations (or Inverse functions) require us to work backward from a known result to a hidden starting point. The key is to **reverse the order** of events and **invert the operations** themselves (e.g., + becomes -).</p>
         <div class="question-tiers">
-            <div class="tier-card"><span>Entry</span>"I think of a number. I add 5 and get 12. What was my number?"</div>
-            <div class="tier-card"><span>Standard</span>"I think of a number. I multiply by 3 then subtract 4 to get 20. Find the number."</div>
-            <div class="tier-card"><span>Advanced</span>"I square a number, add 10, then divide by 2. The result is 13. What was the number?"</div>
+            <div class="tier-card"><span>Entry</span>"I add 5 to my number and get 12. What was it?"</div>
+            <div class="tier-card"><span>Standard</span>"I multiply by 2 then add 10 to get 30. Find the number."</div>
+            <div class="tier-card"><span>Advanced</span>"I square a number, add 4, then divide by 2 to get 10. Find the number."</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="belt-area" id="belt">
-            <div class="node" id="n-start">START</div>
-            <div class="op-bridge"><div class="op-tag" id="tag-1">+5</div></div>
-            <div class="node" id="n-mid">?</div>
-            <div class="op-bridge"><div class="op-tag" id="tag-2">×2</div></div>
-            <div class="node" id="n-end">END</div>
+        <div class="simulation-area">
+            <div class="node" id="v-start">?</div>
+            <div class="arrow" id="v-op1">→</div>
+            <div class="node" id="v-mid">?</div>
+            <div class="arrow" id="v-op2">→</div>
+            <div class="node" id="v-res" style="border-color: var(--gold);">20</div>
         </div>
-        <button class="sim-btn" onclick="runRewind()">Reverse Journey</button>
+        <p style="text-align: center; color: var(--gold); font-weight: bold;">To find the START, move backwards (←) and flip the signs!</p>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-container">
+        <div class="engine-grid">
             <div class="controls">
-                <div class="control-group"><label>FINAL RESULT</label><input type="number" id="res-in" value="20"></div>
-                <div class="control-group">
-                    <label>OP 1</label>
-                    <select id="op1-t"><option value="add">Add</option><option value="sub">Subtract</option><option value="mul">Multiply</option><option value="div">Divide</option></select>
-                    <input type="number" id="op1-v" value="5">
-                </div>
-                <div class="control-group">
-                    <label>OP 2</label>
-                    <select id="op2-t"><option value="mul">Multiply</option><option value="div">Divide</option><option value="add">Add</option><option value="sub">Subtract</option></select>
-                    <input type="number" id="op2-v" value="2">
-                </div>
+                <label>Final Result</label><input type="number" id="i-res" value="20">
+                <label>Step 1 Op</label><select id="i-o1t"><option value="add">+</option><option value="sub">-</option><option value="mul">×</option><option value="div">÷</option></select>
+                <input type="number" id="i-o1v" value="5">
+                <label>Step 2 Op</label><select id="i-o2t"><option value="mul">×</option><option value="div">÷</option><option value="add">+</option><option value="sub">-</option></select>
+                <input type="number" id="i-o2v" value="2">
             </div>
-            <div class="trace-log" id="logic-trace"></div>
-        </div>
-    </section>
-
-    <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 25px;">
-            <h2 style="color:var(--trap-red);">Phase 4: The Saboteur</h2>
-            <p><strong>The "Clockwise" Trap:</strong> Students often try to reverse operations in the order they were written (Op 1 then Op 2).
-            <br><strong>The Fix:</strong> Think of it like dressing: You put on socks, then shoes. To reverse, you <strong>must</strong> take off the shoes first. The last operation done is the first one undone!</p>
+            <div class="trace" id="trace-box"></div>
         </div>
     </section>
 </div>
 
 <script>
-    const elIds = ['res-in', 'op1-t', 'op1-v', 'op2-t', 'op2-v'];
-    const inputs = elIds.map(id => document.getElementById(id));
-
-    function calculate() {
-        const [res, o1t, o1v, o2t, o2v] = inputs.map(i => i.value);
-        const data = LogicProvider.modules.reverseOps.calculate(res, o1t, o1v, o2t, o2v);
-        
-        document.getElementById('logic-trace').innerHTML = data.steps.map(s => `<div>→ ${s}</div>`).join('');
-        document.getElementById('n-end').innerText = res;
-        document.getElementById('tag-1').innerText = `${o1t==='add'?'+':o1t==='sub'?'-':o1t==='mul'?'×':'÷'}${o1v}`;
-        document.getElementById('tag-2').innerText = `${o2t==='add'?'+':o2t==='sub'?'-':o2t==='mul'?'×':'÷'}${o2v}`;
-        
-        document.getElementById('belt').classList.remove('rewind-active');
+    function update() {
+        const resVal = parseFloat(document.getElementById('i-res').value);
+        const data = LogicProvider.modules.reverseOps.calculate(
+            resVal,
+            document.getElementById('i-o1t').value, document.getElementById('i-o1v').value,
+            document.getElementById('i-o2t').value, document.getElementById('i-o2v').value
+        );
+        document.getElementById('v-start').innerText = data.start;
+        document.getElementById('v-mid').innerText = data.mid;
+        document.getElementById('v-res').innerText = resVal;
+        document.getElementById('trace-box').innerHTML = data.steps.map(s => `<div>→ ${s}</div>`).join('');
     }
-
-    function runRewind() {
-        const belt = document.getElementById('belt');
-        belt.classList.add('rewind-active');
-        const [res, o1t, o1v, o2t, o2v] = inputs.map(i => i.value);
-        const data = LogicProvider.modules.reverseOps.calculate(res, o1t, o1v, o2t, o2v);
-        
-        setTimeout(() => { document.getElementById('n-mid').innerText = data.mid; }, 400);
-        setTimeout(() => { document.getElementById('n-start').innerText = data.start; }, 800);
-    }
-
-    inputs.forEach(i => i.addEventListener('input', calculate));
-    window.onload = calculate;
+    document.querySelectorAll('input, select').forEach(i => i.addEventListener('input', update));
+    window.onload = update;
 </script>
 </body>
 </html>

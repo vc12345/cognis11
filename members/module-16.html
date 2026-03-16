@@ -4,34 +4,33 @@
     <meta charset="UTF-8">
     <title>Module 16: The More Than Trap | Cognis11</title>
     <style>
-        :root { --blue: #002d5b; --gold: #c5a059; --light: #f4f7f9; --trap: #d9534f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 20px; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
-        .header { background: var(--blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--gold); }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
-        
-        /* Phase 1 Tiers */
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--blue); font-size: 0.85rem; }
-        .tier-card span { display: block; font-weight: bold; color: var(--blue); margin-bottom: 5px; font-size: 0.7rem; text-transform: uppercase; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
 
-        /* Simulation Area */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 20px 0; text-align: center; }
-        .bar-row { display: flex; align-items: center; margin-bottom: 20px; gap: 20px; }
-        .bar-label { width: 120px; font-weight: bold; color: var(--blue); text-align: right; }
-        .bar-track { flex-grow: 1; height: 40px; background: #e2e8f0; display: flex; border-radius: 4px; overflow: hidden; position: relative; }
-        .part-eq { background: var(--blue); height: 100%; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
-        .part-diff { background: var(--gold); height: 100%; transition: all 0.6s; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; border-left: 2px dashed rgba(255,255,255,0.4); }
+        /* The Bar Splitter Graphic */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; }
+        .bar-row { display: flex; align-items: center; margin-bottom: 15px; }
+        .bar-label { width: 100px; font-weight: bold; font-size: 0.9rem; color: var(--cognis-blue); }
+        .bar-track { flex-grow: 1; height: 40px; background: #cbd5e0; border-radius: 6px; display: flex; overflow: hidden; transition: all 0.5s ease; }
+        .part-equal { background: var(--cognis-blue); height: 100%; transition: width 0.5s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .part-diff { background: var(--cognis-gold); height: 100%; transition: all 0.5s ease; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; border-left: 2px dashed rgba(255,255,255,0.3); }
         
-        .action-btn { background: var(--gold); color: white; border: none; padding: 10px 25px; border-radius: 6px; cursor: pointer; font-weight: bold; text-transform: uppercase; margin-top: 10px; }
-        .action-btn:hover { background: #b08d4b; }
+        .sim-btn { display: block; margin: 20px auto; background: var(--cognis-gold); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .sim-btn:hover { background: #b08d4b; }
 
-        /* Engine */
-        .engine-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
-        .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: none; background: #2d3748; color: white; font-size: 1.1rem; margin-bottom: 15px; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: monospace; border-left: 3px solid var(--gold); line-height: 1.8; }
+        .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: none; background: #2d3748; color: white; font-size: 1.1rem; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -40,11 +39,11 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p><strong>Topic Logic:</strong> We use <strong>Systemic Equalization</strong>. When given a sum and a difference, we "level" the quantities by removing the gap first. This reveals two identical blocks that can be divided perfectly.</p>
+        <p><strong>Topic Logic:</strong> When finding two values where you only know their <strong>Sum</strong> and their <strong>Difference</strong>, the goal is to "level the playing field." We remove the extra amount (the gap) so we are left with two identical shares that can be easily divided by 2.</p>
         <div class="question-tiers">
-            <div class="tier-card"><span>Advanced Y2</span>"Sarah and Tom have 10 sweets. Sarah has 2 more than Tom. How many does Tom have?"</div>
-            <div class="tier-card"><span>Average Y4</span>"A hat and a coat cost £70. The coat is £30 more than the hat. What is the hat's price?"</div>
-            <div class="tier-card"><span>Advanced Y5</span>"The perimeter of a rectangle is 48cm. The length is 4cm longer than the width. Find the area."</div>
+            <div class="tier-card"><span>Entry (Year 2)</span>"Sarah and Jo have 10 sweets. Sarah has 2 more than Jo. How many does Jo have?"</div>
+            <div class="tier-card"><span>Standard (Year 4)</span>"A hat and a coat cost £70. The coat costs £30 more than the hat. What is the hat's price?"</div>
+            <div class="tier-card"><span>Advanced (Year 5)</span>"The perimeter of a rectangle is 48cm. The length is 4cm longer than the width. Find the area."</div>
         </div>
     </section>
 
@@ -53,93 +52,97 @@
         <div class="simulation-area">
             <div class="bar-row">
                 <div class="bar-label">Person A</div>
-                <div class="bar-track" style="width: 100%;">
-                    <div id="vis-a-eq" class="part-eq" style="width: 70%;">?</div>
-                    <div id="vis-a-diff" class="part-diff" style="width: 30%;">+DIFF</div>
+                <div class="bar-track" id="track-a">
+                    <div id="vis-a-eq" class="part-equal" style="width: 70%;">?</div>
+                    <div id="vis-diff" class="part-diff" style="width: 30%;">GAP</div>
                 </div>
             </div>
             <div class="bar-row">
                 <div class="bar-label">Person B</div>
                 <div class="bar-track" id="track-b" style="width: 70%;">
-                    <div class="part-eq" style="width: 100%;">?</div>
+                    <div class="part-equal" style="width: 100%;">?</div>
                 </div>
             </div>
-            <button class="action-btn" onclick="levelField()">Level the Field</button>
-            <button class="action-btn" style="background: var(--blue);" onclick="resetField()">Reset</button>
+            <button class="sim-btn" onclick="applyLeveling()">Apply Leveling Logic</button>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-grid">
+        <div class="engine-container">
             <div class="controls">
                 <div class="control-group"><label>Total Sum</label><input type="number" id="in-sum" value="100"></div>
                 <div class="control-group"><label>Difference (Gap)</label><input type="number" id="in-diff" value="20"></div>
             </div>
-            <div class="trace-log" id="logic-trace">Adjust inputs to begin...</div>
+            <div class="trace-log" id="logic-trace">Adjust inputs to see logic...</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap); border-radius: 8px; padding: 25px;">
-            <h2 style="color:var(--trap);">Phase 4: The Saboteur</h2>
-            <p><strong>The "Split First" Trap:</strong> Taking the total (100) and dividing by 2 (50), then adding the gap (50 + 20 = 70).
-            <br><strong>The Result:</strong> 70 + 50 = 120. The total is broken!
-            <br><strong>The Fix:</strong> Level first! <strong>(Sum - Difference) ÷ 2</strong>. This ensures the total is preserved.</p>
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 25px;">
+            <h2 style="color:var(--trap-red);">Phase 4: The Saboteur</h2>
+            <p><strong>The "Half First" Trap:</strong> Most students take the total (100) and divide by 2 (50), then add the gap (50 + 20 = 70).
+            <br><strong>The Result:</strong> 70 + 50 = 120. The sum is now wrong!
+            <br><strong>The Fix:</strong> Level first. <strong>(Sum - Difference) ÷ 2</strong>. This ensures the total is preserved while finding the smaller share.</p>
         </div>
     </section>
 </div>
 
 <script>
+    // Integration with provided LogicProvider
+    const LogicProvider = {
+        modules: {
+            moreThanTrap: {
+                calculate: (total, diff) => {
+                    const t = parseFloat(total) || 0;
+                    const d = parseFloat(diff) || 0;
+                    const smaller = (t - d) / 2;
+                    const larger = smaller + d;
+                    return { smaller, larger, steps: [
+                        `1. Start with Total: ${t}.`,
+                        `2. Remove Gap: ${t} - ${d} = ${t - d}.`,
+                        `3. Divide equal parts: ${(t - d)} ÷ 2 = ${smaller}.`,
+                        `Result: Smaller share is ${smaller}.`
+                    ]};
+                }
+            }
+        }
+    };
+
     const inputs = ['in-sum', 'in-diff'].map(id => document.getElementById(id));
     const trace = document.getElementById('logic-trace');
     const visAeq = document.getElementById('vis-a-eq');
-    const visAdiff = document.getElementById('vis-a-diff');
+    const visDiff = document.getElementById('vis-diff');
     const trackB = document.getElementById('track-b');
 
-    function update() {
-        const s = parseFloat(inputs[0].value) || 0;
-        const d = parseFloat(inputs[1].value) || 0;
+    function refresh() {
+        const [s, d] = inputs.map(i => parseFloat(i.value) || 0);
         const res = LogicProvider.modules.moreThanTrap.calculate(s, d);
         
-        // Logical check
-        const smaller = parseFloat(res.smaller);
-        const larger = parseFloat(res.larger);
-        
-        // Update labels
-        visAeq.innerText = smaller;
-        visAdiff.innerText = "+" + d;
-        trackB.firstElementChild.innerText = smaller;
-        
         trace.innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
-        resetField(); // Reset visual to initial state on input
-    }
-
-    function levelField() {
-        visAdiff.style.width = "0%";
-        visAdiff.style.opacity = "0";
-        visAeq.style.width = "100%";
-        document.getElementById('vis-a-eq').parentElement.style.width = trackB.style.width;
-    }
-
-    function resetField() {
-        const s = parseFloat(inputs[0].value) || 0;
-        const d = parseFloat(inputs[1].value) || 0;
-        const smaller = (s - d) / 2;
-        const larger = smaller + d;
         
-        const eqPct = (smaller / larger) * 100;
-        const dfPct = (d / larger) * 100;
+        // Update values on bars
+        visAeq.innerText = res.smaller;
+        visDiff.innerText = "+" + d;
+        trackB.firstElementChild.innerText = res.smaller;
 
-        visAeq.style.width = eqPct + "%";
-        visAdiff.style.width = dfPct + "%";
-        visAdiff.style.opacity = "1";
-        visAeq.parentElement.style.width = "100%";
-        trackB.style.width = eqPct + "%";
+        // Reset visual state
+        visDiff.style.width = "30%";
+        visDiff.style.opacity = "1";
+        visAeq.style.width = "70%";
+        trackB.style.width = "70%";
     }
 
-    inputs.forEach(i => i.addEventListener('input', update));
-    window.onload = update;
+    function applyLeveling() {
+        // Visual proof: Remove the diff block
+        visDiff.style.width = "0%";
+        visDiff.style.opacity = "0";
+        visAeq.style.width = "100%";
+        document.getElementById('track-a').style.width = "70%";
+    }
+
+    inputs.forEach(i => i.addEventListener('input', refresh));
+    window.onload = refresh;
 </script>
 </body>
 </html>

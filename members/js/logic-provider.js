@@ -14,12 +14,11 @@ const LogicProvider = {
                     gaps: gaps,
                     interval: intervalSize.toFixed(2),
                     steps: [
-                        `Step 1: Count the objects. You have ${n} items.`,
-                        `Step 2: Identify the intervals. Rule: Gaps = Items - 1.`,
+                        `Step 1: Identify the "Items". You have ${n} objects.`,
+                        `Step 2: Apply the Interval Rule. Gaps = Items - 1.`,
                         `${n} items - 1 = ${gaps} gaps.`,
-                        `Step 3: Distribute the total (${total}) across the gaps.`,
-                        `${total} ÷ ${gaps} = ${intervalSize.toFixed(2)}.`,
-                        `Result: Each interval/gap is ${intervalSize.toFixed(2)} units.`
+                        `Step 3: Calculate the size of 1 gap. ${total} ÷ ${gaps} = ${intervalSize.toFixed(2)}.`,
+                        `Result: Every interval is ${intervalSize.toFixed(2)} units long.`
                     ]
                 };
             }

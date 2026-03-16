@@ -2,140 +2,156 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Module 4: Inverse Proportion | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .anatomy-callout { background: #fff7ed; border-left: 5px solid #f97316; padding: 20px; border-radius: 4px; margin: 20px 0; }
-        .engine-controls { display: grid; gap: 20px; background: #fff7ed; padding: 20px; border-radius: 8px; border: 1px solid #ffedd5; }
-        .slider-group { display: flex; align-items: center; gap: 15px; }
-        .slider-group label { min-width: 160px; font-weight: 600; }
-        input[type=range] { flex-grow: 1; accent-color: var(--accent); }
-        .work-viz { display: flex; align-items: flex-end; justify-content: space-around; height: 160px; margin: 30px 0; border-bottom: 2px solid #cbd5e1; background: #fdfcfb; padding: 10px; }
-        .bar { width: 70px; background: #3b82f6; position: relative; transition: height 0.4s ease; border-radius: 4px 4px 0 0; }
-        .bar-label { position: absolute; top: -25px; width: 100%; text-align: center; font-size: 0.8rem; font-weight: bold; }
-        .question-card { background: white; border: 2px solid var(--primary); padding: 20px; border-radius: 8px; font-size: 1.2rem; text-align: center; font-style: italic; }
-        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-weight: 600; margin-top: 15px; }
-        .logic-card { background: #fef3c7; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid var(--accent); }
-        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
-        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
+        :root {
+            --cognis-blue: #002d5b;
+            --cognis-gold: #c5a059;
+            --cognis-light: #f4f7f9;
+            --trap-red: #d9534f;
+            --work-color: rgba(197, 160, 89, 0.2);
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; color: #2c3e50; padding: 40px 20px; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; }
+
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; margin-top: 0; letter-spacing: 2px; }
+
+        /* X-Ray Questions */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+
+        /* Anatomy: The Constant Rectangle */
+        .anatomy-display { margin: 30px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 250px; background: #fff; border: 1px dashed #cbd5e0; border-radius: 8px; padding: 20px; }
+        
+        .work-area-container { position: relative; display: flex; align-items: flex-end; justify-content: center; width: 400px; height: 200px; border-left: 2px solid #a0aec0; border-bottom: 2px solid #a0aec0; }
+        
+        /* Axes Labels */
+        .y-axis { position: absolute; left: -40px; top: 50%; transform: translateY(-50%) rotate(-90deg); font-size: 0.7rem; font-weight: bold; color: #718096; text-transform: uppercase; }
+        .x-axis { position: absolute; bottom: -25px; font-size: 0.7rem; font-weight: bold; color: #718096; text-transform: uppercase; }
+        
+        .work-rectangle { background: var(--work-color); border: 2px solid var(--cognis-gold); display: flex; align-items: center; justify-content: center; text-align: center; font-weight: bold; color: var(--cognis-blue); transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: bottom left; position: absolute; left: 0; bottom: 0; }
+
+        /* Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { margin-bottom: 20px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: none; font-size: 1rem; accent-color: var(--cognis-gold); }
+        .val-out { float: right; color: var(--cognis-gold); font-weight: bold; }
+        
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
+        .trace-step { margin-bottom: 10px; line-height: 1.4; color: #e2e8f0; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 4: Inverse Proportion</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "INVARIANT WORK" PRINCIPLE</p>
-    </header>
+<div class="module-card">
+    <div class="header"><h1>Module 4: Inverse Proportion</h1></div>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "System 1" brain expects things to be linear: <em>"If I double the workers, I double the days."</em> But common sense says more workers = <strong>less</strong> time. The logic is inverted.</p>
-    </div>
+        <p>In Inverse Proportion, the "Total Amount of Work" is a constant brick. If you add more workers, the time squashes down. If you lose workers, the time stretches up.</p>
+        <div class="question-tiers">
+            <div class="tier-card">
+                <span>Adv Year 2 Level</span>
+                "If 2 children take 6 minutes to tidy a room, how long will it take 3 children working just as fast?"
+            </div>
+            <div class="tier-card">
+                <span>Avg Year 4 Level</span>
+                "4 builders take 10 days to build a wall. How many days would it take 5 builders?"
+            </div>
+            <div class="tier-card">
+                <span>Adv Year 5 Level (11+)</span>
+                "6 pumps can empty a reservoir in 14 hours. If 2 pumps break down before they start, how long will the remaining pumps take?"
+            </div>
+        </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Think of work as a rectangle. The Area (Total Work) stays the same. If the width (workers) gets bigger, the height (days) <strong>must</strong> get shorter to keep the area constant.</p>
-        
-        
-
-        <div class="anatomy-callout">
-            <strong>The Constant:</strong> Workers × Days = Total Work Units.<br>
-            If you change the workers, you must divide that same Total Work by the new number of workers.
+        <p style="text-align: center; font-size: 0.85rem;"></p>
+        <div class="anatomy-display">
+            <div class="work-area-container">
+                <div class="y-axis">Time</div>
+                <div class="x-axis">Workers</div>
+                <div class="work-rectangle" id="work-rect">Total Work<br>(Constant Area)</div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <div class="slider-group">
-                <label>Original Builders: <span id="w1-val"></span></label>
-                <input type="range" id="w1" min="1" max="10" value="2">
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Initial Workers <span class="val-out" id="w1-label">4</span></label>
+                    <input type="range" id="w1-in" min="1" max="10" value="4">
+                </div>
+                <div class="control-group">
+                    <label>Initial Time (Days/Hours) <span class="val-out" id="t1-label">10</span></label>
+                    <input type="range" id="t1-in" min="1" max="20" value="10">
+                </div>
+                <div class="control-group" style="margin-top: 30px; border-top: 1px solid #4a5568; padding-top: 20px;">
+                    <label>NEW Number of Workers <span class="val-out" id="w2-label">8</span></label>
+                    <input type="range" id="w2-in" min="1" max="20" value="8">
+                </div>
             </div>
-            <div class="slider-group">
-                <label>Original Days: <span id="d1-val"></span></label>
-                <input type="range" id="d1" min="1" max="20" value="10">
-            </div>
-            <div class="slider-group">
-                <label>New Builders: <span id="w2-val"></span></label>
-                <input type="range" id="w2" min="1" max="10" value="4">
-            </div>
+            <div class="trace-log" id="logic-trace"></div>
         </div>
+    </section>
 
-        <div class="work-viz">
-            <div id="bar1" class="bar"><span class="bar-label">Before</span></div>
-            <div id="bar2" class="bar" style="background: var(--accent);"><span class="bar-label">After</span></div>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 20px;">
+            <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Direct Scaling" Trap:</strong> The most common Type 1 error. A student reads "4 builders take 10 days, find 8 builders," and they think: "Double the builders, so <strong>double the time (20 days)</strong>." 
+            <br><br><strong>The Fix:</strong> Always do the common-sense check. <em>"Will more people take MORE time to do the same job? No."</em></p>
         </div>
-
-        <div class="question-card" id="q-text"></div>
-
-        <button class="btn" onclick="toggleLogic()">Show Calculation Steps</button>
-
-        <div id="logic" class="logic-card">
-            <p><strong>Step 1 (Find Constant Work):</strong> <span id="total-work-text"></span></p>
-            <p><strong>Step 2 (Divide by New Team):</strong> <span id="final-calc-text"></span></p>
-            <p><strong>Result:</strong> <span id="correct-ans" style="font-weight: bold;"></span> Days</p>
-        </div>
-    </div>
-
-    <div class="section saboteur-section">
-        <h2>Phase 4: The Saboteur</h2>
-        <div class="trap-item">
-            <span>The "Double-Double" Trap (Linear):</span>
-            <span id="trap-linear" style="color:var(--trap); font-weight:bold;"></span>
-        </div>
-        <div class="trap-item">
-            <span>The Subtraction Trap:</span>
-            <span id="trap-sub" style="color:var(--trap); font-weight:bold;"></span>
-        </div>
-    </div>
+    </section>
 </div>
 
+<script src="js/logic-provider.js"></script>
 <script>
-    const w1In = document.getElementById('w1');
-    const d1In = document.getElementById('d1');
-    const w2In = document.getElementById('w2');
+    const w1In = document.getElementById('w1-in');
+    const t1In = document.getElementById('t1-in');
+    const w2In = document.getElementById('w2-in');
+    const rect = document.getElementById('work-rect');
+    const traceBox = document.getElementById('logic-trace');
 
-    function update() {
-        // Module ID 4
-        const res = LogicProvider.getModule(4).generate(w1In.value, d1In.value, w2In.value);
-        
+    function refresh() {
+        const w1 = parseInt(w1In.value);
+        const t1 = parseFloat(t1In.value);
+        const w2 = parseInt(w2In.value);
+
         // Update Labels
-        document.getElementById('w1-val').innerText = res.inputs.workers;
-        document.getElementById('d1-val').innerText = res.inputs.days;
-        document.getElementById('w2-val').innerText = res.inputs.newWorkers;
+        document.getElementById('w1-label').innerText = w1;
+        document.getElementById('t1-label').innerText = t1;
+        document.getElementById('w2-label').innerText = w2;
 
-        // Visual scaling
-        document.getElementById('bar1').style.height = (res.inputs.days * 7) + 'px';
-        document.getElementById('bar2').style.height = (res.answers.correct * 7) + 'px';
+        const res = LogicProvider.modules.inverseProportion.calculate(w1, t1, w2);
 
-        // Question Text
-        document.getElementById('q-text').innerText = `If ${res.inputs.workers} builders take ${res.inputs.days} days, how many days will it take ${res.inputs.newWorkers} builders?`;
+        // Visual Scaling Logic for the Rectangle Anatomy
+        // We use a base scale multiplier to fit it nicely in the 400x200px CSS container
+        const baseMultiplierX = 20; 
+        const baseMultiplierY = 10;
+        
+        // The area (w1 * t1) is our constant. The visual rectangle reflects the NEW state.
+        const newWidth = w2 * baseMultiplierX;
+        const newHeight = parseFloat(res.newTime) * baseMultiplierY;
 
-        // Step Calculations
-        document.getElementById('total-work-text').innerText = `${res.inputs.workers} × ${res.inputs.days} = ${res.inputs.totalWorkUnits} Work Units.`;
-        document.getElementById('final-calc-text').innerText = `${res.inputs.totalWorkUnits} ÷ ${res.inputs.newWorkers} = ${res.answers.correct} Days.`;
-        document.getElementById('correct-ans').innerText = res.answers.correct;
+        rect.style.width = `${newWidth}px`;
+        rect.style.height = `${newHeight}px`;
+        rect.innerHTML = `Total Work<br>${res.totalWork} units`;
 
-        // Saboteur Traps
-        document.getElementById('trap-linear').innerText = res.answers.traps.linearMore;
-        document.getElementById('trap-sub').innerText = res.answers.traps.subtraction;
+        // Update Trace
+        traceBox.innerHTML = res.steps.map(s => `<div class="trace-step">→ ${s}</div>`).join('');
     }
 
-    function toggleLogic() {
-        const div = document.getElementById('logic');
-        div.style.display = div.style.display === 'none' ? 'block' : 'none';
-    }
-
-    [w1In, d1In, w2In].forEach(el => el.oninput = update);
-    update();
+    [w1In, t1In, w2In].forEach(el => el.addEventListener('input', refresh));
+    window.onload = refresh;
 </script>
 </body>
 </html>

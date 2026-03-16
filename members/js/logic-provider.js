@@ -1,31 +1,38 @@
 const LogicProvider = {
     modules: {
 
-        relativeSpeed: {
-            calculate: (s1, s2, dist, isTowards) => {
-                const speed1 = parseFloat(s1);
-                const speed2 = parseFloat(s2);
-                const d = parseFloat(dist);
+        relativeSpeed = {
+            calculate: (s1, s2, dist) => {
+                const speed1 = parseFloat(s1) || 0;
+                const speed2 = parseFloat(s2) || 0;
+                const d = parseFloat(dist) || 0;
                 
-                // Towards = Add speeds (closing gap), Away = Add speeds (widening gap)
-                // In 11+, "Towards" is the most common for 'Time to Meet'
+                if (speed1 + speed2 === 0) return { rate: 0, timeH: 0, meetPtPct: 50, steps: ["Speeds cannot be zero."] };
+
                 const relativeRate = speed1 + speed2;
                 const timeToMeet = d / relativeRate;
                 const timeMinutes = timeToMeet * 60;
+                
+                // Where do they meet on the track? (Percentage from Object A's start)
+                const distA = speed1 * timeToMeet;
+                const meetPtPct = (distA / d) * 100;
 
                 return {
                     rate: relativeRate.toFixed(2),
                     timeH: timeToMeet.toFixed(2),
                     timeM: timeMinutes.toFixed(0),
+                    meetPtPct: meetPtPct,
+                    distA: distA.toFixed(1),
                     steps: [
-                        `Step 1: Calculate the Combined Speed. Since they are moving ${isTowards ? 'towards' : 'away from'} each other, their speeds add up: ${speed1} + ${speed2} = ${relativeRate} km/h.`,
-                        `Step 2: Use the DST formula for the Gap. Time = Distance ÷ Combined Speed.`,
-                        `Step 3: ${d} ÷ ${relativeRate} = ${timeToMeet.toFixed(2)} hours.`,
-                        `Result: They will meet in ${timeToMeet.toFixed(2)} hours (${timeMinutes.toFixed(0)} minutes).`
+                        `Step 1: Calculate Combined Speed. They are helping each other close the gap. ${speed1} + ${speed2} = ${relativeRate} km/h.`,
+                        `Step 2: Use Time = Distance ÷ Speed.`,
+                        `Step 3: ${d} km ÷ ${relativeRate} km/h = ${timeToMeet.toFixed(2)} hours.`,
+                        `Result: They meet in ${timeToMeet.toFixed(2)} hours (${timeMinutes.toFixed(0)} mins).`,
+                        `Bonus: Object A travelled ${distA.toFixed(1)} km before meeting.`
                     ]
                 };
             }
-        },
+        };
 
         averageSpeed: {
             calculate: (d1, t1, d2, t2) => {

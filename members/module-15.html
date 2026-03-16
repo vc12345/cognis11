@@ -2,92 +2,117 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 15: Venn Diagram Overlap | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 15: Time Conversions | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
-        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
-        .anatomy-callout { background: #fdf2f8; border-left: 5px solid #db2777; padding: 20px; border-radius: 4px; margin: 20px 0; }
-        .engine-controls { display: grid; gap: 20px; background: #fdf2f8; padding: 20px; border-radius: 8px; border: 1px solid #fbcfe8; }
-        .slider-group { display: flex; align-items: center; gap: 15px; }
-        .slider-group label { min-width: 160px; font-weight: 600; }
-        input[type=range] { flex-grow: 1; accent-color: #db2777; }
-        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
-        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-        .logic-card { background: #fdf2f8; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid #db2777; }
-        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
-        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        /* Module 12 Style X-Ray Tiers */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+
+        /* The Clock Visualizer */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; display: flex; align-items: center; justify-content: space-around; }
+        .clock-face { width: 150px; height: 150px; border: 5px solid var(--cognis-blue); border-radius: 50%; position: relative; background: white; }
+        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: var(--cognis-blue); border-radius: 4px; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .hour-hand { width: 4px; height: 40px; z-index: 2; }
+        .min-hand { width: 2px; height: 60px; background: var(--cognis-gold); z-index: 1; }
+        .digital-display { font-family: 'Courier New', monospace; font-size: 2.5rem; font-weight: bold; color: var(--cognis-blue); background: #e2e8f0; padding: 10px 20px; border-radius: 8px; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { margin-bottom: 15px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
+        .control-group input { width: 100%; padding: 8px; border-radius: 4px; border: none; font-size: 1rem; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); min-height: 150px; }
     </style>
 </head>
 <body>
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 15: Venn Overlap</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "SUM VS TOTAL" PRINCIPLE</p>
-    </header>
+<div class="module-card">
+    <div class="header"><h1>Module 15: Time Conversions</h1></div>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "Type 1" thinker adds the groups together and assumes that's the total. A "Type 2" thinker knows that if the groups add up to more than the total people, that extra amount <em>must</em> be the people counted twice (the overlap).</p>
-        <div class="xray-examples">
-            <strong>Exam Wording Patterns:</strong>
-            <div class="example-item">1. "In a class of 30, 20 like Pizza and 15 like Burger. How many like both?"</div>
-            <div class="example-item">2. "Of 50 students, 40 play Tennis and 25 play Football. How many play both?"</div>
-            <div class="example-item">3. "12 children study French, 10 study Spanish. Total class size is 18. Find the overlap."</div>
+        <p>Time calculation is tricky because it uses **Base-60** (60 seconds/minutes) instead of the standard Base-10 we use for most math.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><span>Entry</span>"Convert 140 minutes into hours and minutes."</div>
+            <div class="tier-card"><span>Standard</span>"A film starts at 14:45 and lasts 135 minutes. What time does it end?"</div>
+            <div class="tier-card"><span>Advanced</span>"A train journey takes 3h 15m. If it arrives at 1:10 PM, when did it depart?"</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         
-        <div class="anatomy-callout">
-            <strong>The Formula:</strong><br>
-            (Group A + Group B) - Total Students = Overlap (Both)
+        <div class="simulation-area">
+            <div class="clock-face">
+                <div id="h-hand" class="hand hour-hand"></div>
+                <div id="m-hand" class="hand min-hand"></div>
+            </div>
+            <div id="digital" class="digital-display">12:00</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <div class="slider-group"><label>Group A Count: <span id="ga-val"></span></label><input type="range" id="ga" min="5" max="50" value="20"></div>
-            <div class="slider-group"><label>Group B Count: <span id="gb-val"></span></label><input type="range" id="gb" min="5" max="50" value="15"></div>
-            <div class="slider-group"><label>Total People: <span id="t-val"></span></label><input type="range" id="tot" min="20" max="60" value="30"></div>
+        <div class="engine-container">
+            <div class="controls">
+                <div style="display: flex; gap: 10px;">
+                    <div class="control-group" style="flex: 1;">
+                        <label>Start Hour</label>
+                        <input type="number" id="in-h" value="14" min="0" max="23" oninput="updateTime()">
+                    </div>
+                    <div class="control-group" style="flex: 1;">
+                        <label>Start Min</label>
+                        <input type="number" id="in-m" value="45" min="0" max="59" oninput="updateTime()">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Add Minutes</label>
+                    <input type="number" id="in-add" value="135" oninput="updateTime()">
+                </div>
+            </div>
+            <div id="logic-trace" class="trace-log">Calculation trace...</div>
         </div>
-        <div class="question-card" id="q-text"></div>
-        <button class="btn" onclick="toggleLogic()">Show Venn Logic</button>
-        <div id="logic" class="logic-card">
-            <p>1. Sum of Groups = <span id="calc-sum"></span></p>
-            <p>2. Excess (Overlap) = <span id="calc-over"></span></p>
-            <p><strong>Result: <span id="ans-both"></span> like BOTH.</strong></p>
-        </div>
-    </div>
+    </section>
 
-    <div class="section saboteur-section">
-        <h2>Phase 4: The Saboteur</h2>
-        <div class="trap-item"><span>The "Total Sum" Trap:</span> <span class="trap-val" id="trap-sum"></span></div>
-    </div>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 20px;">
+            <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Decimal" Trap:</strong> Students often write 2 hours and 30 minutes as "2.3 hours." 
+            <br><br><strong>The Fix:</strong> Always remember that **0.5 hours is 30 minutes**, not 50. When doing column addition for time, if the minutes column reaches 60, you must "carry" 1 to the hours column and reset the minutes.</p>
+        </div>
+    </section>
 </div>
+
 <script>
-    function update() {
-        const res = LogicProvider.getModule(15).generate(document.getElementById('ga').value, document.getElementById('gb').value, document.getElementById('tot').value);
-        document.getElementById('ga-val').innerText = res.inputs.groupA;
-        document.getElementById('gb-val').innerText = res.inputs.groupB;
-        document.getElementById('t-val').innerText = res.inputs.total;
-        document.getElementById('q-text').innerText = `In a group of ${res.inputs.total}, ${res.inputs.groupA} like A and ${res.inputs.groupB} like B. How many like BOTH?`;
-        document.getElementById('calc-sum').innerText = `${res.inputs.groupA} + ${res.inputs.groupB} = ${parseInt(res.inputs.groupA) + parseInt(res.inputs.groupB)}`;
-        document.getElementById('calc-over').innerText = `${parseInt(res.inputs.groupA) + parseInt(res.inputs.groupB)} - ${res.inputs.total} = ${res.answers.both}`;
-        document.getElementById('ans-both').innerText = res.answers.both;
-        document.getElementById('trap-sum').innerText = res.answers.traps.sum;
+    const logic = LogicProvider.modules.timeConv;
+
+    function updateTime() {
+        const h = parseInt(document.getElementById('in-h').value) || 0;
+        const m = parseInt(document.getElementById('in-m').value) || 0;
+        const add = parseInt(document.getElementById('in-add').value) || 0;
+
+        const res = logic.calculate(h, m, add);
+
+        // Update Digital
+        document.getElementById('digital').innerText = res.formatted;
+
+        // Update Hands
+        const hDeg = (res.h * 30) + (res.m * 0.5);
+        const mDeg = res.m * 6;
+        document.getElementById('h-hand').style.transform = `translateX(-50%) rotate(${hDeg}deg)`;
+        document.getElementById('m-hand').style.transform = `translateX(-50%) rotate(${mDeg}deg)`;
+
+        // Update Trace
+        document.getElementById('logic-trace').innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
     }
-    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    window.onload = updateTime;
 </script>
 </body>
 </html>

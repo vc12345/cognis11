@@ -1,75 +1,41 @@
 const LogicProvider = {
     modules: {
 
-        moreThanTrap: {
-            calculate: (total, diff) => {
-                const t = parseFloat(total) || 0;
-                const d = parseFloat(diff) || 0;
-                const equalized = t - d;
-                const smaller = equalized / 2;
-                const larger = smaller + d;
+        timeConv: {
+            calculate: (h, m, addM) => {
+                const totalMins = (parseInt(h) * 60) + parseInt(m) + parseInt(addM);
+                const finalH = Math.floor(totalMins / 60) % 24;
+                const finalM = totalMins % 60;
+                const hoursCarried = Math.floor((parseInt(m) + parseInt(addM)) / 60);
                 return {
-                    smaller, larger, equalized,
-                    steps: [
-                        `1. Identify the 'Extra': Person A has ${d} more.`,
-                        `2. Level the field: ${t} - ${d} = ${equalized}.`,
-                        `3. Split equal shares: ${equalized} ÷ 2 = ${smaller}.`,
-                        `4. Result: Smaller is ${smaller}, Larger is ${smaller} + ${d} = ${larger}.`
-                    ]
+                    finalH, finalM, hoursCarried,
+                    overflow: (parseInt(m) + parseInt(addM)) >= 60,
+                    steps: [`Start: ${h}:${m}`, `Add ${addM}m`, `Total: ${totalMins}m`, `Result: ${finalH}:${finalM}`]
+                };
+            }
+        },
+        
+        moreThan: {
+            calculate: (total, diff) => {
+                const smaller = (total - diff) / 2;
+                const larger = smaller + diff;
+                return {
+                    smaller, larger,
+                    steps: [`Total: ${total}`, `Gap: ${diff}`, `Levelled: ${total-diff}`, `Half: ${smaller}`]
                 };
             }
         },
         
         reverseOps: {
-            calculate: (final, op1T, op1V, op2T, op2V) => {
-                const f = parseFloat(final) || 0;
-                const v1 = parseFloat(op1V) || 0;
-                const v2 = parseFloat(op2V) || 0;
-                
-                const invert = (t) => ({'add':'sub','sub':'add','mul':'div','div':'mul'}[t]);
-                const solve = (val, t, v) => {
-                    if(t === 'add') return val - v;
-                    if(t === 'sub') return val + v;
-                    if(t === 'mul') return val / v;
-                    if(t === 'div') return val * v;
+            calculate: (res, op1T, op1V, op2T, op2V) => {
+                const inv = {add:'sub', sub:'add', mul:'div', div:'mul'};
+                const solve = (v, t, n) => {
+                    if(t==='add') return v-n; if(t==='sub') return v+n;
+                    if(t==='mul') return v/n; if(t==='div') return v*n;
                 };
-
-                const mid = solve(f, op2T, v2);
-                const start = solve(mid, op1T, v1);
-
-                return {
-                    start, mid,
-                    steps: [
-                        `1. Reverse last step: ${f} ${invert(op2T)} ${v2} = ${mid}.`,
-                        `2. Reverse first step: ${mid} ${invert(op1T)} ${v1} = ${start}.`,
-                        `Result: The hidden number was ${start}.`
-                    ]
-                };
-            }
-        },
-    
-        timeConv: {
-            calculate: (h, m, addM) => {
-                const hStart = parseInt(h) || 0;
-                const mStart = parseInt(m) || 0;
-                const duration = parseInt(addM) || 0;
-                
-                const totalMins = (hStart * 60) + mStart + duration;
-                const finalH = Math.floor(totalMins / 60) % 24;
-                const finalM = totalMins % 60;
-                
-                const overflowed = (mStart + duration) >= 60;
-                const hoursCarried = Math.floor((mStart + duration) / 60);
-
-                return {
-                    totalMins, finalH, finalM, overflowed, hoursCarried,
-                    steps: [
-                        `1. Initial state: ${hStart}h ${mStart}m. Adding ${duration}m.`,
-                        `2. Minutes logic: ${mStart} + ${duration} = ${mStart + duration}m.`,
-                        overflowed ? `3. OVERFLOW! ${mStart + duration}m = ${hoursCarried}h and ${finalM}m.` : `3. No overflow: total minutes stay under 60.`,
-                        `Result: Final time is ${finalH}:${finalM.toString().padStart(2, '0')}.`
-                    ]
-                };
+                const mid = solve(res, op2T, op2V);
+                const start = solve(mid, op1T, op1V);
+                return { start, mid, steps: [`End: ${res}`, `Undo ${op2T}: ${mid}`, `Undo ${op1T}: ${start}`] };
             }
         },
 

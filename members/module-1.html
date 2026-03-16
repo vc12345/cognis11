@@ -133,7 +133,7 @@
         document.getElementById('label-t').innerText = t;
 
         // Run Logic from your provider
-        const result = LogicProvider.modules[1].generate(q, v, t);
+        const result = LogicProvider.modules.unitary.calculate(q, v, t);
 
         // Update Anatomy (The Bar Model)
         barModel.innerHTML = '';

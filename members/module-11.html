@@ -2,146 +2,113 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module 11: Shared Ratios | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 11: Average Speed | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        
-        /* Anatomy Callout */
-        .anatomy-callout { background: #eff6ff; border-left: 5px solid #3b82f6; padding: 20px; border-radius: 4px; margin: 20px 0; font-weight: 500; }
-        
-        /* Engine Styling */
-        .engine-controls { display: grid; gap: 20px; background: #f0fdf4; padding: 20px; border-radius: 8px; border: 1px solid #dcfce7; }
-        .slider-group { display: flex; align-items: center; gap: 15px; }
-        .slider-group label { min-width: 150px; font-weight: 600; }
-        input[type=range] { flex-grow: 1; accent-color: var(--success); }
-        
-        /* Bar Model Viz */
-        .ratio-display { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 30px 0; min-height: 45px; }
-        .box { width: 35px; height: 35px; border: 2px solid white; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s; }
-        .box-a { background: #3b82f6; } /* Blue */
-        .box-b { background: #10b981; } /* Green */
-        
-        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
-        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-        
-        .logic-card { background: #ecfdf5; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border: 1px solid #a7f3d0; }
-        
-        /* Saboteur Styling */
-        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
-        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
-        .trap-val { color: var(--trap); font-weight: 700; font-size: 1.1rem; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+
+        /* Journey Map Anatomy */
+        .journey-map { display: flex; align-items: center; margin: 40px 0; padding: 20px; background: white; border: 1px dashed #cbd5e0; border-radius: 12px; }
+        .leg { flex: 1; height: 10px; background: #cbd5e0; position: relative; display: flex; justify-content: center; }
+        .leg::before { content: ''; width: 20px; height: 20px; background: var(--cognis-blue); border-radius: 50%; position: absolute; left: -10px; top: -5px; }
+        .leg:last-child::after { content: ''; width: 20px; height: 20px; background: var(--cognis-gold); border-radius: 50%; position: absolute; right: -10px; top: -5px; }
+        .leg-label { position: absolute; top: -30px; font-size: 0.75rem; font-weight: bold; color: var(--cognis-blue); }
+        .leg-sub { position: absolute; bottom: -25px; font-size: 0.7rem; color: #718096; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { margin-bottom: 15px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
+        .control-group input { width: 100%; padding: 8px; border-radius: 4px; border: none; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1 style="margin-bottom:5px;">Module 11: Shared Ratios</h1>
-        <p style="color: var(--accent); font-weight: 700; text-transform: uppercase;">The "Hidden Whole" Principle</p>
-    </header>
-
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 11: Average Speed</h1></div>
+    
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In a ratio problem, the question gives you two parts (like 3:5), but the <strong>logic</strong> requires a third number: the sum of those parts. A Type 2 mind immediately looks for the "Hidden Whole."</p>
-    </div>
+        <p>Average speed is not the average of the speeds. It is the <strong>total</strong> story of the journey. You must collapse all segments into one single distance and one single time.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><span>Adv Year 2</span>"A car travels 10 miles in the morning and 20 miles in the afternoon. The whole trip took 3 hours. What was the average speed?"</div>
+            <div class="tier-card"><span>Avg Year 4</span>"A cyclist travels 15km at 15km/h, then 20km at 10km/h. What is the average speed for the whole journey?"</div>
+            <div class="tier-card"><span>Adv Year 5</span>"A plane flies 400 miles at 200mph, then 600 miles at 300mph. Calculate the average speed for the 1000-mile flight."</div>
+        </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Think of a ratio as a set of equal-sized boxes. If the ratio is 3:5, there are 8 boxes total. To find what's inside one box, you must divide the total amount by the total number of boxes.</p>
         
-        <div class="anatomy-callout">
-            1. <strong>Add:</strong> Part A + Part B = Total Parts<br>
-            2. <strong>Divide:</strong> Total Value ÷ Total Parts = Value of 1 Box<br>
-            3. <strong>Multiply:</strong> Value of 1 Box × Requested Part = Answer
+        <div class="journey-map">
+            <div class="leg" id="leg1"><div class="leg-label" id="l1-d">Leg 1</div><div class="leg-sub" id="l1-t">Time 1</div></div>
+            <div class="leg" id="leg2" style="background: var(--cognis-gold);"><div class="leg-label" id="l2-d">Leg 2</div><div class="leg-sub" id="l2-t">Time 2</div></div>
         </div>
-    </div>
+        <p style="text-align:center; font-weight:bold; color:var(--cognis-blue)" id="total-summary">Total: 0 km in 0 hours</p>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <div class="slider-group">
-                <label>Ratio A (Blue): <span id="ra-val">3</span></label>
-                <input type="range" id="ratioA" min="1" max="10" value="3">
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Leg 1 Distance (km)</label>
+                    <input type="number" id="d1-in" value="30">
+                </div>
+                <div class="control-group">
+                    <label>Leg 1 Time (hrs)</label>
+                    <input type="number" id="t1-in" value="1">
+                </div>
+                <div class="control-group">
+                    <label>Leg 2 Distance (km)</label>
+                    <input type="number" id="d2-in" value="60">
+                </div>
+                <div class="control-group">
+                    <label>Leg 2 Time (hrs)</label>
+                    <input type="number" id="t2-in" value="2">
+                </div>
             </div>
-            <div class="slider-group">
-                <label>Ratio B (Green): <span id="rb-val">5</span></label>
-                <input type="range" id="ratioB" min="1" max="10" value="5">
-            </div>
-            <div class="slider-group">
-                <label>Total Marbles: <span id="total-val">160</span></label>
-                <input type="range" id="total" min="20" max="400" value="160">
-            </div>
+            <div class="trace-log" id="logic-trace"></div>
         </div>
+    </section>
 
-        <div id="ratio-visual" class="ratio-display"></div>
-        <div class="question-card" id="q-text"></div>
-
-        <button class="btn" onclick="toggleLogic()">Show Calculation Steps</button>
-
-        <div id="logic" class="logic-card">
-            <p><strong>1. Sum of Ratio:</strong> <span id="calc-sum"></span></p>
-            <p><strong>2. Value of 1 Box:</strong> <span id="calc-one"></span></p>
-            <p><strong>3. Result for Green:</strong> <span id="calc-final"></span></p>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 20px;">
+            <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Mean Speed" Trap:</strong> If a car goes 40mph then 60mph, students often say the average is 50mph ($ (40+60) \div 2 $). 
+            <br><br><strong>The Fix:</strong> This only works if the *times* spent at each speed are identical. Since journeys usually vary, you must <strong>always</strong> find Total Distance and Total Time first.</p>
         </div>
-    </div>
-
-    <div class="section saboteur-section">
-        <h2>Phase 4: The Saboteur</h2>
-        <p>A "Type 1" brain will try to divide the total by just one side of the ratio. Here are the traps:</p>
-        <div class="trap-item">
-            <span>The "One-Side" Trap (Dividing by Blue only):</span>
-            <span class="trap-val" id="trap-div-a"></span>
-        </div>
-        <div class="trap-item">
-            <span>The "Lazy Half" Trap (Dividing by 2):</span>
-            <span class="trap-val" id="trap-half"></span>
-        </div>
-    </div>
+    </section>
 </div>
 
+<script src="js/logic-provider.js"></script>
 <script>
-    const raIn = document.getElementById('ratioA');
-    const rbIn = document.getElementById('ratioB');
-    const tIn = document.getElementById('total');
-    const visual = document.getElementById('ratio-visual');
+    const inputs = ['d1-in', 't1-in', 'd2-in', 't2-in'].map(id => document.getElementById(id));
+    const traceBox = document.getElementById('logic-trace');
+    const summary = document.getElementById('total-summary');
 
-    function update() {
-        const res = LogicProvider.getModule(11).generate(raIn.value, rbIn.value, tIn.value);
-        
-        document.getElementById('ra-val').innerText = res.inputs.ratioA;
-        document.getElementById('rb-val').innerText = res.inputs.ratioB;
-        document.getElementById('total-val').innerText = res.inputs.total;
+    function refresh() {
+        const [d1, t1, d2, t2] = inputs.map(i => parseFloat(i.value) || 0);
+        const res = LogicProvider.modules.averageSpeed.calculate(d1, t1, d2, t2);
 
-        visual.innerHTML = '';
-        for(let i=0; i<res.inputs.ratioA; i++) visual.innerHTML += '<div class="box box-a"></div>';
-        for(let i=0; i<res.inputs.ratioB; i++) visual.innerHTML += '<div class="box box-b"></div>';
+        document.getElementById('l1-d').innerText = d1 + ' km';
+        document.getElementById('l1-t').innerText = t1 + ' hrs';
+        document.getElementById('l2-d').innerText = d2 + ' km';
+        document.getElementById('l2-t').innerText = t2 + ' hrs';
+        summary.innerText = `Total: ${res.totalDist} km in ${res.totalTime} hours`;
 
-        document.getElementById('q-text').innerText = `A bag has Blue and Green marbles in a ratio of ${res.inputs.ratioA}:${res.inputs.ratioB}. Total marbles: ${res.inputs.total}. How many are Green?`;
-
-        // Engine IDs synced with HTML
-        document.getElementById('calc-sum').innerText = `${res.inputs.ratioA} + ${res.inputs.ratioB} = ${res.inputs.totalParts} total parts.`;
-        document.getElementById('calc-one').innerText = `${res.inputs.total} ÷ ${res.inputs.totalParts} = ${res.answers.onePart} per box.`;
-        document.getElementById('calc-final').innerText = `${res.answers.onePart} × ${res.inputs.ratioB} = ${res.answers.partB} Green marbles.`;
-
-        // Saboteur IDs synced with HTML
-        document.getElementById('trap-div-a').innerText = res.answers.traps.divByA;
-        document.getElementById('trap-half').innerText = res.answers.traps.simpleSplit;
+        traceBox.innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
     }
 
-    function toggleLogic() {
-        const div = document.getElementById('logic');
-        div.style.display = div.style.display === 'none' ? 'block' : 'none';
-    }
-
-    [raIn, rbIn, tIn].forEach(el => el.oninput = update);
-    update();
+    inputs.forEach(i => i.addEventListener('input', refresh));
+    window.onload = refresh;
 </script>
 </body>
 </html>

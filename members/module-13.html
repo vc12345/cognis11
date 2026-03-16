@@ -11,67 +11,59 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        /* Fixed Simulation Layout */
-        .simulation-container { 
-            background: #f8fafc; 
-            border: 2px solid #e2e8f0; 
-            border-radius: 12px; 
-            padding: 80px 20px; 
-            margin: 30px 0; 
-            position: relative;
-            overflow: hidden; 
-        }
-        .track-bg { 
-            height: 4px; 
-            background: #cbd5e0; 
-            width: 100%; 
-            position: absolute; 
-            top: 50%; 
-            left: 0;
-            transform: translateY(-50%);
-        }
+        /* Module 12 Style X-Ray Tiers */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+
+        /* The Anatomy Track */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 60px 20px; margin: 30px 0; position: relative; overflow: hidden; }
+        .track-line { height: 4px; background: #cbd5e0; position: relative; top: 40px; }
+        
         .tunnel-block { 
             position: absolute; 
             left: 50%; 
-            top: 50%;
-            transform: translate(-50%, -50%);
-            height: 50px; 
-            background: rgba(71, 85, 105, 0.9); 
-            border: 2px solid #1e293b;
+            top: 50%; 
+            transform: translate(-50%, -50%); 
+            height: 60px; 
+            background: rgba(71, 85, 105, 0.8); 
+            border: 3px solid #1e293b; 
             z-index: 2; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             color: white; 
             font-size: 0.7rem; 
-            font-weight: bold;
+            font-weight: bold; 
         }
+
         .train-sprite { 
             position: absolute; 
-            left: -150px; 
-            top: 50%;
-            transform: translateY(-50%);
-            height: 25px; 
+            left: 0; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            height: 30px; 
             background: var(--cognis-gold); 
-            border-radius: 2px; 
             z-index: 3; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 0.6rem;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            font-size: 0.6rem; 
+            font-weight: bold; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+
+        .status-msg { position: absolute; top: 10px; width: 100%; text-align: center; font-weight: bold; color: var(--cognis-blue); font-size: 0.9rem; }
+
+        .sim-btn { display: block; margin: 40px auto 0; background: var(--cognis-gold); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .sim-btn:disabled { background: #ccc; cursor: not-allowed; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .control-group { margin-bottom: 15px; }
         .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
-        .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: none; font-size: 1rem; }
-        
+        .control-group input { width: 100%; padding: 8px; border-radius: 4px; border: none; font-size: 1rem; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); min-height: 180px; }
-        .sim-btn { background: var(--cognis-gold); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; text-transform: uppercase; transition: background 0.2s; }
-        .sim-btn:hover { background: #b08d4b; }
     </style>
 </head>
 <body>
@@ -80,10 +72,10 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A train passing a point (like a pole) only travels its own length. But to "clear" a <strong>tunnel</strong>, the train must travel the tunnel's length <strong>PLUS</strong> its own length.</p>
+        <p>A train passing a point only travels its own length. To clear a <strong>tunnel</strong>, it travels the tunnel length <strong>PLUS</strong> its own length.</p>
         <div class="question-tiers">
-            <div class="tier-card"><span>Entry</span>"A train 100m long passes a signal post at 20m/s. How long does it take?"</div>
-            <div class="tier-card"><span>Standard</span>"A train 200m long travels through a 400m tunnel at 72km/h. How long until it is completely clear?"</div>
+            <div class="tier-card"><span>Entry</span>"A train 100m long passes a post at 20m/s. How long does it take?"</div>
+            <div class="tier-card"><span>Standard</span>"A train 200m long travels through a 400m tunnel at 72km/h. How long until it clears?"</div>
             <div class="tier-card"><span>Advanced</span>"A train takes 15s to pass a pole and 45s to pass a 600m tunnel. Find the train's speed."</div>
         </div>
     </section>
@@ -91,14 +83,13 @@
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         
-        <div class="simulation-container">
-            <div class="track-bg"></div>
+        <div class="simulation-area">
+            <div id="status" class="status-msg">Ready to Simulate</div>
+            <div class="track-line"></div>
             <div id="tunnel-vis" class="tunnel-block">TUNNEL</div>
             <div id="train-vis" class="train-sprite">TRAIN</div>
-            <div style="position: absolute; bottom: 10px; width: 100%; text-align: center; font-size: 0.8rem; font-weight: bold; color: var(--cognis-blue);">
-                Effective Distance: <span id="dist-display">600</span>m
-            </div>
         </div>
+        <button id="sim-btn" class="sim-btn" onclick="runSimulation()">Run Staged Simulation</button>
     </section>
 
     <section class="phase">
@@ -117,10 +108,9 @@
                     <label>Speed (km/h)</label>
                     <input type="number" id="speed-val" value="72">
                 </div>
-                <button class="sim-btn" onclick="runSimulation()">Start Simulation</button>
             </div>
             <div class="trace-log" id="logic-trace">
-                Click 'Start' to see the logic trace...
+                Adjust values to see logic...
             </div>
         </div>
     </section>
@@ -128,14 +118,13 @@
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 20px;">
             <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Front-Only" Trap:</strong> Students often calculate how long it takes for the <em>front</em> of the train to reach the end of the tunnel.
-            <br><br><strong>The Fix:</strong> The train isn't "clear" until its <strong>tail</strong> leaves. You must visualize the train's nose traveling the tunnel length AND then traveling its own length to get the tail out.</p>
+            <p><strong>The "Front-Only" Trap:</strong> Students often calculate time for the <em>front</em> to reach the exit. But the train isn't "clear" until the <strong>tail</strong> leaves.
+            <br><br><strong>The Fix:</strong> Distance = Length of Train + Length of Tunnel.</p>
         </div>
     </section>
 </div>
 
 <script>
-    // Self-contained LogicProvider for Module 13
     const LocalLogic = {
         calculate: (t, tun, s) => {
             const totalD = t + tun;
@@ -145,10 +134,9 @@
                 totalD,
                 time: time.toFixed(1),
                 steps: [
-                    `Distance = Train(${t}m) + Tunnel(${tun}m) = ${totalD}m.`,
+                    `Total Distance = ${t}m (Train) + ${tun}m (Tunnel) = ${totalD}m.`,
                     `Speed = ${s}km/h ÷ 3.6 = ${sMs.toFixed(2)}m/s.`,
-                    `Time = ${totalD}m ÷ ${sMs.toFixed(2)}m/s.`,
-                    `Result: ${time.toFixed(1)} seconds to clear.`
+                    `Time = ${totalD}m ÷ ${sMs.toFixed(2)}m/s = ${time.toFixed(1)}s.`
                 ]
             };
         }
@@ -156,40 +144,61 @@
 
     const trainVis = document.getElementById('train-vis');
     const tunnelVis = document.getElementById('tunnel-vis');
+    const status = document.getElementById('status');
+    const simBtn = document.getElementById('sim-btn');
 
     function initVisuals() {
-        const tLen = parseInt(document.getElementById('train-len').value) || 0;
-        const tunLen = parseInt(document.getElementById('tunnel-len').value) || 0;
+        const tLen = parseInt(document.getElementById('train-len').value) || 100;
+        const tunLen = parseInt(document.getElementById('tunnel-len').value) || 100;
         
-        // Scale visuals: 1px = 2m roughly
+        // Scale 1px = 2m
         trainVis.style.width = (tLen / 2) + 'px';
         tunnelVis.style.width = (tunLen / 2) + 'px';
-        document.getElementById('dist-display').innerText = tLen + tunLen;
         
-        // Reset position
-        trainVis.style.transition = 'none';
-        trainVis.style.left = '-150px';
-    }
-
-    function runSimulation() {
-        const tLen = parseInt(document.getElementById('train-len').value);
-        const tunLen = parseInt(document.getElementById('tunnel-len').value);
-        const speed = parseInt(document.getElementById('speed-val').value);
-
-        const res = LocalLogic.calculate(tLen, tunLen, speed);
-        
-        document.getElementById('logic-trace').innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
-
-        // Animation logic
         trainVis.style.transition = 'none';
         trainVis.style.left = '0px';
+        status.innerText = "Ready to Simulate";
         
-        setTimeout(() => {
-            // Animating to clear: The "center" of the tunnel is the anchor. 
-            // We move the train so its tail (left edge) is at the tunnel's right edge.
-            trainVis.style.transition = `left ${Math.min(res.time, 5)}s linear`;
-            trainVis.style.left = '90%'; 
-        }, 100);
+        const res = LocalLogic.calculate(tLen, tunLen, parseInt(document.getElementById('speed-val').value));
+        document.getElementById('logic-trace').innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
+    }
+
+    async function runSimulation() {
+        simBtn.disabled = true;
+        const containerWidth = document.querySelector('.simulation-area').offsetWidth;
+        const tunnelLeft = tunnelVis.offsetLeft;
+        const tunnelWidth = tunnelVis.offsetWidth;
+        const trainWidth = trainVis.offsetWidth;
+
+        // Reset
+        trainVis.style.transition = 'none';
+        trainVis.style.left = '0px';
+        await new Promise(r => setTimeout(r, 100));
+
+        // 1. Move to Tunnel Entrance
+        status.innerText = "Moving to entrance...";
+        trainVis.style.transition = 'left 1.5s linear';
+        trainVis.style.left = (tunnelLeft - trainWidth) + 'px';
+        
+        await new Promise(r => setTimeout(r, 1500));
+        
+        // PAUSE 1: At entrance
+        status.innerText = "PAUSE: Nose touches tunnel (2s)";
+        await new Promise(r => setTimeout(r, 2000));
+
+        // 2. Move through tunnel until clear
+        status.innerText = "Passing through...";
+        trainVis.style.transition = 'left 2s linear';
+        trainVis.style.left = (tunnelLeft + tunnelWidth) + 'px';
+
+        await new Promise(r => setTimeout(r, 2000));
+
+        // PAUSE 2: Just cleared
+        status.innerText = "PAUSE: Tail has cleared tunnel (5s)";
+        await new Promise(r => setTimeout(r, 5000));
+
+        status.innerText = "Simulation Complete";
+        simBtn.disabled = false;
     }
 
     window.onload = initVisuals;

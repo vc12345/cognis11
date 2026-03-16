@@ -1,5 +1,33 @@
 const LogicProvider = {
     modules: {
+        
+        rounding: {
+            calculate: (num, place) => {
+                const n = parseFloat(num);
+                const p = parseFloat(place); // 10, 100, 0.1, etc.
+                const rounded = Math.round(n / p) * p;
+                const lower = Math.floor(n / p) * p;
+                const upper = lower + p;
+                const midpoint = lower + (p / 2);
+                
+                return {
+                    original: n,
+                    rounded: p < 1 ? rounded.toFixed(1) : rounded,
+                    lower: lower,
+                    upper: upper,
+                    midpoint: midpoint,
+                    isUp: n >= midpoint,
+                    steps: [
+                        `Target: Nearest ${p}`,
+                        `Boundaries: ${lower} ↔ ${upper}`,
+                        `Midpoint: ${midpoint}`,
+                        `Decision: ${n} is ${n >= midpoint ? 'at or above' : 'below'} the midpoint.`,
+                        `Result: ${p < 1 ? rounded.toFixed(1) : rounded}`
+                    ]
+                };
+            }
+        },
+        
         unitary: {
             calculate: (knownQty, knownValue, targetQty) => {
                 const unitValue = knownValue / knownQty;

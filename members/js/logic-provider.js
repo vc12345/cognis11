@@ -1,6 +1,29 @@
 const LogicProvider = {
     modules: {
 
+        percentageChange: {
+            calculate: (original, percent, isIncrease) => {
+                const start = parseFloat(original);
+                const p = parseFloat(percent);
+                const multiplier = isIncrease ? (1 + p / 100) : (1 - p / 100);
+                const result = start * multiplier;
+                const change = Math.abs(result - start);
+
+                return {
+                    multiplier: multiplier.toFixed(2),
+                    result: result.toFixed(2),
+                    change: change.toFixed(2),
+                    steps: [
+                        `Step 1: Convert the ${isIncrease ? 'Increase' : 'Decrease'} to a Multiplier.`,
+                        `Formula: 100% ${isIncrease ? '+' : '-'} ${p}% = ${(multiplier * 100).toFixed(0)}%.`,
+                        `Step 2: Express as a decimal: ${multiplier.toFixed(2)}.`,
+                        `Step 3: Multiply original by the decimal (${start} × ${multiplier.toFixed(2)}).`,
+                        `Result: The new value is ${result.toFixed(2)}.`
+                    ]
+                };
+            }
+        },
+
         directProportion: {
             calculate: (origQty, origVal, targetQty) => {
                 const q1 = parseFloat(origQty);

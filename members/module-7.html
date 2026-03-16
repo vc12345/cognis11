@@ -2,80 +2,143 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 7: Area vs Perimeter | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 7: Reverse Percentages | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
-        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
-        .anatomy-callout { background: #ecfdf5; border-left: 5px solid #10b981; padding: 20px; border-radius: 4px; margin: 20px 0; }
-        .engine-controls { display: grid; gap: 20px; background: #f0fdf4; padding: 20px; border-radius: 8px; border: 1px solid #dcfce7; }
-        .slider-group { display: flex; align-items: center; gap: 15px; }
-        .slider-group label { min-width: 160px; font-weight: 600; }
-        input[type=range] { flex-grow: 1; accent-color: #10b981; }
-        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
-        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-        .logic-card { background: #ecfdf5; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid #10b981; }
+        :root {
+            --cognis-blue: #002d5b;
+            --cognis-gold: #c5a059;
+            --cognis-light: #f4f7f9;
+            --trap-red: #d9534f;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; color: #2c3e50; padding: 40px 20px; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; }
+
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; margin-top: 0; letter-spacing: 2px; }
+
+        /* X-Ray Tiers */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+
+        /* Anatomy: The Reverse Bridge */
+        .anatomy-display { margin: 40px 0; display: flex; align-items: center; justify-content: center; gap: 20px; }
+        .node { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--cognis-blue); display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: bold; text-align: center; background: white; z-index: 2; }
+        .node.result { border-color: var(--cognis-gold); }
+        .node span { font-size: 0.7rem; color: #718096; text-transform: uppercase; }
+
+        .bridge-container { position: relative; width: 200px; height: 100px; }
+        .arrow-path { position: absolute; width: 100%; height: 2px; background: #cbd5e0; top: 50%; }
+        .op-bubble { position: absolute; left: 50%; transform: translateX(-50%); background: var(--cognis-blue); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+        .op-bubble.top { top: 0; background: #718096; }
+        .op-bubble.bottom { bottom: 0; background: var(--cognis-gold); }
+
+        /* Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { margin-bottom: 20px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .control-group input, .control-group select { width: 100%; padding: 10px; border-radius: 4px; border: none; font-size: 1rem; }
+        
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
+        .trace-step { margin-bottom: 10px; line-height: 1.4; color: #e2e8f0; }
     </style>
 </head>
 <body>
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 7: Area vs Perimeter</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "FENCE VS GRASS" PRINCIPLE</p>
-    </header>
 
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 7: Reverse Percentages</h1></div>
+
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "Type 1" thinker mixes up the two formulas. A "Type 2" thinker visualizes the difference: Perimeter is the <strong>Walk</strong> around the edge; Area is the <strong>Space</strong> inside.</p>
-        <div class="xray-examples">
-            <strong>Exam Wording Patterns:</strong>
-            <div class="example-item">1. "How much fencing is needed for a garden 10m by 5m?" (Perimeter)</div>
-            <div class="example-item">2. "How many tiles are needed to cover a floor 4m by 6m?" (Area)</div>
-            <div class="example-item">3. "Find the total distance around the edge of a rectangle." (Perimeter)</div>
+        <p>Reverse Percentages ask you to find the <strong>Original Price</strong>. You are at the destination; you need to drive back to the start.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><span>Adv Year 2</span>"A half-price toy costs £5. What was the full price?"</div>
+            <div class="tier-card"><span>Avg Year 4</span>"After a 10% discount, trainers cost £45. What was the original price?"</div>
+            <div class="tier-card"><span>Adv Year 5</span>"A house worth £240,000 has increased in value by 20%. What was it worth before?"</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         
-        <div class="anatomy-callout">
-            <strong>Area:</strong> Length × Width (Units squared)<br>
-            <strong>Perimeter:</strong> (Length + Width) × 2 (Standard units)
+        <div class="anatomy-display">
+            <div class="node"><span>Original</span><div id="disp-orig">?</div></div>
+            <div class="bridge-container">
+                <div class="arrow-path"></div>
+                <div class="op-bubble top" id="top-op">× 1.20</div>
+                <div class="op-bubble bottom" id="bot-op">÷ 1.20</div>
+            </div>
+            <div class="node result"><span>New Value</span><div id="disp-new">£240</div></div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <div class="slider-group"><label>Length (cm): <span id="l-val"></span></label><input type="range" id="len" min="2" max="20" value="10"></div>
-            <div class="slider-group"><label>Width (cm): <span id="w-val"></span></label><input type="range" id="wid" min="2" max="20" value="5"></div>
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>New (Final) Value</label>
+                    <input type="number" id="v-in" value="240">
+                </div>
+                <div class="control-group">
+                    <label>Change Type</label>
+                    <select id="type-in">
+                        <option value="inc">After Increase (+)</option>
+                        <option value="dec" selected>After Decrease (-)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Percentage Change (%)</label>
+                    <input type="number" id="p-in" value="10">
+                </div>
+            </div>
+            <div class="trace-log" id="logic-trace"></div>
         </div>
-        <div class="question-card" id="q-text"></div>
-        <button class="btn" onclick="toggleLogic()">Show Formula Logic</button>
-        <div id="logic" class="logic-card">
-            <p><strong>Area (Space):</strong> <span id="ans-area"></span> cm²</p>
-            <p><strong>Perimeter (Edge):</strong> <span id="ans-peri"></span> cm</p>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 20px;">
+            <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Forward Percent" Trap:</strong> If a price is £90 after a 10% discount, students often find 10% of £90 (£9) and add it back to get £99. 
+            <br><br><strong>The Fix:</strong> Percentages are not "fixed amounts." 10% of the <em>original</em> is more than 10% of the <em>sale price</em>. You must use <strong>Division</strong> by the multiplier to undo the change.</p>
         </div>
-    </div>
+    </section>
 </div>
+
+<script src="js/logic-provider.js"></script>
 <script>
-    function update() {
-        const res = LogicProvider.getModule(7).generate(document.getElementById('len').value, document.getElementById('wid').value);
-        document.getElementById('l-val').innerText = res.inputs.length;
-        document.getElementById('w-val').innerText = res.inputs.width;
-        document.getElementById('q-text').innerText = `A rectangle is ${res.inputs.length}cm long and ${res.inputs.width}cm wide. Calculate its Area and Perimeter.`;
-        document.getElementById('ans-area').innerText = `${res.inputs.length} × ${res.inputs.width} = ${res.answers.area}`;
-        document.getElementById('ans-peri').innerText = `2 × (${res.inputs.length} + ${res.inputs.width}) = ${res.answers.perimeter}`;
+    const vIn = document.getElementById('v-in');
+    const pIn = document.getElementById('p-in');
+    const tIn = document.getElementById('type-in');
+    const traceBox = document.getElementById('logic-trace');
+    
+    const dOrig = document.getElementById('disp-orig');
+    const dNew = document.getElementById('disp-new');
+    const tOp = document.getElementById('top-op');
+    const bOp = document.getElementById('bot-op');
+
+    function refresh() {
+        const val = parseFloat(vIn.value) || 0;
+        const per = parseFloat(pIn.value) || 0;
+        const isInc = tIn.value === 'inc';
+
+        const res = LogicProvider.modules.reversePercentage.calculate(val, per, isInc);
+
+        // Update Anatomy
+        dOrig.innerText = `£${res.original}`;
+        dNew.innerText = `£${val}`;
+        tOp.innerText = `× ${res.multiplier}`;
+        bOp.innerText = `÷ ${res.multiplier}`;
+
+        // Update Trace
+        traceBox.innerHTML = res.steps.map(s => `<div class="trace-step">→ ${s}</div>`).join('');
     }
-    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    [vIn, pIn, tIn].forEach(el => el.addEventListener('input', refresh));
+    window.onload = refresh;
 </script>
 </body>
 </html>

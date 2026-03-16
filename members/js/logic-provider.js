@@ -1,6 +1,34 @@
 const LogicProvider = {
     modules: {
 
+        balancingEquations = {
+            calculate: (a, b, c) => {
+                const coef = parseInt(a) || 1;
+                const constLeft = parseInt(b) || 0;
+                const constRight = parseInt(c) || 0;
+
+                if (coef === 0) return { error: "Coefficient of X cannot be zero.", steps: [] };
+
+                const step1Right = constRight - constLeft;
+                const finalX = step1Right / coef;
+
+                return {
+                    coef: coef,
+                    constLeft: constLeft,
+                    constRight: constRight,
+                    step1Right: step1Right,
+                    finalX: finalX,
+                    steps: [
+                        `Original Equation: ${coef}x + ${constLeft} = ${constRight}`,
+                        `Step 1: Isolate the X term. Subtract ${constLeft} from BOTH sides.`,
+                        `${coef}x = ${constRight} - ${constLeft}  →  ${coef}x = ${step1Right}`,
+                        `Step 2: Solve for 1x. Divide both sides by ${coef}.`,
+                        `x = ${step1Right} ÷ ${coef}  →  x = ${finalX.toFixed(2)}`
+                    ]
+                };
+            }
+        },
+
         relativeSpeed = {
             calculate: (s1, s2, dist) => {
                 const speed1 = parseFloat(s1) || 0;
@@ -32,7 +60,7 @@ const LogicProvider = {
                     ]
                 };
             }
-        };
+        },
 
         averageSpeed: {
             calculate: (d1, t1, d2, t2) => {

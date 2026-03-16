@@ -1,6 +1,27 @@
 const LogicProvider = {
     modules: {
 
+        fractionsOfAmounts: {
+            calculate: (total, numerator, denominator) => {
+                const t = parseFloat(total);
+                const n = parseInt(numerator);
+                const d = parseInt(denominator);
+
+                const unitFraction = t / d;
+                const result = unitFraction * n;
+
+                return {
+                    unitFraction: unitFraction.toFixed(2),
+                    result: result.toFixed(2),
+                    steps: [
+                        `Step 1: Find the value of one 'slice' (1/${d}). Divide the total by the denominator: £${t} ÷ ${d} = £${unitFraction.toFixed(2)}.`,
+                        `Step 2: Find the value of ${n} 'slices'. Multiply the unit value by the numerator: £${unitFraction.toFixed(2)} × ${n}.`,
+                        `Result: ${n}/${d} of £${t} is £${result.toFixed(2)}.`
+                    ]
+                };
+            }
+        },
+
         reversePercentage: {
             calculate: (finalVal, percent, isIncrease) => {
                 const f = parseFloat(finalVal);

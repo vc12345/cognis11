@@ -1,6 +1,62 @@
 const LogicProvider = {
     modules: {
 
+        reverseOps: {
+            calculate: (finalResult, op1Type, op1Val, op2Type, op2Val) => {
+                const res = parseFloat(finalResult) || 0;
+                const v1 = parseFloat(op1Val) || 0;
+                const v2 = parseFloat(op2Val) || 0;
+
+                // Step-by-step reversal
+                // Problem structure: ((X [op1] v1) [op2] v2) = res
+                
+                // Reverse Op 2 first
+                let afterOp1;
+                let step1Desc = "";
+                if (op2Type === 'add') {
+                    afterOp1 = res - v2;
+                    step1Desc = `Reverse +${v2} by subtracting: ${res} - ${v2} = ${afterOp1}`;
+                } else if (op2Type === 'sub') {
+                    afterOp1 = res + v2;
+                    step1Desc = `Reverse -${v2} by adding: ${res} + ${v2} = ${afterOp1}`;
+                } else if (op2Type === 'mul') {
+                    afterOp1 = res / v2;
+                    step1Desc = `Reverse ×${v2} by dividing: ${res} ÷ ${v2} = ${afterOp1}`;
+                } else {
+                    afterOp1 = res * v2;
+                    step1Desc = `Reverse ÷${v2} by multiplying: ${res} × ${v2} = ${afterOp1}`;
+                }
+
+                // Reverse Op 1
+                let originalX;
+                let step2Desc = "";
+                if (op1Type === 'add') {
+                    originalX = afterOp1 - v1;
+                    step2Desc = `Reverse +${v1} by subtracting: ${afterOp1} - ${v1} = ${originalX}`;
+                } else if (op1Type === 'sub') {
+                    originalX = afterOp1 + v1;
+                    step2Desc = `Reverse -${v1} by adding: ${afterOp1} + ${v1} = ${originalX}`;
+                } else if (op1Type === 'mul') {
+                    originalX = afterOp1 / v1;
+                    step2Desc = `Reverse ×${v1} by dividing: ${afterOp1} ÷ ${v1} = ${originalX}`;
+                } else {
+                    originalX = afterOp1 * v1;
+                    step2Desc = `Reverse ÷${v1} by multiplying: ${afterOp1} × ${v1} = ${originalX}`;
+                }
+
+                return {
+                    original: originalX.toFixed(2),
+                    intermediate: afterOp1.toFixed(2),
+                    steps: [
+                        `Step 1: Start at the end with ${res}.`,
+                        `Step 2: ${step1Desc}.`,
+                        `Step 3: ${step2Desc}.`,
+                        `Result: The original number was ${originalX.toFixed(2)}.`
+                    ]
+                };
+            }
+        },
+    
         timeConv = {
             calculate: (h, m, addM) => {
                 const hStart = parseInt(h) || 0;

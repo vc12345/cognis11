@@ -1,6 +1,32 @@
 const LogicProvider = {
     modules: {
 
+        relativeSpeed: {
+            calculate: (s1, s2, dist, isTowards) => {
+                const speed1 = parseFloat(s1);
+                const speed2 = parseFloat(s2);
+                const d = parseFloat(dist);
+                
+                // Towards = Add speeds (closing gap), Away = Add speeds (widening gap)
+                // In 11+, "Towards" is the most common for 'Time to Meet'
+                const relativeRate = speed1 + speed2;
+                const timeToMeet = d / relativeRate;
+                const timeMinutes = timeToMeet * 60;
+
+                return {
+                    rate: relativeRate.toFixed(2),
+                    timeH: timeToMeet.toFixed(2),
+                    timeM: timeMinutes.toFixed(0),
+                    steps: [
+                        `Step 1: Calculate the Combined Speed. Since they are moving ${isTowards ? 'towards' : 'away from'} each other, their speeds add up: ${speed1} + ${speed2} = ${relativeRate} km/h.`,
+                        `Step 2: Use the DST formula for the Gap. Time = Distance ÷ Combined Speed.`,
+                        `Step 3: ${d} ÷ ${relativeRate} = ${timeToMeet.toFixed(2)} hours.`,
+                        `Result: They will meet in ${timeToMeet.toFixed(2)} hours (${timeMinutes.toFixed(0)} minutes).`
+                    ]
+                };
+            }
+        },
+
         averageSpeed: {
             calculate: (d1, t1, d2, t2) => {
                 const totalDist = parseFloat(d1) + parseFloat(d2);

@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <title>Module 15: Time Conversions | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; --overflow: #ef4444; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
         .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
@@ -17,31 +18,27 @@
         .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
         .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
 
-        /* The Anatomy: Visual Anchor */
+        /* Visual Anchor: The Overflow Tanks */
         .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 60px 20px; margin: 30px 0; }
         .tank-system { display: flex; justify-content: center; align-items: flex-end; gap: 40px; height: 180px; }
         
-        .tank { width: 100px; height: 150px; border: 4px solid var(--cognis-blue); border-top: none; position: relative; display: flex; align-items: flex-end; background: white; border-radius: 0 0 10px 10px; transition: border-color 0.3s; }
-        .tank-label { position: absolute; top: -30px; width: 100%; text-align: center; font-weight: 800; font-size: 0.75rem; color: var(--cognis-blue); letter-spacing: 1px; }
+        .tank { width: 100px; height: 150px; border: 4px solid var(--cognis-blue); border-top: none; position: relative; display: flex; align-items: flex-end; background: white; border-radius: 0 0 10px 10px; }
+        .tank-label { position: absolute; top: -30px; width: 100%; text-align: center; font-weight: 800; font-size: 0.75rem; color: var(--cognis-blue); }
         
-        .water { width: 100%; background: var(--cognis-gold); transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s; position: relative; }
+        .water { width: 100%; background: var(--cognis-gold); transition: height 0.4s ease, background 0.3s; position: relative; }
         .water-val { position: absolute; top: 10px; width: 100%; text-align: center; color: white; font-weight: 800; font-size: 1.4rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         
-        /* Overflow Visuals */
-        .tank.overflow { border-color: var(--overflow); animation: shake 0.5s ease-in-out; }
-        .tank.overflow .water { background: var(--overflow); }
+        .tank.overflow { border-color: var(--trap-red); }
+        .tank.overflow .water { background: var(--trap-red); }
         
-        .carry-arrow { font-size: 2.5rem; color: var(--overflow); opacity: 0; transform: translateX(20px); transition: all 0.4s; font-weight: bold; }
-        .carry-active { opacity: 1; transform: translateX(0); }
+        .carry-arrow { font-size: 2.5rem; color: var(--trap-red); opacity: 0; transition: all 0.4s; font-weight: bold; }
+        .carry-active { opacity: 1; transform: translateX(-10px); }
 
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-
-        /* Engine Side-by-Side */
+        /* Engine Layout */
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group { margin-bottom: 20px; }
         .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
-        .control-group input { width: 100%; padding: 12px; border-radius: 6px; border: none; font-size: 1.1rem; font-weight: bold; background: #2d3748; color: white; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.95rem; border-left: 4px solid var(--cognis-gold); min-height: 160px; line-height: 1.6; }
+        .control-group input { width: 100%; padding: 10px; border-radius: 6px; border: none; font-size: 1.1rem; background: #2d3748; color: white; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: monospace; border-left: 4px solid var(--cognis-gold); line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -51,10 +48,11 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
+        <p><strong>Topic Logic:</strong> Time calculations do not follow the standard decimal system (Base-10). Instead, they use <strong>Modular Arithmetic (Base-60)</strong>. The core challenge is managing the "reset" point where 60 minutes transforms into 1 hour.</p>
         <div class="question-tiers">
-            <div class="tier-card"><span>Entry</span>"Convert 140 minutes into hours and minutes."</div>
-            <div class="tier-card"><span>Standard</span>"A lesson starts at 09:45 and lasts 75 minutes. What time does it end?"</div>
-            <div class="tier-card"><span>Advanced</span>"A train leaves at 22:50. The trip takes 4h 25m. At what time does it arrive?"</div>
+            <div class="tier-card"><span>Entry (Year 2)</span>"Convert 140 minutes into hours and minutes."</div>
+            <div class="tier-card"><span>Standard (Year 4)</span>"A film starts at 15:30 and is 115 minutes long. When does it end?"</div>
+            <div class="tier-card"><span>Advanced (Year 5)</span>"A clock loses 4 minutes every hour. If it is set correctly at 9am, what time will it show at 9pm?"</div>
         </div>
     </section>
 
@@ -64,16 +62,16 @@
             <div class="tank-system">
                 <div class="tank" id="tank-h">
                     <div class="tank-label">HOURS</div>
-                    <div id="fill-h" class="water"><span class="water-val" id="val-h">0</span></div>
+                    <div id="fill-h" class="water" style="height: 0%;"><span class="water-val" id="val-h">0</span></div>
                 </div>
                 <div id="arrow" class="carry-arrow">←</div>
                 <div class="tank" id="tank-m">
                     <div class="tank-label">MINUTES</div>
-                    <div id="fill-m" class="water"><span class="water-val" id="val-m">0</span></div>
+                    <div id="fill-m" class="water" style="height: 0%;"><span class="water-val" id="val-m">0</span></div>
                 </div>
             </div>
-            <p style="text-align: center; margin-top: 40px; font-weight: 800; font-size: 1.2rem; color: var(--cognis-blue);">
-                Digital Clock: <span id="digital-out" style="background: #e2e8f0; padding: 6px 15px; border-radius: 6px; font-family: monospace;">00:00</span>
+            <p style="text-align: center; margin-top: 40px; font-weight: bold; font-size: 1.2rem; color: var(--cognis-blue);">
+                Digital Result: <span id="digital-clock" style="background: #e2e8f0; padding: 5px 15px; border-radius: 6px; font-family: monospace;">00:00</span>
             </p>
         </div>
     </section>
@@ -83,106 +81,95 @@
         <div class="engine-container">
             <div class="controls">
                 <div class="control-group">
-                    <label>Start Hours (0-23)</label>
-                    <input type="number" id="in-h" value="14" min="0" max="23">
+                    <label>Start Hours</label>
+                    <input type="number" id="in-h" value="10" min="0" max="23">
                 </div>
                 <div class="control-group">
-                    <label>Start Minutes (0-59)</label>
+                    <label>Start Minutes</label>
                     <input type="number" id="in-m" value="45" min="0" max="59">
                 </div>
                 <div class="control-group">
-                    <label>Duration to Add (Minutes)</label>
+                    <label>Add Minutes</label>
                     <input type="number" id="in-add" value="30">
                 </div>
             </div>
-            <div class="trace-log" id="logic-trace">Initializing system...</div>
+            <div class="trace-log" id="logic-trace">Initializing...</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Decimal" Trap:</strong> Most students write 1 hour 30 mins as "1.3" or "1.30" because they are used to base-10 math.
-            <br><br><strong>The Fix:</strong> Time is <strong>Base-60</strong>. When the minutes container fills to 60, it spills over into the hours container. Always treat the ":" like a barrier, not a decimal point.</p>
+            <h2 style="color:var(--trap-red);">Phase 4: The Saboteur</h2>
+            <p><strong>The "Decimal" Trap:</strong> Mistakenly thinking that 1.5 hours is 1 hour and 5 minutes. 
+            <br><br><strong>The Fix:</strong> Always remember that in time, <strong>0.5 = 30</strong>. Half of the 60-minute container is 30, not 50. Use the tanks to visualize the 60m boundary!</p>
         </div>
     </section>
 </div>
 
 <script>
-    // Embedded Logic Provider for Module 15
-    const LogicProvider = {
-        modules: {
-            timeConv: {
-                calculate: (h, m, addM) => {
-                    const hStart = parseInt(h) || 0;
-                    const mStart = parseInt(m) || 0;
-                    const duration = parseInt(addM) || 0;
-                    
-                    const totalMins = (hStart * 60) + mStart + duration;
-                    const finalH = Math.floor(totalMins / 60) % 24;
-                    const finalM = totalMins % 60;
-                    
-                    const overflowed = (mStart + duration) >= 60;
-                    const hoursCarried = Math.floor((mStart + duration) / 60);
+    // Embedded Logic for immediate functionality
+    const Logic = {
+        calculate: (h, m, add) => {
+            const hIn = parseInt(h) || 0;
+            const mIn = parseInt(m) || 0;
+            const addIn = parseInt(add) || 0;
 
-                    return {
-                        totalMins, finalH, finalM, overflowed, hoursCarried,
-                        steps: [
-                            `1. Initial: ${hStart}h ${mStart}m. Adding ${duration}m.`,
-                            `2. New Minute Total: ${mStart + duration}m.`,
-                            overflowed ? `3. OVERFLOW: Carrying +${hoursCarried} hour(s).` : `3. No overflow: total minutes stay under 60.`,
-                            `Result: Final time is ${finalH}:${finalM.toString().padStart(2, '0')}.`
-                        ]
-                    };
-                }
-            }
+            const totalMins = (hIn * 60) + mIn + addIn;
+            const finalH = Math.floor(totalMins / 60) % 24;
+            const finalM = totalMins % 60;
+            const mTotalRaw = mIn + addIn;
+            const carried = Math.floor(mTotalRaw / 60);
+
+            return {
+                finalH, finalM, carried,
+                overflow: mTotalRaw >= 60,
+                mTotalRaw,
+                steps: [
+                    `Start: ${hIn}:${mIn.toString().padStart(2,'0')}`,
+                    `Adding: ${addIn} minutes`,
+                    mTotalRaw >= 60 ? `Overflow: ${mTotalRaw}m = ${carried}h and ${finalM}m.` : `Stay: ${mTotalRaw}m is under the 60m limit.`,
+                    `Final: ${finalH}:${finalM.toString().padStart(2,'0')}`
+                ]
+            };
         }
     };
 
-    const inputIds = ['in-h', 'in-m', 'in-add'];
-    const inputs = inputIds.map(id => document.getElementById(id));
+    const inputs = ['in-h', 'in-m', 'in-add'].map(id => document.getElementById(id));
+    const trace = document.getElementById('logic-trace');
     const fillH = document.getElementById('fill-h');
     const fillM = document.getElementById('fill-m');
-    const valH = document.getElementById('val-h');
-    const valM = document.getElementById('val-m');
-    const arrow = document.getElementById('arrow');
     const tankM = document.getElementById('tank-m');
-    const trace = document.getElementById('logic-trace');
-    const digital = document.getElementById('digital-out');
+    const arrow = document.getElementById('arrow');
 
-    function refresh() {
-        const h = parseInt(inputs[0].value) || 0;
-        const m = parseInt(inputs[1].value) || 0;
-        const add = parseInt(inputs[2].value) || 0;
-
-        const res = LogicProvider.modules.timeConv.calculate(h, m, add);
-
-        // Update Text
-        valH.innerText = res.finalH;
-        valM.innerText = res.finalM;
-        digital.innerText = `${String(res.finalH).padStart(2, '0')}:${String(res.finalM).padStart(2, '0')}`;
+    function update() {
+        const res = Logic.calculate(inputs[0].value, inputs[1].value, inputs[2].value);
+        
+        // Text Updates
+        document.getElementById('val-h').innerText = res.finalH;
+        document.getElementById('val-m').innerText = res.finalM;
+        document.getElementById('digital-clock').innerText = 
+            `${String(res.finalH).padStart(2,'0')}:${String(res.finalM).padStart(2,'0')}`;
         trace.innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
 
-        // Update Visuals
-        fillH.style.height = ((res.finalH / 24) * 100) + '%';
+        // Visual Updates
+        fillH.style.height = (res.finalH / 24 * 100) + "%";
         
-        // Visualizing the overflow state of the container
-        const mTotal = m + add;
-        const fillPercent = Math.min((mTotal / 60) * 100, 100);
-        fillM.style.height = fillPercent + '%';
+        // Minute Tank Logic: Show it approaching/exceeding the 60 limit
+        const visualMPct = Math.min((res.mTotalRaw / 60) * 100, 100);
+        fillM.style.height = visualMPct + "%";
 
-        if (res.overflowed) {
+        if (res.overflow) {
             tankM.classList.add('overflow');
             arrow.classList.add('carry-active');
-            arrow.innerText = `← +${res.hoursCarried}`;
+            arrow.innerText = `← +${res.carried}h`;
         } else {
             tankM.classList.remove('overflow');
             arrow.classList.remove('carry-active');
         }
     }
 
-    inputs.forEach(i => i.addEventListener('input', refresh));
-    window.onload = refresh;
+    inputs.forEach(i => i.addEventListener('input', update));
+    window.onload = update;
 </script>
 </body>
 </html>

@@ -2,84 +2,136 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 2: Rounding | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 2: Rounding & Estimation | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
-        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
-        .engine-controls { display: grid; gap: 20px; background: #eff6ff; padding: 20px; border-radius: 8px; }
-        .slider-group { display: flex; align-items: center; gap: 15px; }
-        .slider-group label { min-width: 160px; font-weight: 600; }
-        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
-        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-        .logic-card { background: #ecfdf5; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid #10b981; }
+        :root {
+            --cognis-blue: #002d5b;
+            --cognis-gold: #c5a059;
+            --cognis-light: #f4f7f9;
+            --trap-red: #d9534f;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #eaeff2; color: #2c3e50; padding: 40px 20px; }
+        .module-card { max-width: 900px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; }
+
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; margin-top: 0; letter-spacing: 2px; }
+
+        /* Anatomy: The Proximity Scale */
+        .anatomy-display { margin: 40px 0; position: relative; padding: 20px 0; }
+        .number-line { height: 4px; background: #cbd5e0; width: 100%; position: relative; display: flex; justify-content: space-between; align-items: center; }
+        .point { width: 12px; height: 12px; background: var(--cognis-blue); border-radius: 50%; position: relative; }
+        .point::after { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 0.9rem; }
+        #p-low::after { content: attr(data-val); }
+        #p-high::after { content: attr(data-val); }
+        
+        #midpoint-marker { position: absolute; height: 20px; width: 2px; background: #a0aec0; top: -8px; }
+        #midpoint-marker::after { content: attr(data-val); position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; color: #718096; }
+
+        #active-num { position: absolute; width: 16px; height: 16px; background: var(--cognis-gold); border: 3px solid white; border-radius: 50%; top: -9px; transition: left 0.3s ease; box-shadow: 0 0 10px rgba(197, 160, 89, 0.5); }
+        #active-num::after { content: attr(data-val); position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); font-weight: 900; color: var(--cognis-gold); background: #fff; padding: 2px 8px; border-radius: 4px; border: 1px solid #eee; }
+
+        /* Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { margin-bottom: 20px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .control-group input, .control-group select { width: 100%; padding: 10px; border-radius: 4px; border: none; }
+        
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
+        .trace-step { margin-bottom: 10px; line-height: 1.4; }
     </style>
 </head>
 <body>
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 2: Rounding & Estimation</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "BOUNDARY" PRINCIPLE</p>
-    </header>
 
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 2: Rounding & Estimation</h1></div>
+
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "Type 1" thinker just looks at the whole number. A "Type 2" thinker identifies the <strong>Critical Digit</strong> (the one to the right of the rounding place) to decide whether to push the value up or let it rest.</p>
-        <div class="xray-examples">
-            <strong>Exam Wording Patterns:</strong>
-            <div class="example-item">1. "Round 456 to the nearest hundred."</div>
-            <div class="example-item">2. "Give your answer to 1 decimal place."</div>
-            <div class="example-item">3. "Estimate the total cost by rounding each item to the nearest pound."</div>
-        </div>
-    </div>
+        <p>Rounding isn't about numbers; it's about <strong>Limits</strong>. We ask: "Which neighbor is this value closer to?"</p>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        
-        <div class="anatomy-callout" style="background: #eff6ff; padding: 15px; border-radius: 8px; margin: 20px 0;">
-            <strong>The Rule:</strong> If the digit is **5 or more**, round up. If it is **4 or less**, round down (keep the digit the same).
+        <div class="anatomy-display">
+            <div class="number-line">
+                <div id="p-low" class="point" data-val="0"></div>
+                <div id="midpoint-marker" style="left: 50%;" data-val="5"></div>
+                <div id="active-num" style="left: 70%;" data-val="7"></div>
+                <div id="p-high" class="point" data-val="10"></div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <div class="slider-group"><label>Value: <span id="v-val"></span></label><input type="range" id="val" min="1" max="1000" value="456"></div>
-            <div class="slider-group"><label>Round to Nearest: <span id="p-val"></span></label><input type="range" id="place" min="10" max="100" step="90" value="100"></div>
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Input Number</label>
+                    <input type="number" id="num-input" value="147">
+                </div>
+                <div class="control-group">
+                    <label>Round To Nearest...</label>
+                    <select id="place-input">
+                        <option value="10">10 (Tens)</option>
+                        <option value="100">100 (Hundreds)</option>
+                        <option value="1">1 (Whole Number)</option>
+                        <option value="0.1">0.1 (1 Decimal Place)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="trace-log" id="logic-trace"></div>
         </div>
-        <div class="question-card" id="q-text"></div>
-        <button class="btn" onclick="toggleLogic()">Show Rounding Logic</button>
-        <div id="logic" class="logic-card">
-            <p>Target Place: <span id="logic-p"></span></p>
-            <p><strong>Result: <span id="res-round"></span></strong></p>
-        </div>
-    </div>
+    </section>
 
-    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
-        <h2>Phase 4: The Saboteur</h2>
-        <p style="color: var(--trap); font-weight: 700;">The "Always Up" Trap: Thinking 4 rounds up because it's "close".</p>
-        <p>Trap Answer: <span id="trap-ans"></span></p>
-    </div>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 20px;">
+            <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Place Value Drift":</strong> When rounding 197 to the nearest 10, students often say 190 because they see the '9'. They forget the boundary is 200. Always check your neighbors first!</p>
+        </div>
+    </section>
 </div>
+
+<script src="js/logic-provider.js"></script>
 <script>
-    function update() {
-        const res = LogicProvider.modules[2].generate(document.getElementById('val').value, document.getElementById('place').value);
-        document.getElementById('v-val').innerText = res.inputs.val;
-        document.getElementById('p-val').innerText = res.inputs.place;
-        document.getElementById('q-text').innerText = `Round ${res.inputs.val} to the nearest ${res.inputs.place}.`;
-        document.getElementById('logic-p').innerText = res.inputs.place;
-        document.getElementById('res-round').innerText = res.answers.correct;
-        document.getElementById('trap-ans').innerText = res.answers.traps.wrongPlace;
+    const nIn = document.getElementById('num-input');
+    const pIn = document.getElementById('place-input');
+    const traceBox = document.getElementById('logic-trace');
+    
+    // Anatomy Elements
+    const pLow = document.getElementById('p-low');
+    const pHigh = document.getElementById('p-high');
+    const pMid = document.getElementById('midpoint-marker');
+    const pActive = document.getElementById('active-num');
+
+    function refresh() {
+        const n = parseFloat(nIn.value) || 0;
+        const p = parseFloat(pIn.value);
+
+        // CALL: LogicProvider.modules.rounding.calculate
+        const res = LogicProvider.modules.rounding.calculate(n, p);
+
+        // Update Anatomy
+        pLow.setAttribute('data-val', res.lower);
+        pHigh.setAttribute('data-val', res.upper);
+        pMid.setAttribute('data-val', res.midpoint);
+        pActive.setAttribute('data-val', n);
+        
+        // Calculate % position on the number line
+        let percent = ((n - res.lower) / (res.upper - res.lower)) * 100;
+        // Clamp for visuals
+        percent = Math.max(-5, Math.min(105, percent));
+        pActive.style.left = `${percent}%`;
+
+        // Update Trace
+        traceBox.innerHTML = res.steps.map(s => `<div class="trace-step">→ ${s}</div>`).join('');
     }
-    function toggleLogic() { const d = document.getElementById('logic'); d.style.display = d.style.display==='none'?'block':'none'; }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    [nIn, pIn].forEach(el => el.addEventListener('input', refresh));
+    window.onload = refresh;
 </script>
 </body>
 </html>

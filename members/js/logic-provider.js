@@ -1,5 +1,28 @@
 const LogicProvider = {
     modules: {
+
+        inverseProportion: {
+            calculate: (workers, time, newWorkers) => {
+                const w1 = parseInt(workers) || 1;
+                const t1 = parseFloat(time) || 1;
+                const w2 = parseInt(newWorkers) || 1;
+
+                // The Golden Rule of Inverse: X * Y = Constant
+                const totalWork = w1 * t1; 
+                const newTime = totalWork / w2;
+
+                return {
+                    totalWork: totalWork.toFixed(1),
+                    newTime: newTime.toFixed(1),
+                    steps: [
+                        `Step 1: Find the "Constant" (Total Work). Multiply workers by time (${w1} × ${t1} = ${totalWork.toFixed(1)} units of work).`,
+                        `Step 2: Understand that the Total Work never changes, no matter how many people are doing it.`,
+                        `Step 3: Divide the Total Work by the NEW number of workers (${totalWork.toFixed(1)} ÷ ${w2}).`,
+                        `Result: It will take ${w2} worker(s) ${newTime.toFixed(1)} units of time.`
+                    ]
+                };
+            }
+        },
         
         sharedRatiosDiff: {
             calculate: (diffAmount, partA, partB) => {

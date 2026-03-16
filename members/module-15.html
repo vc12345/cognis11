@@ -4,30 +4,43 @@
     <meta charset="UTF-8">
     <title>Module 15: Time Conversions | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; --overflow-color: #e53e3e; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        /* Module 12 Style X-Ray Tiers */
+        /* Professional X-Ray Grid */
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
         .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
         .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
 
-        /* The Clock Visualizer */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; display: flex; align-items: center; justify-content: space-around; }
-        .clock-face { width: 150px; height: 150px; border: 5px solid var(--cognis-blue); border-radius: 50%; position: relative; background: white; }
-        .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; background: var(--cognis-blue); border-radius: 4px; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        .hour-hand { width: 4px; height: 40px; z-index: 2; }
-        .min-hand { width: 2px; height: 60px; background: var(--cognis-gold); z-index: 1; }
-        .digital-display { font-family: 'Courier New', monospace; font-size: 2.5rem; font-weight: bold; color: var(--cognis-blue); background: #e2e8f0; padding: 10px 20px; border-radius: 8px; }
+        /* The Overflow Visualizer */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; }
+        .overflow-box-container { display: flex; justify-content: center; gap: 40px; align-items: flex-end; }
+        
+        .tank { width: 100px; border: 3px solid var(--cognis-blue); border-top: none; position: relative; display: flex; align-items: flex-end; overflow: hidden; background: white; transition: border-color 0.3s; }
+        .tank-h { height: 120px; }
+        .tank-m { height: 120px; }
+        .tank-label { position: absolute; top: -25px; width: 100%; text-align: center; font-weight: bold; font-size: 0.7rem; color: var(--cognis-blue); }
+        
+        .fill { width: 100%; background: var(--cognis-gold); transition: height 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
+        .fill-text { position: absolute; top: 5px; width: 100%; text-align: center; color: white; font-weight: bold; font-size: 1.2rem; }
+        
+        .tank.overflow { border-color: var(--overflow-color); animation: shake 0.5s; }
+        .tank.overflow .fill { background: var(--overflow-color); }
+        
+        .carry-arrow { font-size: 2rem; color: var(--overflow-color); opacity: 0; transition: opacity 0.3s; transform: translateY(-40px); }
+        .carry-active { opacity: 1; animation: bounce 1s infinite; }
+
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes bounce { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-15px); } }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .control-group { margin-bottom: 15px; }
         .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
-        .control-group input { width: 100%; padding: 8px; border-radius: 4px; border: none; font-size: 1rem; }
+        .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: none; font-size: 1rem; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); min-height: 150px; }
     </style>
 </head>
@@ -37,11 +50,10 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Time calculation is tricky because it uses **Base-60** (60 seconds/minutes) instead of the standard Base-10 we use for most math.</p>
         <div class="question-tiers">
             <div class="tier-card"><span>Entry</span>"Convert 140 minutes into hours and minutes."</div>
-            <div class="tier-card"><span>Standard</span>"A film starts at 14:45 and lasts 135 minutes. What time does it end?"</div>
-            <div class="tier-card"><span>Advanced</span>"A train journey takes 3h 15m. If it arrives at 1:10 PM, when did it depart?"</div>
+            <div class="tier-card"><span>Standard</span>"A movie starts at 15:45 and is 80 minutes long. When does it end?"</div>
+            <div class="tier-card"><span>Advanced</span>"A plane leaves London at 22:50. The flight takes 3 hours 25 mins. What time does it land?"</div>
         </div>
     </section>
 
@@ -49,11 +61,18 @@
         <h2>Phase 2: The Anatomy</h2>
         
         <div class="simulation-area">
-            <div class="clock-face">
-                <div id="h-hand" class="hand hour-hand"></div>
-                <div id="m-hand" class="hand min-hand"></div>
+            <div class="overflow-box-container">
+                <div class="tank tank-h">
+                    <div class="tank-label">HOURS</div>
+                    <div id="fill-h" class="fill" style="height: 40%;"><span class="fill-text" id="txt-h">14</span></div>
+                </div>
+                <div id="arrow" class="carry-arrow">← +1</div>
+                <div id="tank-m" class="tank tank-m">
+                    <div class="tank-label">MINUTES</div>
+                    <div id="fill-m" class="fill" style="height: 75%;"><span class="fill-text" id="txt-m">45</span></div>
+                </div>
             </div>
-            <div id="digital" class="digital-display">12:00</div>
+            <p style="text-align: center; margin-top: 30px; font-weight: bold; color: var(--cognis-blue);">Digital Result: <span id="final-digital">14:45</span></p>
         </div>
     </section>
 
@@ -61,58 +80,68 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <div style="display: flex; gap: 10px;">
-                    <div class="control-group" style="flex: 1;">
-                        <label>Start Hour</label>
-                        <input type="number" id="in-h" value="14" min="0" max="23" oninput="updateTime()">
-                    </div>
-                    <div class="control-group" style="flex: 1;">
-                        <label>Start Min</label>
-                        <input type="number" id="in-m" value="45" min="0" max="59" oninput="updateTime()">
-                    </div>
+                <div class="control-group">
+                    <label>Starting Hours (0-23)</label>
+                    <input type="number" id="in-h" value="14" min="0" max="23" oninput="updateAll()">
                 </div>
                 <div class="control-group">
-                    <label>Add Minutes</label>
-                    <input type="number" id="in-add" value="135" oninput="updateTime()">
+                    <label>Starting Minutes (0-59)</label>
+                    <input type="number" id="in-m" value="45" min="0" max="59" oninput="updateAll()">
+                </div>
+                <div class="control-group" style="background: rgba(197, 160, 89, 0.1); padding: 10px; border-radius: 4px;">
+                    <label style="color: var(--cognis-gold);">Minutes to Add</label>
+                    <input type="number" id="in-add" value="25" oninput="updateAll()">
                 </div>
             </div>
-            <div id="logic-trace" class="trace-log">Calculation trace...</div>
+            <div id="logic-trace" class="trace-log">Adjust inputs to calculate...</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 20px;">
             <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Decimal" Trap:</strong> Students often write 2 hours and 30 minutes as "2.3 hours." 
-            <br><br><strong>The Fix:</strong> Always remember that **0.5 hours is 30 minutes**, not 50. When doing column addition for time, if the minutes column reaches 60, you must "carry" 1 to the hours column and reset the minutes.</p>
+            <p><strong>The "Decimal" Trap:</strong> Writing 1 hour 30 mins as "1.3" or "1.30".
+            <br><br><strong>The Fix:</strong> Time doesn't reset at 100. It resets at 60. Always ask: "Does my minute total have a 60 hidden inside it?" If yes, pull it out and add it to the Hours column.</p>
         </div>
     </section>
 </div>
 
 <script>
-    const logic = LogicProvider.modules.timeConv;
-
-    function updateTime() {
+    function updateAll() {
         const h = parseInt(document.getElementById('in-h').value) || 0;
         const m = parseInt(document.getElementById('in-m').value) || 0;
         const add = parseInt(document.getElementById('in-add').value) || 0;
 
-        const res = logic.calculate(h, m, add);
+        const res = LogicProvider.modules.timeConv.calculate(h, m, add);
 
-        // Update Digital
-        document.getElementById('digital').innerText = res.formatted;
-
-        // Update Hands
-        const hDeg = (res.h * 30) + (res.m * 0.5);
-        const mDeg = res.m * 6;
-        document.getElementById('h-hand').style.transform = `translateX(-50%) rotate(${hDeg}deg)`;
-        document.getElementById('m-hand').style.transform = `translateX(-50%) rotate(${mDeg}deg)`;
-
-        // Update Trace
+        // Update Text
+        document.getElementById('txt-h').innerText = res.finalH;
+        document.getElementById('txt-m').innerText = res.finalM;
+        document.getElementById('final-digital').innerText = res.finalH + ":" + res.finalM.toString().padStart(2, '0');
         document.getElementById('logic-trace').innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
+
+        // Visual "Tank" Heights
+        // Height of H tank is based on 24 hours. Height of M tank is based on 60 mins.
+        document.getElementById('fill-h').style.height = ((res.finalH / 24) * 100) + '%';
+        
+        const mTotalAtOnce = m + add;
+        document.getElementById('fill-m').style.height = (Math.min(mTotalAtOnce / 60, 1) * 100) + '%';
+
+        // Overflow Logic Visuals
+        const tankM = document.getElementById('tank-m');
+        const arrow = document.getElementById('arrow');
+
+        if(res.overflowed) {
+            tankM.classList.add('overflow');
+            arrow.classList.add('carry-active');
+            arrow.innerText = `← +${res.hoursCarried}`;
+        } else {
+            tankM.classList.remove('overflow');
+            arrow.classList.remove('carry-active');
+        }
     }
 
-    window.onload = updateTime;
+    window.onload = updateAll;
 </script>
 </body>
 </html>

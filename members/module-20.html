@@ -2,82 +2,140 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 20: Range | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 20: Substitution | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
-        .anatomy-callout { background: #fefce8; border-left: 5px solid #eab308; padding: 20px; border-radius: 4px; margin: 20px 0; }
-        .engine-controls { background: #fefce8; padding: 20px; border-radius: 8px; border: 1px solid #fef08a; }
-        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
-        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-        .logic-card { background: #fefce8; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border: 1px solid #fde047; }
-        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        /* Phase 1: X-Ray Tiers */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; line-height: 1.4; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+
+        /* Phase 2: Substitution Key Visual */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
+        .key-container { display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; }
+        .key-item { padding: 15px; background: white; border: 2px solid var(--cognis-blue); border-radius: 12px; min-width: 80px; }
+        .symbol { font-size: 1.5rem; font-weight: bold; color: var(--cognis-gold); display: block; margin-bottom: 5px; }
+        .val-badge { font-size: 1.2rem; font-weight: bold; color: var(--cognis-blue); }
+
+        .equation-projection { font-size: 2.2rem; font-weight: 800; color: var(--cognis-blue); letter-spacing: 5px; }
+        .token-slot { display: inline-block; border-bottom: 4px solid var(--cognis-gold); min-width: 40px; transition: all 0.3s; }
+        .token-slot.active { color: var(--cognis-gold); transform: translateY(-5px); }
+
+        /* Phase 3: Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { margin-bottom: 15px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .input-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+        .input-row input { background: #2d3748; color: white; border: 1px solid #4a5568; padding: 10px; border-radius: 6px; font-size: 1rem; width: 70px; font-weight: bold; }
+        
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 4px solid var(--cognis-gold); min-height: 200px; line-height: 1.7; }
+        .step-map { color: #48bb78; }
+        .step-calc { color: var(--cognis-gold); }
     </style>
 </head>
 <body>
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 20: Range & Spread</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "GAP" PRINCIPLE</p>
-    </header>
 
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 20: Substitution</h1></div>
+
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "Type 1" thinker assumes Range is an average. A "Type 2" thinker knows Range is a measure of <strong>consistency</strong>—the gap between the best and the worst.</p>
-        <div class="xray-examples">
-            <strong>Exam Wording Patterns:</strong>
-            <div class="example-item">1. "Find the range of the following temperatures."</div>
-            <div class="example-item">2. "How much did the scores vary?"</div>
-            <div class="example-item">3. "Work out the difference between the highest and lowest values."</div>
+        <p><strong>Topic Logic:</strong> Substitution is the process of replacing symbols (letters or shapes) with their known numerical values. Once the symbols are replaced, the expression becomes a standard calculation that follows **BODMAS** priority.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><span>Entry</span>If $a = 5$ and $b = 3$, what is $a + b$?</div>
+            <div class="tier-card"><span>Standard</span>If $x = 10$ and $y = 2$, find the value of $x - 3y$.</div>
+            <div class="tier-card"><span>Advanced</span>Given $\triangle = 4$ and $\square = 3$, calculate: $(\triangle \times \square)^2 - \triangle$.</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        
-        <div class="anatomy-callout">
-            <strong>The Formula:</strong><br>
-            Highest Value - Lowest Value = Range.
+        <div class="simulation-area">
+            <div class="key-container">
+                <div class="key-item"><span class="symbol">A</span><span class="val-badge" id="v-a-val">5</span></div>
+                <div class="key-item"><span class="symbol">B</span><span class="val-badge" id="v-b-val">2</span></div>
+                <div class="key-item"><span class="symbol">C</span><span class="val-badge" id="v-c-val">10</span></div>
+            </div>
+            <div class="equation-projection">
+                <span class="token-slot" id="slot-1">A</span> + 
+                <span class="token-slot" id="slot-2">B</span> × 
+                <span class="token-slot" id="slot-3">C</span>
+            </div>
+            <p id="final-res" style="margin-top:20px; font-weight:bold; color:var(--cognis-gold); font-size:1.5rem;"></p>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <label>Enter numbers (comma-separated):</label>
-            <input type="text" id="range-input" value="5, 12, 3, 19, 8" style="width:100%; padding:10px; margin:10px 0; border: 1px solid #ccc; border-radius: 4px;">
+        <div class="engine-container">
+            <div class="controls">
+                <label>Set Variable Values</label>
+                <div class="input-row">
+                    <span>A:</span> <input type="number" id="in-a" value="5">
+                    <span>B:</span> <input type="number" id="in-b" value="2">
+                    <span>C:</span> <input type="number" id="in-c" value="10">
+                </div>
+                <label style="margin-top:20px;">Expression Logic (Fixed Structure)</label>
+                <p style="font-size:0.8rem; color:#a0aec0;">Structure: A + ( B × C )</p>
+            </div>
+            <div class="trace-log" id="logic-trace">Initializing...</div>
         </div>
-        <div class="question-card" id="q-text">Identify the range.</div>
-        <button class="btn" onclick="toggleLogic()">Show Range Calculation</button>
-        <div id="logic" class="logic-card">
-            <p><strong>Highest:</strong> <span id="calc-max"></span></p>
-            <p><strong>Lowest:</strong> <span id="calc-min"></span></p>
-            <p><strong>Range:</strong> <span id="calc-range"></span></p>
-        </div>
-    </div>
+    </section>
 
-    <div class="section saboteur-section">
-        <h2>Phase 4: The Saboteur</h2>
-        <p style="color: var(--trap); font-weight: 700;">The "Extreme Ignorance" Trap: Only looking at the first and last numbers in a list without checking if they are actually the highest and lowest.</p>
-    </div>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red);">Phase 4: The Saboteur</h2>
+            <p><strong>The "Invisible Multiplier" Trap:</strong> In algebra, $3y$ means $3 \times y$. A "Type 1" thinker often forgets this and tries to write the numbers side-by-side (e.g., if $y=2$, they think $3y$ is $32$). 
+            <br><br><strong>The Fix:</strong> Always put brackets around your substitution! $3(y) \rightarrow 3(2) = 6$. This prevents "Digit Gluing" and keeps your operations clear.</p>
+        </div>
+    </section>
 </div>
+
 <script>
-    function update() {
-        const val = document.getElementById('range-input').value;
-        const res = LogicProvider.getModule(20).generate(val);
-        document.getElementById('calc-max').innerText = res.inputs.max;
-        document.getElementById('calc-min').innerText = res.inputs.min;
-        document.getElementById('calc-range').innerText = res.answers.range;
+    const inputs = ['in-a', 'in-b', 'in-c'].map(id => document.getElementById(id));
+    const trace = document.getElementById('logic-trace');
+
+    function refresh() {
+        const valA = parseFloat(inputs[0].value) || 0;
+        const valB = parseFloat(inputs[1].value) || 0;
+        const valC = parseFloat(inputs[2].value) || 0;
+
+        // Update Key
+        document.getElementById('v-a-val').innerText = valA;
+        document.getElementById('v-b-val').innerText = valB;
+        document.getElementById('v-c-val').innerText = valC;
+
+        // Process Logic: A + B * C
+        const step1 = valB * valC;
+        const final = valA + step1;
+
+        // Animate slots
+        const slots = ['slot-1', 'slot-2', 'slot-3'];
+        slots.forEach(s => document.getElementById(s).classList.add('active'));
+        setTimeout(() => slots.forEach(s => document.getElementById(s).classList.remove('active')), 500);
+
+        // Update Trace
+        trace.innerHTML = `
+            <div class="step-map">→ Step 1: Mapping A=(${valA}), B=(${valB}), C=(${valC})</div>
+            <div>→ Expression: ${valA} + (${valB} × ${valC})</div>
+            <div class="step-calc">→ BODMAS: Solve Multiplier (${valB} × ${valC} = ${step1})</div>
+            <div class="step-calc">→ Final: ${valA} + ${step1} = ${final}</div>
+            <div style="color:#7cfc00; font-weight:bold; margin-top:10px;">Result: ${final}</div>
+        `;
+
+        document.getElementById('final-res').innerText = `Total: ${final}`;
     }
-    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
-    document.getElementById('range-input').oninput = update;
-    update();
+
+    inputs.forEach(i => i.addEventListener('input', refresh));
+    window.onload = refresh;
 </script>
 </body>
 </html>

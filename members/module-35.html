@@ -13,89 +13,117 @@
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; line-height: 1.4; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; display: flex; align-items: center; justify-content: center; gap: 40px; }
-        .word-box { background: #2d3748; padding: 20px; border-radius: 10px; border: 2px solid #4a5568; display: flex; gap: 5px; }
-        .letter-node { width: 45px; height: 45px; background: white; color: #1a202c; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.5rem; border-radius: 6px; cursor: pointer; transition: transform 0.3s, background 0.3s; }
-        .letter-node.selected { background: var(--cognis-gold); transform: translateY(-10px); color: white; }
-        .drop-zone { width: 45px; height: 45px; border: 2px dashed #4a5568; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--cognis-gold); }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; text-align: center; }
+        .word-box { display: inline-flex; gap: 8px; background: #2d3748; padding: 15px; border-radius: 10px; border: 2px solid #4a5568; }
+        .letter-node { width: 45px; height: 50px; background: white; color: #1a202c; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.6rem; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+        .letter-node.selected { background: var(--cognis-gold); color: white; transform: translateY(-8px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .letter-node.ghost { opacity: 0.2; border: 2px dashed white; background: transparent; }
+        
+        .target-word { font-family: 'Courier New', monospace; font-size: 2.5rem; color: white; margin-top: 30px; letter-spacing: 5px; }
+        .landing-spot { color: var(--cognis-gold); text-decoration: underline; font-weight: 900; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .btn-example { background: #4a5568; color: white; border: none; padding: 8px 12px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; margin: 4px; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
+        input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
     </style>
 </head>
 <body>
 <div class="module-card">
     <div class="header"><h1>Module 35: Word Morphing</h1></div>
-    
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In this challenge, you must "steal" one letter from Word A and give it to Word B. The letter can be placed anywhere in the second word. Both resulting strings must be real English words.</p>
         <div class="question-tiers">
             <div class="tier-card"><b>Advanced Year 2</b>Move one letter from <b>CHART</b> to <b>EAT</b> to make two new words.</div>
-            <div class="tier-card"><b>Average Year 4</b>From <b>STEAM</b> to <b>BIT</b>. Which letter moves?</div>
-            <div class="tier-card"><b>Advanced Year 5</b>From <b>BRIDGE</b> to <b>OUR</b>. Find the new pair.</div>
+            <div class="tier-card"><b>Average Year 4</b>Move one letter from <b>STEAM</b> to <b>BIT</b> to make two new words.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Move one letter from <b>BRIDGE</b> to <b>OUR</b> to make two new words.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div class="word-box" id="box-a"></div>
-            <div style="color: var(--cognis-gold); font-size: 2rem;">→</div>
-            <div class="word-box" id="box-b"></div>
+            <div id="box-a" class="word-box"></div>
+            <div id="target-display" class="target-word"></div>
+            <div style="max-width: 400px; margin: 30px auto 0;">
+                <label style="color:#a0aec0; font-size:0.6rem; text-transform:uppercase; display:block; margin-bottom:10px;">Adjust Insertion Point</label>
+                <input type="range" id="insert-slider" min="0" max="3" value="0" oninput="updateMorph()">
+            </div>
         </div>
-        <p style="text-align: center; color: #718096; font-size: 0.8rem;">Click a letter in Word A to "transport" it to the gap in Word B.</p>
+        <div style="text-align:center">
+            <button class="btn-example" onclick="setMorph('CHART','EAT')">CHART → EAT</button>
+            <button class="btn-example" onclick="setMorph('STEAM','BIT')">STEAM → BIT</button>
+            <button class="btn-example" onclick="setMorph('BRIDGE','OUR')">BRIDGE → OUR</button>
+            <button class="btn-example" onclick="setMorph('POUND','EACH')">POUND → EACH</button>
+        </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <input type="text" id="in-a" value="CHART" style="width:100%; margin-bottom:10px; padding:10px; border-radius:6px; border:none;" oninput="init35()">
-                <input type="text" id="in-b" value="EAT" style="width:100%; padding:10px; border-radius:6px; border:none;" oninput="init35()">
+                <p style="font-size:0.8rem; color:#a0aec0;">1. Click a letter in the top word to "steal" it.<br>2. Use the slider to find a valid landing spot in the bottom word.</p>
             </div>
-            <div class="trace-log" id="trace-35">Select a letter to begin the morph...</div>
+            <div class="trace-log" id="trace-35">Select a letter to begin...</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The "First Slot" Trap:</strong> Students often try to put the stolen letter only at the beginning or end of the second word.
-            <br><br><strong>The Fix:</strong> The letter can hide <b>anywhere</b> inside the second word. For example, if you move 'R' from 'CHART' to 'EAT', it doesn't just make 'REAT' or 'EATR'—it makes <b>'EART'</b> (not a word) or <b>'ARET'</b>... but if you move the 'H', it makes <b>'HEAT'</b>.</p>
+            <p><strong>The "Edge Only" Trap:</strong> Most students only try putting the moved letter at the start or end of the new word.
+            <br><br><strong>The Fix:</strong> Treat the second word like a set of gaps: <b>_ B _ I _ T _</b>. The moved letter could hide in any of those four positions. If it doesn't work at the ends, start sliding it through the middle.</p>
         </div>
     </section>
 </div>
 
 <script>
-    function init35() {
-        const a = document.getElementById('in-a').value.toUpperCase();
-        const b = document.getElementById('in-b').value.toUpperCase();
-        const boxA = document.getElementById('box-a');
-        const boxB = document.getElementById('box-b');
-        
-        boxA.innerHTML = a.split('').map((l, i) => `<div class="letter-node" onclick="morph('${l}', ${i})">${l}</div>`).join('');
-        boxB.innerHTML = b.split('').map(l => `<div class="letter-node" style="cursor:default">${l}</div>`).join('') + `<div class="drop-zone">?</div>`;
-        document.getElementById('trace-35').innerText = "Word A: " + a + " | Word B: " + b;
+    let currentA = "CHART";
+    let currentB = "EAT";
+    let selectedIdx = 1; // Default 'H' for CHART
+
+    function setMorph(a, b) {
+        currentA = a;
+        currentB = b;
+        selectedIdx = 0;
+        document.getElementById('insert-slider').max = b.length;
+        updateMorph();
     }
 
-    function morph(letter, idx) {
-        const a = document.getElementById('in-a').value.toUpperCase();
-        const b = document.getElementById('in-b').value.toUpperCase();
-        const remainA = a.slice(0, idx) + a.slice(idx + 1);
+    function updateMorph() {
+        const boxA = document.getElementById('box-a');
+        const target = document.getElementById('target-display');
+        const slider = document.getElementById('insert-slider');
+        const insPos = parseInt(slider.value);
         
+        boxA.innerHTML = currentA.split('').map((l, i) => 
+            `<div class="letter-node ${i === selectedIdx ? 'selected' : ''}" onclick="selectLetter(${i})">${l}</div>`
+        ).join('');
+
+        const stolen = currentA[selectedIdx];
+        const newB = currentB.slice(0, insPos) + `<span class="landing-spot">${stolen}</span>` + currentB.slice(insPos);
+        target.innerHTML = newB;
+
+        const remainA = currentA.slice(0, selectedIdx) + currentA.slice(selectedIdx + 1);
+        const plainB = currentB.slice(0, insPos) + stolen + currentB.slice(insPos);
+
         document.getElementById('trace-35').innerHTML = `
-            <b>Morph Logic:</b><br>
-            1. Removed '${letter}' from position ${idx + 1}.<br>
-            2. Result A: <b>${remainA}</b><br>
-            3. Target B: <b>${b} + ${letter}</b><br><br>
-            <i>Check: Are "${remainA}" and words made from "${b}${letter}" both real?</i>
+            <b>Current Result:</b><br>
+            Word A becomes: <b style="color:var(--cognis-gold)">${remainA}</b><br>
+            Word B becomes: <b style="color:var(--cognis-gold)">${plainB}</b><br><br>
+            <i>Are both real words?</i>
         `;
     }
-    window.onload = init35;
+
+    function selectLetter(i) {
+        selectedIdx = i;
+        updateMorph();
+    }
+
+    window.onload = () => setMorph('CHART', 'EAT');
 </script>
 </body>
 </html>

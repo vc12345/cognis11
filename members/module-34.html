@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 34: Compound Word Bridge | Cognis11</title>
+    <title>Module 34: Magnetic Bridge | Cognis11</title>
     <style>
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
@@ -13,38 +13,28 @@
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; line-height: 1.4; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        /* Fusion Stage */
-        .simulation-area { background: #f8fafc; border-radius: 12px; padding: 80px; margin: 30px 0; overflow: hidden; }
-        .fusion-stage { display: flex; align-items: center; justify-content: center; gap: 40px; }
+        .simulation-area { background: #f8fafc; border-radius: 12px; padding: 100px 40px; margin: 30px 0; overflow: hidden; }
+        .fusion-stage { display: flex; align-items: center; justify-content: center; position: relative; }
         
-        .word-block { background: var(--cognis-blue); color: white; padding: 25px 35px; border-radius: 12px; font-weight: 900; font-size: 2rem; text-transform: uppercase; transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .bridge-core { position: relative; z-index: 10; }
-        .bridge-input { background: white; border: 4px solid var(--cognis-gold); padding: 20px; border-radius: 12px; font-size: 2rem; font-weight: 900; width: 160px; text-align: center; color: var(--cognis-gold); text-transform: uppercase; box-shadow: 0 0 20px rgba(197, 160, 89, 0.2); }
-
-        /* Fusion Active State */
-        .fused #w1 { transform: translateX(35px); border-top-right-radius: 0; border-bottom-right-radius: 0; }
-        .fused #w2 { transform: translateX(-35px); border-top-left-radius: 0; border-bottom-left-radius: 0; }
-        .fused .bridge-input { border-radius: 0; border-left: none; border-right: none; }
+        .word-block { background: var(--cognis-blue); color: white; padding: 25px 35px; border-radius: 12px; font-weight: 900; font-size: 2rem; text-transform: uppercase; z-index: 5; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .bridge-input { background: white; border: 4px solid var(--cognis-gold); padding: 20px; border-radius: 12px; font-size: 2rem; font-weight: 900; width: 160px; text-align: center; color: var(--cognis-gold); text-transform: uppercase; position: relative; z-index: 10; margin: 0 20px; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .input-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 10px; }
-        .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 2; }
-        .btn-fuse { width: 100%; background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+        input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
     </style>
 </head>
 <body>
 <div class="module-card">
     <div class="header"><h1>Module 34: Compound Word Bridge</h1></div>
-    
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>RAIN [ ____ ] BALL. (What fits both?)</div>
-            <div class="tier-card"><b>Average Year 4</b>FOOT [ ____ ] ROOM. (A 4-letter bridge).</div>
+            <div class="tier-card"><b>Advanced Year 2</b>RAIN [ ____ ] BALL. What fits both?</div>
+            <div class="tier-card"><b>Average Year 4</b>FOOT [ ____ ] ROOM. (4-letter bridge).</div>
             <div class="tier-card"><b>Advanced Year 5</b>Identify the bridge for SEA [ ____ ] SIDE.</div>
         </div>
     </section>
@@ -52,14 +42,15 @@
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div class="fusion-stage" id="stage">
-                <div class="word-block" id="w1">RAIN</div>
-                <div class="bridge-core">
-                    <input type="text" class="bridge-input" id="bridge-in" placeholder="????" oninput="update34()">
-                </div>
-                <div class="word-block" id="w2">BALL</div>
+            <div class="fusion-stage">
+                <div class="word-block" id="block-left">RAIN</div>
+                <input type="text" class="bridge-input" id="bridge-in" placeholder="????" oninput="update34()">
+                <div class="word-block" id="block-right">BALL</div>
             </div>
-            <button class="btn-fuse" onclick="toggleFusion()" id="fuse-btn">Initiate Fusion</button>
+            <div style="max-width: 500px; margin: 40px auto 0;">
+                <label style="font-size:0.6rem; color:#718096; text-transform:uppercase; display:block; text-align:center;">Magnetic Tension</label>
+                <input type="range" id="tension-slider" min="0" max="60" value="0" oninput="update34()">
+            </div>
         </div>
     </section>
 
@@ -67,44 +58,33 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <div class="input-group"><label>Word A (Prefix)</label><input type="text" id="in-w1" value="RAIN" oninput="update34()"></div>
-                <div class="input-group" style="margin-top:15px;"><label>Word B (Suffix)</label><input type="text" id="in-w2" value="BALL" oninput="update34()"></div>
+                <input type="text" id="in-w1" value="RAIN" style="width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:none;" oninput="update34()">
+                <input type="text" id="in-w2" value="BALL" style="width:100%; padding:10px; border-radius:6px; border:none;" oninput="update34()">
             </div>
-            <div class="trace-log" id="trace-34">Enter a bridge word to see the compounds form...</div>
+            <div class="trace-log" id="trace-34">Enter a bridge and slide to test the compound.</div>
         </div>
     </section>
 </div>
 
 <script>
-    let isFused = false;
-
-    function toggleFusion() {
-        isFused = !isFused;
-        const stage = document.getElementById('stage');
-        const btn = document.getElementById('fuse-btn');
-        if (isFused) {
-            stage.classList.add('fused');
-            btn.innerText = "Deconstruct Compounds";
-        } else {
-            stage.classList.remove('fused');
-            btn.innerText = "Initiate Fusion";
-        }
-        update34();
-    }
-
     function update34() {
         const w1 = document.getElementById('in-w1').value.toUpperCase();
         const w2 = document.getElementById('in-w2').value.toUpperCase();
         const bridge = document.getElementById('bridge-in').value.toUpperCase();
+        const tension = document.getElementById('tension-slider').value;
         
-        document.getElementById('w1').innerText = w1;
-        document.getElementById('w2').innerText = w2;
+        document.getElementById('block-left').innerText = w1;
+        document.getElementById('block-right').innerText = w2;
+        
+        // Move blocks toward the center based on tension
+        document.getElementById('block-left').style.transform = `translateX(${tension}px)`;
+        document.getElementById('block-right').style.transform = `translateX(${-tension}px)`;
 
         document.getElementById('trace-34').innerHTML = `
-            <div style="color:var(--cognis-gold); font-weight:bold; margin-bottom:10px;">Fusion Logic:</div>
-            1. ${w1} + ${bridge || '____'} = <span style="color:white">${w1}${bridge || '?'}</span><br>
-            2. ${bridge || '____'} + ${w2} = <span style="color:white">${bridge || '?'}${w2}</span><br><br>
-            <i>Verification: Both resulting strings must be recognizable English words.</i>
+            <b>Compound Logic:</b><br>
+            Word 1: ${w1}${bridge || '____'}<br>
+            Word 2: ${bridge || '____'}${w2}<br><br>
+            <i>Note: As tension increases, the words must fuse into single logical meanings.</i>
         `;
     }
     window.onload = update34;

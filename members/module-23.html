@@ -12,23 +12,19 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        /* X-Ray Tiers */
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
         .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        /* Visual Leveler */
         .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
         .chart-container { display: flex; align-items: flex-end; justify-content: center; gap: 15px; height: 200px; margin-bottom: 30px; border-bottom: 2px solid var(--cognis-blue); }
         .bar-stack { width: 40px; background: var(--cognis-blue); border-radius: 4px 4px 0 0; position: relative; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .bar-stack span { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 0.8rem; }
         .bar-stack.is-median { background: var(--cognis-gold); }
-        .bar-stack.is-mode { border: 3px solid #e53e3e; }
 
         .btn-row { display: flex; justify-content: center; gap: 10px; }
         .sim-btn { background: var(--cognis-gold); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; }
 
-        /* Engine */
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .input-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 10px; }
         .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1.1rem; letter-spacing: 2px; }
@@ -38,28 +34,26 @@
         .res-pill small { display: block; font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; }
         .res-pill b { font-size: 1.2rem; color: var(--cognis-gold); }
 
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; min-height: 200px; }
     </style>
 </head>
 <body>
 <div class="module-card">
     <div class="header"><h1>Module 23: The Average Family</h1></div>
-
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Topic Logic: Averages are tools to find the "center" of a data set. The <b>Mean</b> is the fair-share balance, the <b>Median</b> is the physical middle, and the <b>Mode</b> is the popularity contest.</p>
+        <p>Averages find the center of a data set. The <b>Mean</b> is the fair-share balance, the <b>Median</b> is the physical middle of the line-up, and the <b>Mode</b> is the most popular value.</p>
         <div class="question-tiers">
             <div class="tier-card"><b>Advanced Year 2</b>Find the mean of 2, 4, and 6.</div>
             <div class="tier-card"><b>Average Year 4</b>Find the median and range of: 12, 5, 8, 12, 3.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>The mean of five numbers is 10. Four of the numbers are 8, 12, 7, and 13. Find the fifth number.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>The mean of five numbers is 10. Four numbers are 8, 12, 7, and 13. Find the fifth.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div class="chart-container" id="chart">
-                </div>
+            <div class="chart-container" id="chart"></div>
             <div class="btn-row">
                 <button class="sim-btn" onclick="visualizeSort()">Sort (Median)</button>
                 <button class="sim-btn" onclick="visualizeLevel()">Level (Mean)</button>
@@ -83,42 +77,68 @@
                     <div class="res-pill"><small>Range</small><b id="out-range">0</b></div>
                 </div>
             </div>
-            <div class="trace-log" id="out-trace">Enter numbers to start the analysis...</div>
-        </div>
-    </section>
-
-    <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><b>The "Missing Middle" Trap:</b> When finding the Median, students often pick the middle number of the *original* list.
-            <br><br><b>The Fix:</b> You must <b>Sort</b> first. The Median is not the middle of the story; it is the middle of the line-up. Always line your data up from smallest to largest before looking for the center.</p>
+            <div class="trace-log" id="out-trace">Analyzing data...</div>
         </div>
     </section>
 </div>
 
 <script>
     let currentData = [];
+
+    function adaptiveRound(num) {
+        let f = Math.round((num + Number.EPSILON) * 100) / 100;
+        if (f % 1 === 0) return f.toString();
+        if ((f * 10) % 1 === 0) return f.toFixed(1);
+        return f.toFixed(2);
+    }
+
     function processData() {
         const input = document.getElementById('in-data').value;
         currentData = input.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
         
-        if (currentData.length === 0) return;
+        if (currentData.length === 0) {
+            document.getElementById('out-trace').innerHTML = "Enter valid numbers...";
+            return;
+        }
 
-        const res = LogicProvider.modules.averages.calculate(currentData);
-        
-        document.getElementById('out-mean').innerText = res.mean;
-        document.getElementById('out-median').innerText = res.median;
-        document.getElementById('out-mode').innerText = res.mode;
-        document.getElementById('out-range').innerText = res.range;
-        document.getElementById('out-trace').innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
-        
+        const sorted = [...currentData].sort((a, b) => a - b);
+        const sum = currentData.reduce((a, b) => a + b, 0);
+        const meanVal = sum / currentData.length;
+
+        let medianVal;
+        const mid = Math.floor(sorted.length / 2);
+        if (sorted.length % 2 === 0) {
+            medianVal = (sorted[mid - 1] + sorted[mid]) / 2;
+        } else {
+            medianVal = sorted[mid];
+        }
+
+        const counts = {};
+        currentData.forEach(n => counts[n] = (counts[n] || 0) + 1);
+        let maxFreq = 0; let modes = [];
+        for (let n in counts) {
+            if (counts[n] > maxFreq) { maxFreq = counts[n]; modes = [Number(n)]; }
+            else if (counts[n] === maxFreq) { modes.push(Number(n)); }
+        }
+
+        document.getElementById('out-mean').innerText = adaptiveRound(meanVal);
+        document.getElementById('out-median').innerText = adaptiveRound(medianVal);
+        document.getElementById('out-mode').innerText = maxFreq > 1 ? modes.join(', ') : "None";
+        document.getElementById('out-range').innerText = adaptiveRound(sorted[sorted.length-1] - sorted[0]);
+
+        document.getElementById('out-trace').innerHTML = `
+            <div>→ Sorted List: [${sorted.join(', ')}]</div>
+            <div>→ <b>Mean:</b> ${sum} ÷ ${currentData.length} = ${adaptiveRound(meanVal)}</div>
+            <div>→ <b>Median:</b> ${sorted.length % 2 === 0 ? `Avg of ${sorted[mid-1]} & ${sorted[mid]}` : `Middle is ${sorted[mid]}`} = ${adaptiveRound(medianVal)}</div>
+            <div>→ <b>Mode:</b> ${maxFreq > 1 ? `Most frequent: ${modes.join(', ')}` : `No repeated values`}</div>
+        `;
         renderBars(currentData);
     }
 
     function renderBars(data) {
         const chart = document.getElementById('chart');
         chart.innerHTML = '';
-        const max = Math.max(...data, 20);
+        const max = Math.max(...data, 1);
         data.forEach(val => {
             const bar = document.createElement('div');
             bar.className = 'bar-stack';
@@ -132,19 +152,20 @@
         const sorted = [...currentData].sort((a, b) => a - b);
         renderBars(sorted);
         const bars = document.querySelectorAll('.bar-stack');
-        const mid = Math.floor(sorted.length / 2);
-        bars[mid].classList.add('is-median');
+        if (bars.length > 0) {
+            const mid = Math.floor(sorted.length / 2);
+            bars[mid].classList.add('is-median');
+            if (sorted.length % 2 === 0) bars[mid-1].classList.add('is-median');
+        }
     }
 
     function visualizeLevel() {
         const sum = currentData.reduce((a, b) => a + b, 0);
         const avg = sum / currentData.length;
-        const leveled = currentData.map(() => avg);
-        renderBars(leveled);
+        renderBars(currentData.map(() => avg));
     }
 
     function resetSim() { processData(); }
-
     window.onload = processData;
 </script>
 </body>

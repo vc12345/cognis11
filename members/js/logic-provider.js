@@ -1,6 +1,37 @@
 const LogicProvider = {
     modules: {
 
+        venn3: {
+            calculate: (vals) => {
+                // vals: { center, ab, bc, ac, onlyA, onlyB, onlyC, neither }
+                // Note: These inputs represent the DISJOINT sections (the actual map)
+                const center = parseFloat(vals.center) || 0;
+                const ab = parseFloat(vals.ab) || 0; // Intersection of A and B excluding center
+                const bc = parseFloat(vals.bc) || 0; // Intersection of B and C excluding center
+                const ac = parseFloat(vals.ac) || 0; // Intersection of A and C excluding center
+                
+                const totalA = parseFloat(vals.onlyA) + ab + ac + center;
+                const totalB = parseFloat(vals.onlyB) + ab + bc + center;
+                const totalC = parseFloat(vals.onlyC) + ac + bc + center;
+                
+                const universe = totalA + totalB + totalC 
+                                 - (ab + bc + ac + 3 * center) // Basic Principle of Inclusion-Exclusion logic
+                                 + center + (parseFloat(vals.neither) || 0);
+
+                return {
+                    totalA, totalB, totalC,
+                    grandTotal: parseFloat(vals.onlyA) + parseFloat(vals.onlyB) + parseFloat(vals.onlyC) 
+                                + ab + bc + ac + center + (parseFloat(vals.neither) || 0),
+                    steps: [
+                        `1. Start at the Core: Center (All 3) = ${center}.`,
+                        `2. Calculate Dual Overlaps: A&B share ${ab + center} total.`,
+                        `3. Calculate Set Totals: Group A = ${vals.onlyA} (Only) + ${ab} (A&B) + ${ac} (A&C) + ${center} (Center) = ${totalA}.`,
+                        `4. Final Tally: Adding all unique sections + Neither = Total Universe.`
+                    ]
+                };
+            }
+        },
+
         venn2: {
             calculate: (onlyA, onlyB, both, neither) => {
                 const totalA = parseFloat(onlyA) + parseFloat(both);

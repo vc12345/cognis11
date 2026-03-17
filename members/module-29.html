@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 29: Alpha-Numeric Shift | Cognis11</title>
+    <title>Module 29: Alpha-Numeric Decoder | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
@@ -17,37 +17,45 @@
         .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
-        svg { background: #1a202c; }
-        .ring-text { font-family: 'Courier New', monospace; font-weight: bold; font-size: 12px; fill: #a0aec0; }
-        .ring-text.active { fill: var(--cognis-gold); font-size: 18px; filter: drop-shadow(0 0 5px var(--cognis-gold)); }
+        svg { background: #1a202c; border-radius: 50%; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        .ring-text { font-family: 'Courier New', monospace; font-weight: bold; font-size: 13px; fill: #64748b; transition: all 0.5s ease; cursor: default; }
+        .letter-text { fill: #a0aec0; }
+        .number-text { fill: var(--cognis-gold); font-size: 11px; }
+        .active { fill: white; font-size: 18px; filter: drop-shadow(0 0 8px var(--cognis-gold)); }
         
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .input-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
-        .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 4px; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
+        .control-group { margin-bottom: 20px; }
+        .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 10px; }
+        .input-text { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; text-transform: uppercase; letter-spacing: 4px; }
+        
+        .btn-toggle { background: #4a5568; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .btn-toggle.active { background: var(--cognis-gold); }
+        
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; min-height: 150px; }
+        input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
     </style>
 </head>
 <body>
 <div class="module-card">
-    <div class="header"><h1>Module 29: Alpha-Numeric Shift</h1></div>
+    <div class="header"><h1>Module 29: Alpha-Numeric Decoder</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>This cipher maps the alphabet directly to a sequence of numbers ($A=1, B=2$). To decode, you must translate each position back to its "alphabetical address." The logic is purely positional.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>If A=1 and B=2, what is the code for the word "CAT"?</div>
-            <div class="tier-card"><b>Average Year 4</b>If A=1, translate the code "13-1-20-8".</div>
-            <div class="tier-card"><b>Advanced Year 5</b>If Z=1, Y=2 (Reverse Alpha), find the numerical code for "BRAIN".</div>
+            <div class="tier-card"><b>Advanced Year 2</b>If A=1, what is the numerical code for "FISH"?</div>
+            <div class="tier-card"><b>Average Year 4</b>If A=26 (Reverse), what is the code for "CAT"?</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Decode "4-18-21-13" where A=3 (Offset Shift).</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <svg id="dial-svg" width="400" height="400" viewBox="0 0 400 400">
-                <circle cx="200" cy="200" r="140" fill="none" stroke="#2d3748" stroke-width="40" />
-                <circle cx="200" cy="200" r="100" fill="none" stroke="#333" stroke-width="40" />
+            <svg id="cipher-svg" width="420" height="420" viewBox="0 0 420 420">
+                <circle cx="210" cy="210" r="160" fill="none" stroke="#2d3748" stroke-width="45" />
+                <circle cx="210" cy="210" r="115" fill="none" stroke="#333" stroke-width="45" />
                 <g id="letters-group"></g>
                 <g id="numbers-group"></g>
+                <line x1="210" y1="30" x2="210" y2="70" stroke="var(--cognis-gold)" stroke-width="4" />
             </svg>
         </div>
     </section>
@@ -56,49 +64,85 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <div class="input-group">
-                    <label>Enter Word to Encode</label>
-                    <input type="text" id="word-in" value="CODE" maxlength="8" oninput="run29()">
+                <div class="control-group">
+                    <label>Shift Alpha (Rotate Dial)</label>
+                    <input type="range" id="shift-dial" min="0" max="25" value="0" oninput="run29()">
+                </div>
+                <div class="control-group">
+                    <label>Dial Direction</label>
+                    <button id="btn-reverse" class="btn-toggle" onclick="toggleReverse()">Clockwise (A→B)</button>
+                </div>
+                <div class="control-group">
+                    <label>Test Word</label>
+                    <input type="text" id="word-in" class="input-text" value="CODE" maxlength="8" oninput="run29()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-29">Type a word to see the mapping on the dial...</div>
+            <div class="trace-log" id="trace-29">Adjust the dial to change the mapping...</div>
         </div>
     </section>
 </div>
 
 <script>
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    function initDial() {
-        const lGroup = document.getElementById('letters-group');
-        const nGroup = document.getElementById('numbers-group');
-        for (let i = 0; i < 26; i++) {
-            const angle = (i / 26) * 2 * Math.PI - Math.PI / 2;
-            const lx = 200 + 140 * Math.cos(angle);
-            const ly = 200 + 140 * Math.sin(angle);
-            const nx = 200 + 100 * Math.cos(angle);
-            const ny = 200 + 100 * Math.sin(angle);
-            
-            lGroup.innerHTML += `<text x="${lx}" y="${ly}" class="ring-text" id="L-${alphabet[i]}" text-anchor="middle" dominant-baseline="middle">${alphabet[i]}</text>`;
-            nGroup.innerHTML += `<text x="${nx}" y="${ny}" class="ring-text" id="N-${i+1}" text-anchor="middle" dominant-baseline="middle" style="fill:#666">${i+1}</text>`;
-        }
+    let isReversed = false;
+
+    function toggleReverse() {
+        isReversed = !isReversed;
+        const btn = document.getElementById('btn-reverse');
+        btn.innerText = isReversed ? "Counter-Clockwise (A←B)" : "Clockwise (A→B)";
+        btn.classList.toggle('active', isReversed);
+        run29();
     }
 
     function run29() {
+        const offset = parseInt(document.getElementById('shift-dial').value);
         const word = document.getElementById('word-in').value.toUpperCase();
-        document.querySelectorAll('.ring-text').forEach(t => t.classList.remove('active'));
+        const lGroup = document.getElementById('letters-group');
+        const nGroup = document.getElementById('numbers-group');
         
-        let trace = "";
-        for (let char of word) {
-            const pos = alphabet.indexOf(char);
-            if (pos !== -1) {
-                document.getElementById(`L-${char}`).classList.add('active');
-                document.getElementById(`N-${pos+1}`).classList.add('active');
-                trace += `${char} → Position ${pos+1}<br>`;
+        lGroup.innerHTML = '';
+        nGroup.innerHTML = '';
+
+        // Generate the Alpha Ring based on Offset and Direction
+        for (let i = 0; i < 26; i++) {
+            // Letter selection
+            let alphaIdx = (i + offset) % 26;
+            if (isReversed) {
+                alphaIdx = (26 - (i + offset) % 26) % 26;
+            }
+            
+            const char = alphabet[alphaIdx];
+            const isActive = word.includes(char);
+            
+            // Positioning (i=0 is Top)
+            const angle = (i / 26) * 2 * Math.PI - Math.PI / 2;
+            const lx = 210 + 160 * Math.cos(angle);
+            const ly = 210 + 160 * Math.sin(angle);
+            const nx = 210 + 115 * Math.cos(angle);
+            const ny = 210 + 115 * Math.sin(angle);
+
+            lGroup.innerHTML += `<text x="${lx}" y="${ly}" class="ring-text letter-text ${isActive ? 'active' : ''}" text-anchor="middle" dominant-baseline="middle">${char}</text>`;
+            nGroup.innerHTML += `<text x="${nx}" y="${ny}" class="ring-text number-text ${isActive ? 'active' : ''}" text-anchor="middle" dominant-baseline="middle">${i+1}</text>`;
+        }
+
+        // Trace calculation
+        let trace = `<b>Key:</b> ${alphabet[isReversed ? (26-offset)%26 : offset]} = 1<br>`;
+        for (let c of word) {
+            const charIdx = alphabet.indexOf(c);
+            if (charIdx !== -1) {
+                let num;
+                if (!isReversed) {
+                    num = ((charIdx - offset + 26) % 26) + 1;
+                } else {
+                    num = ((offset - charIdx + 26) % 26) + 1;
+                }
+                trace += `${c} → ${num}<br>`;
             }
         }
-        document.getElementById('trace-29').innerHTML = trace || "Enter a letter...";
+        document.getElementById('trace-29').innerHTML = trace;
     }
-    window.onload = () => { initDial(); run29(); };
+
+    window.onload = run29;
 </script>
 </body>
 </html>

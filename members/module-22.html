@@ -2,106 +2,181 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 22: Missing Lengths | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 22: Venn Logic | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
-        .example-item { margin-bottom: 10px; font-style: italic; color: #334155; }
-        .engine-controls { display: grid; gap: 20px; background: #f0fdf4; padding: 20px; border-radius: 8px; border: 1px solid #dcfce7; }
-        .slider-group { display: flex; align-items: center; gap: 15px; }
-        .slider-group label { min-width: 160px; font-weight: 600; }
-        input[type=range] { flex-grow: 1; accent-color: var(--primary); }
-        .question-card { background: white; border: 2px solid var(--primary); padding: 25px; border-radius: 8px; font-size: 1.25rem; text-align: center; font-style: italic; margin: 20px 0; }
-        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-        .logic-card { background: #ecfdf5; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border-left: 5px solid var(--success); }
-        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
-        .trap-item { background: white; padding: 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #fda4af; display: flex; justify-content: space-between; align-items: center; }
-        .trap-val { color: var(--trap); font-weight: 700; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        /* X-Ray Tiers */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 5px; }
+
+        /* Simulation Area */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 60px 20px; margin: 30px 0; text-align: center; height: 400px; position: relative; overflow: hidden; }
+        .venn-stage { display: flex; justify-content: center; align-items: center; height: 250px; position: relative; width: 100%; }
+        
+        .set-circle { width: 200px; height: 200px; border: 3px solid var(--cognis-blue); border-radius: 50%; position: absolute; background: rgba(0, 45, 91, 0.05); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .set-circle b { font-size: 1.5rem; color: var(--cognis-blue); }
+        .set-circle span { font-size: 0.7rem; text-transform: uppercase; font-weight: bold; color: #718096; }
+
+        #set-a { left: 15%; }
+        #set-b { right: 15%; }
+        
+        /* Merged State */
+        .merged #set-a { left: 30%; }
+        .merged #set-b { right: 30%; }
+        
+        .intersection-label { position: absolute; opacity: 0; transition: opacity 0.5s; color: var(--cognis-gold); font-weight: 900; font-size: 1.8rem; z-index: 10; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .merged .intersection-label { opacity: 1; }
+
+        .notation-box { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+        .not-item { background: white; padding: 10px 15px; border-radius: 6px; border: 1px solid #e2e8f0; font-family: monospace; font-size: 0.9rem; }
+        .not-item span { color: var(--cognis-gold); font-weight: bold; }
+
+        /* Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { margin-bottom: 15px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .control-group input { width: 100%; padding: 10px; border-radius: 6px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1rem; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
+        
+        .btn-merge { background: var(--cognis-gold); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 22: Missing Lengths</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "PARALLEL PARTNERS" PRINCIPLE</p>
-    </header>
+<div class="module-card">
+    <div class="header"><h1>Module 22: Venn Notation & Logic</h1></div>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "Type 1" thinker sees a shape and gets overwhelmed by the lines. A "Type 2" thinker only looks at lines going in the same direction. Parallel lines must add up to their partner.</p>
-        <div class="xray-examples">
-            <strong>Exam Wording Patterns:</strong>
-            <div class="example-item">1. "Calculate the perimeter of this L-shaped room."</div>
-            <div class="example-item">2. "Side $x$ is missing. Given the total length is 12cm and part is 5cm, find $x$."</div>
-            <div class="example-item">3. "Find the missing vertical length in this compound shape."</div>
+        <p>Topic Logic: Modern Set Theory uses symbols to describe relationships. A <b>Cap (∩)</b> is the Intersection (Both), and a <b>Cup (∪)</b> is the Union (Everything in either set). The "Type 2" secret is that the Intersection is counted in BOTH totals, so it must be handled with care.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>A = {1, 2, 3}, B = {3, 4, 5}. What is the intersection (A ∩ B)?</div>
+            <div class="tier-card"><b>Average Year 4</b>In a group of 20, 15 like Art and 10 like Music. If 5 like both, how many like ONLY Art?</div>
+            <div class="tier-card"><b>Advanced Year 5</b>If n(A) = 30, n(B) = 25 and n(A ∪ B) = 45, find n(A ∩ B).</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>In an L-shape, the "Long" side is always equal to the sum of the two "Short" parallel sides.</p>
-        
-        <div class="anatomy-callout" style="background: #eff6ff; border-left: 5px solid #3b82f6; padding: 15px;">
-            <strong>Vertical Logic:</strong> Top Short + Bottom Short = Long Vertical.<br>
-            <strong>Horizontal Logic:</strong> Left Short + Right Short = Long Horizontal.
+        <div class="simulation-area" id="stage">
+            <div class="venn-stage">
+                <div class="set-circle" id="set-a">
+                    <span id="label-a">Set A</span>
+                    <b id="val-a-only">15</b>
+                </div>
+                <div class="intersection-label" id="val-both">5</div>
+                <div class="set-circle" id="set-b">
+                    <span id="label-b">Set B</span>
+                    <b id="val-b-only">10</b>
+                </div>
+            </div>
+            
+            <div class="notation-box">
+                <div class="not-item">Intersection: <span>A ∩ B</span></div>
+                <div class="not-item">Union: <span>A ∪ B</span></div>
+            </div>
+            
+            <button class="btn-merge" onclick="toggleMerge()" id="merge-btn">Merge Sets</button>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <div class="slider-group">
-                <label>Total Length (cm): <span id="t-val">20</span></label>
-                <input type="range" id="total" min="10" max="100" value="20">
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Total in Group A</label>
+                    <input type="number" id="in-total-a" value="15" oninput="calculate()">
+                </div>
+                <div class="control-group">
+                    <label>Total in Group B</label>
+                    <input type="number" id="in-total-b" value="10" oninput="calculate()">
+                </div>
+                <div class="control-group">
+                    <label>The Intersection (Both / ∩)</label>
+                    <input type="number" id="in-both" value="5" oninput="calculate()">
+                </div>
+                <div class="control-group">
+                    <label>Neither</label>
+                    <input type="number" id="in-neither" value="2" oninput="calculate()">
+                </div>
             </div>
-            <div class="slider-group">
-                <label>Known Part (cm): <span id="p-val">8</span></label>
-                <input type="range" id="part" min="1" max="19" value="8">
+            <div class="trace-log" id="logic-trace">
+                Adjust the totals to see the disjoint values calculate.
             </div>
         </div>
+    </section>
 
-        <div class="question-card" id="q-text"></div>
-        <button class="btn" onclick="toggleLogic()">Show Calculation</button>
-
-        <div id="logic" class="logic-card" style="display:none; background:#f0fdf4; padding:15px; border-radius:8px; margin-top:15px;">
-            <p><strong>Logic:</strong> Total Length - Known Part = Missing Length</p>
-            <p><span id="calc-text"></span></p>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><b>The "Cup vs Cap" Confusion:</b> Students often mix up ∩ and ∪. 
+            <br><br><b>The Fix:</b> Think of the <b>Cap (∩)</b> as a hat that only fits people in the middle. Think of the <b>Cup (∪)</b> as a giant bowl that catches everyone from both sides. Also, remember: <b>Union = Total A + Total B - Intersection</b>. If you don't subtract the cap, you've counted the middle people twice!</p>
         </div>
-    </div>
-
-    <div class="section saboteur-section">
-        <h2>Phase 4: The Saboteur</h2>
-        <div class="trap-item">
-            <span>The "Addition" Trap (Thinking sides are separate):</span>
-            <span class="trap-val" id="trap-add"></span>
-        </div>
-        <div class="trap-item">
-            <span>The "Repeat" Trap (Thinking parallel sides are the same):</span>
-            <span class="trap-val" id="trap-rep"></span>
-        </div>
-    </div>
+    </section>
 </div>
 
 <script>
-    function update() {
-        const res = LogicProvider.getModule(22).generate(document.getElementById('total').value, document.getElementById('part').value);
-        document.getElementById('t-val').innerText = res.inputs.total;
-        document.getElementById('p-val').innerText = res.inputs.part;
-        document.getElementById('q-text').innerText = `A compound shape has a total vertical side of ${res.inputs.total}cm. One of the smaller vertical parts is ${res.inputs.part}cm. Find the missing vertical length.`;
-        document.getElementById('calc-text').innerText = `${res.inputs.total} - ${res.inputs.part} = ${res.answers.missing}cm`;
-        document.getElementById('trap-add').innerText = res.answers.traps.added;
-        document.getElementById('trap-rep').innerText = res.answers.traps.totalRepeat;
+    const inputs = ['in-total-a', 'in-total-b', 'in-both', 'in-neither'].map(id => document.getElementById(id));
+    const stage = document.getElementById('stage');
+    const mergeBtn = document.getElementById('merge-btn');
+    
+    let isMerged = false;
+
+    function calculate() {
+        const tA = parseFloat(inputs[0].value) || 0;
+        const tB = parseFloat(inputs[1].value) || 0;
+        const both = parseFloat(inputs[2].value) || 0;
+        const neither = parseFloat(inputs[3].value) || 0;
+
+        const onlyA = tA - both;
+        const onlyB = tB - both;
+        const union = onlyA + onlyB + both;
+
+        // Update Anatomy Labels
+        document.getElementById('val-a-only').innerText = isMerged ? onlyA : tA;
+        document.getElementById('label-a').innerText = isMerged ? "Only A" : "Total A";
+        
+        document.getElementById('val-b-only').innerText = isMerged ? onlyB : tB;
+        document.getElementById('label-b').innerText = isMerged ? "Only B" : "Total B";
+        
+        document.getElementById('val-both').innerText = both;
+
+        // Update Trace
+        document.getElementById('logic-trace').innerHTML = `
+            <div style="color:var(--cognis-gold); font-weight:bold; margin-bottom:10px;">Notation Mapping:</div>
+            <div>n(A) = ${tA}</div>
+            <div>n(B) = ${tB}</div>
+            <div>n(A ∩ B) = ${both} [The Cap]</div>
+            <div style="margin: 10px 0; border-top: 1px solid #444; padding-top: 10px;">
+                <b>The Union Calculation (A ∪ B):</b><br>
+                ${onlyA} (Only A) + ${both} (Both) + ${onlyB} (Only B) = ${union}
+            </div>
+            <div>Total Universe (ξ): ${union + neither}</div>
+        `;
     }
-    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    function toggleMerge() {
+        isMerged = !isMerged;
+        if (isMerged) {
+            stage.classList.add('merged');
+            mergeBtn.innerText = "Separate Sets";
+        } else {
+            stage.classList.remove('merged');
+            mergeBtn.innerText = "Merge Sets";
+        }
+        calculate();
+    }
+
+    window.onload = calculate;
 </script>
 </body>
 </html>

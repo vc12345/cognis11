@@ -1,6 +1,43 @@
 const LogicProvider = {
     modules: {
 
+        missingSigns: {
+            calculate: (a, op1, b, op2, c, target) => {
+                const ops = { '+': (x, y) => x + y, '-': (x, y) => x - y, 'x': (x, y) => x * y, '/': (x, y) => x / y };
+                
+                // BODMAS check (x and / first)
+                let result = 0;
+                let steps = [];
+
+                const p1 = (op1 === 'x' || op1 === '/') ? 2 : 1;
+                const p2 = (op2 === 'x' || op2 === '/') ? 2 : 1;
+
+                if (p2 > p1) {
+                    const step1 = ops[op2](parseFloat(b), parseFloat(c));
+                    result = ops[op1](parseFloat(a), step1);
+                    steps = [
+                        `Priority: ${op2} resolved first.`,
+                        `${b} ${op2} ${c} = ${step1}`,
+                        `${a} ${op1} ${step1} = ${result}`
+                    ];
+                } else {
+                    const step1 = ops[op1](parseFloat(a), parseFloat(b));
+                    result = ops[op2](step1, parseFloat(c));
+                    steps = [
+                        `Priority: ${op1} resolved first (or equal).`,
+                        `${a} ${op1} ${b} = ${step1}`,
+                        `${step1} ${op2} ${c} = ${result}`
+                    ];
+                }
+
+                return { 
+                    current: result, 
+                    isBalanced: result === parseFloat(target), 
+                    steps 
+                };
+            }
+        },
+
         bodmas: {
             // Evaluates a single operation
             operate: (a, op, b) => {

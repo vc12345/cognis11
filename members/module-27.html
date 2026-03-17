@@ -19,7 +19,7 @@
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
         .p-line { stroke: rgba(255,255,255,0.3); stroke-width: 2; stroke-dasharray: 8,4; }
         .t-line { stroke: var(--cognis-gold); stroke-width: 5; stroke-linecap: round; }
-        .angle-text { font-family: monospace; font-weight: bold; font-size: 16px; transition: all 0.1s linear; }
+        .angle-text { font-family: 'Courier New', monospace; font-weight: bold; font-size: 16px; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .control-group input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
@@ -32,11 +32,10 @@
     
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Parallel lines create identical geometric "junctions." When a transversal line cuts through them, the angles formed at the top junction are mirrored exactly at the bottom junction. All you need is one angle to unlock the entire map.</p>
         <div class="question-tiers">
             <div class="tier-card"><b>Advanced Year 2</b>Find the missing angle on a straight line when one side is 110°.</div>
             <div class="tier-card"><b>Average Year 4</b>Calculate the 'Alternate' (Z) angle if the top-left corner is 65°.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Identify the relationship between co-interior angles in a set of parallel lines.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the relationship between co-interior angles in parallel lines.</div>
         </div>
     </section>
 
@@ -48,10 +47,10 @@
                 <line x1="50" y1="200" x2="550" y2="200" class="p-line" />
                 <line id="t-line" x1="300" y1="50" x2="300" y2="250" class="t-line" />
                 
-                <text id="lab-u1" class="angle-text" fill="var(--angle-a)">θ</text>
-                <text id="lab-u2" class="angle-text" fill="var(--angle-b)">180-θ</text>
-                <text id="lab-l1" class="angle-text" fill="var(--angle-a)">θ</text>
-                <text id="lab-l2" class="angle-text" fill="var(--angle-b)">180-θ</text>
+                <text id="lab-left-top" class="angle-text" fill="var(--angle-a)" text-anchor="end">θ</text>
+                <text id="lab-right-top" class="angle-text" fill="var(--angle-b)" text-anchor="start">180-θ</text>
+                <text id="lab-left-bottom" class="angle-text" fill="var(--angle-a)" text-anchor="end">θ</text>
+                <text id="lab-right-bottom" class="angle-text" fill="var(--angle-b)" text-anchor="start">180-θ</text>
             </svg>
         </div>
     </section>
@@ -64,9 +63,8 @@
                     <label>Pivot Transversal (θ)</label>
                     <input type="range" id="angle-slider" min="30" max="150" value="60" oninput="update27()">
                 </div>
-                <p style="font-size: 0.7rem; color: #a0aec0;">Watch how the labels stay locked to the "elbow" of the intersection as the line rotates.</p>
             </div>
-            <div class="trace-log" id="trace-27">Rotate the line to observe the two-value rule.</div>
+            <div class="trace-log" id="trace-27">Rotate the line to observe the mirrored angles.</div>
         </div>
     </section>
 </div>
@@ -75,9 +73,8 @@
     function update27() {
         const theta = parseInt(document.getElementById('angle-slider').value);
         const rad = (theta * Math.PI) / 180;
-        const dist = 130;
-        const dx = dist * Math.cos(rad);
-        const dy = dist * Math.sin(rad);
+        const dx = 130 * Math.cos(rad);
+        const dy = 130 * Math.sin(rad);
 
         // Update Line Pivot
         const tLine = document.getElementById('t-line');
@@ -86,33 +83,37 @@
         tLine.setAttribute('x2', 300 - dx);
         tLine.setAttribute('y2', 150 + dy);
 
-        // Update Tethered Labels (Center 300, 100 and 300, 200)
-        const labelDist = 35;
-        // Acute side
-        const u1 = document.getElementById('lab-u1');
-        u1.setAttribute('x', 300 - labelDist);
-        u1.setAttribute('y', 100 - 15);
-        u1.textContent = theta + '°';
+        // Label Positioning logic
+        const offset = 40;
+        const isAcuteLeft = theta < 90;
 
-        // Obtuse side
-        const u2 = document.getElementById('lab-u2');
-        u2.setAttribute('x', 300 + labelDist);
-        u2.setAttribute('y', 100 - 15);
-        u2.textContent = (180 - theta) + '°';
+        // Top Junction
+        document.getElementById('lab-left-top').setAttribute('x', 300 - offset);
+        document.getElementById('lab-left-top').setAttribute('y', 100 - 10);
+        document.getElementById('lab-left-top').textContent = isAcuteLeft ? theta + '°' : (180 - theta) + '°';
+        document.getElementById('lab-left-top').setAttribute('fill', isAcuteLeft ? 'var(--angle-a)' : 'var(--angle-b)');
 
-        // Lower Mirror
-        document.getElementById('lab-l1').setAttribute('x', 300 - labelDist);
-        document.getElementById('lab-l1').setAttribute('y', 200 - 15);
-        document.getElementById('lab-l1').textContent = theta + '°';
+        document.getElementById('lab-right-top').setAttribute('x', 300 + offset);
+        document.getElementById('lab-right-top').setAttribute('y', 100 - 10);
+        document.getElementById('lab-right-top').textContent = isAcuteLeft ? (180 - theta) + '°' : theta + '°';
+        document.getElementById('lab-right-top').setAttribute('fill', isAcuteLeft ? 'var(--angle-b)' : 'var(--angle-a)');
 
-        document.getElementById('lab-l2').setAttribute('x', 300 + labelDist);
-        document.getElementById('lab-l2').setAttribute('y', 200 - 15);
-        document.getElementById('lab-l2').textContent = (180 - theta) + '°';
+        // Bottom Junction (Mirror)
+        document.getElementById('lab-left-bottom').setAttribute('x', 300 - offset);
+        document.getElementById('lab-left-bottom').setAttribute('y', 200 - 10);
+        document.getElementById('lab-left-bottom').textContent = isAcuteLeft ? theta + '°' : (180 - theta) + '°';
+        document.getElementById('lab-left-bottom').setAttribute('fill', isAcuteLeft ? 'var(--angle-a)' : 'var(--angle-b)');
+
+        document.getElementById('lab-right-bottom').setAttribute('x', 300 + offset);
+        document.getElementById('lab-right-bottom').setAttribute('y', 200 - 10);
+        document.getElementById('lab-right-bottom').textContent = isAcuteLeft ? (180 - theta) + '°' : theta + '°';
+        document.getElementById('lab-right-bottom').setAttribute('fill', isAcuteLeft ? 'var(--angle-b)' : 'var(--angle-a)');
 
         document.getElementById('trace-27').innerHTML = `
-            Active Angle: <b>${theta}°</b><br>
-            Supplementary Angle: <b>${180-theta}°</b><br><br>
-            Note: The 'F' shape (Corresponding) proves that ${theta}° at the top matches ${theta}° at the bottom.
+            <b>Geometry Snapshot:</b><br>
+            Acute Intersection: ${Math.min(theta, 180-theta)}°<br>
+            Obtuse Intersection: ${Math.max(theta, 180-theta)}°<br><br>
+            <i>Notice: Regardless of rotation, the angle at the top junction is perfectly cloned at the bottom junction.</i>
         `;
     }
     window.onload = update27;

@@ -16,22 +16,21 @@
         .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; line-height: 1.4; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        /* Radial Stage */
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 80px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; }
-        .radial-container { position: relative; width: 300px; height: 300px; }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 80px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; position: relative; }
+        .radial-container { position: relative; width: 350px; height: 350px; }
         
-        .word-path { position: absolute; font-family: 'Courier New', monospace; font-size: 1.8rem; font-weight: 900; color: #a0aec0; letter-spacing: 5px; white-space: nowrap; }
-        .word-path b { color: var(--cognis-gold); text-decoration: underline; }
+        .word-path { position: absolute; font-family: 'Courier New', monospace; font-size: 1.8rem; font-weight: 900; color: #a0aec0; letter-spacing: 6px; white-space: nowrap; transition: color 0.3s; }
+        .word-path b { color: var(--cognis-gold); text-decoration: underline; font-size: 2.2rem; }
         
-        #w1 { top: 10%; left: 50%; transform: translateX(-50%); }
-        #w2 { bottom: 20%; left: -10%; transform: rotate(-60deg); }
-        #w3 { bottom: 20%; right: -10%; transform: rotate(60deg); }
+        #w1 { top: 0%; left: 50%; transform: translateX(-50%); }
+        #w2 { bottom: 15%; left: -15%; transform: rotate(-60deg); }
+        #w3 { bottom: 15%; right: -15%; transform: rotate(60deg); }
 
-        .keyhole { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80px; height: 80px; background: white; border: 4px solid var(--cognis-gold); border-radius: 50%; box-shadow: 0 0 20px rgba(197, 160, 89, 0.4); display: flex; align-items: center; justify-content: center; }
-        .keyhole input { width: 100%; background: transparent; border: none; text-align: center; font-size: 2.5rem; font-weight: 900; color: var(--cognis-blue); text-transform: uppercase; outline: none; }
+        .keyhole { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90px; height: 90px; background: white; border: 5px solid var(--cognis-gold); border-radius: 50%; box-shadow: 0 0 30px rgba(197, 160, 89, 0.4); display: flex; align-items: center; justify-content: center; z-index: 20; }
+        .keyhole input { width: 100%; background: transparent; border: none; text-align: center; font-size: 3rem; font-weight: 900; color: var(--cognis-blue); text-transform: uppercase; outline: none; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .btn-example { width: 100%; background: #4a5568; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 8px; text-align: left; }
+        .btn-example { width: 100%; background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; text-align: left; font-weight: bold; }
         .btn-example:hover { background: var(--cognis-gold); }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
     </style>
@@ -42,10 +41,11 @@
     
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
+        <p>This is a "Common Factor" puzzle for words. You must find the single letter that satisfies the spelling rules for three different words simultaneously. A candidate letter is only correct if it has a 100% success rate across the entire set.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>Which letter completes: HO_SE, MOU_E, and LO_SE?</div>
-            <div class="tier-card"><b>Average Year 4</b>Find the letter that fits: RA_N, PA_N, and MA_N.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Identify the single letter for: _ABLE, _RAIN, and _OWER.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>Completes: FI_H, WI_H, DI_H.</div>
+            <div class="tier-card"><b>Average Year 4</b>Completes: RA_N, PA_N, MA_N.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Completes: _ABLE, _RAIN, _OWER.</div>
         </div>
     </section>
 
@@ -53,9 +53,9 @@
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
             <div class="radial-container">
-                <div id="w1" class="word-path">HO<b id="k1">_</b>SE</div>
-                <div id="w2" class="word-path">MOU<b id="k2">_</b>E</div>
-                <div id="w3" class="word-path">LO<b id="k3">_</b>SE</div>
+                <div id="w1" class="word-path">FI<b id="k1">_</b>H</div>
+                <div id="w2" class="word-path">WI<b id="k2">_</b>H</div>
+                <div id="w3" class="word-path">DI<b id="k3">_</b>H</div>
                 <div class="keyhole">
                     <input type="text" id="master-key" maxlength="1" oninput="update37()" placeholder="?">
                 </div>
@@ -67,28 +67,29 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <button class="btn-example" onclick="setRadial('HO_SE', 'MOU_E', 'LO_SE')">Set: _O_SE Pattern</button>
-                <button class="btn-example" onclick="setRadial('RA_N', 'PA_N', 'MA_N')">Set: _A_N Pattern</button>
-                <button class="btn-example" onclick="setRadial('_ABLE', '_RAIN', '_OWER')">Set: _ Prefix Pattern</button>
+                <button class="btn-example" onclick="setRadial('FI_H', 'WI_H', 'DI_H')">Set: _ISH Pattern (S)</button>
+                <button class="btn-example" onclick="setRadial('RA_N', 'PA_N', 'MA_N')">Set: RA_N Pattern (I)</button>
+                <button class="btn-example" onclick="setRadial('_ABLE', '_RAIN', '_OWER')">Set: _ Prefix Pattern (T)</button>
+                <button class="btn-example" onclick="setRadial('LO_SE', 'HOU_E', 'MOU_E')">Set: _ SE Pattern (S)</button>
             </div>
-            <div class="trace-log" id="trace-37">Type a letter into the keyhole to test the words...</div>
+            <div class="trace-log" id="trace-37">Type a letter into the central keyhole to unlock the radial.</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The "First Word" Trap:</strong> Finding a letter that works for the first word and assuming it's the answer.
-            <br><br><strong>The Fix:</strong> Always test your candidate letter against the <b>least</b> common word in the set. If it doesn't fit the hardest word, it's not the key. The answer is the only letter that has 100% agreement across all three word-locks.</p>
+            <p><strong>The "First Word" Bias:</strong> If you see <b>RA_N</b>, you might immediately think "N" for RAN. But then you check <b>PA_N</b> and get PAN (Correct), and finally <b>MA_N</b> and get MAN (Correct).
+            <br><br><strong>The Fix:</strong> Always check if there is a <b>better</b> fit. If you used "I", you get RAIN, PAIN, and MAIN. Both "N" and "I" might work for one word, but usually only one letter creates a cohesive set of the same "type" (e.g., all 4-letter common nouns).</p>
         </div>
     </section>
 </div>
 
 <script>
-    let currentTemplates = ['HO_SE', 'MOU_E', 'LO_SE'];
+    let templates = ['FI_H', 'WI_H', 'DI_H'];
 
     function setRadial(w1, w2, w3) {
-        currentTemplates = [w1, w2, w3];
+        templates = [w1, w2, w3];
         document.getElementById('master-key').value = '';
         update37();
     }
@@ -97,16 +98,16 @@
         const key = document.getElementById('master-key').value.toUpperCase();
         const displayKey = key || "_";
         
-        document.getElementById('w1').innerHTML = currentTemplates[0].replace('_', `<b id="k1">${displayKey}</b>`);
-        document.getElementById('w2').innerHTML = currentTemplates[1].replace('_', `<b id="k2">${displayKey}</b>`);
-        document.getElementById('w3').innerHTML = currentTemplates[2].replace('_', `<b id="k3">${displayKey}</b>`);
+        document.getElementById('w1').innerHTML = templates[0].replace('_', `<b id="k1">${displayKey}</b>`);
+        document.getElementById('w2').innerHTML = templates[1].replace('_', `<b id="k2">${displayKey}</b>`);
+        document.getElementById('w3').innerHTML = templates[2].replace('_', `<b id="k3">${displayKey}</b>`);
 
         document.getElementById('trace-37').innerHTML = `
-            <b>Key Verification:</b><br>
-            1. ${currentTemplates[0].replace('_', key || '?')}<br>
-            2. ${currentTemplates[1].replace('_', key || '?')}<br>
-            3. ${currentTemplates[2].replace('_', key || '?')}<br><br>
-            <i>Result: ${key ? 'Testing ' + key : 'Awaiting input...'}</i>
+            <b>Current Validation:</b><br>
+            1. ${templates[0].replace('_', key || '?')}<br>
+            2. ${templates[1].replace('_', key || '?')}<br>
+            3. ${templates[2].replace('_', key || '?')}<br><br>
+            <i>Note: The central letter must complete the spelling for all three paths.</i>
         `;
     }
     window.onload = update37;

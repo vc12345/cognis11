@@ -7,44 +7,38 @@
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
         .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        /* Phase 1: X-Ray Tiers */
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-top: 4px solid var(--cognis-blue); font-size: 0.85rem; text-align: center; }
-        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 12px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
-        .logic-box { display: inline-block; width: 22px; height: 22px; border: 2px solid var(--cognis-blue); vertical-align: middle; margin: 0 5px; background: white; border-radius: 4px; }
-        .tier-eq { font-size: 1.1rem; font-weight: bold; margin-top: 10px; color: var(--cognis-blue); }
+        /* Phase 1: X-Ray */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-top: 4px solid var(--cognis-blue); text-align: center; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 10px; font-size: 0.7rem; text-transform: uppercase; }
+        .logic-box { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--cognis-blue); vertical-align: middle; margin: 0 4px; background: white; }
+        .tier-eq { font-size: 1rem; font-weight: bold; color: var(--cognis-blue); }
 
-        /* Phase 2: Centered Physics Scale */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 30px 0; height: 450px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-        .scale-pivot { width: 0; height: 0; border-left: 35px solid transparent; border-right: 35px solid transparent; border-bottom: 70px solid #cbd5e0; position: relative; margin-top: 160px; z-index: 1; }
+        /* Phase 2: Physics Scale (Centered & Corrected) */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 30px 0; height: 480px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .scale-pivot { width: 0; height: 0; border-left: 35px solid transparent; border-right: 35px solid transparent; border-bottom: 70px solid #cbd5e0; margin-top: 180px; }
+        .scale-beam { width: 500px; height: 14px; background: var(--cognis-blue); border-radius: 7px; position: absolute; top: 240px; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-origin: center center; display: flex; justify-content: space-between; }
         
-        .scale-beam { width: 500px; height: 14px; background: var(--cognis-blue); border-radius: 7px; position: absolute; top: 225px; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: flex; justify-content: space-between; align-items: center; transform-origin: center center; }
-        
-        .pan { width: 180px; position: absolute; top: 14px; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; align-items: center; }
-        .pan-string { width: 100%; height: 80px; border-left: 2px solid #94a3b8; border-right: 2px solid #94a3b8; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); margin-bottom: -5px; }
-        .pan-bowl { width: 100%; background: white; border: 3px solid var(--cognis-blue); border-top: none; border-radius: 0 0 90px 90px; padding: 25px 10px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .pan { width: 180px; position: absolute; top: 12px; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; align-items: center; }
+        .pan-string { width: 100%; height: 90px; border-left: 2px solid #94a3b8; border-right: 2px solid #94a3b8; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+        .pan-bowl { width: 100%; background: white; border: 3px solid var(--cognis-blue); border-radius: 0 0 90px 90px; padding: 25px 10px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
         
         #left-pan { left: -90px; }
         #right-pan { right: -90px; }
-
-        .eq-text { font-size: 1.2rem; font-weight: 800; color: var(--cognis-blue); letter-spacing: 1px; }
-        .status-pill { display: inline-block; margin-top: 8px; padding: 2px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; background: #edf2f7; color: #64748b; }
+        .eq-text { font-size: 1.2rem; font-weight: 800; color: var(--cognis-blue); }
 
         /* Phase 3: Engine */
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .builder-row { display: flex; gap: 10px; align-items: center; margin-bottom: 25px; }
-        .builder-row input, .builder-row select { background: #2d3748; color: white; border: 1px solid #4a5568; padding: 12px; border-radius: 8px; font-size: 1rem; width: 85px; font-weight: bold; }
-        .builder-row select { width: 120px; border-color: var(--cognis-gold); cursor: pointer; }
-        .target-line { border-top: 1px dashed #4a5568; padding-top: 20px; margin-top: 10px; }
-        
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 4px solid var(--cognis-gold); min-height: 200px; line-height: 1.8; }
-        .step-tag { color: var(--cognis-gold); font-weight: bold; }
+        .builder-row { display: flex; gap: 8px; align-items: center; margin-bottom: 20px; }
+        .builder-row input, .builder-row select { background: #2d3748; color: white; border: 1px solid #4a5568; padding: 10px; border-radius: 6px; font-size: 0.9rem; font-weight: bold; }
+        .builder-row select { border-color: var(--cognis-gold); width: 120px; }
+        .target-val { width: 100% !important; border: 2px solid var(--cognis-gold) !important; margin-top: 10px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; min-height: 220px; }
     </style>
 </head>
 <body>
@@ -54,22 +48,11 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
+        <p><strong>Topic Logic:</strong> Solving for missing signs requires <strong>Structural Reversibility</strong>. Instead of performing a calculation, you are engineering the operational path (BODMAS) that connects a set of numbers to a fixed target. Roots and Powers act as high-priority constraints.</p>
         <div class="question-tiers">
-            <div class="tier-card">
-                <span>Advanced Year 2</span>
-                What sign is missing?
-                <div class="tier-eq">8 <div class="logic-box"></div> 2 = 10</div>
-            </div>
-            <div class="tier-card">
-                <span>Average Year 4</span>
-                Balance the expression:
-                <div class="tier-eq">12 <div class="logic-box"></div> 3 <div class="logic-box"></div> 2 = 18</div>
-            </div>
-            <div class="tier-card">
-                <span>Advanced Year 5</span>
-                Find the signs to equal 13:
-                <div class="tier-eq">2 <div class="logic-box"></div> 3 <div class="logic-box"></div> 5 = 13</div>
-            </div>
+            <div class="tier-card"><span>Entry</span>$10 \square 5 = 15$<br><div class="tier-eq">Sign: <div class="logic-box"></div></div></div>
+            <div class="tier-card"><span>Average</span>$4 \square 3 \square 2 = 14$<br><div class="tier-eq">Signs: <div class="logic-box"></div> <div class="logic-box"></div></div></div>
+            <div class="tier-card"><span>Advanced</span>$\sqrt{16} \square 2^3 \square 1 = 12$<br><div class="tier-eq">Signs: <div class="logic-box"></div> <div class="logic-box"></div></div></div>
         </div>
     </section>
 
@@ -80,15 +63,15 @@
                 <div class="pan" id="left-pan">
                     <div class="pan-string"></div>
                     <div class="pan-bowl">
-                        <div class="eq-text"><span id="v-a">12</span> <span id="v-op1">?</span> <span id="v-b">3</span> <span id="v-op2">?</span> <span id="v-c">2</span></div>
-                        <div class="status-pill">Left: <span id="v-calc">0</span></div>
+                        <div class="eq-text"><span id="v-pre"></span><span id="v-a">12</span> <span id="v-op1">?</span> <span id="v-b">3</span> <span id="v-op2">?</span> <span id="v-c">2</span></div>
+                        <div style="font-size: 0.7rem; font-weight: bold; color: #64748b; margin-top:5px;">Weight: <span id="v-calc">0</span></div>
                     </div>
                 </div>
                 <div class="pan" id="right-pan">
                     <div class="pan-string"></div>
                     <div class="pan-bowl">
                         <div class="eq-text" id="v-target">18</div>
-                        <div class="status-pill">Target Weight</div>
+                        <div style="font-size: 0.7rem; font-weight: bold; color: #64748b; margin-top:5px;">Target Weight</div>
                     </div>
                 </div>
             </div>
@@ -100,53 +83,46 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; letter-spacing: 1px;">Expression Builder</label>
-                <div class="builder-row">
-                    <input type="number" id="in-a" value="12">
-                    <select id="in-op1">
-                        <option value="">Select Op</option>
-                        <option value="+">+</option><option value="-">-</option><option value="x">×</option><option value="/">÷</option><option value="^">^</option>
-                    </select>
-                    <input type="number" id="in-b" value="3">
+                <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase;">Expression Setup</label>
+                <div class="builder-row" style="margin-top:5px;">
+                    <select id="in-pre" style="width: 80px;"><option value="none">Value A</option><option value="sqrt">√ A</option></select>
+                    <input type="number" id="in-a" value="16" style="width: 60px;">
+                    <select id="in-op1"><option value="">Select Op</option><option value="+">+</option><option value="-">-</option><option value="x">×</option><option value="/">÷</option><option value="^">^</option></select>
                 </div>
                 <div class="builder-row">
-                    <select id="in-op2">
-                        <option value="">Select Op</option>
-                        <option value="+">+</option><option value="-">-</option><option value="x">×</option><option value="/">÷</option><option value="^">^</option>
-                    </select>
-                    <input type="number" id="in-c" value="2">
+                    <input type="number" id="in-b" value="2" style="width: 80px;">
+                    <select id="in-op2"><option value="">Select Op</option><option value="+">+</option><option value="-">-</option><option value="x">×</option><option value="/">÷</option><option value="^">^</option></select>
+                    <input type="number" id="in-c" value="4" style="width: 80px;">
                 </div>
-                <div class="target-line">
-                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; letter-spacing: 1px;">Target Value</label>
-                    <div class="builder-row" style="margin-top:10px;">
-                        <input type="number" id="in-target" value="18" style="width: 100%; border: 2px solid var(--cognis-gold);">
-                    </div>
+                <div style="border-top: 1px solid #4a5568; padding-top: 15px;">
+                    <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase;">Target Value</label>
+                    <input type="number" id="in-target" value="12" class="target-val">
                 </div>
             </div>
-            <div class="trace-log" id="logic-trace">Select operators to test the equilibrium...</div>
+            <div class="trace-log" id="logic-trace">Select operators to test the balance...</div>
         </div>
     </section>
 
-    <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); font-size: 0.8rem;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Left-to-Right" Trap:</strong> Linear thinking is the enemy. 
-            <br><i>Example: $2 + 3^2$. A Type 1 thinker does $2+3 = 5$, then $5^2 = 25$. </i>
-            <br><br><strong>The Fix:</strong> Orders (^) and Multiplication/Division are physically heavier. They pull the focus first! In $2 + 3^2$, the $3^2$ (9) is solved first, making the total 11.</p>
-        </div>
+    <section class="phase" style="border-left: 10px solid var(--trap-red); background: #fff5f5;">
+        <h2>Phase 4: The Saboteur</h2>
+        <p><strong>The "Linear" Trap:</strong> Reading an equation like a sentence. 
+        <br><i>Example: $4 + 2 \times 3$. Type 1 thinkers get $18$ ($6 \times 3$). Type 2 thinkers get $10$ ($4 + 6$).</i>
+        <br><br><strong>The Fix:</strong> Powers and Roots are "heaviest." Multiplication/Division are "heavy." Addition/Subtraction are "light." The scale always processes the heavy operators first, no matter where they sit!</p>
     </section>
 </div>
 
 <script>
-    const inputs = ['in-a', 'in-op1', 'in-b', 'in-op2', 'in-c', 'in-target'].map(id => document.getElementById(id));
+    const inputs = ['in-pre', 'in-a', 'in-op1', 'in-b', 'in-op2', 'in-c', 'in-target'].map(id => document.getElementById(id));
     const beam = document.getElementById('beam');
     const lPan = document.getElementById('left-pan');
     const rPan = document.getElementById('right-pan');
     const trace = document.getElementById('logic-trace');
 
     function refresh() {
-        const [a, op1, b, op2, c, target] = inputs.map(i => i.value);
+        const [pre, a, op1, b, op2, c, target] = inputs.map(i => i.value);
         
+        const valA = pre === 'sqrt' ? Math.sqrt(parseFloat(a)) : parseFloat(a);
+        document.getElementById('v-pre').innerText = pre === 'sqrt' ? '√' : '';
         document.getElementById('v-a').innerText = a;
         document.getElementById('v-op1').innerText = op1 || '?';
         document.getElementById('v-b').innerText = b;
@@ -155,52 +131,44 @@
         document.getElementById('v-target').innerText = target;
 
         if (!op1 || !op2) {
-            trace.innerHTML = "Select both operators to calculate the balance.";
+            trace.innerHTML = "Awaiting operators for calculation...";
             beam.style.transform = `rotate(0deg)`;
             lPan.style.transform = `rotate(0deg)`;
             rPan.style.transform = `rotate(0deg)`;
             return;
         }
 
-        const ops = { 
-            '+': (x, y) => x + y, 
-            '-': (x, y) => x - y, 
-            'x': (x, y) => x * y, 
-            '/': (x, y) => x / y,
-            '^': (x, y) => Math.pow(x, y)
-        };
+        const ops = { '+':(x,y)=>x+y, '-':(x,y)=>x-y, 'x':(x,y)=>x*y, '/':(x,y)=>x/y, '^':(x,y)=>Math.pow(x,y) };
+        const priority = (o) => o === '^' ? 3 : (o === 'x' || o === '/') ? 2 : 1;
         
         let current = 0;
-        let steps = [];
-        
-        // Priority logic: ^ is 3, x/ is 2, +- is 1
-        const getPriority = (o) => (o === '^' ? 3 : (o === 'x' || o === '/') ? 2 : 1);
-        const p1 = getPriority(op1);
-        const p2 = getPriority(op2);
+        let steps = [pre === 'sqrt' ? `Root Check: √${a} = ${valA}` : `Initial Value: ${a}`];
 
-        if (p2 > p1) {
+        if (priority(op2) > priority(op1)) {
             const s1 = ops[op2](parseFloat(b), parseFloat(c));
-            current = ops[op1](parseFloat(a), s1);
-            steps = [`<span class="step-tag">BODMAS Priority:</span> ${op2} beats ${op1}`, `${b} ${op2} ${c} = ${s1}`, `${a} ${op1} ${s1} = ${current}`];
+            current = ops[op1](valA, s1);
+            steps.push(`BODMAS: ${op2} resolved first.`, `${b} ${op2} ${c} = ${s1}`, `${valA} ${op1} ${s1} = ${current}`);
         } else {
-            const s1 = ops[op1](parseFloat(a), parseFloat(b));
+            const s1 = ops[op1](valA, parseFloat(b));
             current = ops[op2](s1, parseFloat(c));
-            steps = [`<span class="step-tag">Standard Flow:</span> ${op1} solved first`, `${a} ${op1} ${b} = ${s1}`, `${s1} ${op2} ${c} = ${current}`];
+            steps.push(`Flow: ${op1} resolved first.`, `${valA} ${op1} ${b} = ${s1}`, `${s1} ${op2} ${c} = ${current}`);
         }
 
         document.getElementById('v-calc').innerText = current % 1 === 0 ? current : current.toFixed(1);
         trace.innerHTML = steps.map(s => `<div>→ ${s}</div>`).join('');
 
-        // Physics: Positive diff = Left is heavier = Tilts Right-Side UP (Left-Side DOWN)
+        // Correct Physics: HEAVIER side (Larger Number) must go DOWN.
+        // Difference = Left - Right. If Left is 20 and Target is 10, Diff is +10.
+        // Beam rotation: Negative rotation tilts Left Pan DOWN.
         const diff = current - parseFloat(target);
-        const tilt = Math.max(-25, Math.min(25, diff * 2));
+        const tilt = Math.max(-25, Math.min(25, diff * -2)); // Multiplied by -1 to ensure Larger = Lower
         
         beam.style.transform = `rotate(${tilt}deg)`;
         lPan.style.transform = `rotate(${-tilt}deg)`;
         rPan.style.transform = `rotate(${-tilt}deg)`;
 
         if (current === parseFloat(target)) {
-            trace.innerHTML += `<div style="color:#2ecc71; font-weight:bold; margin-top:15px; border-top:1px solid #333; padding-top:10px;">★ SYSTEM EQUILIBRIUM ACHIEVED ★</div>`;
+            trace.innerHTML += `<div style="color:#2ecc71; font-weight:bold; margin-top:15px; border-top:1px solid #4a5568; padding-top:10px;">★ SYSTEM EQUILIBRIUM ACHIEVED ★</div>`;
         }
     }
 

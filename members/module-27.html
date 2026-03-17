@@ -19,7 +19,7 @@
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
         .p-line { stroke: rgba(255,255,255,0.2); stroke-width: 2; stroke-dasharray: 8,4; }
         .t-line { stroke: var(--cognis-gold); stroke-width: 5; stroke-linecap: round; }
-        .angle-text { font-family: 'Courier New', monospace; font-weight: bold; font-size: 16px; }
+        .angle-text { font-family: 'Courier New', monospace; font-weight: bold; font-size: 18px; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .control-group input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
@@ -33,7 +33,7 @@
         <h2>Phase 1: The X-Ray</h2>
         <div class="question-tiers">
             <div class="tier-card"><b>Advanced Year 2</b>Find the missing angle on a straight line when one side is 110°.</div>
-            <div class="tier-card"><b>Average Year 4</b>Find the 'Alternate' (Z) angle if the top-left corner is 65°.</div>
+            <div class="tier-card"><b>Average Year 4</b>Find the 'Alternate' (Z) angle if the top-right corner is 60°.</div>
             <div class="tier-card"><b>Advanced Year 5</b>Identify co-interior angles between two parallel lines.</div>
         </div>
     </section>
@@ -41,15 +41,15 @@
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <svg width="600" height="300" viewBox="0 0 600 300">
+            <svg id="canvas-27" width="600" height="300" viewBox="0 0 600 300">
                 <line x1="50" y1="100" x2="550" y2="100" class="p-line" />
                 <line x1="50" y1="200" x2="550" y2="200" class="p-line" />
                 <line id="t-line" x1="300" y1="50" x2="300" y2="250" class="t-line" />
                 
-                <text id="lab-L-top" class="angle-text" y="90" text-anchor="end">θ</text>
-                <text id="lab-R-top" class="angle-text" y="90" text-anchor="start">180-θ</text>
-                <text id="lab-L-bot" class="angle-text" y="190" text-anchor="end">θ</text>
-                <text id="lab-R-bot" class="angle-text" y="190" text-anchor="start">180-θ</text>
+                <text id="lab-left-top" class="angle-text" y="85" text-anchor="end">θ</text>
+                <text id="lab-right-top" class="angle-text" y="85" text-anchor="start">180-θ</text>
+                <text id="lab-left-bot" class="angle-text" y="185" text-anchor="end">θ</text>
+                <text id="lab-right-bot" class="angle-text" y="185" text-anchor="start">180-θ</text>
             </svg>
         </div>
     </section>
@@ -63,7 +63,7 @@
                     <input type="range" id="angle-slider" min="30" max="150" value="60" oninput="update27()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-27">Rotate to see the angles swap sides.</div>
+            <div class="trace-log" id="trace-27">Rotate to observe how angles mirror across the intersections.</div>
         </div>
     </section>
 </div>
@@ -72,6 +72,8 @@
     function update27() {
         const theta = parseInt(document.getElementById('angle-slider').value);
         const rad = (theta * Math.PI) / 180;
+        
+        // dx and dy control the line tilt
         const dx = 130 * Math.cos(rad);
         const dy = 130 * Math.sin(rad);
 
@@ -79,40 +81,40 @@
         tLine.setAttribute('x1', 300 + dx); tLine.setAttribute('y1', 150 - dy);
         tLine.setAttribute('x2', 300 - dx); tLine.setAttribute('y2', 150 + dy);
 
-        const offset = 45;
-        const acuteVal = Math.min(theta, 180 - theta);
-        const obtuseVal = Math.max(theta, 180 - theta);
-        
-        // If theta > 90, the LEFT side is now the obtuse side
-        const leftIsAcute = theta < 90;
+        // Logic: When theta is < 90, the line leans "forward" (top is to the right)
+        // Visually, this means the angle to the RIGHT (above the line) is acute.
+        const rightIsAcute = theta < 90;
+        const acuteVal = rightIsAcute ? theta : 180 - theta;
+        const obtuseVal = 180 - acuteVal;
 
-        // Apply values and colors
-        const lTop = document.getElementById('lab-L-top');
-        const rTop = document.getElementById('lab-R-top');
-        const lBot = document.getElementById('lab-L-bot');
-        const rBot = document.getElementById('lab-R-bot');
+        const offset = 40;
+        const labLT = document.getElementById('lab-left-top');
+        const labRT = document.getElementById('lab-right-top');
+        const labLB = document.getElementById('lab-left-bot');
+        const labRB = document.getElementById('lab-right-bot');
 
-        lTop.textContent = leftIsAcute ? acuteVal + '°' : obtuseVal + '°';
-        lTop.setAttribute('fill', leftIsAcute ? 'var(--angle-a)' : 'var(--angle-b)');
-        lTop.setAttribute('x', 300 - offset);
+        // Set Text and Colors
+        labRT.textContent = acuteVal + '°';
+        labRT.setAttribute('fill', 'var(--angle-a)');
+        labRT.setAttribute('x', 300 + offset);
 
-        rTop.textContent = leftIsAcute ? obtuseVal + '°' : acuteVal + '°';
-        rTop.setAttribute('fill', leftIsAcute ? 'var(--angle-b)' : 'var(--angle-a)');
-        rTop.setAttribute('x', 300 + offset);
+        labLT.textContent = obtuseVal + '°';
+        labLT.setAttribute('fill', 'var(--angle-b)');
+        labLT.setAttribute('x', 300 - offset);
 
-        lBot.textContent = lTop.textContent;
-        lBot.setAttribute('fill', lTop.getAttribute('fill'));
-        lBot.setAttribute('x', 300 - offset);
+        labRB.textContent = acuteVal + '°';
+        labRB.setAttribute('fill', 'var(--angle-a)');
+        labRB.setAttribute('x', 300 + offset);
 
-        rBot.textContent = rTop.textContent;
-        rBot.setAttribute('fill', rTop.getAttribute('fill'));
-        rBot.setAttribute('x', 300 + offset);
+        labLB.textContent = obtuseVal + '°';
+        labLB.setAttribute('fill', 'var(--angle-b)');
+        labLB.setAttribute('x', 300 - offset);
 
         document.getElementById('trace-27').innerHTML = `
-            <b>Current Angle: ${theta}°</b><br>
-            Acute Junction: ${acuteVal}°<br>
-            Obtuse Junction: ${obtuseVal}°<br><br>
-            Note: The left and right labels swap values as the transversal crosses the 90° vertical point.
+            <b>Angular Junction:</b><br>
+            Acute Angle (Red): <b>${acuteVal}°</b><br>
+            Obtuse Angle (Blue): <b>${obtuseVal}°</b><br><br>
+            Note: Summing any adjacent pair always results in 180°.
         `;
     }
     window.onload = update27;

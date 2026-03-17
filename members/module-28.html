@@ -2,69 +2,89 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 28: Area | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 28: Net-to-Volume | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
-        .area-box { background: #dcfce7; border: 1px solid #166534; margin: 20px auto; position: relative; }
-        .triangle-visual { width: 0; height: 0; border-left: 50px solid transparent; border-right: 50px solid transparent; border-bottom: 100px solid #dcfce7; margin: 20px auto; position: relative; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+        
+        .simulation-area { background: #f8fafc; border-radius: 12px; padding: 40px; margin: 30px 0; display: flex; justify-content: center; gap: 40px; }
+        .net-svg { background: white; border: 1px solid #e2e8f0; border-radius: 8px; }
+        .net-face { fill: rgba(0, 45, 91, 0.05); stroke: var(--cognis-blue); stroke-width: 2; }
+        .net-base { fill: rgba(197, 160, 89, 0.2); stroke: var(--cognis-gold); stroke-width: 3; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .input-row { display: flex; gap: 10px; margin-bottom: 20px; }
+        .input-row input { width: 60px; padding: 8px; border-radius: 4px; border: none; background: #2d3748; color: white; font-weight: bold; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Module 28: Area (Rectangles & Triangles)</h1>
-    
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 28: Net-to-Volume</h1></div>
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Area is the <strong>space inside</strong> a shape. It is measured in square units ($cm^2$, $m^2$).</p>
-    </div>
+        <p><strong>The Logic:</strong> Visualizing a net is about identifying the <b>Base</b>. Once the base is fixed, the adjacent flaps fold up to create the <b>Height</b>. Volume is simply the Base Area multiplied by that height.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>A cube net has 6 identical squares. If one side is 2cm, what is the volume?</div>
+            <div class="tier-card"><b>Average Year 4</b>A net has a base of 5x4 and side flaps of 3. What is the volume when folded?</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Which edges of this net will meet when folded? Calculate the volume of the resulting cuboid.</div>
+        </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        [Image comparing the area of a rectangle ($Area = l \times w$) and a triangle ($Area = \frac{1}{2} \times b \times h$), showing the triangle as exactly half of the rectangle]
-        <div style="background:#f0fdf4; padding:15px; border-radius:8px;">
-            <strong>Rectangle:</strong> Base $\times$ Height<br>
-            <strong>Triangle:</strong> $\frac{1}{2} \times$ Base $\times$ Height
+        <div class="simulation-area">
+            <svg class="net-svg" width="300" height="300" viewBox="0 0 300 300">
+                <rect id="face-top" x="100" y="50" width="100" height="50" class="net-face" />
+                <rect id="face-base" x="100" y="100" width="100" height="100" class="net-base" />
+                <rect id="face-bottom" x="100" y="200" width="100" height="50" class="net-face" />
+                <rect id="face-left" x="50" y="100" width="50" height="100" class="net-face" />
+                <rect id="face-right" x="200" y="100" width="50" height="100" class="net-face" />
+            </svg>
+            <div id="dims-display" style="padding: 20px; font-weight: bold; color: var(--cognis-blue);">
+                Base: 100 x 100<br>Height (Flap): 50
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
-        <select id="type" style="width:100%; padding:10px; margin-bottom:10px;">
-            <option value="rectangle">Rectangle</option>
-            <option value="triangle">Triangle</option>
-        </select>
-        <label>Base: <span id="b-v"></span>cm</label><input type="range" id="b" min="10" max="60" value="40" style="width:100%"><br>
-        <label>Height: <span id="h-v"></span>cm</label><input type="range" id="h" min="10" max="60" value="30" style="width:100%">
-        <div id="viz" class="area-box" style="width:120px; height:90px; display:flex; align-items:center; justify-content:center;">
-            Area: <span id="ans"></span>$cm^2$
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase;">Adjust Net Proportions</label>
+                <div class="input-row">
+                    L: <input type="number" id="in-l" value="5" oninput="run28()">
+                    W: <input type="number" id="in-w" value="4" oninput="run28()">
+                    H: <input type="number" id="in-h" value="3" oninput="run28()">
+                </div>
+            </div>
+            <div class="trace-log" id="trace-28">Volume = Base Area × Height</div>
         </div>
-    </div>
-
-    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
-        <h2>Phase 4: The Saboteur</h2>
-        <p style="color: var(--trap); font-weight: 700;">The "Half-Forgotten" Triangle: Forgetting to divide by 2 when calculating a triangle's area. A triangle is always half of a rectangle with the same base and height!</p>
-    </div>
+    </section>
 </div>
+
 <script>
-    function update() {
-        const b = document.getElementById('b').value;
-        const h = document.getElementById('h').value;
-        const type = document.getElementById('type').value;
-        const res = LogicProvider.getModule(28).generate(b, h, type);
-        document.getElementById('b-v').innerText = b;
-        document.getElementById('h-v').innerText = h;
-        document.getElementById('ans').innerText = res.answers.area;
-        const viz = document.getElementById('viz');
-        viz.style.width = (b * 2) + 'px';
-        viz.style.height = (h * 2) + 'px';
-        viz.style.clipPath = type === 'triangle' ? 'polygon(50% 0%, 0% 100%, 100% 100%)' : 'none';
+    function run28() {
+        const l = parseFloat(document.getElementById('in-l').value);
+        const w = parseFloat(document.getElementById('in-w').value);
+        const h = parseFloat(document.getElementById('in-h').value);
+        
+        const area = l * w;
+        const vol = area * h;
+
+        document.getElementById('trace-28').innerHTML = `
+            <b>1. Identify Base:</b> ${l} × ${w} = ${area} units²<br>
+            <b>2. Identify Height (Flap):</b> ${h} units<br>
+            <b>3. Fold & Fill:</b> ${area} × ${h} = <b>${vol} units³</b><br><br>
+            <i>Type 2 Insight: The 'Height' of your box is always the length of the flaps that fold up from the central base.</i>
+        `;
     }
-    document.querySelectorAll('input, select').forEach(i => i.onchange = i.oninput = update);
-    update();
+    window.onload = run28;
 </script>
 </body>
 </html>

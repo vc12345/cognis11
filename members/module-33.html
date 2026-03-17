@@ -12,24 +12,20 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        /* Consistently Boxed Tiers */
+        /* Fixed Formatting for Tiers */
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; line-height: 1.5; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; line-height: 1.4; min-height: 100px; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 1px; }
+        .tier-card p { margin: 0; white-space: normal; }
+        .tier-card span { font-weight: bold; color: var(--cognis-blue); white-space: nowrap; }
 
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 80px 40px; margin: 30px 0; text-align: center; color: white; position: relative; overflow: hidden; }
-        .word-display { font-family: 'Courier New', monospace; font-size: 3.5rem; letter-spacing: 12px; font-weight: 900; display: inline-block; position: relative; white-space: nowrap; }
-        
-        /* Adjustable Scanner Beam */
+        .word-display { font-family: 'Courier New', monospace; font-size: 3rem; letter-spacing: 10px; font-weight: 900; display: inline-block; position: relative; white-space: nowrap; }
         .scanner-beam { position: absolute; height: 140%; background: rgba(197, 160, 89, 0.2); border-left: 2px solid var(--cognis-gold); border-right: 2px solid var(--cognis-gold); top: -20%; left: 50%; transform: translateX(-50%); pointer-events: none; transition: width 0.3s ease; box-shadow: 0 0 20px rgba(197, 160, 89, 0.4); }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .input-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
         .input-text { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
-        
         .btn-example { background: #4a5568; color: white; border: none; padding: 8px 12px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; margin: 5px; }
-        .btn-example:hover { background: var(--cognis-gold); }
-
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
         input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
     </style>
@@ -37,13 +33,12 @@
 <body>
 <div class="module-card">
     <div class="header"><h1>Module 33: Hidden Words</h1></div>
-    
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>Find the 3-letter word hidden in: "TH<b>E AT</b>OM".</div>
-            <div class="tier-card"><b>Average Year 4</b>Find the 4-letter word hidden in: "FISH <b>ARE D</b>EEP".</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Find the 4-letter word hidden in: "HE MADE A GOAL".</div>
+            <div class="tier-card"><b>Advanced Year 2</b><p>Find the 3-letter word hidden in: <span>"THE ATOM"</span>.</p></div>
+            <div class="tier-card"><b>Average Year 4</b><p>Find the 4-letter word hidden in: <span>"FISH ARE DEEP"</span>.</p></div>
+            <div class="tier-card"><b>Advanced Year 5</b><p>Find the 4-letter word hidden in: <span>"MADE A GOAL"</span>.</p></div>
         </div>
     </section>
 
@@ -54,9 +49,9 @@
             <div class="word-display" id="word-string">THEATOM</div>
         </div>
         <div style="text-align: center;">
-            <button class="btn-example" onclick="setPhrase('THE ATOM', 3)">Example: THE ATOM</button>
-            <button class="btn-example" onclick="setPhrase('FISH ARE DEEP', 4)">Example: FISH ARE DEEP</button>
-            <button class="btn-example" onclick="setPhrase('MADE A GOAL', 4)">Example: MADE A GOAL</button>
+            <button class="btn-example" onclick="setPhrase('THE ATOM', 3)">Example 1</button>
+            <button class="btn-example" onclick="setPhrase('FISH ARE DEEP', 4)">Example 2</button>
+            <button class="btn-example" onclick="setPhrase('MADE A GOAL', 4)">Example 3</button>
         </div>
     </section>
 
@@ -64,20 +59,17 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <div class="input-group">
-                    <label>Manual Phrase Input</label>
-                    <input type="text" id="phrase-in" class="input-text" value="THE ATOM" oninput="update33()">
-                </div>
-                <div class="input-group" style="margin-top:20px;">
-                    <label>Position Scanner</label>
+                <input type="text" id="phrase-in" class="input-text" value="THE ATOM" oninput="update33()" placeholder="PHRASE">
+                <div style="margin-top:20px;">
+                    <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase;">Position</label>
                     <input type="range" id="scan-slider" min="0" max="100" value="50" oninput="update33()">
                 </div>
-                <div class="input-group" style="margin-top:20px;">
-                    <label>Scanner Width (Letter Count)</label>
+                <div style="margin-top:20px;">
+                    <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase;">Word Length</label>
                     <input type="range" id="scan-width" min="2" max="5" value="3" oninput="update33()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-33">Collapsing spaces to find hidden patterns...</div>
+            <div class="trace-log" id="trace-33">Collapsing spaces for pattern discovery...</div>
         </div>
     </section>
 </div>
@@ -88,37 +80,21 @@
         document.getElementById('scan-width').value = w;
         update33();
     }
-
     function update33() {
-        const rawPhrase = document.getElementById('phrase-in').value.toUpperCase();
-        // Remove spaces for anatomical scanning
-        const collapsed = rawPhrase.replace(/\s/g, '');
+        const raw = document.getElementById('phrase-in').value.toUpperCase();
+        const collapsed = raw.replace(/\s/g, '');
         const slider = document.getElementById('scan-slider').value;
         const widthVal = document.getElementById('scan-width').value;
-        
         const display = document.getElementById('word-string');
         const scanner = document.getElementById('scanner');
-        
         display.innerText = collapsed;
-
-        // Scale scanner width based on character count logic
-        const charWidth = 33; // Approx pixel width of character + letter spacing
+        const charWidth = 33; 
         scanner.style.width = (widthVal * charWidth) + "px";
-        
         const rect = display.getBoundingClientRect();
         const containerRect = display.parentElement.getBoundingClientRect();
-        const relativeLeft = rect.left - containerRect.left;
-        const span = rect.width;
-        
-        const beamPos = (slider / 100) * span;
-        scanner.style.left = (relativeLeft + beamPos) + "px";
-
-        document.getElementById('trace-33').innerHTML = `
-            <b>X-Ray Diagnostic:</b><br>
-            Raw Phrase: "${rawPhrase}"<br>
-            Scanning for: <b>${widthVal}-letter</b> hidden word.<br><br>
-            <i>Notice: By removing the space, the letters from two different words touch. This is where the hidden word is born.</i>
-        `;
+        const beamPos = (slider / 100) * rect.width;
+        scanner.style.left = ((rect.left - containerRect.left) + beamPos) + "px";
+        document.getElementById('trace-33').innerHTML = `Scanning for: <b>${widthVal}-letter</b> word.<br>Phrase: "${raw}"`;
     }
     window.onload = update33;
 </script>

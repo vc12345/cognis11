@@ -2,7 +2,6 @@ const LogicProvider = {
     modules: {
 
         bodmas: {
-            // Evaluates a single operation
             operate: (a, op, b) => {
                 a = parseFloat(a); b = parseFloat(b);
                 switch(op) {
@@ -15,16 +14,9 @@ const LogicProvider = {
                 }
             },
             
-            // Step-by-step solver
-            solveStepByStep: (tokens) => {
+            // Core solver for a flat array of tokens (no brackets)
+            solveFlat: (tokens) => {
                 let current = [...tokens];
-                let history = [ { expr: current.join(' '), action: "Start" } ];
-
-                // 1. Brackets (Simulated for this module via specific grouping logic)
-                // 2. Orders (Exponents ^)
-                // 3. DM (Division/Multiplication left-to-right)
-                // 4. AS (Addition/Subtraction left-to-right)
-                
                 const priorities = [
                     { ops: ['^'], label: 'Orders' },
                     { ops: ['x', '/'], label: 'DM' },
@@ -36,16 +28,35 @@ const LogicProvider = {
                     while (i < current.length) {
                         if (p.ops.includes(current[i])) {
                             const result = LogicProvider.modules.bodmas.operate(current[i-1], current[i], current[i+1]);
-                            const action = `Solved ${p.label}: ${current[i-1]} ${current[i]} ${current[i+1]} = ${result}`;
                             current.splice(i-1, 3, result);
-                            history.push({ expr: current.join(' '), action });
-                            i = 0; // Restart scan for priority
-                        } else {
-                            i++;
-                        }
+                            i = 0; 
+                        } else { i++; }
                     }
                 }
-                return history;
+                return current[0];
+            },
+
+            // Recursive solver that hunts for ()
+            solveWithBrackets: (expressionStr) => {
+                let steps = [];
+                let currentExpr = expressionStr;
+
+                while (currentExpr.includes('(')) {
+                    // Match the innermost bracket pair
+                    currentExpr = currentExpr.replace(/\(([^()]+)\)/, (match, subExpr) => {
+                        const tokens = subExpr.split(' ').filter(t => t !== '');
+                        const result = LogicProvider.modules.bodmas.solveFlat(tokens);
+                        steps.push(`Bracket Resolved: (${subExpr}) = ${result}`);
+                        return result;
+                    });
+                }
+
+                // Final flat solve
+                const finalTokens = currentExpr.split(' ').filter(t => t !== '');
+                const finalRes = LogicProvider.modules.bodmas.solveFlat(finalTokens);
+                steps.push(`Final Calculation: ${currentExpr} = ${finalRes}`);
+
+                return { finalRes, steps };
             }
         },
 

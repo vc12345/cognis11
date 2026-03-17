@@ -2,67 +2,104 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 31: Sequences | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/reasoning-provider.js"></script>
+    <title>Module 31: Vowel/Consonant Ciphers | Cognis11</title>
     <style>
-        :root { --primary: #7c2d12; --bg: #fff7ed; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #ffedd5; }
-        .seq-box { display: inline-block; width: 50px; height: 50px; line-height: 50px; text-align: center; background: #ffedd5; border: 2px solid #fdba74; border-radius: 8px; margin: 5px; font-weight: 700; color: var(--primary); }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --vowel-color: #3182ce; --consonant-color: #e53e3e; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; min-height: 250px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .gate-container { display: flex; align-items: center; gap: 20px; }
+        .word-stream { display: flex; gap: 10px; }
+        .char-tile { width: 40px; height: 40px; background: white; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; transition: all 0.5s; }
+        .char-tile.vowel { border: 3px solid var(--vowel-color); color: var(--vowel-color); }
+        .char-tile.consonant { border: 3px solid var(--consonant-color); color: var(--consonant-color); }
+        .char-tile small { font-size: 0.6rem; text-transform: uppercase; margin-top: -2px; opacity: 0.7; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 10px; }
+        .input-text { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; text-transform: uppercase; letter-spacing: 4px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1 style="color:var(--primary); text-align:center;">Module 31: Sequence Logic</h1>
-
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 31: Vowel/Consonant Ciphers</h1></div>
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A sequence is just a pattern with a rule. To solve any sequence, find the <strong>"Jump"</strong> between the first two numbers and check if it stays the same.</p>
-    </div>
-
-    <div class="section">
-        <h2>Phase 2: The Anatomy</h2>
-        
-        <p>The <strong>Term-to-Term</strong> rule is the instruction to get from one number to the next.</p>
-    </div>
-
-    <div class="section">
-        <h2>Phase 3: The Engine</h2>
-        <label>Start Number:</label><input type="number" id="start" value="3" style="width:100%; padding:10px; margin-bottom:10px;">
-        <label>The Jump (Rule):</label><input type="number" id="jump" value="4" style="width:100%; padding:10px; margin-bottom:20px;">
-        
-        <div id="seq-display" style="text-align:center; min-height:60px;"></div>
-        
-        <button onclick="toggle()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; margin-top:20px;">Reveal the Rule</button>
-        <div id="logic" style="display:none; text-align:center; margin-top:20px; font-weight:700; color:var(--primary);">
-            Rule: <span id="rule-text"></span>
+        <p>In advanced coding, the rule is not fixed. It depends on the <b>property</b> of the letter. Vowels ($A, E, I, O, U$) and Consonants are treated as separate groups, each with its own transformation. To solve these, you must first categorize the letter before applying the math.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>If Vowels move +1 and Consonants stay the same, what is "BAT"?</div>
+            <div class="tier-card"><b>Average Year 4</b>Rule: Vowels shift +2, Consonants shift -1. Find the code for "DOG".</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the two separate rules used to turn "PLANET" into "QMANFU".</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
-        <h2>Phase 4: The Saboteur</h2>
-        <p style="color: var(--trap); font-weight: 700;">The "First Jump" Trap: Assuming the rule is the same for the whole sequence based on only the first two numbers. Always check the third and fourth numbers to be sure!</p>
-    </div>
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="simulation-area">
+            <div class="gate-container" id="gate-display">
+                </div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Test Word</label>
+                    <input type="text" id="word-in" class="input-text" value="BRAIN" maxlength="8" oninput="run31()">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <div style="flex: 1;"><small>Vowel Shift</small><input type="number" id="v-shift" value="1" style="width:100%; padding:8px; border-radius:4px; border:none; background:#2d3748; color:white;" oninput="run31()"></div>
+                    <div style="flex: 1;"><small>Cons. Shift</small><input type="number" id="c-shift" value="-1" style="width:100%; padding:8px; border-radius:4px; border:none; background:#2d3748; color:white;" oninput="run31()"></div>
+                </div>
+            </div>
+            <div class="trace-log" id="trace-31">Categorizing letters...</div>
+        </div>
+    </section>
 </div>
+
 <script>
-    function update() {
-        const s = document.getElementById('start').value;
-        const j = document.getElementById('jump').value;
-        const res = ReasoningProvider.getModule(31).generate(s, j, 5);
-        const cont = document.getElementById('seq-display');
-        cont.innerHTML = '';
-        res.sequence.forEach(n => {
-            const div = document.createElement('div');
-            div.className = 'seq-box'; div.innerText = n;
-            cont.appendChild(div);
-        });
-        document.getElementById('rule-text').innerText = res.rule;
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const vowels = "AEIOU";
+
+    function run31() {
+        const word = document.getElementById('word-in').value.toUpperCase();
+        const vShift = parseInt(document.getElementById('v-shift').value) || 0;
+        const cShift = parseInt(document.getElementById('c-shift').value) || 0;
+        const display = document.getElementById('gate-display');
+        
+        display.innerHTML = '';
+        let trace = "";
+
+        for (let char of word) {
+            if (!alphabet.includes(char)) continue;
+            const isVowel = vowels.includes(char);
+            const shift = isVowel ? vShift : cShift;
+            const charIdx = alphabet.indexOf(char);
+            const newChar = alphabet[(charIdx + shift + 26) % 26];
+
+            display.innerHTML += `
+                <div class="char-tile ${isVowel ? 'vowel' : 'consonant'}">
+                    <small>${isVowel ? 'V' : 'C'}</small>
+                    ${char} → ${newChar}
+                </div>
+            `;
+            trace += `<div>→ ${char} (${isVowel ? 'Vowel' : 'Cons.'}): Shift ${shift} = <b>${newChar}</b></div>`;
+        }
+        document.getElementById('trace-31').innerHTML = trace;
     }
-    function toggle() { const d = document.getElementById('logic'); d.style.display = d.style.display==='none'?'block':'none'; }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+    window.onload = run31;
 </script>
 </body>
 </html>

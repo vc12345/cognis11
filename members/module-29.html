@@ -2,70 +2,103 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 29: Money Reasoning | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/reasoning-provider.js"></script>
+    <title>Module 29: Alpha-Numeric Shift | Cognis11</title>
     <style>
-        :root { --primary: #065f46; --accent: #0891b2; --bg: #f0fdfa; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #ccfbf1; }
-        .logic-card { background: #f0fdfa; border-left: 5px solid #10b981; padding: 20px; margin-top: 20px; display: none; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
+        svg { background: #1a202c; }
+        .ring-text { font-family: 'Courier New', monospace; font-weight: bold; font-size: 12px; fill: #a0aec0; }
+        .ring-text.active { fill: var(--cognis-gold); font-size: 18px; filter: drop-shadow(0 0 5px var(--cognis-gold)); }
+        
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .input-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 4px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
     </style>
 </head>
 <body>
-<div class="container">
-    <header style="text-align:center; margin-bottom:40px;">
-        <h1 style="color:var(--primary)">Module 29: Multi-Step Money</h1>
-        <p style="font-weight:700; color:var(--accent)">PILLAR 2: REASONING</p>
-    </header>
-
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 29: Alpha-Numeric Shift</h1></div>
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In Reasoning, we look for the <strong>"Hidden Question."</strong> Most students see numbers and jump to one calculation. A Type 2 thinker asks: "What do I need to know <em>before</em> I can find the final answer?"</p>
-    </div>
-
-    <div class="section">
-        <h2>Phase 2: The Anatomy</h2>
-        
-        <p>The "Total" (Payment) must equal the "Parts" (Items + Change).</p>
-    </div>
-
-    <div class="section">
-        <h2>Phase 3: The Engine</h2>
-        <label>Item Price: £<span id="p-v"></span></label><input type="range" id="price" min="0.5" max="5" step="0.5" value="1.5" style="width:100%"><br>
-        <label>Quantity: <span id="q-v"></span></label><input type="range" id="qty" min="1" max="10" value="3" style="width:100%"><br>
-        <label>Payment: £<span id="pay-v"></span></label><input type="range" id="pay" min="5" max="50" step="5" value="10" style="width:100%">
-        
-        <div style="font-size: 1.2rem; text-align: center; margin: 20px 0; padding:15px; background:#f8fafc; border-radius:8px;" id="scenario"></div>
-        
-        <button onclick="toggleLogic()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:700;">Show Reasoning Steps</button>
-        <div id="logic" class="logic-card">
-            <p id="step1"></p><p id="step2"></p>
-            <h3 style="color:var(--primary)">Final Change: £<span id="final-ans"></span></h3>
+        <p>This cipher maps the alphabet directly to a sequence of numbers ($A=1, B=2$). To decode, you must translate each position back to its "alphabetical address." The logic is purely positional.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>If A=1 and B=2, what is the code for the word "CAT"?</div>
+            <div class="tier-card"><b>Average Year 4</b>If A=1, translate the code "13-1-20-8".</div>
+            <div class="tier-card"><b>Advanced Year 5</b>If Z=1, Y=2 (Reverse Alpha), find the numerical code for "BRAIN".</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
-        <h2>Phase 4: The Saboteur</h2>
-        <p style="color: var(--trap); font-weight: 700;">The "Half-Way" Trap: Calculating the total cost and stopping there, forgetting the question asked for the <em>change</em>. Always re-read the last sentence!</p>
-    </div>
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="simulation-area">
+            <svg id="dial-svg" width="400" height="400" viewBox="0 0 400 400">
+                <circle cx="200" cy="200" r="140" fill="none" stroke="#2d3748" stroke-width="40" />
+                <circle cx="200" cy="200" r="100" fill="none" stroke="#333" stroke-width="40" />
+                <g id="letters-group"></g>
+                <g id="numbers-group"></g>
+            </svg>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <div class="input-group">
+                    <label>Enter Word to Encode</label>
+                    <input type="text" id="word-in" value="CODE" maxlength="8" oninput="run29()">
+                </div>
+            </div>
+            <div class="trace-log" id="trace-29">Type a word to see the mapping on the dial...</div>
+        </div>
+    </section>
 </div>
+
 <script>
-    function update() {
-        const p = document.getElementById('price').value;
-        const q = document.getElementById('qty').value;
-        const pay = document.getElementById('pay').value;
-        const res = ReasoningProvider.getModule(29).generate(p, q, pay);
-        document.getElementById('p-v').innerText = p; document.getElementById('q-v').innerText = q; document.getElementById('pay-v').innerText = pay;
-        document.getElementById('scenario').innerText = `Problem: I buy ${q} items at £${p} each. I pay with a £${pay} note. How much change?`;
-        document.getElementById('step1').innerText = "Step 1: " + res.steps.step1;
-        document.getElementById('step2').innerText = "Step 2: " + res.steps.step2;
-        document.getElementById('final-ans').innerText = res.answers.change;
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    function initDial() {
+        const lGroup = document.getElementById('letters-group');
+        const nGroup = document.getElementById('numbers-group');
+        for (let i = 0; i < 26; i++) {
+            const angle = (i / 26) * 2 * Math.PI - Math.PI / 2;
+            const lx = 200 + 140 * Math.cos(angle);
+            const ly = 200 + 140 * Math.sin(angle);
+            const nx = 200 + 100 * Math.cos(angle);
+            const ny = 200 + 100 * Math.sin(angle);
+            
+            lGroup.innerHTML += `<text x="${lx}" y="${ly}" class="ring-text" id="L-${alphabet[i]}" text-anchor="middle" dominant-baseline="middle">${alphabet[i]}</text>`;
+            nGroup.innerHTML += `<text x="${nx}" y="${ny}" class="ring-text" id="N-${i+1}" text-anchor="middle" dominant-baseline="middle" style="fill:#666">${i+1}</text>`;
+        }
     }
-    function toggleLogic() { const d = document.getElementById('logic'); d.style.display = d.style.display==='none'?'block':'none'; }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    function run29() {
+        const word = document.getElementById('word-in').value.toUpperCase();
+        document.querySelectorAll('.ring-text').forEach(t => t.classList.remove('active'));
+        
+        let trace = "";
+        for (let char of word) {
+            const pos = alphabet.indexOf(char);
+            if (pos !== -1) {
+                document.getElementById(`L-${char}`).classList.add('active');
+                document.getElementById(`N-${pos+1}`).classList.add('active');
+                trace += `${char} → Position ${pos+1}<br>`;
+            }
+        }
+        document.getElementById('trace-29').innerHTML = trace || "Enter a letter...";
+    }
+    window.onload = () => { initDial(); run29(); };
 </script>
 </body>
 </html>

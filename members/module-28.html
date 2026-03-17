@@ -4,22 +4,28 @@
     <meta charset="UTF-8">
     <title>Module 28: Net-to-Volume | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
         .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
-        
-        .simulation-area { background: #f8fafc; border-radius: 12px; padding: 40px; margin: 30px 0; display: flex; justify-content: center; gap: 40px; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #f8fafc; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
         .net-svg { background: white; border: 1px solid #e2e8f0; border-radius: 8px; }
-        .net-face { fill: rgba(0, 45, 91, 0.05); stroke: var(--cognis-blue); stroke-width: 2; }
-        .net-base { fill: rgba(197, 160, 89, 0.2); stroke: var(--cognis-gold); stroke-width: 3; }
+        .face { fill: rgba(0, 45, 91, 0.05); stroke: var(--cognis-blue); stroke-width: 2; transition: all 0.3s; }
+        .face-base { fill: rgba(197, 160, 89, 0.2); stroke: var(--cognis-gold); stroke-width: 3; }
+        .face-lid { fill: rgba(49, 130, 206, 0.1); stroke: #3182ce; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .input-row { display: flex; gap: 10px; margin-bottom: 20px; }
-        .input-row input { width: 60px; padding: 8px; border-radius: 4px; border: none; background: #2d3748; color: white; font-weight: bold; }
+        .input-row { display: flex; gap: 15px; margin-bottom: 20px; }
+        .input-row div { display: flex; flex-direction: column; gap: 5px; }
+        .input-row input { width: 60px; padding: 10px; border-radius: 6px; border: none; background: #2d3748; color: white; font-weight: bold; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
     </style>
 </head>
@@ -28,27 +34,28 @@
     <div class="header"><h1>Module 28: Net-to-Volume</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p><strong>The Logic:</strong> Visualizing a net is about identifying the <b>Base</b>. Once the base is fixed, the adjacent flaps fold up to create the <b>Height</b>. Volume is simply the Base Area multiplied by that height.</p>
+        <p>A 3D object is a 2D surface wrapped in space. Volume is the Base Area multiplied by the Height. In a net, the 'Height' is determined by the length of the flaps that fold up perpendicular to the base.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>A cube net has 6 identical squares. If one side is 2cm, what is the volume?</div>
-            <div class="tier-card"><b>Average Year 4</b>A net has a base of 5x4 and side flaps of 3. What is the volume when folded?</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Which edges of this net will meet when folded? Calculate the volume of the resulting cuboid.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>A cube net has 6 squares. One side is 3cm. Find the volume.</div>
+            <div class="tier-card"><b>Average Year 4</b>A net has a 4x6 base and side flaps of 2. What is the volume when folded?</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the 'Lid' on this net and calculate the total internal capacity.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <svg class="net-svg" width="300" height="300" viewBox="0 0 300 300">
-                <rect id="face-top" x="100" y="50" width="100" height="50" class="net-face" />
-                <rect id="face-base" x="100" y="100" width="100" height="100" class="net-base" />
-                <rect id="face-bottom" x="100" y="200" width="100" height="50" class="net-face" />
-                <rect id="face-left" x="50" y="100" width="50" height="100" class="net-face" />
-                <rect id="face-right" x="200" y="100" width="50" height="100" class="net-face" />
+            <svg id="net-canvas" width="400" height="400" viewBox="0 0 400 400" class="net-svg">
+                <rect id="n-lid" x="150" y="20" width="100" height="80" class="face face-lid" />
+                <rect id="n-back" x="150" y="100" width="100" height="80" class="face" />
+                <rect id="n-base" x="150" y="180" width="100" height="80" class="face face-base" />
+                <rect id="n-front" x="150" y="260" width="100" height="80" class="face" />
+                <rect id="n-left" x="70" y="180" width="80" height="80" class="face" />
+                <rect id="n-right" x="250" y="180" width="80" height="80" class="face" />
+                
+                <text x="200" y="225" font-size="12" fill="var(--cognis-gold)" text-anchor="middle" font-weight="bold">BASE</text>
+                <text x="200" y="65" font-size="12" fill="#3182ce" text-anchor="middle" font-weight="bold">LID</text>
             </svg>
-            <div id="dims-display" style="padding: 20px; font-weight: bold; color: var(--cognis-blue);">
-                Base: 100 x 100<br>Height (Flap): 50
-            </div>
         </div>
     </section>
 
@@ -56,32 +63,44 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase;">Adjust Net Proportions</label>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase;">Adjust Net Proportions</label>
                 <div class="input-row">
-                    L: <input type="number" id="in-l" value="5" oninput="run28()">
-                    W: <input type="number" id="in-w" value="4" oninput="run28()">
-                    H: <input type="number" id="in-h" value="3" oninput="run28()">
+                    <div><small>Length</small><input type="number" id="in-l" value="5" oninput="run28()"></div>
+                    <div><small>Width</small><input type="number" id="in-w" value="4" oninput="run28()"></div>
+                    <div><small>Height</small><input type="number" id="in-h" value="3" oninput="run28()"></div>
                 </div>
             </div>
-            <div class="trace-log" id="trace-28">Volume = Base Area × Height</div>
+            <div class="trace-log" id="trace-28">Calculate volume from the 2D layout.</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p>The "Area vs Volume" trap: The total area of the paper net is the <b>Surface Area</b>. The space inside the folded box is the <b>Volume</b>. To avoid confusion, always multiply the base dimensions first, then 'extrude' that area by the height of the side flaps.</p>
         </div>
     </section>
 </div>
 
 <script>
     function run28() {
-        const l = parseFloat(document.getElementById('in-l').value);
-        const w = parseFloat(document.getElementById('in-w').value);
-        const h = parseFloat(document.getElementById('in-h').value);
+        const l = parseFloat(document.getElementById('in-l').value) || 0;
+        const w = parseFloat(document.getElementById('in-w').value) || 0;
+        const h = parseFloat(document.getElementById('in-h').value) || 0;
         
-        const area = l * w;
-        const vol = area * h;
+        const baseArea = l * w;
+        const volume = baseArea * h;
 
+        // Visual feedback
+        const scale = 20;
+        document.getElementById('n-base').setAttribute('width', l * scale);
+        document.getElementById('n-base').setAttribute('height', w * scale);
+        
         document.getElementById('trace-28').innerHTML = `
-            <b>1. Identify Base:</b> ${l} × ${w} = ${area} units²<br>
-            <b>2. Identify Height (Flap):</b> ${h} units<br>
-            <b>3. Fold & Fill:</b> ${area} × ${h} = <b>${vol} units³</b><br><br>
-            <i>Type 2 Insight: The 'Height' of your box is always the length of the flaps that fold up from the central base.</i>
+            <b>1. Base Area (Gold):</b> ${l} × ${w} = ${baseArea} units²<br>
+            <b>2. Flap Height:</b> ${h} units<br>
+            <b>3. Internal Volume:</b> ${baseArea} × ${h} = <b>${volume} units³</b><br><br>
+            <i>Visualization: The blue face (Lid) will fold over to sit perfectly opposite the gold face (Base).</i>
         `;
     }
     window.onload = run28;

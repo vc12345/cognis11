@@ -1,6 +1,27 @@
 const LogicProvider = {
     modules: {
 
+        meanBridge: {
+            calculate: (currentVals, targetMean) => {
+                const knownSum = currentVals.reduce((a, b) => a + b, 0);
+                const targetCount = currentVals.length + 1;
+                const targetSum = targetMean * targetCount;
+                const missingValue = targetSum - knownSum;
+
+                return {
+                    knownSum,
+                    targetSum,
+                    missingValue,
+                    targetCount,
+                    steps: [
+                        `1. Calculate Target Total: Mean (${targetMean}) × Total Count (${targetCount}) = ${targetSum}.`,
+                        `2. Calculate Current Total: Sum of known values = ${knownSum}.`,
+                        `3. The Bridge: Target Total (${targetSum}) - Current Total (${knownSum}) = ${missingValue}.`
+                    ]
+                };
+            }
+        },
+
         averages: {
             calculate: (dataArray) => {
                 const sorted = [...dataArray].sort((a, b) => a - b);

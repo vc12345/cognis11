@@ -9,68 +9,60 @@
         .module-card { max-width: 1000px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
         .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
-        
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        /* Question Tiers */
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; line-height: 1.4; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 1px; }
 
-        /* SVG Simulation Area */
         .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; }
-        svg { background: white; border-radius: 8px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
-        
-        circle { fill: rgba(0, 45, 91, 0.05); stroke: var(--cognis-blue); stroke-width: 3; transition: all 0.8s ease-in-out; }
+        svg { background: white; border-radius: 8px; }
+        circle { fill: rgba(0, 45, 91, 0.04); stroke: var(--cognis-blue); stroke-width: 3; transition: all 0.8s ease-in-out; }
         text { font-family: 'Segoe UI', sans-serif; font-weight: 800; pointer-events: none; transition: all 0.8s ease-in-out; text-anchor: middle; dominant-baseline: middle; }
         .label-main { fill: var(--cognis-blue); font-size: 18px; }
         .label-overlap { fill: var(--cognis-gold); font-size: 16px; opacity: 0; }
         .label-core { fill: #e53e3e; font-size: 22px; opacity: 0; }
         .merged .label-overlap, .merged .label-core { opacity: 1; }
 
-        /* Engine */
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .control-group label { display: block; font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
         .control-group input { width: 100%; padding: 8px; border-radius: 6px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1rem; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
-        
         .btn-merge { width: 250px; background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
     </style>
 </head>
 <body>
-
 <div class="module-card">
     <div class="header"><h1>Module 22: 3-Circle Venn Logic</h1></div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
+        <p>Topic Logic: Triple overlaps require "Inside-Out" deduction. Information in word problems is given as totals, but the diagram must be populated starting from the innermost core (all three) and working outwards to find the unique remainders.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Level 1</b>Out of 30 people, 5 like all three. 12 like A and B. Find A ∩ B but NOT C.</div>
-            <div class="tier-card"><b>Level 2</b>n(A)=20, n(B)=20, n(C)=20. Dual overlaps are 8. Center is 4. Find n(A ∪ B ∪ C).</div>
-            <div class="tier-card"><b>Level 3</b>In a class of 40, find the missing intersection using the Principle of Inclusion-Exclusion.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>If 5 like all three flavors and 12 like A and B, find how many like A and B but NOT C.</div>
+            <div class="tier-card"><b>Average Year 4</b>n(A)=20, n(B)=20, n(C)=20. Dual overlaps are 8. Center is 4. Find the Union.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Use the Principle of Inclusion-Exclusion to find the population of a 3-set universe.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <svg id="venn-svg" width="500" height="450" viewBox="0 0 500 450">
-                <circle id="svg-c-a" cx="130" cy="130" r="110" />
-                <circle id="svg-c-b" cx="370" cy="130" r="110" />
-                <circle id="svg-c-c" cx="250" cy="350" r="110" />
-
-                <text id="txt-oa" x="130" y="130" class="label-main">25</text>
-                <text id="txt-ob" x="370" y="130" class="label-main">25</text>
-                <text id="txt-oc" x="250" y="350" class="label-main">25</text>
-
-                <text id="txt-ab" x="250" y="130" class="label-overlap">5</text>
-                <text id="txt-ac" x="190" y="240" class="label-overlap">5</text>
-                <text id="txt-bc" x="310" y="240" class="label-overlap">5</text>
-                <text id="txt-all" x="250" y="200" class="label-core">5</text>
+            <svg id="v3-svg" width="500" height="450" viewBox="0 0 500 450">
+                <circle id="v3-c-a" cx="130" cy="130" r="110" />
+                <circle id="v3-c-b" cx="370" cy="130" r="110" />
+                <circle id="v3-c-c" cx="250" cy="350" r="110" />
+                <text id="v3-t-oa" x="130" y="130" class="label-main">25</text>
+                <text id="v3-t-ob" x="370" y="130" class="label-main">25</text>
+                <text id="v3-t-oc" x="250" y="350" class="label-main">25</text>
+                <text id="v3-t-ab" x="250" y="130" class="label-overlap">5</text>
+                <text id="v3-t-ac" x="190" y="240" class="label-overlap">5</text>
+                <text id="v3-t-bc" x="310" y="240" class="label-overlap">5</text>
+                <text id="v3-t-all" x="250" y="200" class="label-core">5</text>
             </svg>
-            <button class="btn-merge" onclick="toggleMerge()" id="merge-btn">Commence Merger</button>
+            <button class="btn-merge" onclick="toggleV3()" id="btn-v3">Commence Merger</button>
         </div>
     </section>
 
@@ -78,83 +70,60 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="input-grid">
-                <div class="control-group"><label>Total n(A)</label><input type="number" id="in-ta" value="25" oninput="update()"></div>
-                <div class="control-group"><label>Total n(B)</label><input type="number" id="in-tb" value="25" oninput="update()"></div>
-                <div class="control-group"><label>Total n(C)</label><input type="number" id="in-tc" value="25" oninput="update()"></div>
-                <div class="control-group"><label>Cap n(A ∩ B)</label><input type="number" id="in-ab" value="10" oninput="update()"></div>
-                <div class="control-group"><label>Cap n(B ∩ C)</label><input type="number" id="in-bc" value="10" oninput="update()"></div>
-                <div class="control-group"><label>Cap n(A ∩ C)</label><input type="number" id="in-ac" value="10" oninput="update()"></div>
-                <div class="control-group"><label>Center n(A ∩ B ∩ C)</label><input type="number" id="in-all" value="5" oninput="update()"></div>
-                <div class="control-group"><label>Neither</label><input type="number" id="in-none" value="2" oninput="update()"></div>
+                <div class="control-group"><label>Total n(A)</label><input type="number" id="v3-ta" value="25" oninput="updateV3()"></div>
+                <div class="control-group"><label>Total n(B)</label><input type="number" id="v3-tb" value="25" oninput="updateV3()"></div>
+                <div class="control-group"><label>Total n(C)</label><input type="number" id="v3-tc" value="25" oninput="updateV3()"></div>
+                <div class="control-group"><label>Cap n(A ∩ B)</label><input type="number" id="v3-ab" value="10" oninput="updateV3()"></div>
+                <div class="control-group"><label>Cap n(B ∩ C)</label><input type="number" id="v3-bc" value="10" oninput="updateV3()"></div>
+                <div class="control-group"><label>Cap n(A ∩ C)</label><input type="number" id="v3-ac" value="10" oninput="updateV3()"></div>
+                <div class="control-group"><label>Center (All 3)</label><input type="number" id="v3-all" value="5" oninput="updateV3()"></div>
             </div>
-            <div class="trace-log" id="logic-trace">Adjust values to calculate the layers...</div>
+            <div class="trace-log" id="v3-trace">Enter total group sizes (as seen in questions) to reveal the disjoint sections.</div>
         </div>
     </section>
 </div>
 
 <script>
-    let isMerged = false;
-    const inputs = ['in-ta', 'in-tb', 'in-tc', 'in-ab', 'in-bc', 'in-ac', 'in-all', 'in-none'].map(id => document.getElementById(id));
+    let v3Merged = false;
+    const ids = ['v3-ta', 'v3-tb', 'v3-tc', 'v3-ab', 'v3-bc', 'v3-ac', 'v3-all'];
+    function updateV3() {
+        const [ta, tb, tc, ab, bc, ac, all] = ids.map(id => parseFloat(document.getElementById(id).value) || 0);
+        const pAB = ab - all; const pBC = bc - all; const pAC = ac - all;
+        const oA = ta - pAB - pAC - all; const oB = tb - pAB - pBC - all; const oC = tc - pAC - pBC - all;
 
-    function update() {
-        const [ta, tb, tc, ab, bc, ac, center, none] = inputs.map(i => parseFloat(i.value) || 0);
+        document.getElementById('v3-t-oa').textContent = v3Merged ? oA : ta;
+        document.getElementById('v3-t-ob').textContent = v3Merged ? oB : tb;
+        document.getElementById('v3-t-oc').textContent = v3Merged ? oC : tc;
+        document.getElementById('v3-t-ab').textContent = pAB;
+        document.getElementById('v3-t-bc').textContent = pBC;
+        document.getElementById('v3-t-ac').textContent = pAC;
+        document.getElementById('v3-t-all').textContent = all;
 
-        const pAB = ab - center;
-        const pBC = bc - center;
-        const pAC = ac - center;
-        const oA = ta - pAB - pAC - center;
-        const oB = tb - pAB - pBC - center;
-        const oC = tc - pAC - pBC - center;
-
-        // Update SVG Text Content
-        document.getElementById('txt-oa').textContent = isMerged ? oA : ta;
-        document.getElementById('txt-ob').textContent = isMerged ? oB : tb;
-        document.getElementById('txt-oc').textContent = isMerged ? oC : tc;
-        document.getElementById('txt-ab').textContent = pAB;
-        document.getElementById('txt-bc').textContent = pBC;
-        document.getElementById('txt-ac').textContent = pAC;
-        document.getElementById('txt-all').textContent = center;
-
-        document.getElementById('logic-trace').innerHTML = `
-            <b>Layer Logic:</b><br>
-            1. Core (All 3) = ${center}<br>
-            2. AB Petal = ${ab} - ${center} = ${pAB}<br>
-            3. Only A = ${ta} - ${pAB} - ${pAC} - ${center} = ${oA}
+        document.getElementById('v3-trace').innerHTML = `
+            <b>Subtraction Steps:</b><br>
+            1. Center Anchor = ${all}<br>
+            2. AB Petal: ${ab} (Total AB) - ${all} (Center) = ${pAB}<br>
+            3. Only A: ${ta} (Total A) - ${pAB} - ${pAC} - ${all} = ${oA}
         `;
     }
-
-    function toggleMerge() {
-        isMerged = !isMerged;
-        const svg = document.getElementById('venn-svg');
-        const btn = document.getElementById('merge-btn');
+    function toggleV3() {
+        v3Merged = !v3Merged;
+        const svg = document.getElementById('v3-svg');
+        const btn = document.getElementById('btn-v3');
+        const c = v3Merged ? { a:[190,160], b:[310,160], c:[250,260], oa:[130,100], ob:[370,100], oc:[250,380] } : { a:[130,130], b:[370,130], c:[250,350], oa:[130,130], ob:[370,130], oc:[250,350] };
         
-        // Coordinates for Separated vs Merged
-        const coords = isMerged ? 
-            { a: [190, 160], b: [310, 160], c: [250, 260], oa: [130, 100], ob: [370, 100], oc: [250, 380] } : 
-            { a: [130, 130], b: [370, 130], c: [250, 350], oa: [130, 130], ob: [370, 130], oc: [250, 350] };
+        document.getElementById('v3-c-a').setAttribute('cx', c.a[0]); document.getElementById('v3-c-a').setAttribute('cy', c.a[1]);
+        document.getElementById('v3-c-b').setAttribute('cx', c.b[0]); document.getElementById('v3-c-b').setAttribute('cy', c.b[1]);
+        document.getElementById('v3-c-c').setAttribute('cx', c.c[0]); document.getElementById('v3-c-c').setAttribute('cy', c.c[1]);
+        document.getElementById('v3-t-oa').setAttribute('x', c.oa[0]); document.getElementById('v3-t-oa').setAttribute('y', c.oa[1]);
+        document.getElementById('v3-t-ob').setAttribute('x', c.ob[0]); document.getElementById('v3-t-ob').setAttribute('y', c.ob[1]);
+        document.getElementById('v3-t-oc').setAttribute('x', c.oc[0]); document.getElementById('v3-t-oc').setAttribute('y', c.oc[1]);
 
-        // Move Circles
-        document.getElementById('svg-c-a').setAttribute('cx', coords.a[0]);
-        document.getElementById('svg-c-a').setAttribute('cy', coords.a[1]);
-        document.getElementById('svg-c-b').setAttribute('cx', coords.b[0]);
-        document.getElementById('svg-c-b').setAttribute('cy', coords.b[1]);
-        document.getElementById('svg-c-c').setAttribute('cx', coords.c[0]);
-        document.getElementById('svg-c-c').setAttribute('cy', coords.c[1]);
-
-        // Move "Only" Labels
-        document.getElementById('txt-oa').setAttribute('x', coords.oa[0]);
-        document.getElementById('txt-oa').setAttribute('y', coords.oa[1]);
-        document.getElementById('txt-ob').setAttribute('x', coords.ob[0]);
-        document.getElementById('txt-ob').setAttribute('y', coords.ob[1]);
-        document.getElementById('txt-oc').setAttribute('x', coords.oc[0]);
-        document.getElementById('txt-oc').setAttribute('y', coords.oc[1]);
-
-        if (isMerged) svg.classList.add('merged'); else svg.classList.remove('merged');
-        btn.innerText = isMerged ? "Separate Sets" : "Commence Merger";
-        update();
+        if (v3Merged) svg.classList.add('merged'); else svg.classList.remove('merged');
+        btn.innerText = v3Merged ? "Deconstruct Sets" : "Commence Merger";
+        updateV3();
     }
-
-    window.onload = update;
+    updateV3();
 </script>
 </body>
 </html>

@@ -1,6 +1,46 @@
 const LogicProvider = {
     modules: {
 
+        averages: {
+            calculate: (dataArray) => {
+                const sorted = [...dataArray].sort((a, b) => a - b);
+                const sum = dataArray.reduce((a, b) => a + b, 0);
+                const mean = sum / dataArray.length;
+
+                // Median
+                const mid = Math.floor(sorted.length / 2);
+                const median = sorted.length % 2 !== 0 
+                    ? sorted[mid] 
+                    : (sorted[mid - 1] + sorted[mid]) / 2;
+
+                // Mode
+                const counts = {};
+                dataArray.forEach(n => counts[n] = (counts[n] || 0) + 1);
+                let maxFreq = 0;
+                let modes = [];
+                for (let n in counts) {
+                    if (counts[n] > maxFreq) {
+                        maxFreq = counts[n];
+                        modes = [Number(n)];
+                    } else if (counts[n] === maxFreq) {
+                        modes.push(Number(n));
+                    }
+                }
+
+                return {
+                    mean: mean.toFixed(1),
+                    median,
+                    mode: maxFreq > 1 ? modes.join(', ') : "None",
+                    range: sorted[sorted.length - 1] - sorted[0],
+                    steps: [
+                        `Mean: Total sum (${sum}) ÷ Count (${dataArray.length}) = ${mean.toFixed(1)}`,
+                        `Median: Sorted list is [${sorted.join(', ')}]. The middle is ${median}.`,
+                        `Mode: The most frequent value is ${maxFreq > 1 ? modes.join(', ') : 'none'}.`
+                    ]
+                };
+            }
+        },
+
         venn3: {
             calculate: (tA, tB, tC, iAB, iBC, iAC, iAll, none) => {
                 // Input: Totals as provided in word problems

@@ -2,39 +2,39 @@ const LogicProvider = {
     modules: {
 
         missingSigns: {
-            calculate: (a, op1, b, op2, c, target) => {
-                const ops = { '+': (x, y) => x + y, '-': (x, y) => x - y, 'x': (x, y) => x * y, '/': (x, y) => x / y };
+            calculate: (pre, a, op1, b, op2, c, target) => {
+                const ops = { 
+                    '+': (x, y) => x + y, 
+                    '-': (x, y) => x - y, 
+                    'x': (x, y) => x * y, 
+                    '/': (x, y) => x / y,
+                    '^': (x, y) => Math.pow(x, y)
+                };
                 
-                // BODMAS check (x and / first)
-                let result = 0;
+                const valA = pre === 'sqrt' ? Math.sqrt(parseFloat(a)) : parseFloat(a);
+                const priority = (o) => (o === '^' ? 3 : (o === 'x' || o === '/') ? 2 : 1);
+                
+                let current = 0;
                 let steps = [];
 
-                const p1 = (op1 === 'x' || op1 === '/') ? 2 : 1;
-                const p2 = (op2 === 'x' || op2 === '/') ? 2 : 1;
-
-                if (p2 > p1) {
-                    const step1 = ops[op2](parseFloat(b), parseFloat(c));
-                    result = ops[op1](parseFloat(a), step1);
+                if (priority(op2) > priority(op1)) {
+                    const s1 = ops[op2](parseFloat(b), parseFloat(c));
+                    current = ops[op1](valA, s1);
                     steps = [
-                        `Priority: ${op2} resolved first.`,
-                        `${b} ${op2} ${c} = ${step1}`,
-                        `${a} ${op1} ${step1} = ${result}`
+                        `BODMAS: ${op2} has higher priority than ${op1}.`,
+                        `Step 1: Solve ${b} ${op2} ${c} = ${s1}.`,
+                        `Step 2: Solve ${valA} ${op1} ${s1} = ${current}.`
                     ];
                 } else {
-                    const step1 = ops[op1](parseFloat(a), parseFloat(b));
-                    result = ops[op2](step1, parseFloat(c));
+                    const s1 = ops[op1](valA, parseFloat(b));
+                    current = ops[op2](s1, parseFloat(c));
                     steps = [
-                        `Priority: ${op1} resolved first (or equal).`,
-                        `${a} ${op1} ${b} = ${step1}`,
-                        `${step1} ${op2} ${c} = ${result}`
+                        `Flow: ${op1} solved first (Left-to-Right or Higher Priority).`,
+                        `Step 1: Solve ${valA} ${op1} ${b} = ${s1}.`,
+                        `Step 2: Solve ${s1} ${op2} ${c} = ${current}.`
                     ];
                 }
-
-                return { 
-                    current: result, 
-                    isBalanced: result === parseFloat(target), 
-                    steps 
-                };
+                return { current, steps, isBalanced: current === parseFloat(target) };
             }
         },
 

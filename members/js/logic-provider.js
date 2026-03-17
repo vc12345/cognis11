@@ -1,6 +1,26 @@
 const LogicProvider = {
     modules: {
 
+        venn2: {
+            calculate: (onlyA, onlyB, both, neither) => {
+                const totalA = parseFloat(onlyA) + parseFloat(both);
+                const totalB = parseFloat(onlyB) + parseFloat(both);
+                const universe = parseFloat(onlyA) + parseFloat(onlyB) + parseFloat(both) + parseFloat(neither);
+                
+                return {
+                    totalA,
+                    totalB,
+                    universe,
+                    steps: [
+                        `1. 'Only A' (${onlyA}) + 'Both' (${both}) = Group A has ${totalA}.`,
+                        `2. 'Only B' (${onlyB}) + 'Both' (${both}) = Group B has ${totalB}.`,
+                        `3. The 'Both' section is the intersection where they meet.`,
+                        `4. Universe Total: ${onlyA} + ${onlyB} + ${both} + ${neither} = ${universe}.`
+                    ]
+                };
+            }
+        },
+
         substitution: {
             // Parses coefficients like '3A' into '3 * 12'
             parseTerm: (term, mappings) => {

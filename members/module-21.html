@@ -7,10 +7,8 @@
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
         .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
-        
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
@@ -18,160 +16,107 @@
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
         .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 1px; }
-        .q-box { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--cognis-blue); vertical-align: middle; border-radius: 3px; background: white; margin: 0 4px; }
 
-        /* Animation Stage */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 60px 20px; margin: 30px 0; text-align: center; height: 420px; position: relative; overflow: hidden; }
-        .venn-stage { display: flex; justify-content: center; align-items: center; height: 250px; position: relative; width: 100%; margin-bottom: 20px; }
-        
-        .set-circle { width: 220px; height: 220px; border: 3px solid var(--cognis-blue); border-radius: 50%; position: absolute; background: rgba(0, 45, 91, 0.04); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .set-circle b { font-size: 1.8rem; color: var(--cognis-blue); margin-bottom: 2px; }
-        .set-circle span { font-size: 0.75rem; font-weight: 800; color: #718096; text-transform: uppercase; letter-spacing: 1px; }
+        /* SVG Simulation Area */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; }
+        svg { background: white; border-radius: 8px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
+        circle { fill: rgba(0, 45, 91, 0.04); stroke: var(--cognis-blue); stroke-width: 3; transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        text { font-family: 'Segoe UI', sans-serif; font-weight: 800; pointer-events: none; transition: all 0.8s ease; text-anchor: middle; dominant-baseline: middle; }
+        .label-val { fill: var(--cognis-blue); font-size: 20px; }
+        .label-intersect { fill: var(--cognis-gold); font-size: 24px; opacity: 0; }
+        .merged .label-intersect { opacity: 1; }
 
-        #set-a { left: 10%; }
-        #set-b { right: 10%; }
-        
-        /* The Overlap state */
-        .merged #set-a { left: 28%; }
-        .merged #set-b { right: 28%; }
-        
-        .intersect-value { position: absolute; opacity: 0; transition: opacity 0.4s; color: var(--cognis-gold); font-weight: 900; font-size: 2rem; z-index: 20; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-        .merged .intersect-value { opacity: 1; transition-delay: 0.5s; }
-
-        .universe-tag { position: absolute; bottom: 20px; right: 20px; background: white; border: 2px solid #e2e8f0; padding: 8px 15px; border-radius: 8px; font-weight: bold; color: #64748b; font-size: 0.8rem; }
-
-        /* The Engine */
+        /* Engine */
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .input-stack { display: flex; flex-direction: column; gap: 15px; }
+        .control-group { margin-bottom: 20px; }
         .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
         .control-group input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1.1rem; }
-        
-        .btn-action { width: 100%; background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 15px; transition: 0.2s; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; min-height: 220px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+        .btn-action { width: 250px; background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
     </style>
 </head>
 <body>
-
 <div class="module-card">
-    <div class="header"><h1>Module 21: Venn Diagrams (The Intersection)</h1></div>
+    <div class="header"><h1>Module 21: Venn Diagrams (2 Circles)</h1></div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p><strong>Topic Logic:</strong> Venn diagrams are visual maps of sets. The most critical reasoning point is the <b>Intersection (∩)</b>. When two groups share members, those members are counted in the total of BOTH groups. To find how many are in "Only" one group, we must subtract the intersection.</p>
+        <p>Topic Logic: A Venn diagram is a map of shared properties. The critical point of failure in most questions is "Double Counting." We must identify the Intersection first to determine the unique "Only" values for each group.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Level 1</b>In a class, 12 play Football and 3 play Football AND Tennis. How many play <u>only</u> Football?</div>
-            <div class="tier-card"><b>Level 2</b>Group A has 20 people. Group B has 15. The intersection (A ∩ B) is 5. Find the total Union (A ∪ B).</div>
-            <div class="tier-card"><b>Level 3</b>There are 40 students. n(A) = 25, n(B) = 20. If 5 students are in neither, how many are in (A ∩ B)?</div>
+            <div class="tier-card"><b>Advanced Year 2</b>In a class, 12 play Football and 3 play BOTH. How many play Football ONLY?</div>
+            <div class="tier-card"><b>Average Year 4</b>Group A has 20 people. Group B has 15. The intersection is 5. Find the total Union.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Out of 40 students, n(A)=25 and n(B)=20. Calculate the size of the Intersection.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area" id="stage">
-            <div class="venn-stage">
-                <div class="set-circle" id="set-a">
-                    <span id="label-a">Total A</span>
-                    <b id="val-a">15</b>
-                </div>
-                <div class="intersect-value" id="val-both">5</div>
-                <div class="set-circle" id="set-b">
-                    <span id="label-b">Total B</span>
-                    <b id="val-b">10</b>
-                </div>
-            </div>
-            <div class="universe-tag">Universe Total: <span id="val-uni">22</span></div>
-            <button class="btn-action" style="width: 250px;" onclick="toggleVenn()" id="merge-btn">Calculate Intersection</button>
+        <div class="simulation-area">
+            <svg id="venn2-svg" width="500" height="300" viewBox="0 0 500 300">
+                <circle id="v2-c-a" cx="130" cy="150" r="110" />
+                <circle id="v2-c-b" cx="370" cy="150" r="110" />
+                <text id="v2-t-oa" x="130" y="150" class="label-val">15</text>
+                <text id="v2-t-ob" x="370" y="150" class="label-val">10</text>
+                <text id="v2-t-int" x="250" y="150" class="label-intersect">5</text>
+            </svg>
+            <button class="btn-action" onclick="toggleVenn2()" id="btn-v2">Calculate Intersection</button>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="input-stack">
-                <div class="control-group">
-                    <label>Total in Group A [n(A)]</label>
-                    <input type="number" id="in-ta" value="15" oninput="updateLogic()">
-                </div>
-                <div class="control-group">
-                    <label>Total in Group B [n(B)]</label>
-                    <input type="number" id="in-tb" value="10" oninput="updateLogic()">
-                </div>
-                <div class="control-group">
-                    <label>Intersection (Both) [n(A ∩ B)]</label>
-                    <input type="number" id="in-int" value="5" oninput="updateLogic()">
-                </div>
-                <div class="control-group">
-                    <label>Neither [n(A ∪ B)']</label>
-                    <input type="number" id="in-neither" value="2" oninput="updateLogic()">
-                </div>
+            <div class="inputs">
+                <div class="control-group"><label>Total n(A)</label><input type="number" id="v2-in-ta" value="15" oninput="updateV2()"></div>
+                <div class="control-group"><label>Total n(B)</label><input type="number" id="v2-in-tb" value="10" oninput="updateV2()"></div>
+                <div class="control-group"><label>Intersection (A ∩ B)</label><input type="number" id="v2-in-int" value="5" oninput="updateV2()"></div>
             </div>
-            <div class="trace-log" id="logic-trace">
-                Adjust values to re-map the set boundaries...
-            </div>
-        </div>
-    </section>
-
-    <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0; font-size:0.85rem;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Double-Counting" Error:</strong> If you add the total of A and B (15 + 10 = 25), you have counted the middle 5 people twice.
-            <br><br><strong>The Fix:</strong> Always think of the <b>Cap (∩)</b> as a shared resource. To find the unique population, you must perform: <b>(A + B) - (A ∩ B)</b>. This "flattens" the overlap so every person is counted exactly once.</p>
+            <div class="trace-log" id="v2-trace">Adjust totals to see the "Only" remainder...</div>
         </div>
     </section>
 </div>
 
 <script>
-    const inputs = ['in-ta', 'in-tb', 'in-int', 'in-neither'].map(id => document.getElementById(id));
-    const stage = document.getElementById('stage');
-    const mergeBtn = document.getElementById('merge-btn');
-    let isMerged = false;
+    let v2Merged = false;
+    function updateV2() {
+        const ta = parseFloat(document.getElementById('v2-in-ta').value) || 0;
+        const tb = parseFloat(document.getElementById('v2-in-tb').value) || 0;
+        const inter = parseFloat(document.getElementById('v2-in-int').value) || 0;
+        const oa = ta - inter; const ob = tb - inter;
 
-    function updateLogic() {
-        const ta = parseFloat(inputs[0].value) || 0;
-        const tb = parseFloat(inputs[1].value) || 0;
-        const intersect = parseFloat(inputs[2].value) || 0;
-        const neither = parseFloat(inputs[3].value) || 0;
+        document.getElementById('v2-t-oa').textContent = v2Merged ? oa : ta;
+        document.getElementById('v2-t-ob').textContent = v2Merged ? ob : tb;
+        document.getElementById('v2-t-int').textContent = inter;
 
-        const onlyA = ta - intersect;
-        const onlyB = tb - intersect;
-        const union = onlyA + onlyB + intersect;
-        const universe = union + neither;
-
-        // Update Labels based on state
-        document.getElementById('val-a').innerText = isMerged ? onlyA : ta;
-        document.getElementById('label-a').innerText = isMerged ? "Only A" : "Total A";
-        document.getElementById('val-b').innerText = isMerged ? onlyB : tb;
-        document.getElementById('label-b').innerText = isMerged ? "Only B" : "Total B";
-        document.getElementById('val-both').innerText = intersect;
-        document.getElementById('val-uni').innerText = universe;
-
-        // Trace Output
-        document.getElementById('logic-trace').innerHTML = `
-            <div style="color:var(--cognis-gold); font-weight:bold; margin-bottom:12px;">Step-by-Step Mapping:</div>
-            <div>→ Intersection (A ∩ B) is ${intersect}.</div>
-            <div>→ 'Only A' = Total A (${ta}) - ${intersect} = ${onlyA}.</div>
-            <div>→ 'Only B' = Total B (${tb}) - ${intersect} = ${onlyB}.</div>
-            <div style="margin: 15px 0; border-top: 1px solid #444; padding-top: 10px;">
-                <b>Calculating the Union (A ∪ B):</b><br>
-                ${onlyA} (Only A) + ${intersect} (Both) + ${onlyB} (Only B) = <b>${union}</b>
-            </div>
-            <div>Total Universe: ${union} + ${neither} (Neither) = <b>${universe}</b></div>
+        document.getElementById('v2-trace').innerHTML = `
+            <b>Disjoint Analysis:</b><br>
+            → Only A = ${ta} - ${inter} = ${oa}<br>
+            → Only B = ${tb} - ${inter} = ${ob}<br>
+            → Total Union (A ∪ B) = ${oa + ob + inter}
         `;
     }
-
-    function toggleVenn() {
-        isMerged = !isMerged;
-        if (isMerged) {
-            stage.classList.add('merged');
-            mergeBtn.innerText = "Separate Totals";
+    function toggleVenn2() {
+        v2Merged = !v2Merged;
+        const svg = document.getElementById('venn2-svg');
+        const btn = document.getElementById('btn-v2');
+        if (v2Merged) {
+            document.getElementById('v2-c-a').setAttribute('cx', '200');
+            document.getElementById('v2-c-b').setAttribute('cx', '300');
+            document.getElementById('v2-t-oa').setAttribute('x', '140');
+            document.getElementById('v2-t-ob').setAttribute('x', '360');
+            svg.classList.add('merged');
+            btn.innerText = "Separate Totals";
         } else {
-            stage.classList.remove('merged');
-            mergeBtn.innerText = "Calculate Intersection";
+            document.getElementById('v2-c-a').setAttribute('cx', '130');
+            document.getElementById('v2-c-b').setAttribute('cx', '370');
+            document.getElementById('v2-t-oa').setAttribute('x', '130');
+            document.getElementById('v2-t-ob').setAttribute('x', '370');
+            svg.classList.remove('merged');
+            btn.innerText = "Calculate Intersection";
         }
-        updateLogic();
+        updateV2();
     }
-
-    window.onload = updateLogic;
+    window.onload = updateV2;
 </script>
 </body>
 </html>

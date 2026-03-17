@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 36: Anagram Chamber | Cognis11</title>
+    <title>Module 36: Anagram Scrambler | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
@@ -16,43 +16,51 @@
         .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
+        /* The Boggle Chamber */
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
-        .chamber { background: #2d3748; border: 4px inset #4a5568; border-radius: 15px; padding: 30px; display: inline-flex; flex-wrap: wrap; gap: 10px; justify-content: center; min-width: 320px; }
-        .tile { width: 55px; height: 55px; background: #fefefe; border-radius: 10px; border-bottom: 5px solid #cbd5e0; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; color: #1a202c; transition: 0.2s; }
+        .chamber { background: #2d3748; border: 4px inset #4a5568; border-radius: 15px; padding: 30px; display: inline-flex; flex-wrap: wrap; gap: 12px; justify-content: center; min-width: 320px; min-height: 100px; }
+        .tile { width: 60px; height: 60px; background: #fefefe; border-radius: 10px; border-bottom: 5px solid #cbd5e0; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; color: #1a202c; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
-        @keyframes shake {
-            0% { transform: rotate(0deg) translate(0,0); }
-            25% { transform: rotate(5deg) translate(2px, -2px); }
-            75% { transform: rotate(-5deg) translate(-2px, 2px); }
-            100% { transform: rotate(0deg) translate(0,0); }
+        @keyframes rumble {
+            0% { transform: translate(0,0) rotate(0); }
+            20% { transform: translate(-3px, 3px) rotate(-5deg); }
+            40% { transform: translate(3px, -3px) rotate(5deg); }
+            60% { transform: translate(-3px, -3px) rotate(-5deg); }
+            80% { transform: translate(3px, 3px) rotate(5deg); }
+            100% { transform: translate(0,0) rotate(0); }
         }
-        .shake-active .tile { animation: shake 0.4s infinite; }
+        .rumbling .tile { animation: rumble 0.15s infinite; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .btn-choice { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; display: flex; justify-content: space-between; }
+        .btn-choice { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; display: flex; justify-content: space-between; font-weight: bold; }
         .btn-choice:hover { background: var(--cognis-gold); }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+        
+        .shake-btn { background: var(--cognis-gold); color: white; border: none; padding: 15px 40px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 1rem; margin-top: 20px; transition: transform 0.1s; }
+        .shake-btn:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
 <div class="module-card">
-    <div class="header"><h1>Module 36: Anagram Chamber</h1></div>
+    <div class="header"><h1>Module 36: Anagram Scrambler</h1></div>
+    
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
+        <p>An anagram is a word or phrase formed by rearranging the letters of another. To a computer (and a Type 2 thinker), two words are anagrams if their <b>Sorted Inventory</b> matches exactly. The order is irrelevant; the stock is everything.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>Is <b>TAC</b> an anagram of <b>CAT</b>?</div>
-            <div class="tier-card"><b>Average Year 4</b>Rearrange <b>LISTEN</b> to make a word for quiet.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Find the pair in <b>DESSERT / DESERT / RESTED</b>.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>Is <b>ACT</b> an anagram of <b>CAT</b>?</div>
+            <div class="tier-card"><b>Average Year 4</b>Rearrange <b>LISTEN</b> to find a word meaning quiet.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the true anagram pair: <b>RETAIN, TERNIA, NERITA</b>.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area">
-            <div id="chamber" class="chamber"></div>
-            <div style="margin-top: 30px;">
-                <button onclick="shake()" style="background:var(--cognis-gold); color:white; border:none; padding:12px 30px; border-radius:8px; font-weight:bold; cursor:pointer; text-transform:uppercase;">Shake Inventory</button>
-            </div>
+        <div class="simulation-area" id="sim-area">
+            <div id="chamber" class="chamber">
+                </div>
+            <br>
+            <button class="shake-btn" onclick="shakeChamber()">Shake & Scramble</button>
         </div>
     </section>
 
@@ -60,41 +68,73 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase; margin-bottom:10px; display:block;">Select Comparison Pair</label>
-                <button class="btn-choice" onclick="loadPair('LISTEN', 'SILENT')">LISTEN / SILENT <span>Check</span></button>
-                <button class="btn-choice" onclick="loadPair('HEART', 'EARTH')">HEART / EARTH <span>Check</span></button>
-                <button class="btn-choice" onclick="loadPair('DORMITORY', 'DIRTY ROOM')">DORMITORY / DIRTY ROOM <span>Check</span></button>
-                <button class="btn-choice" onclick="loadPair('DESSERT', 'DESERT')">DESSERT / DESERT <span>Check</span></button>
+                <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase; margin-bottom:10px; display:block;">Select High-Frequency Pair</label>
+                <button class="btn-choice" onclick="loadPair('LISTEN', 'SILENT')">LISTEN / SILENT <span>Load</span></button>
+                <button class="btn-choice" onclick="loadPair('HEART', 'EARTH')">HEART / EARTH <span>Load</span></button>
+                <button class="btn-choice" onclick="loadPair('ELBOW', 'BELOW')">ELBOW / BELOW <span>Load</span></button>
+                <button class="btn-choice" onclick="loadPair('DORMITORY', 'DIRTY ROOM')">DORMITORY / DIRTY ROOM <span>Load</span></button>
+                <button class="btn-choice" onclick="loadPair('SPOUND', 'POUNDS')">SPOUND / POUNDS <span>Load</span></button>
+                <button class="btn-choice" onclick="loadPair('MELON', 'LEMON')">MELON / LEMON <span>Load</span></button>
             </div>
             <div class="trace-log" id="trace-36">Compare alphabetical inventories...</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The "One Letter Off" Trap:</strong> Words like <b>DESSERT</b> and <b>DESERT</b> are designed to fool the eye. They share the same letters, but not the same <b>count</b>.
+            <br><br><strong>The Fix:</strong> Never trust your eyes. Trust the inventory. If Word A has two 'S's and Word B has one, the "Sorted Key" will break, proving they are not anagrams.</p>
         </div>
     </section>
 </div>
 
 <script>
-    function loadPair(w1, w2) {
-        const chamber = document.getElementById('chamber');
-        const clean1 = w1.replace(/\s/g, '').toUpperCase();
-        const clean2 = w2.replace(/\s/g, '').toUpperCase();
-        
-        chamber.innerHTML = clean1.split('').map(l => `<div class="tile">${l}</div>`).join('');
-        
-        const sorted1 = clean1.split('').sort().join('');
-        const sorted2 = clean2.split('').sort().join('');
-        const isMatch = (sorted1 === sorted2);
+    let currentLetters = [];
+    let currentWord1 = "";
+    let currentWord2 = "";
 
-        document.getElementById('trace-36').innerHTML = `
-            <b>Inventory Comparison:</b><br>
-            A: [${sorted1}]<br>
-            B: [${sorted2}]<br><br>
-            Result: <b style="color:${isMatch ? 'var(--cognis-gold)' : '#e53e3e'}">${isMatch ? 'MATCH (Anagram)' : 'NO MATCH'}</b>
-        `;
+    function loadPair(w1, w2) {
+        currentWord1 = w1.toUpperCase().replace(/\s/g, '');
+        currentWord2 = w2.toUpperCase().replace(/\s/g, '');
+        currentLetters = currentWord1.split('');
+        renderTiles();
+        updateTrace();
     }
 
-    function shake() {
-        const area = document.querySelector('.simulation-area');
-        area.classList.add('shake-active');
-        setTimeout(() => area.classList.remove('shake-active'), 600);
+    function renderTiles() {
+        const chamber = document.getElementById('chamber');
+        chamber.innerHTML = currentLetters.map(l => `<div class="tile">${l}</div>`).join('');
+    }
+
+    function shakeChamber() {
+        const area = document.getElementById('sim-area');
+        area.classList.add('rumbling');
+        
+        // Fisher-Yates Shuffle
+        setTimeout(() => {
+            for (let i = currentLetters.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentLetters[i], currentLetters[j]] = [currentLetters[j], currentLetters[i]];
+            }
+            renderTiles();
+            area.classList.remove('rumbling');
+        }, 600);
+    }
+
+    function updateTrace() {
+        const k1 = currentWord1.split('').sort().join('');
+        const k2 = currentWord2.split('').sort().join('');
+        const isMatch = (k1 === k2 && k1 !== "");
+
+        document.getElementById('trace-36').innerHTML = `
+            <b>Inventory Analysis:</b><br>
+            Word 1 Key: <span style="color:var(--cognis-gold)">[${k1}]</span><br>
+            Word 2 Key: <span style="color:var(--cognis-gold)">[${k2}]</span><br><br>
+            Result: <b style="color:${isMatch ? '#48bb78' : '#f56565'}">
+            ${isMatch ? 'ANAGRAM VALIDATED' : 'INVALID (Stock Mismatch)'}</b><br><br>
+            <i>Note: "Shake" only changes the visual display; the Stock Key remains constant.</i>
+        `;
     }
 
     window.onload = () => loadPair('LISTEN', 'SILENT');

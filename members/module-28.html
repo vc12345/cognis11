@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 28: Net-to-Volume | Cognis11</title>
+    <title>Module 28: Net Topology | Cognis11</title>
     <style>
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
@@ -16,46 +16,39 @@
         .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        .simulation-area { background: #f8fafc; border-radius: 12px; padding: 40px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; }
+        .simulation-area { background: #f8fafc; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
         .net-svg { background: white; border: 1px solid #e2e8f0; border-radius: 8px; }
-        .face { fill: rgba(0, 45, 91, 0.05); stroke: var(--cognis-blue); stroke-width: 2; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .face { fill: rgba(0, 45, 91, 0.05); stroke: var(--cognis-blue); stroke-width: 2; transition: fill 0.3s; }
         .face-base { fill: rgba(197, 160, 89, 0.3); stroke: var(--cognis-gold); stroke-width: 3; }
-        .face-folded { opacity: 0.4; transform-origin: center; }
+        .face-lid { fill: rgba(49, 130, 206, 0.2); stroke: #3182ce; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .input-row { display: flex; gap: 15px; margin-bottom: 20px; }
-        .input-row input { width: 100%; padding: 10px; border-radius: 6px; border: none; background: #2d3748; color: white; font-weight: bold; accent-color: var(--cognis-gold); }
+        .preset-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-preset { background: #2d3748; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; }
+        .btn-preset:hover, .btn-preset.active { background: var(--cognis-gold); }
+        .input-row { display: flex; gap: 10px; margin-top: 20px; }
+        .input-row div { flex: 1; }
+        .input-row input { width: 100%; padding: 8px; border-radius: 6px; border: none; background: #2d3748; color: white; font-weight: bold; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
     </style>
 </head>
 <body>
 <div class="module-card">
     <div class="header"><h1>Module 28: Net-to-Volume</h1></div>
-    
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>A cube net has 6 identical squares. Side = 3cm. Find Volume.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>A cube net has side = 3cm. Find the Volume.</div>
             <div class="tier-card"><b>Average Year 4</b>A net has a 4x6 base and flaps of 2. Find the Volume.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Identify the 'Lid' and calculate the internal capacity of a Z-net.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the 'Lid' in a non-standard Z-pattern net.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <svg id="fold-svg" width="400" height="400" viewBox="0 0 400 400" class="net-svg">
-                <rect id="f-base" x="150" y="150" width="100" height="100" class="face face-base" />
-                <rect id="f-left" x="50" y="150" width="100" height="100" class="face" />
-                <rect id="f-right" x="250" y="150" width="100" height="100" class="face" />
-                <rect id="f-top" x="150" y="50" width="100" height="100" class="face" />
-                <rect id="f-bottom" x="150" y="250" width="100" height="100" class="face" />
-                <rect id="f-lid" x="150" y="-50" width="100" height="100" class="face" style="fill:rgba(49, 130, 206, 0.2); stroke:#3182ce;" />
-            </svg>
-            <div style="width: 100%; max-width: 400px; margin-top: 20px;">
-                <label style="font-size: 0.7rem; color: #718096; text-transform: uppercase;">Fold Progress</label>
-                <input type="range" id="fold-slider" min="0" max="100" value="0" style="width:100%; accent-color:var(--cognis-gold);" oninput="applyFold()">
-            </div>
+            <svg id="net-svg" width="400" height="350" viewBox="0 0 400 350" class="net-svg"></svg>
+            <p id="net-desc" style="margin-top: 15px; font-weight: bold; color: var(--cognis-blue);">Standard Cross Topology</p>
         </div>
     </section>
 
@@ -63,47 +56,71 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase;">Dimensions</label>
-                <div class="input-row" style="flex-direction: column;">
-                    <div>Length: <input type="number" id="in-l" value="5" oninput="run28()"></div>
-                    <div>Width: <input type="number" id="in-w" value="4" oninput="run28()"></div>
-                    <div>Height: <input type="number" id="in-h" value="3" oninput="run28()"></div>
+                <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase;">1. Topology</label>
+                <div class="preset-grid">
+                    <button class="btn-preset active" onclick="setNet('cross', this)">Cross</button>
+                    <button class="btn-preset" onclick="setNet('z-pattern', this)">Z-Pattern</button>
+                    <button class="btn-preset" onclick="setNet('long-row', this)">Long Row</button>
+                    <button class="btn-preset" onclick="setNet('t-shape', this)">T-Shape</button>
+                </div>
+                <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; margin-top:20px; display:block;">2. Dimensions</label>
+                <div class="input-row">
+                    <div><small>L</small><input type="number" id="in-l" value="5" oninput="run28()"></div>
+                    <div><small>W</small><input type="number" id="in-w" value="4" oninput="run28()"></div>
+                    <div><small>H</small><input type="number" id="in-h" value="3" oninput="run28()"></div>
                 </div>
             </div>
-            <div class="trace-log" id="trace-28">Move the fold slider to see the capacity build...</div>
+            <div class="trace-log" id="trace-28">Select topology and set dimensions...</div>
         </div>
     </section>
 </div>
 
 <script>
-    function applyFold() {
-        const p = document.getElementById('fold-slider').value;
-        const scale = 1 - (p / 150); // Shrink factor
-        const offset = p / 2;
+    const S = 50; // Grid square size
+    let currentType = 'cross';
 
-        // Simulate folding by moving side flaps inward and fading them
-        document.getElementById('f-left').style.transform = `translateX(${offset}px) scaleX(${scale})`;
-        document.getElementById('f-right').style.transform = `translateX(${-offset}px) scaleX(${scale})`;
-        document.getElementById('f-top').style.transform = `translateY(${offset}px) scaleY(${scale})`;
-        document.getElementById('f-bottom').style.transform = `translateY(${-offset}px) scaleY(${scale})`;
-        document.getElementById('f-lid').style.transform = `translateY(${offset * 3}px) scaleY(${scale})`;
-        
+    const nets = {
+        'cross': [{x:2,y:0,t:'lid'},{x:2,y:1,t:'f'},{x:2,y:2,t:'base'},{x:2,y:3,t:'f'},{x:1,y:2,t:'f'},{x:3,y:2,t:'f'}],
+        'z-pattern': [{x:1,y:1,t:'lid'},{x:2,y:1,t:'f'},{x:2,y:2,t:'base'},{x:3,y:2,t:'f'},{x:3,y:3,t:'f'},{x:4,y:3,t:'f'}],
+        'long-row': [{x:0,y:1,t:'lid'},{x:1,y:1,t:'f'},{x:2,y:1,t:'base'},{x:3,y:1,t:'f'},{x:2,y:0,t:'f'},{x:2,y:2,t:'f'}],
+        't-shape': [{x:1,y:1,t:'f'},{x:2,y:1,t:'lid'},{x:3,y:1,t:'f'},{x:2,y:2,t:'f'},{x:2,y:3,t:'base'},{x:2,y:4,t:'f'}]
+    };
+
+    function setNet(type, btn) {
+        document.querySelectorAll('.btn-preset').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentType = type;
         run28();
     }
 
     function run28() {
+        const svg = document.getElementById('net-svg');
+        svg.innerHTML = '';
+        nets[currentType].forEach(f => {
+            const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            r.setAttribute('x', f.x * S + 50); r.setAttribute('y', f.y * S + 25);
+            r.setAttribute('width', S); r.setAttribute('height', S);
+            r.setAttribute('class', f.t === 'base' ? 'face face-base' : f.t === 'lid' ? 'face face-lid' : 'face');
+            svg.appendChild(r);
+            if(f.t !== 'f') {
+                const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                t.setAttribute('x', f.x * S + S/2 + 50); t.setAttribute('y', f.y * S + S/2 + 30);
+                t.setAttribute('text-anchor', 'middle'); t.setAttribute('font-size', '10'); t.textContent = f.t.toUpperCase();
+                svg.appendChild(t);
+            }
+        });
+
         const l = parseFloat(document.getElementById('in-l').value) || 0;
         const w = parseFloat(document.getElementById('in-w').value) || 0;
         const h = parseFloat(document.getElementById('in-h').value) || 0;
-        const baseArea = l * w;
-        const volume = baseArea * h;
+        const vol = l * w * h;
 
         document.getElementById('trace-28').innerHTML = `
-            <b>Capacity Analysis:</b><br>
-            1. Base Area: ${l} × ${w} = ${baseArea} units²<br>
-            2. Vertical Extrusion: ${h} units<br>
-            3. Final Volume: <b>${volume} units³</b><br><br>
-            <i>Visualization: As the flaps fold up, the 2D surface area creates a 3D internal space.</i>
+            <b>Volume Engine:</b><br>
+            Base Area: ${l} × ${w} = ${l*w}<br>
+            Height (Flaps): ${h}<br>
+            Total Capacity: <b>${vol} units³</b><br><br>
+            <i>Logic: Regardless of the 2D layout, the internal capacity is constant for fixed L, W, and H.</i>
         `;
     }
     window.onload = run28;

@@ -2,61 +2,104 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 32: Data Tables | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/reasoning-provider.js"></script>
+    <title>Module 32: Symbol Mapping | Cognis11</title>
     <style>
-        :root { --primary: #1e40af; --accent: #1d4ed8; --bg: #eff6ff; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #dbeafe; }
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th, td { border: 1px solid #cbd5e1; padding: 12px; text-align: left; }
-        th { background: #f1f5f9; }
-        .highlight { background: #fef9c3; font-weight: 700; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; color: white; }
+        .symbol-string { font-size: 3rem; letter-spacing: 15px; margin-bottom: 20px; color: var(--cognis-gold); font-family: serif; }
+        .mapping-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 10px; margin-top: 20px; }
+        .map-pair { background: #2d3748; padding: 10px; border-radius: 6px; border: 1px solid #4a5568; }
+        .map-pair small { display: block; font-size: 1.5rem; margin-bottom: 5px; color: var(--cognis-gold); }
+        .map-pair input { width: 30px; border: none; background: transparent; color: white; text-align: center; border-bottom: 2px solid var(--cognis-gold); font-weight: bold; font-size: 1.2rem; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1 style="color:var(--primary); text-align:center;">Module 32: Data Interpretation</h1>
-
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 32: Symbol-to-Word Mapping</h1></div>
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "Type 1" thinker looks at a table and sees a wall of numbers. A "Type 2" thinker looks for **Intersection**. They find the right row, then the right column, and only then do they look at the number.</p>
-    </div>
-
-    <div class="section">
-        <h2>Phase 2: The Anatomy</h2>
-        
-        <p>In reasoning exams, the question often asks for the <strong>Difference</strong> (Subtract) or the <strong>Total</strong> (Add) between two specific intersections.</p>
-    </div>
-
-    <div class="section">
-        <h2>Phase 3: The Engine</h2>
-        <p>Scenario: A shop sells 3 types of fruit. Use the table to answer the questions.</p>
-        <table>
-            <tr><th>Fruit</th><th>Price per kg</th><th>Stock Level</th></tr>
-            <tr id="r1"><td>Apples</td><td>£2.00</td><td>40kg</td></tr>
-            <tr id="r2"><td>Bananas</td><td>£1.50</td><td>60kg</td></tr>
-            <tr id="r3"><td>Cherries</td><td>£5.00</td><td>10kg</td></tr>
-        </table>
-        
-        <div style="background:#f8fafc; padding:20px; border-radius:8px;">
-            <p><strong>Question:</strong> How much more does 1kg of Cherries cost than 1kg of Apples?</p>
-            <button onclick="reveal(1)" style="padding:10px; background:var(--primary); color:white; border:none; border-radius:4px; cursor:pointer;">Reveal Logic</button>
-            <p id="ans1" style="display:none; margin-top:15px; color:var(--primary); font-weight:700;">
-                Logic: Cherries (£5.00) - Apples (£2.00) = £3.00
-            </p>
+        <p>This is abstract pattern matching. You are given a set of symbols and told they represent words. To crack the code, look for <b>frequency</b> and <b>repetition</b>. If a symbol appears twice in a code for a 5-letter word, it must represent a letter that appears twice in that word (like the 'P' in APPLE).</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>If Δ = G and Ω = O, what word is represented by ΔΩΔ?</div>
+            <div class="tier-card"><b>Average Year 4</b>If ☆♡☆ means "MOM", what does ♡☆♡ mean?</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Crack the 3-word code by matching the position of repeating symbols.</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
-        <h2>Phase 4: The Saboteur</h2>
-        <p style="color: var(--trap); font-weight: 700;">The "Wrong Row" Trap: Sliding your finger across the page and accidentally picking a number from the row above or below. Use a ruler or your pen to "lock" the row!</p>
-    </div>
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="simulation-area">
+            <div class="symbol-string" id="active-code">Ψ Ω Ψ</div>
+            <div style="margin-top:20px; font-size: 0.9rem; opacity: 0.7;">Decode the Rosetta string by assigning letters below:</div>
+            <div class="mapping-grid" id="mapping-ui">
+                </div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <div style="background: rgba(197, 160, 89, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--cognis-gold);">
+                    <b>Current Word:</b><br>
+                    <span id="decoded-word" style="font-size: 1.5rem; letter-spacing: 5px;">_ _ _</span>
+                </div>
+            </div>
+            <div class="trace-log" id="trace-32">Assign 'P' to Ψ and 'O' to Ω to see the mapping...</div>
+        </div>
+    </section>
 </div>
+
 <script>
-    function reveal(id) { document.getElementById('ans'+id).style.display = 'block'; }
+    const symbols = ["Ψ", "Ω", "Σ", "Δ", "Π"];
+    const currentCode = ["Ψ", "Ω", "Ψ"];
+    const userMap = {};
+
+    function init32() {
+        const ui = document.getElementById('mapping-ui');
+        symbols.forEach(s => {
+            ui.innerHTML += `
+                <div class="map-pair">
+                    <small>${s}</small>
+                    <input type="text" maxlength="1" oninput="updateMap('${s}', this.value)">
+                </div>
+            `;
+        });
+        updateDisplay();
+    }
+
+    function updateMap(sym, val) {
+        userMap[sym] = val.toUpperCase();
+        updateDisplay();
+    }
+
+    function updateDisplay() {
+        const decoded = currentCode.map(s => userMap[s] || "_").join(" ");
+        document.getElementById('decoded-word').innerText = decoded;
+        
+        document.getElementById('trace-32').innerHTML = `
+            <b>Logic Trace:</b><br>
+            Checking repetition: The first and third symbols are identical (Ψ).<br>
+            Your current word: <b>${decoded}</b><br>
+            Does this follow a known English pattern? (e.g., POP, MOM, DID)
+        `;
+    }
+
+    window.onload = init32;
 </script>
 </body>
 </html>

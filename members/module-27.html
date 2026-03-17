@@ -2,21 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 27: Angle Radar | Cognis11</title>
+    <title>Module 27: Angle Logic | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --angle-a: #e53e3e; --angle-b: #3182ce; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; --angle-a: #e53e3e; --angle-b: #3182ce; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
         .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
-        
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
-        .p-line { stroke: white; stroke-width: 3; }
-        .t-line { stroke: var(--cognis-gold); stroke-width: 4; transition: all 0.1s; }
-        .arc-a { fill: none; stroke: var(--angle-a); stroke-width: 4; }
-        .arc-b { fill: none; stroke: var(--angle-b); stroke-width: 4; }
+        .p-line { stroke: white; stroke-width: 3; stroke-dasharray: 10,5; }
+        .t-line { stroke: var(--cognis-gold); stroke-width: 5; }
+        .angle-label { font-size: 14px; font-weight: bold; font-family: monospace; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .control-group input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
@@ -28,11 +31,11 @@
     <div class="header"><h1>Module 27: Angle Logic</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p><strong>The Logic:</strong> You don't need to memorize "Alternate" or "Corresponding" if you see the <b>Translation</b>. Parallel lines mean the environment is the same at both intersections. All acute angles will be equal, and all obtuse angles will be equal.</p>
+        <p>Parallel lines create identical geometric environments. When a transversal line intersects them, only two unique angle values are created: the angle itself and its supplementary partner (180° - angle). All acute angles match, and all obtuse angles match.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>What is the angle on a straight line? If one part is 60°, what is the other?</div>
-            <div class="tier-card"><b>Average Year 4</b>Two parallel lines are cut by a transversal. If one angle is 110°, find all other seven angles.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Identify the 'Z' (Alternate) and 'F' (Corresponding) relationships to solve for X in a complex polygon.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>A straight line is 180°. If one angle is 70°, find the other.</div>
+            <div class="tier-card"><b>Average Year 4</b>Find the 'Alternate Interior' angle when one corner is 115°.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Find the unknown angle in a complex 'Z' or 'F' shape.</div>
         </div>
     </section>
 
@@ -40,13 +43,14 @@
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
             <svg id="canvas-27" width="600" height="300" viewBox="0 0 600 300">
-                <line x1="50" y1="100" x2="550" y2="100" class="p-line" />
-                <line x1="50" y1="200" x2="550" y2="200" class="p-line" />
-                <line id="trans-line" x1="300" y1="50" x2="300" y2="250" class="t-line" />
+                <line x1="50" y1="80" x2="550" y2="80" class="p-line" />
+                <line x1="50" y1="220" x2="550" y2="220" class="p-line" />
+                <line id="t-line" x1="200" y1="20" x2="400" y2="280" class="t-line" />
                 
-                <text id="ang-1" x="280" y="90" fill="var(--angle-a)" font-weight="bold">θ</text>
-                <text id="ang-2" x="320" y="90" fill="var(--angle-b)" font-weight="bold">180-θ</text>
-                <text id="ang-5" x="280" y="190" fill="var(--angle-a)" font-weight="bold">θ</text>
+                <text id="ang-u1" x="260" y="70" fill="var(--angle-a)" class="angle-label">θ</text>
+                <text id="ang-u2" x="320" y="70" fill="var(--angle-b)" class="angle-label">180-θ</text>
+                <text id="ang-l1" x="300" y="210" fill="var(--angle-a)" class="angle-label">θ</text>
+                <text id="ang-l2" x="360" y="210" fill="var(--angle-b)" class="angle-label">180-θ</text>
             </svg>
         </div>
     </section>
@@ -57,10 +61,17 @@
             <div class="controls">
                 <div class="control-group">
                     <label>Rotate Transversal (θ)</label>
-                    <input type="range" id="slider-27" min="30" max="150" value="60" oninput="run27()">
+                    <input type="range" id="slider-27" min="30" max="150" value="65" oninput="run27()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-27">Rotate to see the relationships.</div>
+            <div class="trace-log" id="trace-27">Move the slider to see how corresponding angles mirror each other perfectly.</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p>The "Z" (Alternate) and "F" (Corresponding) patterns are just translations of the same intersection. Because the lines are parallel, the angles do not change as you slide from one intersection to the next.</p>
         </div>
     </section>
 </div>
@@ -69,24 +80,23 @@
     function run27() {
         const theta = parseInt(document.getElementById('slider-27').value);
         const rad = (theta * Math.PI) / 180;
-        const dx = 100 * Math.cos(rad);
-        const dy = 100 * Math.sin(rad);
+        const offset = 120 / Math.tan(rad);
 
-        // Update Line
-        const line = document.getElementById('trans-line');
-        line.setAttribute('x1', 300 + dx);
-        line.setAttribute('y1', 150 - 100);
-        line.setAttribute('x2', 300 - dx);
-        line.setAttribute('y2', 150 + 100);
+        const tLine = document.getElementById('t-line');
+        tLine.setAttribute('x1', 300 - offset - 30);
+        tLine.setAttribute('y1', 20);
+        tLine.setAttribute('x2', 300 + offset + 30);
+        tLine.setAttribute('y2', 280);
 
-        document.getElementById('ang-1').textContent = theta + '°';
-        document.getElementById('ang-2').textContent = (180 - theta) + '°';
-        document.getElementById('ang-5').textContent = theta + '°';
+        document.getElementById('ang-u1').textContent = theta + '°';
+        document.getElementById('ang-u2').textContent = (180 - theta) + '°';
+        document.getElementById('ang-l1').textContent = theta + '°';
+        document.getElementById('ang-l2').textContent = (180 - theta) + '°';
 
         document.getElementById('trace-27').innerHTML = `
-            <b>Active Angle (θ): ${theta}°</b> (Red)<br>
-            <b>Supplementary: ${180-theta}°</b> (Blue)<br><br>
-            <i>Type 2 Insight: Notice that the red angles are identical at both intersections because the horizontal lines are parallel. This is the 'Corresponding' rule.</i>
+            Current Angle θ: <b>${theta}°</b><br>
+            Supplementary Angle: <b>${180-theta}°</b><br><br>
+            <i>Logic: The acute angles (Red) are equal because they are in the same relative position on parallel lines.</i>
         `;
     }
     window.onload = run27;

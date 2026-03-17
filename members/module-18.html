@@ -2,59 +2,77 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 18: BODMAS — The Hardened Shield | Cognis11</title>
+    <title>Module 18: BODMAS Dynamic | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --shield-blue: #6366f1; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 1000px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
         .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
-        
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        /* Projection Styling */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 50px; margin: 30px 0; text-align: center; }
-        .eq-projection { font-size: 2.8rem; font-weight: bold; color: var(--cognis-blue); letter-spacing: 2px; line-height: 1.2; }
-        
-        /* The Shield Visual */
-        .shield-bracket { color: var(--shield-blue); font-weight: 900; }
-        .shield-content { background: rgba(99, 102, 241, 0.08); border-top: 3px solid var(--shield-blue); border-bottom: 3px solid var(--shield-blue); padding: 5px 0; margin: 0 2px; }
+        /* X-Ray Tiers */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.7rem; text-transform: uppercase; }
 
-        /* Engine Layout */
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .builder-strip { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-        .term-card { background: #2d3748; padding: 12px; border-radius: 8px; border: 2px solid transparent; text-align: center; }
-        .term-card.is-shielded { border-color: var(--shield-blue); background: #1e1b4b; }
+        /* The Priority Sieve */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; }
+        .equation-bar { font-size: 2.2rem; font-weight: bold; margin-bottom: 40px; color: var(--cognis-blue); background: white; padding: 20px 40px; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         
-        input, select { background: #1a202c; color: white; border: 1px solid #4a5568; padding: 6px; border-radius: 4px; width: 55px; font-weight: bold; text-align: center; }
-        .shield-toggle { display: block; margin-top: 8px; font-size: 0.6rem; cursor: pointer; background: #4a5568; color: white; padding: 4px; border-radius: 4px; border: none; text-transform: uppercase; width: 100%; }
-        .shield-toggle.active { background: var(--shield-blue); }
+        .sieve { width: 100%; max-width: 500px; border: 2px solid #cbd5e0; border-radius: 12px; background: white; overflow: hidden; }
+        .sieve-layer { height: 70px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px dashed #cbd5e0; position: relative; }
+        .sieve-layer.active { background: #fffbeb; }
+        .layer-label { width: 120px; font-size: 0.65rem; font-weight: 800; color: #a0aec0; text-transform: uppercase; }
+        .token-bin { flex-grow: 1; display: flex; gap: 10px; }
+        .token { padding: 4px 12px; border-radius: 6px; font-weight: bold; color: white; font-size: 0.9rem; }
+        .token.b { background: #6366f1; } /* Brackets */
+        .token.o { background: #ec4899; } /* Orders */
+        .token.dm { background: var(--cognis-gold); } /* DM */
+        .token.as { background: var(--cognis-blue); } /* AS */
 
-        .solve-btn { width: 100%; background: #48bb78; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 25px; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; border-left: 4px solid var(--cognis-gold); min-height: 150px; }
+        /* Dynamic Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .builder-grid { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .builder-item { background: #2d3748; padding: 10px; border-radius: 8px; display: flex; flex-direction: column; gap: 5px; }
+        .builder-item input, .builder-item select { background: #1a202c; color: white; border: 1px solid #4a5568; padding: 5px; border-radius: 4px; font-size: 0.9rem; }
+        
+        .add-btn { background: var(--cognis-gold); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold; font-size: 1.2rem; }
+        .solve-btn { background: #48bb78; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
+
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+        .step { color: #a0aec0; border-bottom: 1px solid #333; padding: 5px 0; }
+        .step b { color: var(--cognis-gold); }
     </style>
 </head>
 <body>
 
 <div class="module-card">
-    <div class="header"><h1>Module 18: BODMAS — Hierarchical Shielding</h1></div>
+    <div class="header"><h1>Module 18: BODMAS — Operational Hierarchy</h1></div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
+        <p><strong>Topic Logic:</strong> Math is not a flat sentence. It is a <strong>Priority Sieve</strong>. High-energy operations (Brackets, Powers) must be filtered and solved before lower-energy operations (Addition, Subtraction) are even considered.</p>
         <div class="question-tiers">
-            <div class="tier-card"><span>Entry</span>$15 - (3 + 2)$</div>
-            <div class="tier-card"><span>Standard</span>$(10 \times 2) + 5^2 \div 5$</div>
-            <div class="tier-card"><span>Advanced</span>$144 \div [ (2 + 4) \times 2 ]^2$</div>
+            <div class="tier-card"><span>Entry</span>"What is $4 + 2 \times 3$?"</div>
+            <div class="tier-card"><span>Standard</span>"Calculate $2^3 + (10 - 2) \div 4$."</div>
+            <div class="tier-card"><span>Advanced</span>"Place brackets to make this true: $5 + 3 \times 10 - 2 = 78$."</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div id="eq-output" class="eq-projection"></div>
-            <p id="final-res" style="margin-top:25px; font-size:1.8rem; color:var(--cognis-gold); font-weight:bold;"></p>
+            <div class="equation-bar" id="eq-display">2 + 3 × 10</div>
+            
+            <div class="sieve">
+                <div class="sieve-layer" id="layer-b"><div class="layer-label">1. Brackets ()</div><div class="token-bin" id="bin-b"></div></div>
+                <div class="sieve-layer" id="layer-o"><div class="layer-label">2. Orders (^)</div><div class="token-bin" id="bin-o"></div></div>
+                <div class="sieve-layer" id="layer-dm"><div class="layer-label">3. Div / Mult</div><div class="token-bin" id="bin-dm"></div></div>
+                <div class="sieve-layer" id="layer-as"><div class="layer-label">4. Add / Sub</div><div class="token-bin" id="bin-as"></div></div>
+            </div>
+            <button class="solve-btn" onclick="runBODMAS()">Filter Equation</button>
         </div>
     </section>
 
@@ -62,112 +80,106 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div>
-                <div class="builder-strip" id="builder-ui"></div>
-                <div style="margin-top:20px; display:flex; gap:10px;">
-                    <button onclick="addTerm()" style="background:var(--cognis-gold); border:none; color:white; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight:bold;">+ Add Term</button>
-                    <button onclick="removeTerm()" style="background:#4a5568; border:none; color:white; padding:10px 20px; border-radius:6px; cursor:pointer;">- Remove</button>
-                </div>
-                <button class="solve-btn" onclick="executeBODMAS()">Execute Priority Scan</button>
+                <div class="builder-grid" id="builder">
+                    </div>
+                <button class="add-btn" onclick="addTerm()" style="margin-top:15px;">+</button>
+                <p style="font-size:0.7rem; color:#a0aec0; margin-top:10px;">Click + to expand the equation.</p>
             </div>
-            <div class="trace-log" id="trace-output">
-                Brackets (Shields) create isolated sub-equations.
+            <div class="trace-log" id="trace">
+                Build an equation and click "Filter" to see the logic.
             </div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 25px;">
+            <h2 style="color:var(--trap-red);">Phase 4: The Saboteur</h2>
+            <p><strong>The "Left-to-Right" Trap:</strong> Treating math like reading a book. 
+            <br><i>Example: $10 - 2 \times 3$. A Type 1 thinker does $10-2=8$, then $8 \times 3 = 24$.</i>
+            <br><br><strong>The Fix:</strong> Use the <strong>Priority Scan</strong>. Before solving anything, scan for the "Heaviest" operator. Multiplication and Powers are physically "heavier" and crush lower operators into waiting.</p>
         </div>
     </section>
 </div>
 
 <script>
-    // LogicProvider is assumed to be in logic-provider.js
-    let equation = [
-        { val: 10, op: '^', shielded: false },
-        { val: 2, op: '+', shielded: true },
-        { val: 3, op: null, shielded: true }
+    const builder = document.getElementById('builder');
+    let terms = [
+        {val: 2, op: '+'},
+        {val: 3, op: 'x'},
+        {val: 10}
     ];
 
-    function render() {
-        const builder = document.getElementById('builder-ui');
-        const projection = document.getElementById('eq-output');
+    function renderBuilder() {
         builder.innerHTML = '';
-        let projHTML = '';
-
-        equation.forEach((t, i) => {
-            // Builder UI
-            const card = document.createElement('div');
-            card.className = `term-card ${t.shielded ? 'is-shielded' : ''}`;
-            card.innerHTML = `
-                <input type="number" value="${t.val}" oninput="updateVal(${i}, this.value)">
-                ${t.op ? `<select onchange="updateOp(${i}, this.value)">
+        terms.forEach((t, i) => {
+            let html = `<div class="builder-item">
+                <small>Val</small>
+                <input type="number" value="${t.val}" onchange="updateTerm(${i}, 'val', this.value)">`;
+            
+            if (i < terms.length - 1) {
+                html += `<small>Op</small>
+                <select onchange="updateTerm(${i}, 'op', this.value)">
                     <option value="+" ${t.op==='+'?'selected':''}>+</option>
                     <option value="-" ${t.op==='-'?'selected':''}>-</option>
                     <option value="x" ${t.op==='x'?'selected':''}>×</option>
                     <option value="/" ${t.op==='/'?'selected':''}>÷</option>
-                    <option value="^" ${t.op==='^'?'selected':''}>^</option>
-                </select>` : ''}
-                <button class="shield-toggle ${t.shielded?'active':''}" onclick="toggleShield(${i})">Shield</button>
-            `;
-            builder.appendChild(card);
-
-            // Projection Logic (Strict Boundaries)
-            const isStart = t.shielded && (i === 0 || !equation[i-1].shielded);
-            const isEnd = t.shielded && (i === equation.length - 1 || !equation[i+1].shielded);
-
-            if (isStart) projHTML += `<span class="shield-bracket">(</span><span class="shield-content">`;
-            
-            projHTML += `${t.val} `;
-            
-            if (t.op) {
-                if (isEnd) {
-                    // Close the shield BEFORE the operator
-                    projHTML += `</span><span class="shield-bracket">)</span> ${t.op} `;
-                } else {
-                    // Operator is inside the shield
-                    projHTML += `${t.op} `;
-                }
-            } else {
-                // Last term
-                if (isEnd) projHTML += `</span><span class="shield-bracket">)</span>`;
+                    <option value="^" ${t.op==='^'?'selected':''}>^ (Power)</option>
+                </select>`;
             }
+            html += `</div>`;
+            builder.innerHTML += html;
         });
-
-        projection.innerHTML = projHTML;
+        updateDisplay();
     }
 
-    function toggleShield(i) { equation[i].shielded = !equation[i].shielded; render(); }
-    function updateVal(i, v) { equation[i].val = v; render(); }
-    function updateOp(i, o) { equation[i].op = o; render(); }
     function addTerm() {
-        if(equation.length > 0 && !equation[equation.length-1].op) equation[equation.length-1].op = '+';
-        equation.push({ val: 5, op: null, shielded: false });
-        render();
-    }
-    function removeTerm() {
-        if(equation.length > 1) {
-            equation.pop();
-            equation[equation.length-1].op = null;
-            render();
-        }
+        terms[terms.length-1].op = '+';
+        terms.push({val: 5});
+        renderBuilder();
     }
 
-    function executeBODMAS() {
-        // Construct clean string for the solver
-        let rawStr = '';
-        equation.forEach((t, i) => {
-            const isStart = t.shielded && (i === 0 || !equation[i-1].shielded);
-            const isEnd = t.shielded && (i === equation.length - 1 || !equation[i+1].shielded);
-            if(isStart) rawStr += '( ';
-            rawStr += t.val + ' ';
-            if(t.op) {
-                if(isEnd) rawStr += ') ' + t.op + ' ';
-                else rawStr += t.op + ' ';
-            } else if(isEnd) rawStr += ') ';
+    function updateTerm(index, key, value) {
+        terms[index][key] = value;
+        updateDisplay();
+    }
+
+    function updateDisplay() {
+        let str = terms.map(t => t.op ? `${t.val} ${t.op}` : t.val).join(' ');
+        document.getElementById('eq-display').innerText = str;
+    }
+
+    function runBODMAS() {
+        // Flatten terms for LogicProvider
+        let tokens = [];
+        terms.forEach(t => {
+            tokens.push(t.val);
+            if(t.op) tokens.push(t.op);
         });
 
-        const result = LogicProvider.modules.bodmas.solveWithBrackets(rawStr);
-        document.getElementById('trace-output').innerHTML = result.steps.map(s => `<div style="margin-bottom:8px;">→ ${s}</div>`).join('');
-        document.getElementById('final-res').innerText = `Result: ${result.finalRes}`;
+        // Simplified Sieve Animation
+        const bins = { b:[], o:[], dm:[], as:[] };
+        const priority = { '^':'o', 'x':'dm', '/':'dm', '+': 'as', '-': 'as' };
+
+        terms.forEach(t => {
+            if(t.op) bins[priority[t.op]].push(t.op);
+        });
+
+        // Update Sieve Visuals
+        ['o','dm','as'].forEach(cat => {
+            const container = document.getElementById('bin-'+cat);
+            container.innerHTML = bins[cat].map(op => `<div class="token ${cat}">${op}</div>`).join('');
+            document.getElementById('layer-'+cat).classList.toggle('active', bins[cat].length > 0);
+        });
+
+        // Step-by-step Trace
+        const history = LogicProvider.modules.bodmas.solveStepByStep(tokens);
+        document.getElementById('trace').innerHTML = history.map(h => 
+            `<div class="step"><b>${h.action}:</b> ${h.expr}</div>`
+        ).join('');
     }
 
-    render();
+    // Initial Render
+    renderBuilder();
 </script>
 </body>
 </html>

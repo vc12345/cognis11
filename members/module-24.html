@@ -2,70 +2,161 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 24: Translation | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 24: The Mean Bridge | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
-        .grid-sim { height: 200px; width: 200px; border: 2px solid #334155; position: relative; margin: 20px auto; background-size: 20px 20px; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); }
-        .shape { width: 40px; height: 40px; background: #3b82f6; position: absolute; transition: all 0.5s; opacity: 0.6; }
-        .engine-controls { background: #f1f5f9; padding: 20px; border-radius: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        /* X-Ray Tiers */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        /* SVG Simulation Area */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; }
+        svg { background: white; border-radius: 8px; }
+        
+        .anchor { fill: var(--cognis-blue); }
+        .bridge-span { fill: none; stroke: var(--cognis-gold); stroke-width: 8; stroke-dasharray: 10,5; transition: all 0.6s ease; }
+        .bridge-solid { fill: none; stroke: var(--cognis-gold); stroke-width: 8; opacity: 0; transition: opacity 0.5s; }
+        .merged .bridge-solid { opacity: 1; }
+        .merged .bridge-span { opacity: 0; }
+
+        text { font-family: 'Segoe UI', sans-serif; font-weight: 800; text-anchor: middle; transition: all 0.6s; }
+        .label-total { fill: var(--cognis-blue); font-size: 14px; }
+        .label-bridge { fill: var(--cognis-gold); font-size: 20px; }
+
+        /* Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .input-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1rem; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; min-height: 180px; }
+        .btn-action { width: 250px; background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Module 24: Translation</h1>
-    
-    <div class="section">
+
+<div class="module-card">
+    <div class="header"><h1>Module 24: The Mean Bridge</h1></div>
+
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Translation is a "slide." The shape does not turn, flip, or change size. It simply moves from one spot to another based on a <strong>Vector</strong>.</p>
-        <div style="background:#f1f5f9; padding:15px; border-left: 5px solid #64748b;">
-            "Translate shape A by the vector $\begin{pmatrix} 3 \\ -2 \end{pmatrix}$."
+        <p>Topic Logic: Finding a missing value in an average problem is about "Total Awareness." A Mean is just a shorthand for a Grand Total. To find the missing piece, you must build the "Bridge" between the Total you have and the Total you need.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>The mean of 3 numbers is 5. Two numbers are 4 and 6. What is the 3rd?</div>
+            <div class="tier-card"><b>Average Year 4</b>Sarah scored 12, 15, and 10 in three tests. What must she score in the 4th test to have a mean of 13?</div>
+            <div class="tier-card"><b>Advanced Year 5</b>The mean weight of 5 boys is 42kg. A 6th boy joins, and the mean becomes 43kg. Find the new boy's weight.</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        
-        <p>Vectors are written as $\begin{pmatrix} x \\ y \end{pmatrix}$. The top number ($x$) moves it left/right. The bottom number ($y$) moves it up/down.</p>
-    </div>
+        <div class="simulation-area">
+            <svg id="bridge-svg" width="600" height="250" viewBox="0 0 600 250">
+                <rect x="50" y="150" width="120" height="60" rx="8" class="anchor" />
+                <text x="110" y="185" fill="white" font-size="16">Current Sum</text>
+                <text id="txt-known-sum" x="110" y="230" class="label-total">37</text>
 
-    <div class="section">
+                <path id="bridge-path" d="M 170 180 L 430 180" class="bridge-span" />
+                <path d="M 170 180 L 430 180" class="bridge-solid" />
+                <text id="txt-bridge-val" x="300" y="160" class="label-bridge">15</text>
+                <text x="300" y="210" fill="#a0aec0" font-size="12" font-weight="400">The Missing Value</text>
+
+                <rect x="430" y="150" width="120" height="60" rx="8" class="anchor" />
+                <text x="490" y="185" fill="white" font-size="16">Target Sum</text>
+                <text id="txt-target-sum" x="490" y="230" class="label-total">52</text>
+            </svg>
+            <button class="btn-action" onclick="toggleBridge()" id="btn-bridge">Build the Bridge</button>
+        </div>
+    </section>
+
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <div><label>Move Right (+)/Left (-): <span id="dx-v"></span></label><input type="range" id="dx" min="-4" max="4" value="2" style="width:100%"></div>
-            <div><label>Move Up (+)/Down (-): <span id="dy-v"></span></label><input type="range" id="dy" min="-4" max="4" value="-1" style="width:100%"></div>
+        <div class="engine-container">
+            <div class="inputs">
+                <div class="control-group">
+                    <label>Known Values (Comma separated)</label>
+                    <input type="text" id="in-vals" value="12, 15, 10" oninput="updateBridge()">
+                </div>
+                <div class="control-group" style="margin-top:20px;">
+                    <label>Required Mean (Target Average)</label>
+                    <input type="number" id="in-mean" value="13" oninput="updateBridge()">
+                </div>
+            </div>
+            <div class="trace-log" id="bridge-trace">Enter data to calculate the gap...</div>
         </div>
-        <div class="grid-sim">
-            <div id="box" class="shape" style="left:20px; top:140px;"></div>
-            <div id="target" class="shape" style="border: 2px dashed #1e3a8a; background: transparent; left:20px; top:140px;"></div>
-        </div>
-        <p style="text-align:center; font-weight:700;">Vector: $\begin{pmatrix} <span id="vec-x"></span> \\ <span id="vec-y"></span> \end{pmatrix}$</p>
-    </div>
+    </section>
 
-    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
-        <h2>Phase 4: The Saboteur</h2>
-        <p style="color: var(--trap); font-weight: 700;">The "Inversion" Trap: Moving 3 left when the vector says 3 (positive). Always double-check your signs!</p>
-    </div>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0; font-size:0.85rem;">Phase 4: The Saboteur</h2>
+            <p><strong>The "One-Step" Trap:</strong> Trying to solve the problem by only looking at the numbers provided. 
+            <br><br><strong>The Fix:</strong> You cannot find the missing part until you know the size of the <u>whole</u>. Always multiply the Target Mean by the New Count first to find the "Target Sum." Once you have the destination, the starting point (Current Sum) tells you exactly how far you have to go.</p>
+        </div>
+    </section>
 </div>
+
 <script>
-    function update() {
-        const dx = document.getElementById('dx').value;
-        const dy = document.getElementById('dy').value;
-        document.getElementById('dx-v').innerText = dx;
-        document.getElementById('dy-v').innerText = dy;
-        document.getElementById('vec-x').innerText = dx;
-        document.getElementById('vec-y').innerText = dy;
-        const target = document.getElementById('target');
-        // Initial pos 20, 140. Each grid unit is 20px.
-        target.style.left = (20 + (dx * 20)) + 'px';
-        target.style.top = (140 - (dy * 20)) + 'px';
+    let bridgeBuilt = false;
+    
+    function updateBridge() {
+        const valStr = document.getElementById('in-vals').value;
+        const targetMean = parseFloat(document.getElementById('in-mean').value) || 0;
+        const currentVals = valStr.split(',').map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
+
+        if (currentVals.length === 0) return;
+
+        const res = LogicProvider.modules.meanBridge.calculate(currentVals, targetMean);
+
+        document.getElementById('txt-known-sum').textContent = `Total: ${res.knownSum}`;
+        document.getElementById('txt-target-sum').textContent = `Total: ${res.targetSum}`;
+        document.getElementById('txt-bridge-val').textContent = res.missingValue;
+
+        document.getElementById('bridge-trace').innerHTML = `
+            <b>Bridge Diagnostics:</b><br>
+            → Current Data: [${currentVals.join(', ')}]<br>
+            → Count will increase to: ${res.targetCount}<br>
+            → Target Sum needed: ${targetMean} × ${res.targetCount} = ${res.targetSum}<br>
+            <div style="margin-top:10px; border-top:1px solid #444; padding-top:10px; color:var(--cognis-gold);">
+                <b>The Result:</b> ${res.targetSum} - ${res.knownSum} = <b>${res.missingValue}</b>
+            </div>
+        `;
     }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    function toggleBridge() {
+        bridgeBuilt = !bridgeBuilt;
+        const svg = document.getElementById('bridge-svg');
+        const btn = document.getElementById('btn-bridge');
+        if (bridgeBuilt) {
+            svg.classList.add('merged');
+            btn.innerText = "Reset Journey";
+        } else {
+            svg.classList.remove('merged');
+            btn.innerText = "Build the Bridge";
+        }
+    }
+
+    // LogicProvider (Internalized for functionality)
+    const LogicProvider = {
+        modules: {
+            meanBridge: {
+                calculate: (currentVals, targetMean) => {
+                    const knownSum = currentVals.reduce((a, b) => a + b, 0);
+                    const targetCount = currentVals.length + 1;
+                    const targetSum = targetMean * targetCount;
+                    const missingValue = targetSum - knownSum;
+                    return { knownSum, targetSum, missingValue, targetCount };
+                }
+            }
+        }
+    };
+
+    window.onload = updateBridge;
 </script>
 </body>
 </html>

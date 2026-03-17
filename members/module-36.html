@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 36: Anagram Pairs | Cognis11</title>
+    <title>Module 36: Anagram Chamber | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
@@ -17,32 +17,42 @@
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
-        .inventory-flex { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
-        .scramble-tile { width: 50px; height: 50px; background: var(--cognis-gold); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; box-shadow: 0 4px 0 #9c7a3c; }
+        .chamber { background: #2d3748; border: 4px inset #4a5568; border-radius: 15px; padding: 30px; display: inline-flex; flex-wrap: wrap; gap: 10px; justify-content: center; min-width: 320px; }
+        .tile { width: 55px; height: 55px; background: #fefefe; border-radius: 10px; border-bottom: 5px solid #cbd5e0; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 900; color: #1a202c; transition: 0.2s; }
+        
+        @keyframes shake {
+            0% { transform: rotate(0deg) translate(0,0); }
+            25% { transform: rotate(5deg) translate(2px, -2px); }
+            75% { transform: rotate(-5deg) translate(-2px, 2px); }
+            100% { transform: rotate(0deg) translate(0,0); }
+        }
+        .shake-active .tile { animation: shake 0.4s infinite; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .btn-example { background: #4a5568; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; margin: 4px; display: block; width: 100%; text-align: left; }
-        .btn-example:hover { background: var(--cognis-gold); }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
+        .btn-choice { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; display: flex; justify-content: space-between; }
+        .btn-choice:hover { background: var(--cognis-gold); }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
     </style>
 </head>
 <body>
 <div class="module-card">
-    <div class="header"><h1>Module 36: Anagram Pairs</h1></div>
+    <div class="header"><h1>Module 36: Anagram Chamber</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>Find the anagram of <b>CAT</b> in this list: (ACT, BAT, TAC).</div>
-            <div class="tier-card"><b>Average Year 4</b>Which word is an anagram of <b>LISTEN</b> that means "quiet"?</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Identify the anagram pair here: <b>DESERT, DESSERT, RESTED</b>.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>Is <b>TAC</b> an anagram of <b>CAT</b>?</div>
+            <div class="tier-card"><b>Average Year 4</b>Rearrange <b>LISTEN</b> to make a word for quiet.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Find the pair in <b>DESSERT / DESERT / RESTED</b>.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div id="inventory" class="inventory-flex"></div>
-            <p id="sorted-key" style="color:var(--cognis-gold); font-family:monospace; font-weight:bold; font-size:1.2rem;"></p>
+            <div id="chamber" class="chamber"></div>
+            <div style="margin-top: 30px;">
+                <button onclick="shake()" style="background:var(--cognis-gold); color:white; border:none; padding:12px 30px; border-radius:8px; font-weight:bold; cursor:pointer; text-transform:uppercase;">Shake Inventory</button>
+            </div>
         </div>
     </section>
 
@@ -50,46 +60,44 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase;">Test a Pair</label>
-                <button class="btn-example" onclick="testAnagram('LISTEN','SILENT')">LISTEN / SILENT</button>
-                <button class="btn-example" onclick="testAnagram('HEART','EARTH')">HEART / EARTH</button>
-                <button class="btn-example" onclick="testAnagram('ELBOW','BELOW')">ELBOW / BELOW</button>
-                <button class="btn-example" onclick="testAnagram('DORMITORY','DIRTY ROOM')">DORMITORY / DIRTY ROOM</button>
+                <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase; margin-bottom:10px; display:block;">Select Comparison Pair</label>
+                <button class="btn-choice" onclick="loadPair('LISTEN', 'SILENT')">LISTEN / SILENT <span>Check</span></button>
+                <button class="btn-choice" onclick="loadPair('HEART', 'EARTH')">HEART / EARTH <span>Check</span></button>
+                <button class="btn-choice" onclick="loadPair('DORMITORY', 'DIRTY ROOM')">DORMITORY / DIRTY ROOM <span>Check</span></button>
+                <button class="btn-choice" onclick="loadPair('DESSERT', 'DESERT')">DESSERT / DESERT <span>Check</span></button>
             </div>
-            <div class="trace-log" id="trace-36">Click an example to see the inventory match...</div>
-        </div>
-    </section>
-
-    <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Look-Alike" Trap:</strong> Thinking <b>DESSERT</b> and <b>DESERT</b> are anagrams because they look similar.
-            <br><br><strong>The Fix:</strong> Count the letters. DESSERT has two 'S's; DESERT only has one. An anagram must be an exact 1:1 inventory match. If there is one extra letter, the "sorted key" will not match, and they are NOT anagrams.</p>
+            <div class="trace-log" id="trace-36">Compare alphabetical inventories...</div>
         </div>
     </section>
 </div>
 
 <script>
-    function testAnagram(w1, w2) {
-        const inv = document.getElementById('inventory');
-        const trace = document.getElementById('trace-36');
-        const key = document.getElementById('sorted-key');
+    function loadPair(w1, w2) {
+        const chamber = document.getElementById('chamber');
+        const clean1 = w1.replace(/\s/g, '').toUpperCase();
+        const clean2 = w2.replace(/\s/g, '').toUpperCase();
+        
+        chamber.innerHTML = clean1.split('').map(l => `<div class="tile">${l}</div>`).join('');
+        
+        const sorted1 = clean1.split('').sort().join('');
+        const sorted2 = clean2.split('').sort().join('');
+        const isMatch = (sorted1 === sorted2);
 
-        const clean1 = w1.replace(/\s/g, '').split('').sort().join('');
-        const clean2 = w2.replace(/\s/g, '').split('').sort().join('');
-
-        inv.innerHTML = w1.split('').map(l => `<div class="scramble-tile">${l}</div>`).join('');
-        key.innerText = `Sorted Key: ${clean1}`;
-
-        trace.innerHTML = `
-            <b>Anagram Test:</b><br>
-            Word 1: ${w1} → [${clean1}]<br>
-            Word 2: ${w2} → [${clean2}]<br><br>
-            Result: <b style="color:${clean1 === clean2 ? 'var(--cognis-gold)' : 'red'}">
-            ${clean1 === clean2 ? 'MATCH: TRUE' : 'MATCH: FALSE'}</b>
+        document.getElementById('trace-36').innerHTML = `
+            <b>Inventory Comparison:</b><br>
+            A: [${sorted1}]<br>
+            B: [${sorted2}]<br><br>
+            Result: <b style="color:${isMatch ? 'var(--cognis-gold)' : '#e53e3e'}">${isMatch ? 'MATCH (Anagram)' : 'NO MATCH'}</b>
         `;
     }
-    window.onload = () => testAnagram('LISTEN', 'SILENT');
+
+    function shake() {
+        const area = document.querySelector('.simulation-area');
+        area.classList.add('shake-active');
+        setTimeout(() => area.classList.remove('shake-active'), 600);
+    }
+
+    window.onload = () => loadPair('LISTEN', 'SILENT');
 </script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 22: 3-Circle Venn Logic | Cognis11</title>
+    <title>Module 22: 3-Circle Venn | Cognis11</title>
     <style>
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
@@ -13,50 +13,30 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        /* X-Ray Tiers */
+        /* Question Tiers */
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; line-height: 1.4; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        /* Animation Stage */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; height: 500px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .venn-stage { width: 450px; height: 400px; position: relative; display: flex; justify-content: center; align-items: center; }
+        /* SVG Simulation Area */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; }
+        svg { background: white; border-radius: 8px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
         
-        .v-circle { width: 220px; height: 220px; border: 3px solid var(--cognis-blue); border-radius: 50%; position: absolute; background: rgba(0, 45, 91, 0.03); transition: all 1s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .v-circle b { font-size: 1.4rem; color: var(--cognis-blue); }
-        .v-circle span { font-size: 0.65rem; font-weight: bold; text-transform: uppercase; color: #718096; }
+        circle { fill: rgba(0, 45, 91, 0.05); stroke: var(--cognis-blue); stroke-width: 3; transition: all 0.8s ease-in-out; }
+        text { font-family: 'Segoe UI', sans-serif; font-weight: 800; pointer-events: none; transition: all 0.8s ease-in-out; text-anchor: middle; dominant-baseline: middle; }
+        .label-main { fill: var(--cognis-blue); font-size: 18px; }
+        .label-overlap { fill: var(--cognis-gold); font-size: 16px; opacity: 0; }
+        .label-core { fill: #e53e3e; font-size: 22px; opacity: 0; }
+        .merged .label-overlap, .merged .label-core { opacity: 1; }
 
-        /* Initial Positions (Separated) */
-        #c-a { top: 0; left: 115px; }
-        #c-b { bottom: 0; left: 0; }
-        #c-c { bottom: 0; right: 0; }
-        
-        /* Merged State Positions */
-        .merged #c-a { top: 40px; }
-        .merged #c-b { bottom: 80px; left: 40px; }
-        .merged #c-c { bottom: 80px; right: 40px; }
-
-        /* Intersection Labels (Petals and Core) */
-        .intersect-label { position: absolute; opacity: 0; transition: opacity 0.5s; font-weight: 800; font-size: 1.2rem; color: var(--cognis-gold); z-index: 10; }
-        .core-label { font-size: 1.8rem; color: #e53e3e; }
-        
-        .merged .intersect-label { opacity: 1; transition-delay: 0.6s; }
-        
-        #lab-ab { top: 180px; left: 140px; }
-        #lab-ac { top: 180px; right: 140px; }
-        #lab-bc { bottom: 120px; left: 215px; }
-        #lab-all { bottom: 185px; left: 212px; }
-
-        .universe-tag { position: absolute; top: 20px; right: 20px; border: 2px solid #e2e8f0; padding: 10px; border-radius: 8px; font-weight: bold; color: #64748b; font-size: 0.8rem; background: white; }
-
-        /* The Engine */
+        /* Engine */
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .control-group label { display: block; font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 0.5px; }
+        .control-group label { display: block; font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
         .control-group input { width: 100%; padding: 8px; border-radius: 6px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1rem; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
         
-        .btn-merge { width: 100%; background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
+        .btn-merge { width: 250px; background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -66,38 +46,31 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Topic Logic: Triple Overlaps represent the most complex set relationships. To solve them, you must apply <b>Symmetrical Subtraction</b>. You cannot find the outside values until you have confirmed the innermost core (A ∩ B ∩ C).</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Level 1</b>Out of 30 people, 5 like all three flavors. 12 like Vanilla and Chocolate. How many like V & C, but NOT the third?</div>
-            <div class="tier-card"><b>Level 2</b>n(A)=20, n(B)=20, n(C)=20. All dual intersections are 8. The center is 4. Find n(A ∪ B ∪ C).</div>
-            <div class="tier-card"><b>Level 3</b>In a class of 40, everyone likes at least one sport. 20 Football, 18 Rugby, 15 Hockey. Find the min possible overlap.</div>
+            <div class="tier-card"><b>Level 1</b>Out of 30 people, 5 like all three. 12 like A and B. Find A ∩ B but NOT C.</div>
+            <div class="tier-card"><b>Level 2</b>n(A)=20, n(B)=20, n(C)=20. Dual overlaps are 8. Center is 4. Find n(A ∪ B ∪ C).</div>
+            <div class="tier-card"><b>Level 3</b>In a class of 40, find the missing intersection using the Principle of Inclusion-Exclusion.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area" id="stage">
-            <div class="universe-tag">Universe (ξ): <span id="val-uni">0</span></div>
-            <div class="venn-stage">
-                <div class="v-circle" id="c-a">
-                    <span id="txt-a">Total A</span>
-                    <b id="val-a">25</b>
-                </div>
-                <div class="v-circle" id="c-b">
-                    <span id="txt-b">Total B</span>
-                    <b id="val-b">25</b>
-                </div>
-                <div class="v-circle" id="c-c">
-                    <span id="txt-c">Total C</span>
-                    <b id="val-c">25</b>
-                </div>
-                
-                <div class="intersect-label" id="lab-ab">5</div>
-                <div class="intersect-label" id="lab-ac">5</div>
-                <div class="intersect-label" id="lab-bc">5</div>
-                <div class="intersect-label core-label" id="lab-all">5</div>
-            </div>
-            <button class="btn-merge" style="width: 250px;" onclick="toggleMerge()" id="merge-btn">Commence Merger</button>
+        <div class="simulation-area">
+            <svg id="venn-svg" width="500" height="450" viewBox="0 0 500 450">
+                <circle id="svg-c-a" cx="130" cy="130" r="110" />
+                <circle id="svg-c-b" cx="370" cy="130" r="110" />
+                <circle id="svg-c-c" cx="250" cy="350" r="110" />
+
+                <text id="txt-oa" x="130" y="130" class="label-main">25</text>
+                <text id="txt-ob" x="370" y="130" class="label-main">25</text>
+                <text id="txt-oc" x="250" y="350" class="label-main">25</text>
+
+                <text id="txt-ab" x="250" y="130" class="label-overlap">5</text>
+                <text id="txt-ac" x="190" y="240" class="label-overlap">5</text>
+                <text id="txt-bc" x="310" y="240" class="label-overlap">5</text>
+                <text id="txt-all" x="250" y="200" class="label-core">5</text>
+            </svg>
+            <button class="btn-merge" onclick="toggleMerge()" id="merge-btn">Commence Merger</button>
         </div>
     </section>
 
@@ -114,76 +87,70 @@
                 <div class="control-group"><label>Center n(A ∩ B ∩ C)</label><input type="number" id="in-all" value="5" oninput="update()"></div>
                 <div class="control-group"><label>Neither</label><input type="number" id="in-none" value="2" oninput="update()"></div>
             </div>
-            <div class="trace-log" id="logic-trace">Initializing hierarchical re-mapping...</div>
-        </div>
-    </section>
-
-    <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0; font-size:0.8rem;">Phase 4: The Saboteur</h2>
-            <p><b>The "Inside-Out" Rule:</b> The most common mistake is filling in the "Only" sections first. 
-            <br><br><b>The Fix:</b> You must start at the core. Because the center group is part of <i>everything</i>, they have already been counted in the totals for A, B, and C. If you don't subtract them as you move outward, your total population will be far higher than reality.</p>
+            <div class="trace-log" id="logic-trace">Adjust values to calculate the layers...</div>
         </div>
     </section>
 </div>
 
 <script>
-    const inputIds = ['in-ta', 'in-tb', 'in-tc', 'in-ab', 'in-bc', 'in-ac', 'in-all', 'in-none'];
-    const inputs = inputIds.map(id => document.getElementById(id));
     let isMerged = false;
+    const inputs = ['in-ta', 'in-tb', 'in-tc', 'in-ab', 'in-bc', 'in-ac', 'in-all', 'in-none'].map(id => document.getElementById(id));
 
     function update() {
-        const vals = inputs.map(i => parseFloat(i.value) || 0);
-        const [ta, tb, tc, ab, bc, ac, center, none] = vals;
+        const [ta, tb, tc, ab, bc, ac, center, none] = inputs.map(i => parseFloat(i.value) || 0);
 
-        // Disjoint Math
-        const petalAB = ab - center;
-        const petalBC = bc - center;
-        const petalAC = ac - center;
-        const onlyA = ta - petalAB - petalAC - center;
-        const onlyB = tb - petalAB - petalBC - center;
-        const onlyC = tc - petalAC - petalBC - center;
-        const universe = onlyA + onlyB + onlyC + petalAB + petalBC + petalAC + center + none;
+        const pAB = ab - center;
+        const pBC = bc - center;
+        const pAC = ac - center;
+        const oA = ta - pAB - pAC - center;
+        const oB = tb - pAB - pBC - center;
+        const oC = tc - pAC - pBC - center;
 
-        // Update Labels
-        document.getElementById('val-a').innerText = isMerged ? onlyA : ta;
-        document.getElementById('val-b').innerText = isMerged ? onlyB : tb;
-        document.getElementById('val-c').innerText = isMerged ? onlyC : tc;
-        document.getElementById('txt-a').innerText = isMerged ? "Only A" : "Total A";
-        document.getElementById('txt-b').innerText = isMerged ? "Only B" : "Total B";
-        document.getElementById('txt-c').innerText = isMerged ? "Only C" : "Total C";
-        
-        document.getElementById('lab-ab').innerText = petalAB;
-        document.getElementById('lab-bc').innerText = petalBC;
-        document.getElementById('lab-ac').innerText = petalAC;
-        document.getElementById('lab-all').innerText = center;
-        document.getElementById('val-uni').innerText = universe;
+        // Update SVG Text Content
+        document.getElementById('txt-oa').textContent = isMerged ? oA : ta;
+        document.getElementById('txt-ob').textContent = isMerged ? oB : tb;
+        document.getElementById('txt-oc').textContent = isMerged ? oC : tc;
+        document.getElementById('txt-ab').textContent = pAB;
+        document.getElementById('txt-bc').textContent = pBC;
+        document.getElementById('txt-ac').textContent = pAC;
+        document.getElementById('txt-all').textContent = center;
 
-        // Trace
         document.getElementById('logic-trace').innerHTML = `
-            <div style="color:var(--cognis-gold); font-weight:bold; margin-bottom:10px;">Notation Map:</div>
-            <div>n(A∩B∩C) = ${center} [Start Here]</div>
-            <div>A∩B Petal = ${ab} - ${center} = ${petalAB}</div>
-            <div>B∩C Petal = ${bc} - ${center} = ${petalBC}</div>
-            <div style="margin:10px 0; border-top:1px solid #444; padding-top:10px;">
-                <b>The "Only" Sections:</b><br>
-                Only A = ${ta} (Total) - ${petalAB} - ${petalAC} - ${center} = <b>${onlyA}</b>
-            </div>
-            <div>Universe Total (ξ): ${universe}</div>
+            <b>Layer Logic:</b><br>
+            1. Core (All 3) = ${center}<br>
+            2. AB Petal = ${ab} - ${center} = ${pAB}<br>
+            3. Only A = ${ta} - ${pAB} - ${pAC} - ${center} = ${oA}
         `;
     }
 
     function toggleMerge() {
         isMerged = !isMerged;
-        const stage = document.getElementById('stage');
+        const svg = document.getElementById('venn-svg');
         const btn = document.getElementById('merge-btn');
-        if (isMerged) {
-            stage.classList.add('merged');
-            btn.innerText = "Deconstruct Sets";
-        } else {
-            stage.classList.remove('merged');
-            btn.innerText = "Commence Merger";
-        }
+        
+        // Coordinates for Separated vs Merged
+        const coords = isMerged ? 
+            { a: [190, 160], b: [310, 160], c: [250, 260], oa: [130, 100], ob: [370, 100], oc: [250, 380] } : 
+            { a: [130, 130], b: [370, 130], c: [250, 350], oa: [130, 130], ob: [370, 130], oc: [250, 350] };
+
+        // Move Circles
+        document.getElementById('svg-c-a').setAttribute('cx', coords.a[0]);
+        document.getElementById('svg-c-a').setAttribute('cy', coords.a[1]);
+        document.getElementById('svg-c-b').setAttribute('cx', coords.b[0]);
+        document.getElementById('svg-c-b').setAttribute('cy', coords.b[1]);
+        document.getElementById('svg-c-c').setAttribute('cx', coords.c[0]);
+        document.getElementById('svg-c-c').setAttribute('cy', coords.c[1]);
+
+        // Move "Only" Labels
+        document.getElementById('txt-oa').setAttribute('x', coords.oa[0]);
+        document.getElementById('txt-oa').setAttribute('y', coords.oa[1]);
+        document.getElementById('txt-ob').setAttribute('x', coords.ob[0]);
+        document.getElementById('txt-ob').setAttribute('y', coords.ob[1]);
+        document.getElementById('txt-oc').setAttribute('x', coords.oc[0]);
+        document.getElementById('txt-oc').setAttribute('y', coords.oc[1]);
+
+        if (isMerged) svg.classList.add('merged'); else svg.classList.remove('merged');
+        btn.innerText = isMerged ? "Separate Sets" : "Commence Merger";
         update();
     }
 

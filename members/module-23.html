@@ -2,81 +2,69 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 22: Venn Diagrams (3 Circles) | Cognis11</title>
+    <title>Module 23: The Average Family | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --overlap: rgba(197, 160, 89, 0.2); }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
-        .module-card { max-width: 1000px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
         .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
-        
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
+        /* X-Ray Tiers */
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.82rem; line-height: 1.4; }
-        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.7rem; text-transform: uppercase; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        /* The Triple Venn Anatomy */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 30px 0; height: 450px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
-        .venn-box { position: relative; width: 400px; height: 400px; }
-        
-        .v-circle { position: absolute; border: 2px solid var(--cognis-blue); border-radius: 50%; width: 220px; height: 220px; background: rgba(0, 45, 91, 0.03); transition: all 0.3s; }
-        #circ-a { top: 20px; left: 90px; } /* Top Circle */
-        #circ-b { bottom: 60px; left: 20px; } /* Bottom Left */
-        #circ-c { bottom: 60px; right: 20px; } /* Bottom Right */
+        /* Visual Leveler */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
+        .chart-container { display: flex; align-items: flex-end; justify-content: center; gap: 15px; height: 200px; margin-bottom: 30px; border-bottom: 2px solid var(--cognis-blue); }
+        .bar-stack { width: 40px; background: var(--cognis-blue); border-radius: 4px 4px 0 0; position: relative; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .bar-stack span { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 0.8rem; }
+        .bar-stack.is-median { background: var(--cognis-gold); }
+        .bar-stack.is-mode { border: 3px solid #e53e3e; }
 
-        .v-label { position: absolute; font-weight: 800; font-size: 1.1rem; color: var(--cognis-blue); pointer-events: none; z-index: 10; text-shadow: 0 0 5px white; }
-        /* Positioning Labels within disjoint sections */
-        #l-oa { top: 80px; left: 185px; } 
-        #l-ob { bottom: 120px; left: 80px; }
-        #l-oc { bottom: 120px; right: 80px; }
-        #l-ab { top: 160px; left: 130px; color: var(--cognis-gold); }
-        #l-ac { top: 160px; right: 130px; color: var(--cognis-gold); }
-        #l-bc { bottom: 100px; left: 185px; color: var(--cognis-gold); }
-        #l-mid { bottom: 170px; left: 185px; color: #e53e3e; font-size: 1.4rem; }
+        .btn-row { display: flex; justify-content: center; gap: 10px; }
+        .sim-btn { background: var(--cognis-gold); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; }
 
         /* Engine */
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
-        .control-group input { width: 100%; background: #2d3748; color: white; border: 1px solid #4a5568; padding: 8px; border-radius: 6px; font-weight: bold; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.6; }
+        .input-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 10px; }
+        .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1.1rem; letter-spacing: 2px; }
+        
+        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .res-pill { background: #1a202c; border: 1px solid #4a5568; padding: 10px; border-radius: 6px; text-align: center; }
+        .res-pill small { display: block; font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; }
+        .res-pill b { font-size: 1.2rem; color: var(--cognis-gold); }
+
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
     </style>
 </head>
 <body>
-
 <div class="module-card">
-    <div class="header"><h1>Module 22: Venn Diagrams (3 Circles)</h1></div>
+    <div class="header"><h1>Module 23: The Average Family</h1></div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p><strong>Topic Logic:</strong> 3-Circle Venns introduce **Triple Intersections**. Information is often presented as total group sizes, but to build the diagram, you must work from the innermost core (all three) outward. This prevents the "Accumulation Error" where students count the same person 3 or 4 times.</p>
+        <p>Topic Logic: Averages are tools to find the "center" of a data set. The <b>Mean</b> is the fair-share balance, the <b>Median</b> is the physical middle, and the <b>Mode</b> is the popularity contest.</p>
         <div class="question-tiers">
-            <div class="tier-card"><span>Entry</span>In a group of 20, 5 like A, B, and C. 8 like A and B. How many like A and B, but NOT C?</div>
-            <div class="tier-card"><span>Standard</span>A survey of 50 people: 25 drink Tea, 20 Coffee, 15 Juice. 10 drink Tea and Coffee. 5 drink all three. 2 drink none. Find 'Only Tea'.</div>
-            <div class="tier-card"><span>Advanced</span>$n(A)=40, n(B)=35, n(C)=30$. $n(A\cap B)=15, n(B\cap C)=12, n(A\cap C)=10$. If 5 like all three, find the total population.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>Find the mean of 2, 4, and 6.</div>
+            <div class="tier-card"><b>Average Year 4</b>Find the median and range of: 12, 5, 8, 12, 3.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>The mean of five numbers is 10. Four of the numbers are 8, 12, 7, and 13. Find the fifth number.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div class="venn-box">
-                <div class="v-circle" id="circ-a"></div>
-                <div class="v-circle" id="circ-b"></div>
-                <div class="v-circle" id="circ-c"></div>
-                
-                <div class="v-label" id="l-oa">0</div>
-                <div class="v-label" id="l-ob">0</div>
-                <div class="v-label" id="l-oc">0</div>
-                <div class="v-label" id="l-ab">0</div>
-                <div class="v-label" id="l-ac">0</div>
-                <div class="v-label" id="l-bc">0</div>
-                <div class="v-label" id="l-mid">0</div>
+            <div class="chart-container" id="chart">
+                </div>
+            <div class="btn-row">
+                <button class="sim-btn" onclick="visualizeSort()">Sort (Median)</button>
+                <button class="sim-btn" onclick="visualizeLevel()">Level (Mean)</button>
+                <button class="sim-btn" onclick="resetSim()">Reset</button>
             </div>
-            <p style="font-size: 0.8rem; color: #64748b; font-weight: bold; margin-top: -20px;">The Red Number is the Core. Always start here!</p>
         </div>
     </section>
 
@@ -84,75 +72,80 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <div class="control-grid">
-                    <div class="control-group"><label>Center (All 3)</label><input type="number" id="in-mid" value="5"></div>
-                    <div class="control-group"><label>Neither</label><input type="number" id="in-n" value="2"></div>
-                    <div class="control-group"><label>Only A</label><input type="number" id="in-oa" value="10"></div>
-                    <div class="control-group"><label>Only B</label><input type="number" id="in-ob" value="8"></div>
-                    <div class="control-group"><label>Only C</label><input type="number" id="in-oc" value="6"></div>
-                    <div class="control-group"><label>A & B (Excl. Mid)</label><input type="number" id="in-ab" value="4"></div>
-                    <div class="control-group"><label>A & C (Excl. Mid)</label><input type="number" id="in-ac" value="3"></div>
-                    <div class="control-group"><label>B & C (Excl. Mid)</label><input type="number" id="in-bc" value="2"></div>
+                <div class="input-group">
+                    <label>Data Set (Comma Separated)</label>
+                    <input type="text" id="in-data" value="8, 12, 4, 8, 18" oninput="processData()">
+                </div>
+                <div class="result-grid">
+                    <div class="res-pill"><small>Mean</small><b id="out-mean">0</b></div>
+                    <div class="res-pill"><small>Median</small><b id="out-median">0</b></div>
+                    <div class="res-pill"><small>Mode</small><b id="out-mode">0</b></div>
+                    <div class="res-pill"><small>Range</small><b id="out-range">0</b></div>
                 </div>
             </div>
-            <div class="trace-log" id="logic-trace">Adjust values to tally the sets...</div>
+            <div class="trace-log" id="out-trace">Enter numbers to start the analysis...</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Totalist" Trap:</strong> If the question says "20 people like Apples" and "5 people like everything," the number in the Apple-Only section is **not** 20. 
-            <br><br><strong>The Fix:</strong> Every circle in a Venn diagram is a container. The "Everything" people are already inside the Apple container. You must **subtract** them to find who likes *only* Apples.</p>
+            <p><b>The "Missing Middle" Trap:</b> When finding the Median, students often pick the middle number of the *original* list.
+            <br><br><b>The Fix:</b> You must <b>Sort</b> first. The Median is not the middle of the story; it is the middle of the line-up. Always line your data up from smallest to largest before looking for the center.</p>
         </div>
     </section>
 </div>
 
 <script>
-    const inputs = ['in-mid', 'in-oa', 'in-ob', 'in-oc', 'in-ab', 'in-ac', 'in-bc', 'in-n'].map(id => document.getElementById(id));
-    const trace = document.getElementById('logic-trace');
+    let currentData = [];
+    function processData() {
+        const input = document.getElementById('in-data').value;
+        currentData = input.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+        
+        if (currentData.length === 0) return;
 
-    function refresh() {
-        const v = {
-            center: parseFloat(inputs[0].value) || 0,
-            onlyA: parseFloat(inputs[1].value) || 0,
-            onlyB: parseFloat(inputs[2].value) || 0,
-            onlyC: parseFloat(inputs[3].value) || 0,
-            ab: parseFloat(inputs[4].value) || 0,
-            ac: parseFloat(inputs[5].value) || 0,
-            bc: parseFloat(inputs[6].value) || 0,
-            neither: parseFloat(inputs[7].value) || 0
-        };
-
-        // Update Visual Labels
-        document.getElementById('l-mid').innerText = v.center;
-        document.getElementById('l-oa').innerText = v.onlyA;
-        document.getElementById('l-ob').innerText = v.onlyB;
-        document.getElementById('l-oc').innerText = v.onlyC;
-        document.getElementById('l-ab').innerText = v.ab;
-        document.getElementById('l-ac').innerText = v.ac;
-        document.getElementById('l-bc').innerText = v.bc;
-
-        // Calculate Totals
-        const totalA = v.onlyA + v.ab + v.ac + v.center;
-        const totalB = v.onlyB + v.ab + v.bc + v.center;
-        const totalC = v.onlyC + v.ac + v.bc + v.center;
-        const grandTotal = v.onlyA + v.onlyB + v.onlyC + v.ab + v.ac + v.bc + v.center + v.neither;
-
-        trace.innerHTML = `
-            <div style="color:var(--cognis-gold); font-weight:bold; margin-bottom:10px;">Population Breakdown:</div>
-            <div>→ Set A Total: ${totalA}</div>
-            <div>→ Set B Total: ${totalB}</div>
-            <div>→ Set C Total: ${totalC}</div>
-            <div style="margin-top:10px; border-top:1px solid #333; padding-top:10px;">
-                <b>Universe Total:</b> ${grandTotal}<br>
-                <small>(Sum of all 8 disjoint sections)</small>
-            </div>
-        `;
+        const res = LogicProvider.modules.averages.calculate(currentData);
+        
+        document.getElementById('out-mean').innerText = res.mean;
+        document.getElementById('out-median').innerText = res.median;
+        document.getElementById('out-mode').innerText = res.mode;
+        document.getElementById('out-range').innerText = res.range;
+        document.getElementById('out-trace').innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
+        
+        renderBars(currentData);
     }
 
-    inputs.forEach(i => i.addEventListener('input', refresh));
-    window.onload = refresh;
+    function renderBars(data) {
+        const chart = document.getElementById('chart');
+        chart.innerHTML = '';
+        const max = Math.max(...data, 20);
+        data.forEach(val => {
+            const bar = document.createElement('div');
+            bar.className = 'bar-stack';
+            bar.style.height = (val / max * 100) + '%';
+            bar.innerHTML = `<span>${val}</span>`;
+            chart.appendChild(bar);
+        });
+    }
+
+    function visualizeSort() {
+        const sorted = [...currentData].sort((a, b) => a - b);
+        renderBars(sorted);
+        const bars = document.querySelectorAll('.bar-stack');
+        const mid = Math.floor(sorted.length / 2);
+        bars[mid].classList.add('is-median');
+    }
+
+    function visualizeLevel() {
+        const sum = currentData.reduce((a, b) => a + b, 0);
+        const avg = sum / currentData.length;
+        const leveled = currentData.map(() => avg);
+        renderBars(leveled);
+    }
+
+    function resetSim() { processData(); }
+
+    window.onload = processData;
 </script>
 </body>
 </html>

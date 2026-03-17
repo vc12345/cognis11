@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 36: Anagram Pairs | Cognis11</title>
+    <style>
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
+        .inventory-flex { display: flex; justify-content: center; gap: 10px; margin: 20px 0; perspective: 1000px; }
+        .scramble-tile { width: 50px; height: 50px; background: var(--cognis-gold); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 900; transition: all 0.5s; animation: popIn 0.3s ease-out; }
+        @keyframes popIn { 0% { transform: scale(0) rotate(180deg); } 100% { transform: scale(1) rotate(0deg); } }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .input-text { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
+    </style>
+</head>
+<body>
+<div class="module-card">
+    <div class="header"><h1>Module 36: Anagram Pairs</h1></div>
+    
+    <section class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>Anagrams are words that contain the exact same letters in a different order. To identify a pair, ignore the sound of the word and count the "letter stock." If the inventory matches exactly, they are anagrams.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>Which word is an anagram of <b>CAT</b>? (ACT, BAT, TAC)</div>
+            <div class="tier-card"><b>Average Year 4</b>Find the anagram of <b>LISTEN</b> that means "quiet".</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the anagram pair in this list: <b>DESERT, DESSERT, RESTED</b>.</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="simulation-area">
+            <div style="color: #a0aec0; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 10px;">The Scramble Chamber (Letter Inventory)</div>
+            <div class="inventory-flex" id="inventory"></div>
+            <button onclick="shuffleInventory()" style="background:var(--cognis-blue); color:white; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight:bold; border: 1px solid #4a5568;">Explode & Reassemble</button>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase;">Analyze Word</label>
+                <input type="text" id="word-in" class="input-text" value="LISTEN" oninput="run36()">
+            </div>
+            <div class="trace-log" id="trace-36">Awaiting inventory...</div>
+        </div>
+    </section>
+</div>
+
+<script>
+    function run36() {
+        const word = document.getElementById('word-in').value.toUpperCase();
+        const inv = document.getElementById('inventory');
+        inv.innerHTML = '';
+        
+        const chars = word.split('');
+        chars.forEach(c => {
+            inv.innerHTML += `<div class="scramble-tile">${c}</div>`;
+        });
+
+        const sorted = [...chars].sort().join('');
+        document.getElementById('trace-36').innerHTML = `
+            <b>Inventory Count:</b><br>
+            Letters: ${chars.length}<br>
+            Sorted Key: <b>${sorted}</b><br><br>
+            <i>Note: Any other word with this exact sorted key is an anagram.</i>
+        `;
+    }
+
+    function shuffleInventory() {
+        const word = document.getElementById('word-in').value;
+        const shuffled = word.split('').sort(() => Math.random() - 0.5).join('');
+        document.getElementById('word-in').value = shuffled;
+        run36();
+    }
+    window.onload = run36;
+</script>
+</body>
+</html>

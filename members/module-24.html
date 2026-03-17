@@ -16,17 +16,24 @@
         .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
+        /* The Stick Simulation */
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; overflow: hidden; text-align: center; }
-        svg { filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.2)); }
-        .pillar { fill: #2d3748; stroke: #4a5568; stroke-width: 2; }
-        .missing-beam { fill: var(--cognis-gold); stroke: #fff; stroke-width: 2; transform: translateY(-250px); opacity: 0; transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .merged .missing-beam { transform: translateY(0); opacity: 1; }
-        .scaffold { stroke: #4a5568; stroke-width: 1; stroke-dasharray: 4; }
-        .data-text { font-family: 'Segoe UI', sans-serif; font-weight: bold; fill: var(--cognis-gold); font-size: 24px; }
+        svg { background: #1a202c; }
+        
+        .stick { fill: #4a5568; stroke: #2d3748; stroke-width: 1; transition: all 0.6s ease; }
+        .target-stick { fill: #4a5568; opacity: 0.4; stroke: white; stroke-dasharray: 2; }
+        .missing-stick { fill: var(--cognis-gold); stroke: #fff; transform: translateY(-300px); opacity: 0; transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .merged .missing-stick { transform: translateY(0); opacity: 1; }
+        
+        .label-bg { fill: rgba(0,0,0,0.5); }
+        .stat-text { fill: #a0aec0; font-size: 10px; text-transform: uppercase; font-weight: bold; }
+        .stat-val { fill: white; font-size: 16px; font-weight: 900; }
+        .stat-val.gold { fill: var(--cognis-gold); }
 
+        /* Engine */
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
-        .control-group input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1rem; }
+        .input-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1rem; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; min-height: 180px; }
         .btn-action { width: 100%; background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 15px; }
     </style>
@@ -36,7 +43,7 @@
     <div class="header"><h1>Module 24: The Mean Bridge</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A Mean is shorthand for a Grand Total. To find a missing value, you must build the "Bridge" between the Total you have and the Total you need for the new average.</p>
+        <p>Topic Logic: A Mean is the "Fair Share" height of a group. To find a missing value, we compare the <b>Total Height</b> we currently have against the <b>Total Height</b> required by the new average.</p>
         <div class="question-tiers">
             <div class="tier-card"><b>Advanced Year 2</b>The mean of 3 numbers is 5. Two numbers are 4 and 6. What is the 3rd?</div>
             <div class="tier-card"><b>Average Year 4</b>Sarah scored 12, 15, and 10. What must she score next to have a mean of 13?</div>
@@ -46,23 +53,23 @@
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area">
-            <svg id="bridge-svg" width="600" height="300" viewBox="0 0 600 300">
-                <line x1="150" y1="200" x2="450" y2="200" class="scaffold" />
-                <rect x="50" y="180" width="100" height="80" class="pillar" />
-                <text x="100" y="280" fill="#a0aec0" font-size="10" text-anchor="middle">CURRENT SUM</text>
-                <text id="txt-known-sum" x="100" y="230" fill="white" font-size="20" text-anchor="middle">0</text>
+        <div class="simulation-area" id="stage">
+            <svg id="bridge-svg" width="700" height="350" viewBox="0 0 700 350">
+                <g id="left-group"></g>
+                <text x="175" y="300" class="stat-text" text-anchor="middle">Current Group</text>
+                <text x="110" y="325" class="stat-text" text-anchor="middle">Sum:</text>
+                <text id="l-sum" x="110" y="345" class="stat-val" text-anchor="middle">0</text>
+                <text x="240" y="325" class="stat-text" text-anchor="middle">Avg:</text>
+                <text id="l-avg" x="240" y="345" class="stat-val" text-anchor="middle">0</text>
 
-                <rect x="450" y="180" width="100" height="80" class="pillar" />
-                <text x="500" y="280" fill="#a0aec0" font-size="10" text-anchor="middle">TARGET SUM</text>
-                <text id="txt-target-sum" x="500" y="230" fill="white" font-size="20" text-anchor="middle">0</text>
-
-                <g id="beam-group" class="missing-beam">
-                    <rect x="150" y="190" width="300" height="20" rx="4" />
-                    <text id="txt-bridge-val" x="300" y="180" class="data-text" text-anchor="middle">?</text>
-                </g>
+                <g id="right-group"></g>
+                <text x="525" y="300" class="stat-text" text-anchor="middle">Target State</text>
+                <text x="460" y="325" class="stat-text" text-anchor="middle">Sum:</text>
+                <text id="r-sum" x="460" y="345" class="stat-val gold" text-anchor="middle">0</text>
+                <text x="590" y="325" class="stat-text" text-anchor="middle">Avg:</text>
+                <text id="r-avg" x="590" y="345" class="stat-val gold" text-anchor="middle">0</text>
             </svg>
-            <button class="btn-action" onclick="toggleBridge()" id="btn-bridge">Initiate Construction</button>
+            <button class="btn-action" onclick="toggleBridge()" id="btn-bridge">Add Missing Data</button>
         </div>
     </section>
 
@@ -71,59 +78,83 @@
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Known Values (Comma separated)</label>
-                    <input type="text" id="in-vals" value="12, 15, 10" oninput="updateBridge()">
+                    <label>Known Values</label>
+                    <input type="text" id="in-vals" value="12, 15, 10" oninput="update()">
                 </div>
                 <div class="control-group" style="margin-top:20px;">
-                    <label>Target Mean</label>
-                    <input type="number" id="in-mean" value="13" oninput="updateBridge()">
+                    <label>Required Mean</label>
+                    <input type="number" id="in-mean" value="13" oninput="update()">
                 </div>
             </div>
-            <div class="trace-log" id="bridge-trace">Enter data to build the bridge...</div>
+            <div class="trace-log" id="trace">Building the logic bridge...</div>
         </div>
     </section>
 </div>
 
 <script>
-    let bridgeBuilt = false;
+    let isApplied = false;
 
-    function updateBridge() {
+    function update() {
         const valStr = document.getElementById('in-vals').value;
         const targetMean = parseFloat(document.getElementById('in-mean').value) || 0;
-        const currentVals = valStr.split(',').map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
+        const knowns = valStr.split(',').map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
 
-        if (currentVals.length === 0) return;
+        if (knowns.length === 0) return;
 
-        const knownSum = currentVals.reduce((a, b) => a + b, 0);
-        const targetCount = currentVals.length + 1;
+        const knownSum = knowns.reduce((a, b) => a + b, 0);
+        const targetCount = knowns.length + 1;
         const targetSum = targetMean * targetCount;
-        const missingValue = targetSum - knownSum;
+        const missing = targetSum - knownSum;
 
-        document.getElementById('txt-known-sum').textContent = knownSum;
-        document.getElementById('txt-target-sum').textContent = targetSum;
-        document.getElementById('txt-bridge-val').textContent = missingValue;
+        // Render SVG Elements
+        const lGroup = document.getElementById('left-group');
+        const rGroup = document.getElementById('right-group');
+        lGroup.innerHTML = ''; rGroup.innerHTML = '';
 
-        document.getElementById('bridge-trace').innerHTML = `
-            <div>→ Known Total: [${currentVals.join(' + ')}] = ${knownSum}</div>
-            <div>→ Target: Mean (${targetMean}) × New Count (${targetCount}) = ${targetSum}</div>
-            <div style="margin-top:10px; color:var(--cognis-gold);"><b>Gap: ${targetSum} - ${knownSum} = ${missingValue}</b></div>
+        const maxVal = Math.max(knownSum, targetSum, 50) / knowns.length;
+        const scale = 200 / (targetMean * 1.5);
+
+        // Draw Left Knowns
+        knowns.forEach((v, i) => {
+            const h = v * scale;
+            lGroup.innerHTML += `<rect x="${50 + i*40}" y="${250-h}" width="30" height="${h}" class="stick" />`;
+        });
+
+        // The Missing Stick (Kinetic)
+        const missH = missing * scale;
+        lGroup.innerHTML += `
+            <g class="missing-stick">
+                <rect x="${50 + knowns.length*40}" y="${250-missH}" width="30" height="${missH}" />
+                <text x="${50 + knowns.length*40 + 15}" y="${250-missH-10}" fill="var(--cognis-gold)" font-weight="bold" text-anchor="middle">${missing}</text>
+            </g>`;
+
+        // Draw Right Targets (All equal)
+        for(let i=0; i < targetCount; i++) {
+            const h = targetMean * scale;
+            rGroup.innerHTML += `<rect x="${400 + i*40}" y="${250-h}" width="30" height="${h}" class="stick target-stick" />`;
+        }
+
+        // Update Stats
+        document.getElementById('l-sum').textContent = isApplied ? knownSum + missing : knownSum;
+        document.getElementById('l-avg').textContent = isApplied ? targetMean : (knownSum / knowns.length).toFixed(1);
+        document.getElementById('r-sum').textContent = targetSum;
+        document.getElementById('r-avg').textContent = targetMean;
+
+        document.getElementById('trace').innerHTML = `
+            <div>→ Known: ${knowns.join(' + ')} = ${knownSum}</div>
+            <div>→ Target: ${targetMean} (Mean) × ${targetCount} (Count) = ${targetSum}</div>
+            <div style="margin-top:10px; color:var(--cognis-gold); font-weight:bold;">Missing: ${targetSum} - ${knownSum} = ${missing}</div>
         `;
     }
 
     function toggleBridge() {
-        bridgeBuilt = !bridgeBuilt;
-        const svg = document.getElementById('bridge-svg');
-        const btn = document.getElementById('btn-bridge');
-        if (bridgeBuilt) {
-            svg.classList.add('merged');
-            btn.innerText = "Deconstruct Bridge";
-        } else {
-            svg.classList.remove('merged');
-            btn.innerText = "Initiate Construction";
-        }
+        isApplied = !isApplied;
+        document.getElementById('stage').classList.toggle('merged', isApplied);
+        document.getElementById('btn-bridge').innerText = isApplied ? "Reset State" : "Add Missing Data";
+        update();
     }
 
-    window.onload = updateBridge;
+    window.onload = update;
 </script>
 </body>
 </html>

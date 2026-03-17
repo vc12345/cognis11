@@ -2,66 +2,106 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 26: Rotational Symmetry | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 26: Invariance Lab | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
-        .shape-box { height: 150px; display: flex; justify-content: center; align-items: center; margin: 20px 0; }
-        .poly { background: var(--primary); transition: transform 2s linear; }
-        .square { width: 80px; height: 80px; }
-        .rect { width: 120px; height: 60px; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
+        #canvas-26 { background: #000; border: 2px solid #333; border-radius: 8px; }
+        .boundary { stroke: var(--cognis-gold); stroke-width: 4; fill: rgba(197, 160, 89, 0.1); transition: all 0.2s ease; }
+        .label-text { fill: white; font-family: 'Courier New', monospace; font-size: 14px; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 12px; }
+        input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Module 26: Rotational Symmetry</h1>
-    
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 26: Area/Perimeter Invariance</h1></div>
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Rotational symmetry is about how many times a shape looks <strong>exactly the same</strong> during one full $360^\circ$ turn.</p>
-    </div>
-
-    <div class="section">
-        <h2>Phase 2: The Anatomy</h2>
-        
-        <p>The "Order" is the number of times it fits. A square has order 4. A rectangle has order 2.</p>
-    </div>
-
-    <div class="section">
-        <h2>Phase 3: The Engine</h2>
-        <select id="stype" style="width:100%; padding:10px; margin-bottom:20px;">
-            <option value="square">Square</option>
-            <option value="rectangle">Rectangle</option>
-        </select>
-        <div class="shape-box">
-            <div id="drawing" class="poly square"></div>
+        <p><strong>The Logic:</strong> Perimeter is 1-dimensional (length); Area is 2-dimensional (space). In many 11+ puzzles, shapes look different but share the same boundary length. A "Type 2" thinker knows that for a fixed perimeter, a <b>Square</b> always encloses the maximum possible area.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>A garden has a 12m fence. If it's a square, what is the area?</div>
+            <div class="tier-card"><b>Average Year 4</b>Rectangle A is 8x2. Rectangle B is 5x5. Which has a larger perimeter? Which has a larger area?</div>
+            <div class="tier-card"><b>Advanced Year 5</b>A wire is bent into a 6x4 rectangle. If it is re-bent into a square, by how much does the area increase?</div>
         </div>
-        <button onclick="rotate()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer;">Rotate 360°</button>
-        <p id="res-text" style="text-align:center; margin-top:15px; font-weight:700;"></p>
-    </div>
+    </section>
 
-    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
-        <h2>Phase 4: The Saboteur</h2>
-        <p style="color: #be123c; font-weight: 700;">The "Order 0" Trap: There is no such thing as Order 0. Every shape looks like itself after $360^\circ$, so the minimum order is 1.</p>
-    </div>
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="simulation-area">
+            <svg id="canvas-26" width="500" height="300" viewBox="0 0 500 300">
+                <rect id="dynamic-rect" x="150" y="50" width="200" height="200" class="boundary" />
+                <text id="dim-w" x="250" y="40" class="label-text" text-anchor="middle">W: 10</text>
+                <text id="dim-h" x="130" y="150" class="label-text" text-anchor="end">H: 10</text>
+                <text x="250" y="150" fill="var(--cognis-gold)" font-weight="900" font-size="24" text-anchor="middle" id="area-val">100</text>
+            </svg>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Manipulate Rectangle Shape (Fixed Perimeter: 40 units)</label>
+                    <input type="range" id="slider-26" min="2" max="18" value="10" step="0.5" oninput="run26()">
+                </div>
+                <p style="font-size: 0.7rem; color: #a0aec0;">The perimeter is locked at 2(W + H) = 40. Watch the area fluctuate as you change the "balance" of the sides.</p>
+            </div>
+            <div class="trace-log" id="trace-26">Adjust the slider to compare narrow vs. balanced shapes.</div>
+        </div>
+    </section>
 </div>
+
 <script>
-    function rotate() {
-        const shape = document.getElementById('drawing');
-        const type = document.getElementById('stype').value;
-        const res = LogicProvider.getModule(26).generate(type);
-        shape.style.transform = 'rotate(360deg)';
-        document.getElementById('res-text').innerText = `Order: ${res.answers.order}`;
-        setTimeout(() => { shape.style.transition = 'none'; shape.style.transform = 'rotate(0deg)'; setTimeout(() => shape.style.transition = 'transform 2s linear', 50); }, 2100);
+    function run26() {
+        const w = parseFloat(document.getElementById('slider-26').value);
+        const h = 20 - w; // Sum of w+h must be 20 for perimeter of 40
+        const area = w * h;
+
+        const rect = document.getElementById('dynamic-rect');
+        const scale = 12; // Visual scaling
+        const visualW = w * scale;
+        const visualH = h * scale;
+
+        rect.setAttribute('width', visualW);
+        rect.setAttribute('height', visualH);
+        rect.setAttribute('x', 250 - visualW/2);
+        rect.setAttribute('y', 150 - visualH/2);
+
+        document.getElementById('dim-w').textContent = `Width: ${w}`;
+        document.getElementById('dim-w').setAttribute('x', 250);
+        document.getElementById('dim-w').setAttribute('y', 150 - visualH/2 - 10);
+        
+        document.getElementById('dim-h').textContent = `Height: ${h}`;
+        document.getElementById('dim-h').setAttribute('x', 250 - visualW/2 - 10);
+        document.getElementById('dim-h').setAttribute('y', 150);
+
+        document.getElementById('area-val').textContent = area.toFixed(1);
+
+        document.getElementById('trace-26').innerHTML = `
+            <b>Boundary Constants:</b><br>
+            Perimeter = 2(${w} + ${h}) = 40.0 units<br><br>
+            <b>Spatial Outcome:</b><br>
+            Area = ${w} × ${h} = <b>${area.toFixed(2)} units²</b><br><br>
+            <i>Type 2 Insight: Even though the "fence" is the same length, the internal space is ${w === h ? 'MAXIMIZED' : 'smaller'} because the shape is ${w === h ? 'a Square' : 'stretched'}.</i>
+        `;
     }
-    document.getElementById('stype').onchange = function() {
-        const d = document.getElementById('drawing');
-        d.className = 'poly ' + (this.value === 'square' ? 'square' : 'rect');
-    };
+    window.onload = run26;
 </script>
 </body>
 </html>

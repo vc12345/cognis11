@@ -24,31 +24,33 @@
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .preset-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn-preset { background: #2d3748; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; }
-        .btn-preset:hover, .btn-preset.active { background: var(--cognis-gold); }
-        .input-row { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-preset { background: #2d3748; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
+        .btn-preset:hover, .btn-preset.active { background: var(--cognis-gold); color: white; }
+        
+        .input-row { display: flex; gap: 10px; margin-top: 25px; }
         .input-row div { flex: 1; }
-        .input-row input { width: 100%; padding: 8px; border-radius: 6px; border: none; background: #2d3748; color: white; font-weight: bold; }
+        .input-row input { width: 100%; padding: 12px; border-radius: 6px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1rem; }
+        
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
     </style>
 </head>
 <body>
 <div class="module-card">
-    <div class="header"><h1>Module 28: Net-to-Volume</h1></div>
+    <div class="header"><h1>Module 28: Net Topology & Volume</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>A cube net has side = 3cm. Find the Volume.</div>
-            <div class="tier-card"><b>Average Year 4</b>A net has a 4x6 base and flaps of 2. Find the Volume.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Identify the 'Lid' in a non-standard Z-pattern net.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>A cube net has side = 4cm. Find the Volume.</div>
+            <div class="tier-card"><b>Average Year 4</b>A net has a 5x3 base and flaps of 2. Find the Volume.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the 'Lid' face in this non-standard Z-pattern layout.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <svg id="net-svg" width="400" height="350" viewBox="0 0 400 350" class="net-svg"></svg>
-            <p id="net-desc" style="margin-top: 15px; font-weight: bold; color: var(--cognis-blue);">Standard Cross Topology</p>
+            <svg id="net-svg" width="450" height="350" viewBox="0 0 450 350" class="net-svg"></svg>
+            <p id="net-desc" style="margin-top: 20px; font-weight: bold; color: var(--cognis-blue);">Current Layout: Standard Cross</p>
         </div>
     </section>
 
@@ -56,27 +58,27 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase;">1. Topology</label>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase;">1. Net Layouts</label>
                 <div class="preset-grid">
-                    <button class="btn-preset active" onclick="setNet('cross', this)">Cross</button>
+                    <button class="btn-preset active" onclick="setNet('cross', this)">Standard Cross</button>
                     <button class="btn-preset" onclick="setNet('z-pattern', this)">Z-Pattern</button>
                     <button class="btn-preset" onclick="setNet('long-row', this)">Long Row</button>
                     <button class="btn-preset" onclick="setNet('t-shape', this)">T-Shape</button>
                 </div>
-                <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; margin-top:20px; display:block;">2. Dimensions</label>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-top:25px; display:block;">2. Dimensional Analysis</label>
                 <div class="input-row">
-                    <div><small>L</small><input type="number" id="in-l" value="5" oninput="run28()"></div>
-                    <div><small>W</small><input type="number" id="in-w" value="4" oninput="run28()"></div>
-                    <div><small>H</small><input type="number" id="in-h" value="3" oninput="run28()"></div>
+                    <div><small>Length</small><input type="number" id="in-l" value="5" oninput="run28()"></div>
+                    <div><small>Width</small><input type="number" id="in-w" value="4" oninput="run28()"></div>
+                    <div><small>Height</small><input type="number" id="in-h" value="3" oninput="run28()"></div>
                 </div>
             </div>
-            <div class="trace-log" id="trace-28">Select topology and set dimensions...</div>
+            <div class="trace-log" id="trace-28">Toggle layouts to verify the Lid/Base relationship.</div>
         </div>
     </section>
 </div>
 
 <script>
-    const S = 50; // Grid square size
+    const S = 55; 
     let currentType = 'cross';
 
     const nets = {
@@ -98,14 +100,15 @@
         svg.innerHTML = '';
         nets[currentType].forEach(f => {
             const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-            r.setAttribute('x', f.x * S + 50); r.setAttribute('y', f.y * S + 25);
+            r.setAttribute('x', f.x * S + 60); r.setAttribute('y', f.y * S + 20);
             r.setAttribute('width', S); r.setAttribute('height', S);
             r.setAttribute('class', f.t === 'base' ? 'face face-base' : f.t === 'lid' ? 'face face-lid' : 'face');
             svg.appendChild(r);
             if(f.t !== 'f') {
                 const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                t.setAttribute('x', f.x * S + S/2 + 50); t.setAttribute('y', f.y * S + S/2 + 30);
-                t.setAttribute('text-anchor', 'middle'); t.setAttribute('font-size', '10'); t.textContent = f.t.toUpperCase();
+                t.setAttribute('x', f.x * S + S/2 + 60); t.setAttribute('y', f.y * S + S/2 + 25);
+                t.setAttribute('text-anchor', 'middle'); t.setAttribute('font-size', '11'); t.setAttribute('font-weight', 'bold');
+                t.textContent = f.t.toUpperCase();
                 svg.appendChild(t);
             }
         });
@@ -115,12 +118,13 @@
         const h = parseFloat(document.getElementById('in-h').value) || 0;
         const vol = l * w * h;
 
+        document.getElementById('net-desc').innerText = `Current Layout: ${currentType.replace('-', ' ').toUpperCase()}`;
         document.getElementById('trace-28').innerHTML = `
-            <b>Volume Engine:</b><br>
-            Base Area: ${l} × ${w} = ${l*w}<br>
-            Height (Flaps): ${h}<br>
+            <b>Volume Diagnostic:</b><br>
+            Base Area: ${l} × ${w} = ${l*w} units²<br>
+            Flap Height: ${h} units<br>
             Total Capacity: <b>${vol} units³</b><br><br>
-            <i>Logic: Regardless of the 2D layout, the internal capacity is constant for fixed L, W, and H.</i>
+            <i>Insight: No matter how the net is arranged, the 'Lid' is always separated from the 'Base' by exactly one face.</i>
         `;
     }
     window.onload = run28;

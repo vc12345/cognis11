@@ -2,69 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 30: Inverse Logic | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/reasoning-provider.js"></script>
+    <title>Module 30: Relative Letter Shift | Cognis11</title>
     <style>
-        :root { --primary: #3730a3; --bg: #eef2ff; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e0e7ff; }
-        .step-box { display: inline-block; padding: 15px; background: #f5f3ff; border: 2px solid #ddd6fe; border-radius: 8px; margin: 0 5px; font-weight: 700; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; overflow-x: auto; white-space: nowrap; }
+        .ribbon-container { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; }
+        .ribbon-row { display: flex; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .letter-tile { width: 35px; height: 35px; background: #2d3748; color: #a0aec0; display: flex; align-items: center; justify-content: center; border: 1px solid #1a202c; font-family: monospace; font-weight: bold; }
+        .letter-tile.active { background: var(--cognis-gold); color: #1a202c; border-color: white; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .input-group input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1 style="color:var(--primary); text-align:center;">Module 30: Reverse Thinking</h1>
-
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 30: Relative Letter Shift</h1></div>
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>This is the "Number Machine" logic. When a question says <strong>"I think of a number..."</strong>, you must travel backward from the result to the start by using opposite operations.</p>
-    </div>
+        <p>In a relative shift (Caesar Cipher), every letter is pushed forward or backward by a fixed offset. The "Type 2" secret is recognizing that the alphabet is a loop: shifting 'Z' forward by 1 brings you back to 'A'.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>If "CAT" becomes "DBU", what is the shift?</div>
+            <div class="tier-card"><b>Average Year 4</b>If the code for "FISH" is "HKUJ", what is the code for "BIRD"?</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Decode the word "BCZ" using a -2 shift. (Remember the loop!)</div>
+        </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        
-        <p><strong>The Golden Rules of Inversion:</strong><br> + ↔ - | × ↔ ÷</p>
-    </div>
+        <div class="simulation-area">
+            <div class="ribbon-container">
+                <div class="ribbon-row" id="plain-ribbon"></div>
+                <div class="ribbon-row" id="code-ribbon"></div>
+            </div>
+        </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <p>Scenario: I think of a number. I <strong>add 5</strong>, then <strong>multiply by 2</strong>. The result is <span id="res-v"></span>.</p>
-        <input type="range" id="target" min="10" max="100" step="2" value="20" style="width:100%">
-        
-        <div style="text-align:center; margin: 30px 0;">
-            <div class="step-box">Start: ?</div> → <div class="step-box">+ 5</div> → <div class="step-box">× 2</div> → <div class="step-box" id="disp-res">20</div>
+        <div class="engine-container">
+            <div class="controls">
+                <div class="input-group">
+                    <label>Set Shift Offset (±)</label>
+                    <input type="range" id="shift-in" min="-5" max="5" value="2" oninput="run30()">
+                    <div style="text-align: center; font-size: 1.5rem; font-weight: 900; color: var(--cognis-gold); margin-top: 10px;" id="shift-val">+2</div>
+                </div>
+            </div>
+            <div class="trace-log" id="trace-30">Slide to see how the code ribbon moves relative to the alphabet.</div>
         </div>
-        
-        <button onclick="toggle()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer;">Solve Backwards</button>
-        <div id="logic" style="display:none; margin-top:20px; border-top:2px dashed #ddd6fe; padding-top:20px;">
-            <p>1. Start with the result: <span id="s1"></span></p>
-            <p>2. Opposite of × 2: <span id="s2"></span></p>
-            <p>3. Opposite of + 5: <span id="s3"></span></p>
-            <h3 style="color:var(--primary)">Original Number: <span id="final"></span></h3>
-        </div>
-    </div>
-
-    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
-        <h2>Phase 4: The Saboteur</h2>
-        <p style="color: var(--trap); font-weight: 700;">The "Forward" Trap: Trying to apply the operations to the result in the order they were written (e.g., adding 5 to 20). You MUST work from the end and do the opposite!</p>
-    </div>
+    </section>
 </div>
+
 <script>
-    function update() {
-        const val = document.getElementById('target').value;
-        const res = ReasoningProvider.getModule(30).generate(val);
-        document.getElementById('res-v').innerText = val;
-        document.getElementById('disp-res').innerText = val;
-        document.getElementById('s1').innerText = val;
-        document.getElementById('s2').innerText = `${val} ÷ 2 = ${res.steps[0].res}`;
-        document.getElementById('s3').innerText = `${res.steps[0].res} - 5 = ${res.steps[1].res}`;
-        document.getElementById('final').innerText = res.steps[1].res;
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    function initRibbons() {
+        const plain = document.getElementById('plain-ribbon');
+        const code = document.getElementById('code-ribbon');
+        for (let char of alphabet) {
+            plain.innerHTML += `<div class="letter-tile" id="P-${char}">${char}</div>`;
+            code.innerHTML += `<div class="letter-tile" id="C-${char}">${char}</div>`;
+        }
     }
-    function toggle() { const d = document.getElementById('logic'); d.style.display = d.style.display==='none'?'block':'none'; }
-    document.getElementById('target').oninput = update;
-    update();
+
+    function run30() {
+        const shift = parseInt(document.getElementById('shift-in').value);
+        const displayShift = shift >= 0 ? "+" + shift : shift;
+        document.getElementById('shift-val').innerText = displayShift;
+        
+        const codeRibbon = document.getElementById('code-ribbon');
+        codeRibbon.style.transform = `translateX(${shift * -35}px)`;
+
+        document.getElementById('trace-30').innerHTML = `
+            <b>Current Logic:</b><br>
+            A becomes ${alphabet[(26 + shift) % 26]}<br>
+            B becomes ${alphabet[(26 + 1 + shift) % 26]}<br><br>
+            <i>Note: Sliding the ribbon visually aligns the 'Code' letter under the 'Plain' letter.</i>
+        `;
+    }
+    window.onload = () => { initRibbons(); run30(); };
 </script>
 </body>
 </html>

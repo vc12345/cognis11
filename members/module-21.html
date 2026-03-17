@@ -2,89 +2,157 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 21: Pie Charts | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 21: Venn Diagrams (2 Circles) | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .xray-examples { background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #64748b; }
-        .anatomy-callout { background: #fdf2f8; border-left: 5px solid #db2777; padding: 20px; border-radius: 4px; margin: 20px 0; }
-        .engine-controls { display: grid; gap: 20px; background: #fdf2f8; padding: 20px; border-radius: 8px; border: 1px solid #fbcfe8; }
-        .slider-group { display: flex; align-items: center; gap: 15px; }
-        .slider-group label { min-width: 160px; font-weight: 600; }
-        .chart-sim { width: 150px; height: 150px; border-radius: 50%; background: conic-gradient(#db2777 var(--ang), #e2e8f0 0); margin: 20px auto; border: 2px solid #334155; }
-        .btn { background: var(--primary); color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-        .logic-card { background: #fdf2f8; padding: 20px; border-radius: 8px; margin-top: 20px; display: none; border: 1px solid #fbcfe8; }
-        .saboteur-section { background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --overlap-color: #d1d5db; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; line-height: 1.4; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+
+        /* Venn Diagram Anatomy */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; height: 350px; position: relative; }
+        .venn-container { display: flex; justify-content: center; align-items: center; height: 100%; position: relative; }
+        
+        .circle { width: 220px; height: 220px; border: 3px solid var(--cognis-blue); border-radius: 50%; position: absolute; display: flex; align-items: center; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); background: rgba(0, 45, 91, 0.05); }
+        #circle-a { left: 20%; justify-content: flex-start; padding-left: 40px; }
+        #circle-b { right: 20%; justify-content: flex-end; padding-right: 40px; }
+        
+        .circle.overlap-active#circle-a { left: 30%; }
+        .circle.overlap-active#circle-b { right: 30%; }
+
+        .venn-val { font-size: 1.5rem; font-weight: 800; color: var(--cognis-blue); }
+        #v-both { position: absolute; font-size: 1.8rem; font-weight: 900; color: var(--cognis-gold); opacity: 0; transition: opacity 0.4s; z-index: 10; }
+        #v-both.show { opacity: 1; }
+
+        .universe-box { position: absolute; bottom: 10px; right: 10px; border: 2px solid #cbd5e0; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; color: #64748b; }
+
+        /* Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { margin-bottom: 15px; }
+        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .input-grid input { background: #2d3748; color: white; border: 1px solid #4a5568; padding: 10px; border-radius: 6px; font-weight: bold; }
+        
+        .sim-btn { width: 100%; background: var(--cognis-gold); color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; text-transform: uppercase; margin-top: 20px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; min-height: 200px; }
     </style>
 </head>
 <body>
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 21: Pie Chart Angles</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "MAGIC 360" PRINCIPLE</p>
-    </header>
 
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 21: Venn Diagrams (2 Circles)</h1></div>
+
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "Type 1" thinker confuses people with degrees. A "Type 2" thinker knows that the circle is a fixed $360^\circ$ and uses the **Multiplier** to convert frequency into angles.</p>
-        <div class="xray-examples">
-            <strong>Exam Wording Patterns:</strong>
-            <div class="example-item">1. "Show this data in a pie chart."</div>
-            <div class="example-item">2. "Calculate the angle for the 'Red' category."</div>
-            <div class="example-item">3. "If 10 people are represented by $60^\circ$, how many people in total?"</div>
+        <p><strong>Topic Logic:</strong> Venn Diagrams manage **Sets**. The core reasoning required is identifying the "Intersection" (the overlap). In Type 2 math, we don't just add groups; we subtract the overlap to avoid double-counting.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><span>Entry</span>In a class, 10 play Football and 8 play Tennis. 3 play both. How many play only Football?</div>
+            <div class="tier-card"><span>Standard</span>Out of 30 students, 20 like Pizza, 15 like Burgers, and 5 like neither. How many like both?</div>
+            <div class="tier-card"><span>Advanced</span>$A$ and $B$ are sets. $n(A) = 25$, $n(B) = 18$, and $n(A \cup B) = 35$. Find $n(A \cap B)$.</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        
-        <div class="anatomy-callout">
-            <strong>The Formula:</strong><br>
-            (Value ÷ Total Frequency) × 360 = Angle in Degrees.
+        <div class="simulation-area">
+            <div class="venn-container">
+                <div class="circle" id="circle-a">
+                    <span class="venn-val" id="disp-a">10</span>
+                </div>
+                <span class="venn-val" id="v-both">0</span>
+                <div class="circle" id="circle-b">
+                    <span class="venn-val" id="disp-b">10</span>
+                </div>
+                <div class="universe-box">Universe (Neither): <span id="disp-n">0</span></div>
+            </div>
+            <button class="sim-btn" style="width: 200px; margin-top: 20px;" onclick="toggleOverlap()">Overlap Sets</button>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <div class="slider-group"><label>Category Count: <span id="v-val"></span></label><input type="range" id="val" min="1" max="50" value="10"></div>
-            <div class="slider-group"><label>Total People: <span id="t-val"></span></label><input type="range" id="tot" min="10" max="200" value="60"></div>
+        <div class="engine-container">
+            <div class="controls">
+                <label>Set Membership Values</label>
+                <div class="input-grid">
+                    <div><small>Only A</small><input type="number" id="in-oa" value="10" oninput="refresh()"></div>
+                    <div><small>Only B</small><input type="number" id="in-ob" value="8" oninput="refresh()"></div>
+                    <div><small>Both (A & B)</small><input type="number" id="in-both" value="3" oninput="refresh()"></div>
+                    <div><small>Neither</small><input type="number" id="in-neither" value="5" oninput="refresh()"></div>
+                </div>
+                <p style="font-size: 0.7rem; color: #a0aec0; margin-top: 20px;">Use the simulation above to watch the intersection form.</p>
+            </div>
+            <div class="trace-log" id="logic-trace">Initializing logic map...</div>
         </div>
-        <div id="pie" class="chart-sim" style="--ang: 60deg"></div>
-        <button class="btn" onclick="toggleLogic()">Show Angle Logic</button>
-        <div id="logic" class="logic-card">
-            <p>1. Fraction of total: <span id="calc-frac"></span></p>
-            <p>2. Multiplier (360 ÷ Total): <span id="calc-mult"></span></p>
-            <p><strong>Result: <span id="res-ang"></span>°</strong></p>
-        </div>
-    </div>
+    </section>
 
-    <div class="section saboteur-section">
-        <h2>Phase 4: The Saboteur</h2>
-        <p style="color: var(--trap); font-weight: 700;">The "100% Trap": Trying to make the angles add up to 100 instead of 360. Remember: Pie charts are about circles ($360^\circ$), not percentages ($100\%$), unless specified!</p>
-    </div>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Double-Count" Trap:</strong> If a question says "15 people like Pizza and 10 like both," many students put 15 in the "Pizza Only" section. 
+            <br><br><strong>The Fix:</strong> The group total includes the overlap. To find the "Only" section, you must <strong>subtract</strong> the "Both" section. Always fill the middle of the Venn diagram first!</p>
+        </div>
+    </section>
 </div>
+
 <script>
-    function update() {
-        const val = parseInt(document.getElementById('val').value);
-        const tot = parseInt(document.getElementById('tot').value);
-        if(val > tot) { document.getElementById('val').value = tot; }
-        const res = LogicProvider.getModule(21).generate(val, tot);
-        document.getElementById('v-val').innerText = val;
-        document.getElementById('t-val').innerText = tot;
-        document.getElementById('calc-frac').innerText = `${val} / ${tot}`;
-        document.getElementById('calc-mult').innerText = res.answers.multiplier;
-        document.getElementById('res-ang').innerText = res.answers.angle;
-        document.getElementById('pie').style.setProperty('--ang', res.answers.angle + 'deg');
+    const inputs = ['in-oa', 'in-ob', 'in-both', 'in-neither'].map(id => document.getElementById(id));
+    const trace = document.getElementById('logic-trace');
+    let isOverlapped = false;
+
+    function refresh() {
+        const [oa, ob, b, n] = inputs.map(i => parseFloat(i.value) || 0);
+        
+        document.getElementById('disp-a').innerText = oa;
+        document.getElementById('disp-b').innerText = ob;
+        document.getElementById('v-both').innerText = b;
+        document.getElementById('disp-n').innerText = n;
+
+        const totalA = oa + b;
+        const totalB = ob + b;
+        const universe = oa + ob + b + n;
+
+        trace.innerHTML = `
+            <div style="color:var(--cognis-gold); font-weight:bold; margin-bottom:10px;">Set Analysis:</div>
+            <div>→ Total in Group A: ${oa} (Only) + ${b} (Both) = ${totalA}</div>
+            <div>→ Total in Group B: ${ob} (Only) + ${b} (Both) = ${totalB}</div>
+            <div>→ Total Universe: ${oa} + ${ob} + ${b} + ${n} = ${universe}</div>
+            <div style="margin-top:10px; border-top:1px solid #333; padding-top:10px;">
+                <b>The Equation:</b> <br>
+                Total = Group A + Group B - Both + Neither<br>
+                ${universe} = ${totalA} + ${totalB} - ${b} + ${n} ✅
+            </div>
+        `;
     }
-    function toggleLogic() { const div = document.getElementById('logic'); div.style.display = div.style.display === 'none' ? 'block' : 'none'; }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    function toggleOverlap() {
+        const ca = document.getElementById('circle-a');
+        const cb = document.getElementById('circle-b');
+        const vb = document.getElementById('v-both');
+        
+        isOverlapped = !isOverlapped;
+        
+        if (isOverlapped) {
+            ca.classList.add('overlap-active');
+            cb.classList.add('overlap-active');
+            setTimeout(() => vb.classList.add('show'), 400);
+        } else {
+            ca.classList.remove('overlap-active');
+            cb.classList.remove('overlap-active');
+            vb.classList.remove('show');
+        }
+    }
+
+    window.onload = refresh;
 </script>
 </body>
 </html>

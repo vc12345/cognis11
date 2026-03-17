@@ -32,21 +32,28 @@ const LogicProvider = {
             }
         },
 
-        venn2: {
-            calculate: (onlyA, onlyB, both, neither) => {
-                const totalA = parseFloat(onlyA) + parseFloat(both);
-                const totalB = parseFloat(onlyB) + parseFloat(both);
-                const universe = parseFloat(onlyA) + parseFloat(onlyB) + parseFloat(both) + parseFloat(neither);
-                
+        vennLogic: {
+            calculateFromTotals: (totalA, totalB, intersection, neither) => {
+                const tA = parseFloat(totalA) || 0;
+                const tB = parseFloat(totalB) || 0;
+                const intersect = parseFloat(intersection) || 0;
+                const none = parseFloat(neither) || 0;
+
+                const onlyA = tA - intersect;
+                const onlyB = tB - intersect;
+                const union = onlyA + onlyB + intersect;
+                const universe = union + none;
+
                 return {
-                    totalA,
-                    totalB,
+                    onlyA,
+                    onlyB,
+                    union,
                     universe,
                     steps: [
-                        `1. 'Only A' (${onlyA}) + 'Both' (${both}) = Group A has ${totalA}.`,
-                        `2. 'Only B' (${onlyB}) + 'Both' (${both}) = Group B has ${totalB}.`,
-                        `3. The 'Both' section is the intersection where they meet.`,
-                        `4. Universe Total: ${onlyA} + ${onlyB} + ${both} + ${neither} = ${universe}.`
+                        `1. Group A total is ${tA}. Subtract intersection (${intersect}) to find 'Only A': ${onlyA}.`,
+                        `2. Group B total is ${tB}. Subtract intersection (${intersect}) to find 'Only B': ${onlyB}.`,
+                        `3. The Union (A ∪ B) is the total of all people in either set: ${onlyA} + ${intersect} + ${onlyB} = ${union}.`,
+                        `4. Total Universe (ξ) includes those in 'Neither' (${none}): ${union} + ${none} = ${universe}.`
                     ]
                 };
             }

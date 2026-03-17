@@ -2,47 +2,59 @@ const LogicProvider = {
     modules: {
 
         substitution: {
-            calculate: (expression, mappings) => {
-                // expression: ["A", "+", "B", "x", "2"]
-                // mappings: { A: 5, B: 10 }
+            // Parses coefficients like '3A' into '3 * 12'
+            parseTerm: (term, mappings) => {
+                // Check if term is a pure number
+                if (!isNaN(term)) return parseFloat(term);
+                
+                // Regex to split '3A' into 3 and 'A'
+                const match = term.match(/^(\d*)([A-Z])$/);
+                if (match) {
+                    const coefficient = match[1] === "" ? 1 : parseFloat(match[1]);
+                    const variable = match[2];
+                    const val = mappings[variable] || 0;
+                    return {
+                        original: term,
+                        substituted: `${coefficient} × ${val}`,
+                        result: coefficient * val
+                    };
+                }
+                return { result: 0, substituted: '?' };
+            },
+
+            calculateFormula: (formulaArray, mappings) => {
+                // formulaArray example: ["3A", "+", "B^2", "/", "C"]
                 let steps = [];
-                let substituted = expression.map(token => {
-                    if (mappings[token] !== undefined) {
-                        steps.push(`Mapping: Replace ${token} with ${mappings[token]}`);
-                        return mappings[token];
+                let substitutedValues = [];
+
+                // Step 1: Mapping
+                formulaArray.forEach(token => {
+                    if (['+', '-', '*', '/', '^'].includes(token)) {
+                        substitutedValues.push(token);
+                    } else if (token.includes('^')) {
+                        const baseVar = token.split('^')[0];
+                        const power = token.split('^')[1];
+                        const baseVal = mappings[baseVar] || 0;
+                        const res = Math.pow(baseVal, power);
+                        steps.push(`Power: ${baseVar}^${power} → ${baseVal}^${power} = ${res}`);
+                        substitutedValues.push(res);
+                    } else {
+                        const termData = LogicProvider.modules.substitution.parseTerm(token, mappings);
+                        steps.push(`Substitute: ${token} → ${termData.substituted} = ${termData.result}`);
+                        substitutedValues.push(termData.result);
                     }
-                    return token;
                 });
 
-                // Standard BODMAS evaluation from here
-                // (Logic borrowed from Module 18 solver)
-                const getPriority = (o) => (o === '^' ? 3 : (o === 'x' || o === '/') ? 2 : 1);
-                let tokens = [...substituted];
-                
-                // Solve based on priority
-                const ops = { 
-                    '+':(x,y)=>x+y, '-':(x,y)=>x-y, 
-                    'x':(x,y)=>x*y, '/':(x,y)=>x/y, '^':(x,y)=>Math.pow(x,y) 
-                };
-
-                while (tokens.length > 1) {
-                    let highestIdx = -1;
-                    let highestPrio = -1;
-
-                    for(let i=1; i<tokens.length; i+=2) {
-                        let p = getPriority(tokens[i]);
-                        if(p > highestPrio) {
-                            highestPrio = p;
-                            highestIdx = i;
-                        }
-                    }
-
-                    const res = ops[tokens[highestIdx]](parseFloat(tokens[highestIdx-1]), parseFloat(tokens[highestIdx+1]));
-                    steps.push(`Calculate: ${tokens[highestIdx-1]} ${tokens[highestIdx]} ${tokens[highestIdx+1]} = ${res}`);
-                    tokens.splice(highestIdx-1, 3, res);
+                // Final Evaluation (using a safe eval or simple BODMAS order)
+                // For the sake of this module, we use the values to show the journey
+                try {
+                    const evalStr = substitutedValues.join(' ').replace(/x/g, '*').replace(/\^/g, '**');
+                    const finalRes = eval(substitutedValues.join('').replace(/[^0-9\+\-\*\/\.]/g, '')); 
+                    // Note: In production, use a dedicated math parser like math.js
+                    return { finalRes, steps };
+                } catch (e) {
+                    return { finalRes: "Error", steps: ["Invalid Formula Structure"] };
                 }
-
-                return { final: tokens[0], steps };
             }
         },
 

@@ -2,36 +2,50 @@ const LogicProvider = {
     modules: {
 
         bodmas: {
-            calculate: (expression) => {
-                // Expression format: [a, op1, b, op2, c]
-                // Example: [2, '+', 3, 'x', 10]
-                const a = parseFloat(expression[0]);
-                const op1 = expression[1];
-                const b = parseFloat(expression[2]);
-                const op2 = expression[3];
-                const c = parseFloat(expression[4]);
-
-                let steps = [];
-                let finalRes = 0;
-
-                // Simple check: is op2 higher priority than op1?
-                const priority = {'+':1, '-':1, 'x':2, '/':2};
-                
-                if (priority[op2] > priority[op1]) {
-                    const firstStep = eval(`${b} ${op2 === 'x' ? '*' : op2} ${c}`);
-                    finalRes = eval(`${a} ${op1 === 'x' ? '*' : op1} ${firstStep}`);
-                    steps.push(`1. Priority Check: ${op2} beats ${op1}.`);
-                    steps.push(`2. Solve ${b} ${op2} ${c} = ${firstStep}.`);
-                    steps.push(`3. Solve ${a} ${op1} ${firstStep} = ${finalRes}.`);
-                } else {
-                    const firstStep = eval(`${a} ${op1 === 'x' ? '*' : op1} ${b}`);
-                    finalRes = eval(`${firstStep} ${op2 === 'x' ? '*' : op2} ${c}`);
-                    steps.push(`1. Priority Check: ${op1} is equal/higher than ${op2}.`);
-                    steps.push(`2. Solve ${a} ${op1} ${b} = ${firstStep}.`);
-                    steps.push(`3. Solve ${firstStep} ${op2} ${c} = ${finalRes}.`);
+            // Evaluates a single operation
+            operate: (a, op, b) => {
+                a = parseFloat(a); b = parseFloat(b);
+                switch(op) {
+                    case '+': return a + b;
+                    case '-': return a - b;
+                    case 'x': return a * b;
+                    case '/': return a / b;
+                    case '^': return Math.pow(a, b);
+                    default: return 0;
                 }
+            },
+            
+            // Step-by-step solver
+            solveStepByStep: (tokens) => {
+                let current = [...tokens];
+                let history = [ { expr: current.join(' '), action: "Start" } ];
 
-                return { finalRes, steps, priorityShift: priority[op2] > priority[op1] };
+                // 1. Brackets (Simulated for this module via specific grouping logic)
+                // 2. Orders (Exponents ^)
+                // 3. DM (Division/Multiplication left-to-right)
+                // 4. AS (Addition/Subtraction left-to-right)
+                
+                const priorities = [
+                    { ops: ['^'], label: 'Orders' },
+                    { ops: ['x', '/'], label: 'DM' },
+                    { ops: ['+', '-'], label: 'AS' }
+                ];
+
+                for (let p of priorities) {
+                    let i = 0;
+                    while (i < current.length) {
+                        if (p.ops.includes(current[i])) {
+                            const result = LogicProvider.modules.bodmas.operate(current[i-1], current[i], current[i+1]);
+                            const action = `Solved ${p.label}: ${current[i-1]} ${current[i]} ${current[i+1]} = ${result}`;
+                            current.splice(i-1, 3, result);
+                            history.push({ expr: current.join(' '), action });
+                            i = 0; // Restart scan for priority
+                        } else {
+                            i++;
+                        }
+                    }
+                }
+                return history;
             }
         },
 

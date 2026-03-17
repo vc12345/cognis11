@@ -16,38 +16,46 @@
         .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        .simulation-area { background: #f8fafc; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
+        .simulation-area { background: #f8fafc; border-radius: 12px; padding: 40px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; }
         .net-svg { background: white; border: 1px solid #e2e8f0; border-radius: 8px; }
-        .face { fill: rgba(0, 45, 91, 0.05); stroke: var(--cognis-blue); stroke-width: 2; transition: all 0.4s; }
+        .face { fill: rgba(0, 45, 91, 0.05); stroke: var(--cognis-blue); stroke-width: 2; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .face-base { fill: rgba(197, 160, 89, 0.3); stroke: var(--cognis-gold); stroke-width: 3; }
-        .face-lid { fill: rgba(49, 130, 206, 0.2); stroke: #3182ce; }
+        .face-folded { opacity: 0.4; transform-origin: center; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .preset-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .btn-preset { background: #2d3748; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; }
-        .btn-preset:hover { background: var(--cognis-gold); }
+        .input-row { display: flex; gap: 15px; margin-bottom: 20px; }
+        .input-row input { width: 100%; padding: 10px; border-radius: 6px; border: none; background: #2d3748; color: white; font-weight: bold; accent-color: var(--cognis-gold); }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
     </style>
 </head>
 <body>
 <div class="module-card">
     <div class="header"><h1>Module 28: Net-to-Volume</h1></div>
+    
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A cube or cuboid can be "unwrapped" into many different net layouts. Regardless of the layout, the rule is the same: the <b>Lid</b> must always be exactly one face away from the <b>Base</b>. Volume remains invariant no matter how you arrange the net.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>Which face is opposite the base in a standard cube net?</div>
-            <div class="tier-card"><b>Average Year 4</b>If the base of a net is 5x4 and the volume is 60, find the flap height.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Identify the 'Lid' in a non-standard Z-pattern net.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>A cube net has 6 identical squares. Side = 3cm. Find Volume.</div>
+            <div class="tier-card"><b>Average Year 4</b>A net has a 4x6 base and flaps of 2. Find the Volume.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the 'Lid' and calculate the internal capacity of a Z-net.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <svg id="net-svg" width="400" height="400" viewBox="0 0 400 400" class="net-svg">
-                </svg>
-            <p id="net-desc" style="margin-top: 15px; font-weight: bold; color: var(--cognis-blue);">Current Topology: Standard Cross</p>
+            <svg id="fold-svg" width="400" height="400" viewBox="0 0 400 400" class="net-svg">
+                <rect id="f-base" x="150" y="150" width="100" height="100" class="face face-base" />
+                <rect id="f-left" x="50" y="150" width="100" height="100" class="face" />
+                <rect id="f-right" x="250" y="150" width="100" height="100" class="face" />
+                <rect id="f-top" x="150" y="50" width="100" height="100" class="face" />
+                <rect id="f-bottom" x="150" y="250" width="100" height="100" class="face" />
+                <rect id="f-lid" x="150" y="-50" width="100" height="100" class="face" style="fill:rgba(49, 130, 206, 0.2); stroke:#3182ce;" />
+            </svg>
+            <div style="width: 100%; max-width: 400px; margin-top: 20px;">
+                <label style="font-size: 0.7rem; color: #718096; text-transform: uppercase;">Fold Progress</label>
+                <input type="range" id="fold-slider" min="0" max="100" value="0" style="width:100%; accent-color:var(--cognis-gold);" oninput="applyFold()">
+            </div>
         </div>
     </section>
 
@@ -55,76 +63,50 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase;">1. Choose Net Topology</label>
-                <div class="preset-grid">
-                    <button class="btn-preset" onclick="drawNet('cross')">Standard Cross</button>
-                    <button class="btn-preset" onclick="drawNet('z-pattern')">Z-Pattern</button>
-                    <button class="btn-preset" onclick="drawNet('row')">Long Row</button>
-                    <button class="btn-preset" onclick="drawNet('t-shape')">T-Shape</button>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase;">Dimensions</label>
+                <div class="input-row" style="flex-direction: column;">
+                    <div>Length: <input type="number" id="in-l" value="5" oninput="run28()"></div>
+                    <div>Width: <input type="number" id="in-w" value="4" oninput="run28()"></div>
+                    <div>Height: <input type="number" id="in-h" value="3" oninput="run28()"></div>
                 </div>
             </div>
-            <div class="trace-log" id="trace-28">Select a topology to see the Lid/Base relationship.</div>
+            <div class="trace-log" id="trace-28">Move the fold slider to see the capacity build...</div>
         </div>
     </section>
 </div>
 
 <script>
-    const svg = document.getElementById('net-svg');
-    const S = 60; // Scale
+    function applyFold() {
+        const p = document.getElementById('fold-slider').value;
+        const scale = 1 - (p / 150); // Shrink factor
+        const offset = p / 2;
 
-    const layouts = {
-        'cross': [
-            {x:2, y:1, type:'lid'}, {x:2, y:2, type:'face'}, {x:2, y:3, type:'base'}, {x:2, y:4, type:'face'},
-            {x:1, y:3, type:'face'}, {x:3, y:3, type:'face'}
-        ],
-        'z-pattern': [
-            {x:1, y:1, type:'lid'}, {x:2, y:1, type:'face'}, {x:2, y:2, type:'base'}, {x:3, y:2, type:'face'},
-            {x:3, y:3, type:'face'}, {x:4, y:3, type:'face'}
-        ],
-        'row': [
-            {x:1, y:2, type:'lid'}, {x:2, y:2, type:'face'}, {x:3, y:2, type:'base'}, {x:4, y:2, type:'face'},
-            {x:3, y:1, type:'face'}, {x:3, y:3, type:'face'}
-        ],
-        't-shape': [
-            {x:1, y:1, type:'face'}, {x:2, y:1, type:'lid'}, {x:3, y:1, type:'face'},
-            {x:2, y:2, type:'face'}, {x:2, y:3, type:'base'}, {x:2, y:4, type:'face'}
-        ]
-    };
-
-    function drawNet(type) {
-        svg.innerHTML = '';
-        const faces = layouts[type];
-        faces.forEach(f => {
-            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-            rect.setAttribute('x', f.x * S);
-            rect.setAttribute('y', f.y * S);
-            rect.setAttribute('width', S);
-            rect.setAttribute('height', S);
-            rect.setAttribute('class', f.type === 'base' ? 'face face-base' : f.type === 'lid' ? 'face face-lid' : 'face');
-            svg.appendChild(rect);
-
-            if (f.type === 'base' || f.type === 'lid') {
-                const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                txt.setAttribute('x', f.x * S + S/2);
-                txt.setAttribute('y', f.y * S + S/2 + 5);
-                txt.setAttribute('text-anchor', 'middle');
-                txt.setAttribute('font-size', '10');
-                txt.setAttribute('font-weight', 'bold');
-                txt.setAttribute('fill', f.type === 'base' ? 'var(--cognis-gold)' : '#3182ce');
-                txt.textContent = f.type.toUpperCase();
-                svg.appendChild(txt);
-            }
-        });
-
-        document.getElementById('net-desc').innerText = `Current Topology: ${type.toUpperCase()}`;
-        document.getElementById('trace-28').innerHTML = `
-            <b>Analysis of ${type.toUpperCase()}:</b><br>
-            Even in this layout, the <b>LID</b> is separated from the <b>BASE</b> by exactly one face.<br><br>
-            When folded, the faces adjacent to the base become the <b>Height</b> of the box.
-        `;
+        // Simulate folding by moving side flaps inward and fading them
+        document.getElementById('f-left').style.transform = `translateX(${offset}px) scaleX(${scale})`;
+        document.getElementById('f-right').style.transform = `translateX(${-offset}px) scaleX(${scale})`;
+        document.getElementById('f-top').style.transform = `translateY(${offset}px) scaleY(${scale})`;
+        document.getElementById('f-bottom').style.transform = `translateY(${-offset}px) scaleY(${scale})`;
+        document.getElementById('f-lid').style.transform = `translateY(${offset * 3}px) scaleY(${scale})`;
+        
+        run28();
     }
 
-    window.onload = () => drawNet('cross');
+    function run28() {
+        const l = parseFloat(document.getElementById('in-l').value) || 0;
+        const w = parseFloat(document.getElementById('in-w').value) || 0;
+        const h = parseFloat(document.getElementById('in-h').value) || 0;
+        const baseArea = l * w;
+        const volume = baseArea * h;
+
+        document.getElementById('trace-28').innerHTML = `
+            <b>Capacity Analysis:</b><br>
+            1. Base Area: ${l} × ${w} = ${baseArea} units²<br>
+            2. Vertical Extrusion: ${h} units<br>
+            3. Final Volume: <b>${volume} units³</b><br><br>
+            <i>Visualization: As the flaps fold up, the 2D surface area creates a 3D internal space.</i>
+        `;
+    }
+    window.onload = run28;
 </script>
 </body>
 </html>

@@ -17,17 +17,17 @@
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; text-align: center; }
-        .word-box { display: inline-flex; gap: 8px; background: #2d3748; padding: 15px; border-radius: 10px; border: 2px solid #4a5568; }
-        .letter-node { width: 45px; height: 50px; background: white; color: #1a202c; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.6rem; border-radius: 6px; cursor: pointer; transition: 0.2s; }
-        .letter-node.selected { background: var(--cognis-gold); color: white; transform: translateY(-8px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        .letter-node.ghost { opacity: 0.2; border: 2px dashed white; background: transparent; }
+        .word-box { display: inline-flex; gap: 8px; background: #2d3748; padding: 15px; border-radius: 10px; border: 2px solid #4a5568; margin-bottom: 30px; }
+        .letter-node { width: 45px; height: 55px; background: white; color: #1a202c; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.8rem; border-radius: 6px; cursor: pointer; transition: 0.2s; }
+        .letter-node.selected { background: var(--cognis-gold); color: white; transform: translateY(-10px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
         
-        .target-word { font-family: 'Courier New', monospace; font-size: 2.5rem; color: white; margin-top: 30px; letter-spacing: 5px; }
-        .landing-spot { color: var(--cognis-gold); text-decoration: underline; font-weight: 900; }
+        .target-display { font-family: 'Courier New', monospace; font-size: 3rem; color: white; margin-top: 20px; letter-spacing: 8px; font-weight: 900; }
+        .highlight-letter { color: var(--cognis-gold); text-decoration: underline; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .btn-example { background: #4a5568; color: white; border: none; padding: 8px 12px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; margin: 4px; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
+        .btn-example { background: #4a5568; color: white; border: none; padding: 10px 15px; border-radius: 6px; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; margin: 5px; }
+        .btn-example:hover { background: var(--cognis-gold); }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
         input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
     </style>
 </head>
@@ -37,27 +37,27 @@
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>Move one letter from <b>CHART</b> to <b>EAT</b> to make two new words.</div>
-            <div class="tier-card"><b>Average Year 4</b>Move one letter from <b>STEAM</b> to <b>BIT</b> to make two new words.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Move one letter from <b>BRIDGE</b> to <b>OUR</b> to make two new words.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>Move one letter from <b>CHART</b> to <b>EAT</b>.</div>
+            <div class="tier-card"><b>Average Year 4</b>Move one letter from <b>STEAM</b> to <b>BIT</b>.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Move one letter from <b>POUND</b> to <b>EACH</b>.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div id="box-a" class="word-box"></div>
-            <div id="target-display" class="target-word"></div>
-            <div style="max-width: 400px; margin: 30px auto 0;">
-                <label style="color:#a0aec0; font-size:0.6rem; text-transform:uppercase; display:block; margin-bottom:10px;">Adjust Insertion Point</label>
-                <input type="range" id="insert-slider" min="0" max="3" value="0" oninput="updateMorph()">
+            <div id="word-a-box" class="word-box"></div>
+            <div id="word-b-display" class="target-display"></div>
+            <div style="max-width: 400px; margin: 40px auto 0;">
+                <label style="color:#a0aec0; font-size:0.6rem; text-transform:uppercase; display:block; margin-bottom:10px;">Select Insertion Slot</label>
+                <input type="range" id="slot-slider" min="0" max="3" value="0" oninput="updateMorph()">
             </div>
         </div>
-        <div style="text-align:center">
-            <button class="btn-example" onclick="setMorph('CHART','EAT')">CHART → EAT</button>
-            <button class="btn-example" onclick="setMorph('STEAM','BIT')">STEAM → BIT</button>
-            <button class="btn-example" onclick="setMorph('BRIDGE','OUR')">BRIDGE → OUR</button>
-            <button class="btn-example" onclick="setMorph('POUND','EACH')">POUND → EACH</button>
+        <div style="text-align:center;">
+            <button class="btn-example" onclick="loadPair('SMILE', 'PORT')">SMILE / PORT</button>
+            <button class="btn-example" onclick="loadPair('CHART', 'EAT')">CHART / EAT</button>
+            <button class="btn-example" onclick="loadPair('STEAM', 'BIT')">STEAM / BIT</button>
+            <button class="btn-example" onclick="loadPair('POUND', 'EACH')">POUND / EACH</button>
         </div>
     </section>
 
@@ -65,65 +65,57 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <p style="font-size:0.8rem; color:#a0aec0;">1. Click a letter in the top word to "steal" it.<br>2. Use the slider to find a valid landing spot in the bottom word.</p>
+                <p style="font-size:0.8rem; color:#a0aec0;">Click a letter in the top word to pick it up, then use the slider to find where it fits in the bottom word.</p>
             </div>
-            <div class="trace-log" id="trace-35">Select a letter to begin...</div>
-        </div>
-    </section>
-
-    <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Edge Only" Trap:</strong> Most students only try putting the moved letter at the start or end of the new word.
-            <br><br><strong>The Fix:</strong> Treat the second word like a set of gaps: <b>_ B _ I _ T _</b>. The moved letter could hide in any of those four positions. If it doesn't work at the ends, start sliding it through the middle.</p>
+            <div class="trace-log" id="trace-35">Awaiting selection...</div>
         </div>
     </section>
 </div>
 
 <script>
-    let currentA = "CHART";
-    let currentB = "EAT";
-    let selectedIdx = 1; // Default 'H' for CHART
+    let wordA = "SMILE";
+    let wordB = "PORT";
+    let activeIdx = 0;
 
-    function setMorph(a, b) {
-        currentA = a;
-        currentB = b;
-        selectedIdx = 0;
-        document.getElementById('insert-slider').max = b.length;
+    function loadPair(a, b) {
+        wordA = a;
+        wordB = b;
+        activeIdx = 0;
+        document.getElementById('slot-slider').max = b.length;
+        updateMorph();
+    }
+
+    function selectLetter(i) {
+        activeIdx = i;
         updateMorph();
     }
 
     function updateMorph() {
-        const boxA = document.getElementById('box-a');
-        const target = document.getElementById('target-display');
-        const slider = document.getElementById('insert-slider');
+        const boxA = document.getElementById('word-a-box');
+        const displayB = document.getElementById('word-b-display');
+        const slider = document.getElementById('slot-slider');
         const insPos = parseInt(slider.value);
-        
-        boxA.innerHTML = currentA.split('').map((l, i) => 
-            `<div class="letter-node ${i === selectedIdx ? 'selected' : ''}" onclick="selectLetter(${i})">${l}</div>`
+
+        boxA.innerHTML = wordA.split('').map((l, i) => 
+            `<div class="letter-node ${i === activeIdx ? 'selected' : ''}" onclick="selectLetter(${i})">${l}</div>`
         ).join('');
 
-        const stolen = currentA[selectedIdx];
-        const newB = currentB.slice(0, insPos) + `<span class="landing-spot">${stolen}</span>` + currentB.slice(insPos);
-        target.innerHTML = newB;
+        const stolen = wordA[activeIdx];
+        const newB = wordB.slice(0, insPos) + `<span class="highlight-letter">${stolen}</span>` + wordB.slice(insPos);
+        displayB.innerHTML = newB;
 
-        const remainA = currentA.slice(0, selectedIdx) + currentA.slice(selectedIdx + 1);
-        const plainB = currentB.slice(0, insPos) + stolen + currentB.slice(insPos);
+        const remainA = wordA.slice(0, activeIdx) + wordA.slice(activeIdx + 1);
+        const plainB = wordB.slice(0, insPos) + stolen + wordB.slice(insPos);
 
         document.getElementById('trace-35').innerHTML = `
-            <b>Current Result:</b><br>
-            Word A becomes: <b style="color:var(--cognis-gold)">${remainA}</b><br>
-            Word B becomes: <b style="color:var(--cognis-gold)">${plainB}</b><br><br>
-            <i>Are both real words?</i>
+            <b>Status:</b><br>
+            Word A: <b>${remainA}</b><br>
+            Word B: <b>${plainB}</b><br><br>
+            <i>Verification: Both must be valid words. For example, moving 'P' from POUND to EACH makes PEACH and OUND (Invalid). Moving 'O' makes EACHO (Invalid). Finding the right letter is a process of elimination.</i>
         `;
     }
 
-    function selectLetter(i) {
-        selectedIdx = i;
-        updateMorph();
-    }
-
-    window.onload = () => setMorph('CHART', 'EAT');
+    window.onload = () => loadPair('SMILE', 'PORT');
 </script>
 </body>
 </html>

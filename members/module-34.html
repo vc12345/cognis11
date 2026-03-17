@@ -16,14 +16,24 @@
         .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        .simulation-area { background: #f8fafc; border-radius: 12px; padding: 60px; margin: 30px 0; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .word-block { background: var(--cognis-blue); color: white; padding: 20px 30px; border-radius: 8px; font-weight: 900; font-size: 1.8rem; text-transform: uppercase; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .bridge-input { background: white; border: 4px dashed var(--cognis-gold); padding: 16px 20px; border-radius: 8px; font-size: 1.8rem; font-weight: 900; width: 140px; text-align: center; color: var(--cognis-gold); outline: none; text-transform: uppercase; }
+        /* Fusion Stage */
+        .simulation-area { background: #f8fafc; border-radius: 12px; padding: 80px; margin: 30px 0; overflow: hidden; }
+        .fusion-stage { display: flex; align-items: center; justify-content: center; gap: 40px; }
+        
+        .word-block { background: var(--cognis-blue); color: white; padding: 25px 35px; border-radius: 12px; font-weight: 900; font-size: 2rem; text-transform: uppercase; transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .bridge-core { position: relative; z-index: 10; }
+        .bridge-input { background: white; border: 4px solid var(--cognis-gold); padding: 20px; border-radius: 12px; font-size: 2rem; font-weight: 900; width: 160px; text-align: center; color: var(--cognis-gold); text-transform: uppercase; box-shadow: 0 0 20px rgba(197, 160, 89, 0.2); }
+
+        /* Fusion Active State */
+        .fused #w1 { transform: translateX(35px); border-top-right-radius: 0; border-bottom-right-radius: 0; }
+        .fused #w2 { transform: translateX(-35px); border-top-left-radius: 0; border-bottom-left-radius: 0; }
+        .fused .bridge-input { border-radius: 0; border-left: none; border-right: none; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .input-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 10px; }
         .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 2; }
+        .btn-fuse { width: 100%; background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -32,20 +42,24 @@
     
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A bridge word is the "missing link" that completes two different compound words. It must work perfectly as a suffix for the first word and a prefix for the second.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>RAIN [ ____ ] BALL. What word fits both?</div>
-            <div class="tier-card"><b>Average Year 4</b>FOOT [ ____ ] ROOM. (Hint: It's 4 letters).</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Find the word that links SEA [ ____ ] SIDE.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>RAIN [ ____ ] BALL. (What fits both?)</div>
+            <div class="tier-card"><b>Average Year 4</b>FOOT [ ____ ] ROOM. (A 4-letter bridge).</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the bridge for SEA [ ____ ] SIDE.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div class="word-block" id="w1">RAIN</div>
-            <input type="text" class="bridge-input" id="bridge-in" placeholder="????" oninput="update34()">
-            <div class="word-block" id="w2">BALL</div>
+            <div class="fusion-stage" id="stage">
+                <div class="word-block" id="w1">RAIN</div>
+                <div class="bridge-core">
+                    <input type="text" class="bridge-input" id="bridge-in" placeholder="????" oninput="update34()">
+                </div>
+                <div class="word-block" id="w2">BALL</div>
+            </div>
+            <button class="btn-fuse" onclick="toggleFusion()" id="fuse-btn">Initiate Fusion</button>
         </div>
     </section>
 
@@ -53,21 +67,31 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <div class="input-group">
-                    <label>Set Word 1</label>
-                    <input type="text" id="in-w1" value="RAIN" oninput="update34()">
-                </div>
-                <div class="input-group" style="margin-top:15px;">
-                    <label>Set Word 2</label>
-                    <input type="text" id="in-w2" value="BALL" oninput="update34()">
-                </div>
+                <div class="input-group"><label>Word A (Prefix)</label><input type="text" id="in-w1" value="RAIN" oninput="update34()"></div>
+                <div class="input-group" style="margin-top:15px;"><label>Word B (Suffix)</label><input type="text" id="in-w2" value="BALL" oninput="update34()"></div>
             </div>
-            <div class="trace-log" id="trace-34">Type into the dashed box to test your bridge.</div>
+            <div class="trace-log" id="trace-34">Enter a bridge word to see the compounds form...</div>
         </div>
     </section>
 </div>
 
 <script>
+    let isFused = false;
+
+    function toggleFusion() {
+        isFused = !isFused;
+        const stage = document.getElementById('stage');
+        const btn = document.getElementById('fuse-btn');
+        if (isFused) {
+            stage.classList.add('fused');
+            btn.innerText = "Deconstruct Compounds";
+        } else {
+            stage.classList.remove('fused');
+            btn.innerText = "Initiate Fusion";
+        }
+        update34();
+    }
+
     function update34() {
         const w1 = document.getElementById('in-w1').value.toUpperCase();
         const w2 = document.getElementById('in-w2').value.toUpperCase();
@@ -77,10 +101,10 @@
         document.getElementById('w2').innerText = w2;
 
         document.getElementById('trace-34').innerHTML = `
-            <b>Bridge Verification:</b><br>
-            Word A: ${w1} + ${bridge || '____'} = ${w1}${bridge || '?'}<br>
-            Word B: ${bridge || '____'} + ${w2} = ${bridge || '?'}${w2}<br><br>
-            <i>Both must be valid English words.</i>
+            <div style="color:var(--cognis-gold); font-weight:bold; margin-bottom:10px;">Fusion Logic:</div>
+            1. ${w1} + ${bridge || '____'} = <span style="color:white">${w1}${bridge || '?'}</span><br>
+            2. ${bridge || '____'} + ${w2} = <span style="color:white">${bridge || '?'}${w2}</span><br><br>
+            <i>Verification: Both resulting strings must be recognizable English words.</i>
         `;
     }
     window.onload = update34;

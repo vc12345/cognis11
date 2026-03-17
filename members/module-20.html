@@ -6,136 +6,196 @@
     <style>
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .module-card { max-width: 1000px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
         .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
         /* Phase 1: X-Ray Tiers */
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; line-height: 1.4; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
         .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
 
-        /* Phase 2: Substitution Key Visual */
+        /* The Formula Lab Anatomy */
         .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
-        .key-container { display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; }
-        .key-item { padding: 15px; background: white; border: 2px solid var(--cognis-blue); border-radius: 12px; min-width: 80px; }
-        .symbol { font-size: 1.5rem; font-weight: bold; color: var(--cognis-gold); display: block; margin-bottom: 5px; }
-        .val-badge { font-size: 1.2rem; font-weight: bold; color: var(--cognis-blue); }
+        .variable-vials { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; }
+        .vial { background: white; border: 2px solid var(--cognis-blue); padding: 15px; border-radius: 12px; width: 80px; position: relative; }
+        .vial::after { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 30px; height: 10px; background: #cbd5e0; border-radius: 4px; }
+        .vial b { display: block; color: var(--cognis-gold); font-size: 1.4rem; }
+        .vial span { font-size: 0.9rem; font-weight: 800; color: var(--cognis-blue); }
 
-        .equation-projection { font-size: 2.2rem; font-weight: 800; color: var(--cognis-blue); letter-spacing: 5px; }
-        .token-slot { display: inline-block; border-bottom: 4px solid var(--cognis-gold); min-width: 40px; transition: all 0.3s; }
-        .token-slot.active { color: var(--cognis-gold); transform: translateY(-5px); }
-
-        /* Phase 3: Engine */
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group { margin-bottom: 15px; }
-        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
-        .input-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
-        .input-row input { background: #2d3748; color: white; border: 1px solid #4a5568; padding: 10px; border-radius: 6px; font-size: 1rem; width: 70px; font-weight: bold; }
+        .lab-bench { background: white; padding: 30px; border-radius: 12px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
+        .formula-display { font-size: 2.5rem; font-weight: 900; color: var(--cognis-blue); letter-spacing: 3px; min-height: 60px; transition: all 0.3s; }
+        .formula-display.substituted { color: var(--cognis-gold); font-size: 1.8rem; }
         
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 4px solid var(--cognis-gold); min-height: 200px; line-height: 1.7; }
-        .step-map { color: #48bb78; }
-        .step-calc { color: var(--cognis-gold); }
+        .sim-btn { background: var(--cognis-gold); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 30px; }
+
+        /* The Dynamic Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .builder-section { display: flex; flex-direction: column; gap: 15px; }
+        .builder-row { display: flex; align-items: center; gap: 10px; }
+        .builder-row input { width: 60px; padding: 8px; border-radius: 4px; border: none; background: #2d3748; color: white; font-weight: bold; }
+        .formula-presets { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; }
+        .preset-btn { background: #4a5568; color: white; border: none; padding: 5px 12px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; }
+        .preset-btn:hover { background: var(--cognis-gold); }
+
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; min-height: 250px; }
+        .step-map { color: #48bb78; border-bottom: 1px solid #333; padding-bottom: 4px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
 <div class="module-card">
-    <div class="header"><h1>Module 20: Substitution</h1></div>
+    <div class="header"><h1>Module 20: Substitution (The Formula Lab)</h1></div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p><strong>Topic Logic:</strong> Substitution is the process of replacing symbols (letters or shapes) with their known numerical values. Once the symbols are replaced, the expression becomes a standard calculation that follows **BODMAS** priority.</p>
+        <p><strong>Topic Logic:</strong> Substitution is the bridge between algebra and arithmetic. We replace general symbols (A, B, C) with specific "ingredients" (values). The complexity lies in recognizing implied operations: $3A$ is $3 \times A$, and $B^2$ is $B \times B$.</p>
         <div class="question-tiers">
-            <div class="tier-card"><span>Entry</span>If $a = 5$ and $b = 3$, what is $a + b$?</div>
-            <div class="tier-card"><span>Standard</span>If $x = 10$ and $y = 2$, find the value of $x - 3y$.</div>
-            <div class="tier-card"><span>Advanced</span>Given $\triangle = 4$ and $\square = 3$, calculate: $(\triangle \times \square)^2 - \triangle$.</div>
+            <div class="tier-card"><span>Entry</span>If $a=12$ and $b=5$, find $a - b$.</div>
+            <div class="tier-card"><span>Standard</span>If $x=4$ and $y=10$, find $3x + 2y$.</div>
+            <div class="tier-card"><span>Advanced</span>If $p=3$ and $q=5$, find $p^2 + 2(q - 1)$.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div class="key-container">
-                <div class="key-item"><span class="symbol">A</span><span class="val-badge" id="v-a-val">5</span></div>
-                <div class="key-item"><span class="symbol">B</span><span class="val-badge" id="v-b-val">2</span></div>
-                <div class="key-item"><span class="symbol">C</span><span class="val-badge" id="v-c-val">10</span></div>
+            <div class="variable-vials">
+                <div class="vial"><span>A</span><b id="v-a">12</b></div>
+                <div class="vial"><span>B</span><b id="v-b">2</b></div>
+                <div class="vial"><span>C</span><b id="v-c">5</b></div>
             </div>
-            <div class="equation-projection">
-                <span class="token-slot" id="slot-1">A</span> + 
-                <span class="token-slot" id="slot-2">B</span> × 
-                <span class="token-slot" id="slot-3">C</span>
+            <div class="lab-bench">
+                <div id="display-formula" class="formula-display">3A + 2B + 5C</div>
+                <button class="sim-btn" id="lens-btn" onclick="applyLogicLens()">Apply Logic Lens</button>
             </div>
-            <p id="final-res" style="margin-top:20px; font-weight:bold; color:var(--cognis-gold); font-size:1.5rem;"></p>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls">
-                <label>Set Variable Values</label>
-                <div class="input-row">
-                    <span>A:</span> <input type="number" id="in-a" value="5">
-                    <span>B:</span> <input type="number" id="in-b" value="2">
-                    <span>C:</span> <input type="number" id="in-c" value="10">
+            <div class="builder-section">
+                <label style="font-size: 0.7rem; color: #a0aec0; text-transform: uppercase;">1. Set Ingredients</label>
+                <div class="builder-row">
+                    A: <input type="number" id="in-a" value="12" oninput="updateValues()">
+                    B: <input type="number" id="in-b" value="2" oninput="updateValues()">
+                    C: <input type="number" id="in-c" value="5" oninput="updateValues()">
                 </div>
-                <label style="margin-top:20px;">Expression Logic (Fixed Structure)</label>
-                <p style="font-size:0.8rem; color:#a0aec0;">Structure: A + ( B × C )</p>
+                <label style="font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-top:15px;">2. Choose Formula Preset</label>
+                <div class="formula-presets">
+                    <button class="preset-btn" onclick="setFormula(['3A', '+', '2B', '+', '5C'])">3A + 2B + 5C</button>
+                    <button class="preset-btn" onclick="setFormula(['A', '+', 'B^2', '/', 'C'])">A + B^2 / C</button>
+                    <button class="preset-btn" onclick="setFormula(['2C', '-', '4B', '+', 'A'])">2C - 4B + A</button>
+                    <button class="preset-btn" onclick="setFormula(['A', 'x', 'B', '-', 'C'])">A × B - C</button>
+                </div>
             </div>
-            <div class="trace-log" id="logic-trace">Initializing...</div>
+            <div class="trace-log" id="logic-trace">Select a formula and click "Apply Logic Lens" to retrace the mapping...</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--trap-red);">Phase 4: The Saboteur</h2>
-            <p><strong>The "Invisible Multiplier" Trap:</strong> In algebra, $3y$ means $3 \times y$. A "Type 1" thinker often forgets this and tries to write the numbers side-by-side (e.g., if $y=2$, they think $3y$ is $32$). 
-            <br><br><strong>The Fix:</strong> Always put brackets around your substitution! $3(y) \rightarrow 3(2) = 6$. This prevents "Digit Gluing" and keeps your operations clear.</p>
+            <p><strong>The "Digit Gluing" Trap:</strong> If $A=5$, a Type 1 thinker sees $3A$ and thinks it is $35$. 
+            <br><br><strong>The Fix:</strong> In Algebra, the "glue" between a number and a letter is <strong>Multiplication</strong>. Always imagine a tiny "$\times$" between the coefficient and the variable. $3A$ is $3 \times 5 = 15$.</p>
         </div>
     </section>
 </div>
 
 <script>
-    const inputs = ['in-a', 'in-b', 'in-c'].map(id => document.getElementById(id));
-    const trace = document.getElementById('logic-trace');
+    let activeFormula = ['3A', '+', '2B', '+', '5C'];
+    let isSubstituted = false;
 
-    function refresh() {
-        const valA = parseFloat(inputs[0].value) || 0;
-        const valB = parseFloat(inputs[1].value) || 0;
-        const valC = parseFloat(inputs[2].value) || 0;
-
-        // Update Key
-        document.getElementById('v-a-val').innerText = valA;
-        document.getElementById('v-b-val').innerText = valB;
-        document.getElementById('v-c-val').innerText = valC;
-
-        // Process Logic: A + B * C
-        const step1 = valB * valC;
-        const final = valA + step1;
-
-        // Animate slots
-        const slots = ['slot-1', 'slot-2', 'slot-3'];
-        slots.forEach(s => document.getElementById(s).classList.add('active'));
-        setTimeout(() => slots.forEach(s => document.getElementById(s).classList.remove('active')), 500);
-
-        // Update Trace
-        trace.innerHTML = `
-            <div class="step-map">→ Step 1: Mapping A=(${valA}), B=(${valB}), C=(${valC})</div>
-            <div>→ Expression: ${valA} + (${valB} × ${valC})</div>
-            <div class="step-calc">→ BODMAS: Solve Multiplier (${valB} × ${valC} = ${step1})</div>
-            <div class="step-calc">→ Final: ${valA} + ${step1} = ${final}</div>
-            <div style="color:#7cfc00; font-weight:bold; margin-top:10px;">Result: ${final}</div>
-        `;
-
-        document.getElementById('final-res').innerText = `Total: ${final}`;
+    function setFormula(arr) {
+        activeFormula = arr;
+        isSubstituted = false;
+        document.getElementById('display-formula').classList.remove('substituted');
+        document.getElementById('lens-btn').innerText = "Apply Logic Lens";
+        updateValues();
     }
 
-    inputs.forEach(i => i.addEventListener('input', refresh));
-    window.onload = refresh;
+    function updateValues() {
+        const a = document.getElementById('in-a').value;
+        const b = document.getElementById('in-b').value;
+        const c = document.getElementById('in-c').value;
+        
+        document.getElementById('v-a').innerText = a;
+        document.getElementById('v-b').innerText = b;
+        document.getElementById('v-c').innerText = c;
+        
+        if (!isSubstituted) {
+            document.getElementById('display-formula').innerText = activeFormula.join(' ').replace(/x/g, '×');
+        }
+    }
+
+    function applyLogicLens() {
+        const a = parseFloat(document.getElementById('in-a').value);
+        const b = parseFloat(document.getElementById('in-b').value);
+        const c = parseFloat(document.getElementById('in-c').value);
+        const mappings = { A: a, B: b, C: c };
+
+        if (!isSubstituted) {
+            // Transform algebra to arithmetic
+            let displayParts = activeFormula.map(token => {
+                if (['+', '-', 'x', '/', '^'].includes(token)) return token === 'x' ? '×' : token;
+                if (token.includes('^')) {
+                    const v = token.split('^')[0];
+                    const p = token.split('^')[1];
+                    return `(${mappings[v]}^${p})`;
+                }
+                const match = token.match(/^(\d*)([A-Z])$/);
+                const coeff = match[1] === "" ? "" : match[1] + "×";
+                return `(${coeff}${mappings[match[2]]})`;
+            });
+            
+            document.getElementById('display-formula').innerText = displayParts.join(' ');
+            document.getElementById('display-formula').classList.add('substituted');
+            document.getElementById('lens-btn').innerText = "Reset Formula";
+            
+            // Generate Trace
+            const result = calculate(activeFormula, mappings);
+            document.getElementById('logic-trace').innerHTML = result.steps.map(s => `<div class="step-map">→ ${s}</div>`).join('');
+            document.getElementById('logic-trace').innerHTML += `<div style="font-size:1.2rem; color:#7cfc00; margin-top:15px; font-weight:bold;">Final Result: ${result.final}</div>`;
+            
+            isSubstituted = true;
+        } else {
+            setFormula(activeFormula);
+        }
+    }
+
+    // Simplified Internal Logic for Module 20
+    function calculate(formula, mappings) {
+        let steps = [];
+        let values = [];
+        
+        formula.forEach(t => {
+            if (['+', '-', 'x', '/', '^'].includes(t)) {
+                values.push(t === 'x' ? '*' : t === '^' ? '**' : t);
+            } else if (t.includes('^')) {
+                const b = mappings[t.split('^')[0]];
+                const p = t.split('^')[1];
+                const res = Math.pow(b, p);
+                steps.push(`Power: ${t} → ${b}^${p} = ${res}`);
+                values.push(res);
+            } else {
+                const match = t.match(/^(\d*)([A-Z])$/);
+                const coeff = match[1] === "" ? 1 : parseFloat(match[1]);
+                const res = coeff * mappings[match[2]];
+                steps.push(`Term: ${t} → ${coeff} × ${mappings[match[2]]} = ${res}`);
+                values.push(res);
+            }
+        });
+
+        const final = eval(values.join(' '));
+        return { final, steps };
+    }
+
+    window.onload = updateValues;
 </script>
 </body>
 </html>

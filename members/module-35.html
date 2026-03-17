@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 35: Word Morphing | Cognis11</title>
+    <style>
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; display: flex; align-items: center; justify-content: center; gap: 40px; }
+        .word-box { background: #2d3748; padding: 20px; border-radius: 10px; border: 2px solid #4a5568; display: flex; gap: 5px; }
+        .letter-node { width: 45px; height: 45px; background: white; color: #1a202c; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.5rem; border-radius: 6px; cursor: pointer; transition: transform 0.3s, background 0.3s; }
+        .letter-node.selected { background: var(--cognis-gold); transform: translateY(-10px); color: white; }
+        .drop-zone { width: 45px; height: 45px; border: 2px dashed #4a5568; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--cognis-gold); }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
+    </style>
+</head>
+<body>
+<div class="module-card">
+    <div class="header"><h1>Module 35: Word Morphing</h1></div>
+    
+    <section class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>In this challenge, you must "steal" one letter from Word A and give it to Word B. The letter can be placed anywhere in the second word. Both resulting strings must be real English words.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>Move one letter from <b>CHART</b> to <b>EAT</b> to make two new words.</div>
+            <div class="tier-card"><b>Average Year 4</b>From <b>STEAM</b> to <b>BIT</b>. Which letter moves?</div>
+            <div class="tier-card"><b>Advanced Year 5</b>From <b>BRIDGE</b> to <b>OUR</b>. Find the new pair.</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="simulation-area">
+            <div class="word-box" id="box-a"></div>
+            <div style="color: var(--cognis-gold); font-size: 2rem;">→</div>
+            <div class="word-box" id="box-b"></div>
+        </div>
+        <p style="text-align: center; color: #718096; font-size: 0.8rem;">Click a letter in Word A to "transport" it to the gap in Word B.</p>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <input type="text" id="in-a" value="CHART" style="width:100%; margin-bottom:10px; padding:10px; border-radius:6px; border:none;" oninput="init35()">
+                <input type="text" id="in-b" value="EAT" style="width:100%; padding:10px; border-radius:6px; border:none;" oninput="init35()">
+            </div>
+            <div class="trace-log" id="trace-35">Select a letter to begin the morph...</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The "First Slot" Trap:</strong> Students often try to put the stolen letter only at the beginning or end of the second word.
+            <br><br><strong>The Fix:</strong> The letter can hide <b>anywhere</b> inside the second word. For example, if you move 'R' from 'CHART' to 'EAT', it doesn't just make 'REAT' or 'EATR'—it makes <b>'EART'</b> (not a word) or <b>'ARET'</b>... but if you move the 'H', it makes <b>'HEAT'</b>.</p>
+        </div>
+    </section>
+</div>
+
+<script>
+    function init35() {
+        const a = document.getElementById('in-a').value.toUpperCase();
+        const b = document.getElementById('in-b').value.toUpperCase();
+        const boxA = document.getElementById('box-a');
+        const boxB = document.getElementById('box-b');
+        
+        boxA.innerHTML = a.split('').map((l, i) => `<div class="letter-node" onclick="morph('${l}', ${i})">${l}</div>`).join('');
+        boxB.innerHTML = b.split('').map(l => `<div class="letter-node" style="cursor:default">${l}</div>`).join('') + `<div class="drop-zone">?</div>`;
+        document.getElementById('trace-35').innerText = "Word A: " + a + " | Word B: " + b;
+    }
+
+    function morph(letter, idx) {
+        const a = document.getElementById('in-a').value.toUpperCase();
+        const b = document.getElementById('in-b').value.toUpperCase();
+        const remainA = a.slice(0, idx) + a.slice(idx + 1);
+        
+        document.getElementById('trace-35').innerHTML = `
+            <b>Morph Logic:</b><br>
+            1. Removed '${letter}' from position ${idx + 1}.<br>
+            2. Result A: <b>${remainA}</b><br>
+            3. Target B: <b>${b} + ${letter}</b><br><br>
+            <i>Check: Are "${remainA}" and words made from "${b}${letter}" both real?</i>
+        `;
+    }
+    window.onload = init35;
+</script>
+</body>
+</html>

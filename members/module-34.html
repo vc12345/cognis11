@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 34: Magnetic Bridge | Cognis11</title>
+    <title>Module 34: Hinge Bridge | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
@@ -17,12 +17,16 @@
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
         .simulation-area { background: #f8fafc; border-radius: 12px; padding: 100px 40px; margin: 30px 0; overflow: hidden; }
-        .fusion-stage { display: flex; align-items: center; justify-content: center; position: relative; }
+        .bridge-stage { display: flex; align-items: center; justify-content: center; position: relative; gap: 20px; }
         
-        .word-block { background: var(--cognis-blue); color: white; padding: 25px 35px; border-radius: 12px; font-weight: 900; font-size: 2rem; text-transform: uppercase; z-index: 5; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .bridge-input { background: white; border: 4px solid var(--cognis-gold); padding: 20px; border-radius: 12px; font-size: 2rem; font-weight: 900; width: 160px; text-align: center; color: var(--cognis-gold); text-transform: uppercase; position: relative; z-index: 10; margin: 0 20px; }
+        .word-block { background: var(--cognis-blue); color: white; padding: 25px 35px; border-radius: 12px; font-weight: 900; font-size: 2.2rem; text-transform: uppercase; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 180px; text-align: center; }
+        .bridge-core { position: relative; transition: transform 0.2s ease-out; }
+        .bridge-input { background: white; border: 4px solid var(--cognis-gold); padding: 20px; border-radius: 12px; font-size: 2.2rem; font-weight: 900; width: 180px; text-align: center; color: var(--cognis-gold); text-transform: uppercase; box-shadow: 0 0 20px rgba(197, 160, 89, 0.2); }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .input-group label { display: block; font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .input-group input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; text-transform: uppercase; }
+        
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
         input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
     </style>
@@ -30,6 +34,7 @@
 <body>
 <div class="module-card">
     <div class="header"><h1>Module 34: Compound Word Bridge</h1></div>
+    
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
         <div class="question-tiers">
@@ -42,14 +47,19 @@
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div class="fusion-stage">
+            <div class="bridge-stage">
                 <div class="word-block" id="block-left">RAIN</div>
-                <input type="text" class="bridge-input" id="bridge-in" placeholder="????" oninput="update34()">
+                <div class="bridge-core" id="bridge-container">
+                    <input type="text" class="bridge-input" id="bridge-in" placeholder="????" oninput="update34()">
+                </div>
                 <div class="word-block" id="block-right">BALL</div>
             </div>
-            <div style="max-width: 500px; margin: 40px auto 0;">
-                <label style="font-size:0.6rem; color:#718096; text-transform:uppercase; display:block; text-align:center;">Magnetic Tension</label>
-                <input type="range" id="tension-slider" min="0" max="60" value="0" oninput="update34()">
+            <div style="max-width: 500px; margin: 60px auto 0; text-align: center;">
+                <div style="display:flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span style="font-size:0.6rem; color:#718096; text-transform:uppercase;">Connect Word A</span>
+                    <span style="font-size:0.6rem; color:#718096; text-transform:uppercase;">Connect Word B</span>
+                </div>
+                <input type="range" id="hinge-slider" min="0" max="100" value="50" oninput="update34()">
             </div>
         </div>
     </section>
@@ -58,10 +68,16 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <input type="text" id="in-w1" value="RAIN" style="width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:none;" oninput="update34()">
-                <input type="text" id="in-w2" value="BALL" style="width:100%; padding:10px; border-radius:6px; border:none;" oninput="update34()">
+                <div class="input-group">
+                    <label>Set Word A</label>
+                    <input type="text" id="in-w1" value="RAIN" oninput="update34()">
+                </div>
+                <div class="input-group" style="margin-top:15px;">
+                    <label>Set Word B</label>
+                    <input type="text" id="in-w2" value="BALL" oninput="update34()">
+                </div>
             </div>
-            <div class="trace-log" id="trace-34">Enter a bridge and slide to test the compound.</div>
+            <div class="trace-log" id="trace-34">Slide left to test Word A; slide right to test Word B.</div>
         </div>
     </section>
 </div>
@@ -71,20 +87,23 @@
         const w1 = document.getElementById('in-w1').value.toUpperCase();
         const w2 = document.getElementById('in-w2').value.toUpperCase();
         const bridge = document.getElementById('bridge-in').value.toUpperCase();
-        const tension = document.getElementById('tension-slider').value;
+        const sliderVal = document.getElementById('hinge-slider').value;
         
         document.getElementById('block-left').innerText = w1;
         document.getElementById('block-right').innerText = w2;
         
-        // Move blocks toward the center based on tension
-        document.getElementById('block-left').style.transform = `translateX(${tension}px)`;
-        document.getElementById('block-right').style.transform = `translateX(${-tension}px)`;
+        const bridgeCore = document.getElementById('bridge-container');
+        const offset = (sliderVal - 50) * 1.5; // Controls the movement travel
+        bridgeCore.style.transform = `translateX(${offset}px)`;
+
+        let focusText = "Neutral Position";
+        if(sliderVal < 40) focusText = `Word A Compound: <b>${w1}${bridge || '?'}</b>`;
+        if(sliderVal > 60) focusText = `Word B Compound: <b>${bridge || '?'}${w2}</b>`;
 
         document.getElementById('trace-34').innerHTML = `
-            <b>Compound Logic:</b><br>
-            Word 1: ${w1}${bridge || '____'}<br>
-            Word 2: ${bridge || '____'}${w2}<br><br>
-            <i>Note: As tension increases, the words must fuse into single logical meanings.</i>
+            <b>Hinge Status:</b><br>
+            ${focusText}<br><br>
+            <i>A valid bridge must create two logical compound words when fused at either end.</i>
         `;
     }
     window.onload = update34;

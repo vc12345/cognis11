@@ -1,5 +1,40 @@
 const LogicProvider = {
     modules: {
+
+        venn3: {
+            calculate: (tA, tB, tC, iAB, iBC, iAC, iAll, none) => {
+                // Input: Totals as provided in word problems
+                // iAB, iBC, iAC are the "Cap" totals (including the center)
+                
+                // 1. Core (Triple Intersection)
+                const core = parseFloat(iAll) || 0;
+                
+                // 2. Dual-Intersections (Only the petals, excluding core)
+                const petalAB = (parseFloat(iAB) || 0) - core;
+                const petalBC = (parseFloat(iBC) || 0) - core;
+                const petalAC = (parseFloat(iAC) || 0) - core;
+                
+                // 3. Only Sections
+                const onlyA = (parseFloat(tA) || 0) - petalAB - petalAC - core;
+                const onlyB = (parseFloat(tB) || 0) - petalAB - petalBC - core;
+                const onlyC = (parseFloat(tC) || 0) - petalAC - petalBC - core;
+                
+                // 4. Union & Universe
+                const union = onlyA + onlyB + onlyC + petalAB + petalBC + petalAC + core;
+                const universe = union + (parseFloat(none) || 0);
+
+                return {
+                    core, petalAB, petalBC, petalAC,
+                    onlyA, onlyB, onlyC, universe,
+                    steps: [
+                        `Center (A ∩ B ∩ C) is the anchor: ${core}.`,
+                        `Subtract center from A ∩ B: ${iAB} - ${core} = ${petalAB} (AB Petal).`,
+                        `Subtract all overlaps from Total A: ${tA} - ${petalAB} - ${petalAC} - ${core} = ${onlyA} (Only A).`,
+                        `Sum all 8 disjoint sections for Universe Total: ${universe}.`
+                    ]
+                };
+            }
+        },
        
         vennLogic: {
             calculateFromTotals: (totalA, totalB, intersection, neither) => {

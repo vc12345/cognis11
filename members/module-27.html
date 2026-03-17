@@ -46,10 +46,10 @@
                 <line x1="50" y1="200" x2="550" y2="200" class="p-line" />
                 <line id="t-line" x1="300" y1="50" x2="300" y2="250" class="t-line" />
                 
-                <text id="lab-left-top" class="angle-text" y="85" text-anchor="end">θ</text>
-                <text id="lab-right-top" class="angle-text" y="85" text-anchor="start">180-θ</text>
-                <text id="lab-left-bot" class="angle-text" y="185" text-anchor="end">θ</text>
-                <text id="lab-right-bot" class="angle-text" y="185" text-anchor="start">180-θ</text>
+                <text id="lab-left-top" class="angle-text" y="85" text-anchor="end"></text>
+                <text id="lab-right-top" class="angle-text" y="85" text-anchor="start"></text>
+                <text id="lab-left-bot" class="angle-text" y="185" text-anchor="end"></text>
+                <text id="lab-right-bot" class="angle-text" y="185" text-anchor="start"></text>
             </svg>
         </div>
     </section>
@@ -60,10 +60,10 @@
             <div class="controls">
                 <div class="control-group">
                     <label>Pivot Transversal (θ)</label>
-                    <input type="range" id="angle-slider" min="30" max="150" value="60" oninput="update27()">
+                    <input type="range" id="angle-slider" min="20" max="160" value="60" oninput="update27()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-27">Rotate to observe how angles mirror across the intersections.</div>
+            <div class="trace-log" id="trace-27">Rotate to observe how angles swap sides based on the slope.</div>
         </div>
     </section>
 </div>
@@ -81,11 +81,11 @@
         tLine.setAttribute('x1', 300 + dx); tLine.setAttribute('y1', 150 - dy);
         tLine.setAttribute('x2', 300 - dx); tLine.setAttribute('y2', 150 + dy);
 
-        // Logic: When theta is < 90, the line leans "forward" (top is to the right)
-        // Visually, this means the angle to the RIGHT (above the line) is acute.
-        const rightIsAcute = theta < 90;
-        const acuteVal = rightIsAcute ? theta : 180 - theta;
+        // Logic: When theta is < 90, the acute pocket is on the RIGHT side.
+        // When theta is > 90, the acute pocket flips to the LEFT side.
+        const acuteVal = Math.min(theta, 180 - theta);
         const obtuseVal = 180 - acuteVal;
+        const rightIsAcute = theta < 90;
 
         const offset = 40;
         const labLT = document.getElementById('lab-left-top');
@@ -93,28 +93,29 @@
         const labLB = document.getElementById('lab-left-bot');
         const labRB = document.getElementById('lab-right-bot');
 
-        // Set Text and Colors
-        labRT.textContent = acuteVal + '°';
-        labRT.setAttribute('fill', 'var(--angle-a)');
+        // Upper Junction Logic
+        labRT.textContent = rightIsAcute ? acuteVal + '°' : obtuseVal + '°';
+        labRT.setAttribute('fill', rightIsAcute ? 'var(--angle-a)' : 'var(--angle-b)');
         labRT.setAttribute('x', 300 + offset);
 
-        labLT.textContent = obtuseVal + '°';
-        labLT.setAttribute('fill', 'var(--angle-b)');
+        labLT.textContent = rightIsAcute ? obtuseVal + '°' : acuteVal + '°';
+        labLT.setAttribute('fill', rightIsAcute ? 'var(--angle-b)' : 'var(--angle-a)');
         labLT.setAttribute('x', 300 - offset);
 
-        labRB.textContent = acuteVal + '°';
-        labRB.setAttribute('fill', 'var(--angle-a)');
+        // Mirror Lower Junction
+        labRB.textContent = labRT.textContent;
+        labRB.setAttribute('fill', labRT.getAttribute('fill'));
         labRB.setAttribute('x', 300 + offset);
 
-        labLB.textContent = obtuseVal + '°';
-        labLB.setAttribute('fill', 'var(--angle-b)');
+        labLB.textContent = labLT.textContent;
+        labLB.setAttribute('fill', labLT.getAttribute('fill'));
         labLB.setAttribute('x', 300 - offset);
 
         document.getElementById('trace-27').innerHTML = `
-            <b>Angular Junction:</b><br>
+            <b>Current Slope: ${theta < 90 ? 'Forward' : 'Backward'}</b><br>
             Acute Angle (Red): <b>${acuteVal}°</b><br>
             Obtuse Angle (Blue): <b>${obtuseVal}°</b><br><br>
-            Note: Summing any adjacent pair always results in 180°.
+            The labels dynamically swap sides to stay true to the visual space.
         `;
     }
     window.onload = update27;

@@ -2,81 +2,157 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 23: Coordinates | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 22: Venn Diagrams (3 Circles) | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .grid-visual { height: 250px; width: 250px; border: 2px solid #334155; position: relative; margin: 20px auto; background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px); background-size: 25px 25px; }
-        .axis-x { position: absolute; width: 100%; height: 2px; background: #334155; top: 50%; }
-        .axis-y { position: absolute; height: 100%; width: 2px; background: #334155; left: 50%; }
-        .point { width: 12px; height: 12px; background: #ef4444; border-radius: 50%; position: absolute; transform: translate(-50%, -50%); transition: all 0.3s; }
-        .engine-controls { background: #eff6ff; padding: 20px; border-radius: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --overlap: rgba(197, 160, 89, 0.2); }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 1000px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.82rem; line-height: 1.4; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.7rem; text-transform: uppercase; }
+
+        /* The Triple Venn Anatomy */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 30px 0; height: 450px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+        .venn-box { position: relative; width: 400px; height: 400px; }
+        
+        .v-circle { position: absolute; border: 2px solid var(--cognis-blue); border-radius: 50%; width: 220px; height: 220px; background: rgba(0, 45, 91, 0.03); transition: all 0.3s; }
+        #circ-a { top: 20px; left: 90px; } /* Top Circle */
+        #circ-b { bottom: 60px; left: 20px; } /* Bottom Left */
+        #circ-c { bottom: 60px; right: 20px; } /* Bottom Right */
+
+        .v-label { position: absolute; font-weight: 800; font-size: 1.1rem; color: var(--cognis-blue); pointer-events: none; z-index: 10; text-shadow: 0 0 5px white; }
+        /* Positioning Labels within disjoint sections */
+        #l-oa { top: 80px; left: 185px; } 
+        #l-ob { bottom: 120px; left: 80px; }
+        #l-oc { bottom: 120px; right: 80px; }
+        #l-ab { top: 160px; left: 130px; color: var(--cognis-gold); }
+        #l-ac { top: 160px; right: 130px; color: var(--cognis-gold); }
+        #l-bc { bottom: 100px; left: 185px; color: var(--cognis-gold); }
+        #l-mid { bottom: 170px; left: 185px; color: #e53e3e; font-size: 1.4rem; }
+
+        /* Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
+        .control-group input { width: 100%; background: #2d3748; color: white; border: 1px solid #4a5568; padding: 8px; border-radius: 6px; font-weight: bold; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.6; }
     </style>
 </head>
 <body>
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 23: Coordinate Geometry</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "CORRIDOR & STAIRS" PRINCIPLE</p>
-    </header>
 
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 22: Venn Diagrams (3 Circles)</h1></div>
+
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "Type 1" thinker mixes up X and Y. A "Type 2" thinker remembers: <strong>X is across</strong> (like a cross), and <strong>Y is high</strong> (the tail goes down, but it points up).</p>
-        <div class="xray-examples">
-            <div class="example-item">1. "Plot the point (-3, 4)."</div>
-            <div class="example-item">2. "What are the coordinates of point A?"</div>
-            <div class="example-item">3. "Translate the point 2 units right and 3 units down."</div>
+        <p><strong>Topic Logic:</strong> 3-Circle Venns introduce **Triple Intersections**. Information is often presented as total group sizes, but to build the diagram, you must work from the innermost core (all three) outward. This prevents the "Accumulation Error" where students count the same person 3 or 4 times.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><span>Entry</span>In a group of 20, 5 like A, B, and C. 8 like A and B. How many like A and B, but NOT C?</div>
+            <div class="tier-card"><span>Standard</span>A survey of 50 people: 25 drink Tea, 20 Coffee, 15 Juice. 10 drink Tea and Coffee. 5 drink all three. 2 drink none. Find 'Only Tea'.</div>
+            <div class="tier-card"><span>Advanced</span>$n(A)=40, n(B)=35, n(C)=30$. $n(A\cap B)=15, n(B\cap C)=12, n(A\cap C)=10$. If 5 like all three, find the total population.</div>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        
-        <div style="background:#eff6ff; padding:15px; border-radius:8px;">
-            <strong>( X , Y )</strong><br>
-            X: Left (-) or Right (+)<br>
-            Y: Down (-) or Up (+)
+        <div class="simulation-area">
+            <div class="venn-box">
+                <div class="v-circle" id="circ-a"></div>
+                <div class="v-circle" id="circ-b"></div>
+                <div class="v-circle" id="circ-c"></div>
+                
+                <div class="v-label" id="l-oa">0</div>
+                <div class="v-label" id="l-ob">0</div>
+                <div class="v-label" id="l-oc">0</div>
+                <div class="v-label" id="l-ab">0</div>
+                <div class="v-label" id="l-ac">0</div>
+                <div class="v-label" id="l-bc">0</div>
+                <div class="v-label" id="l-mid">0</div>
+            </div>
+            <p style="font-size: 0.8rem; color: #64748b; font-weight: bold; margin-top: -20px;">The Red Number is the Core. Always start here!</p>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <div class="engine-controls">
-            <div><label>X-Axis: <span id="x-val"></span></label><input type="range" id="posX" min="-5" max="5" value="0" style="width:100%"></div>
-            <div><label>Y-Axis: <span id="y-val"></span></label><input type="range" id="posY" min="-5" max="5" value="0" style="width:100%"></div>
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-grid">
+                    <div class="control-group"><label>Center (All 3)</label><input type="number" id="in-mid" value="5"></div>
+                    <div class="control-group"><label>Neither</label><input type="number" id="in-n" value="2"></div>
+                    <div class="control-group"><label>Only A</label><input type="number" id="in-oa" value="10"></div>
+                    <div class="control-group"><label>Only B</label><input type="number" id="in-ob" value="8"></div>
+                    <div class="control-group"><label>Only C</label><input type="number" id="in-oc" value="6"></div>
+                    <div class="control-group"><label>A & B (Excl. Mid)</label><input type="number" id="in-ab" value="4"></div>
+                    <div class="control-group"><label>A & C (Excl. Mid)</label><input type="number" id="in-ac" value="3"></div>
+                    <div class="control-group"><label>B & C (Excl. Mid)</label><input type="number" id="in-bc" value="2"></div>
+                </div>
+            </div>
+            <div class="trace-log" id="logic-trace">Adjust values to tally the sets...</div>
         </div>
-        <div class="grid-visual">
-            <div class="axis-x"></div><div class="axis-y"></div>
-            <div id="dot" class="point" style="left:50%; top:50%;"></div>
-        </div>
-        <h2 style="text-align:center;" id="coord-display">(0, 0)</h2>
-    </div>
+    </section>
 
-    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
-        <h2>Phase 4: The Saboteur</h2>
-        <p style="color: var(--trap); font-weight: 700;">The "Reversal" Trap: Swapping X and Y (e.g., going up 3 then right 2 for (3,2)). This is the #1 cause of lost marks in spatial reasoning.</p>
-    </div>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Totalist" Trap:</strong> If the question says "20 people like Apples" and "5 people like everything," the number in the Apple-Only section is **not** 20. 
+            <br><br><strong>The Fix:</strong> Every circle in a Venn diagram is a container. The "Everything" people are already inside the Apple container. You must **subtract** them to find who likes *only* Apples.</p>
+        </div>
+    </section>
 </div>
+
 <script>
-    function update() {
-        const x = document.getElementById('posX').value;
-        const y = document.getElementById('posY').value;
-        document.getElementById('x-val').innerText = x;
-        document.getElementById('y-val').innerText = y;
-        document.getElementById('coord-display').innerText = `(${x}, ${y})`;
-        const left = ((parseInt(x) + 5) / 10) * 100;
-        const top = 100 - (((parseInt(y) + 5) / 10) * 100);
-        document.getElementById('dot').style.left = left + '%';
-        document.getElementById('dot').style.top = top + '%';
+    const inputs = ['in-mid', 'in-oa', 'in-ob', 'in-oc', 'in-ab', 'in-ac', 'in-bc', 'in-n'].map(id => document.getElementById(id));
+    const trace = document.getElementById('logic-trace');
+
+    function refresh() {
+        const v = {
+            center: parseFloat(inputs[0].value) || 0,
+            onlyA: parseFloat(inputs[1].value) || 0,
+            onlyB: parseFloat(inputs[2].value) || 0,
+            onlyC: parseFloat(inputs[3].value) || 0,
+            ab: parseFloat(inputs[4].value) || 0,
+            ac: parseFloat(inputs[5].value) || 0,
+            bc: parseFloat(inputs[6].value) || 0,
+            neither: parseFloat(inputs[7].value) || 0
+        };
+
+        // Update Visual Labels
+        document.getElementById('l-mid').innerText = v.center;
+        document.getElementById('l-oa').innerText = v.onlyA;
+        document.getElementById('l-ob').innerText = v.onlyB;
+        document.getElementById('l-oc').innerText = v.onlyC;
+        document.getElementById('l-ab').innerText = v.ab;
+        document.getElementById('l-ac').innerText = v.ac;
+        document.getElementById('l-bc').innerText = v.bc;
+
+        // Calculate Totals
+        const totalA = v.onlyA + v.ab + v.ac + v.center;
+        const totalB = v.onlyB + v.ab + v.bc + v.center;
+        const totalC = v.onlyC + v.ac + v.bc + v.center;
+        const grandTotal = v.onlyA + v.onlyB + v.onlyC + v.ab + v.ac + v.bc + v.center + v.neither;
+
+        trace.innerHTML = `
+            <div style="color:var(--cognis-gold); font-weight:bold; margin-bottom:10px;">Population Breakdown:</div>
+            <div>→ Set A Total: ${totalA}</div>
+            <div>→ Set B Total: ${totalB}</div>
+            <div>→ Set C Total: ${totalC}</div>
+            <div style="margin-top:10px; border-top:1px solid #333; padding-top:10px;">
+                <b>Universe Total:</b> ${grandTotal}<br>
+                <small>(Sum of all 8 disjoint sections)</small>
+            </div>
+        `;
     }
-    document.querySelectorAll('input').forEach(i => i.oninput = update);
-    update();
+
+    inputs.forEach(i => i.addEventListener('input', refresh));
+    window.onload = refresh;
 </script>
 </body>
 </html>

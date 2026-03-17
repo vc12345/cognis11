@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Module 30: Relative Letter Shift | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
@@ -17,17 +17,22 @@
         .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
-        svg { background: #1a202c; border-radius: 50%; }
-        .ring-text { font-family: 'Courier New', monospace; font-weight: bold; font-size: 14px; fill: #64748b; transition: all 0.3s ease; }
+        svg { background: #1a202c; border-radius: 50%; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        .ring-text { font-family: 'Courier New', monospace; font-weight: bold; font-size: 14px; fill: #64748b; transition: all 0.4s ease; cursor: default; }
         .outer-text { fill: #a0aec0; }
         .inner-text { fill: var(--cognis-gold); }
-        .active-pair { fill: white; font-size: 18px; filter: drop-shadow(0 0 5px white); }
+        .active-pair { fill: white; font-size: 18px; filter: drop-shadow(0 0 8px white); }
         
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { margin-bottom: 20px; }
         .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 10px; }
         .input-text { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; text-transform: uppercase; letter-spacing: 4px; }
+        
+        .btn-toggle { background: #4a5568; color: white; border: none; padding: 10px 15px; border-radius: 6px; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; font-weight: bold; width: 100%; }
+        .btn-toggle.active { background: var(--cognis-gold); }
+        
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; min-height: 160px; }
         input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; min-height: 150px; }
     </style>
 </head>
 <body>
@@ -37,8 +42,8 @@
         <h2>Phase 1: The X-Ray</h2>
         <div class="question-tiers">
             <div class="tier-card"><b>Advanced Year 2</b>If "CAT" becomes "DBU", what is the shift?</div>
-            <div class="tier-card"><b>Average Year 4</b>If the code for "FISH" is "HKUJ", what is the code for "BIRD"?</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Decode "BCZ" using a shift of -2. (Remember the loop!)</div>
+            <div class="tier-card"><b>Average Year 4</b>If the code for "FISH" is "HKUJ", find the code for "BIRD".</div>
+            <div class="tier-card"><b>Advanced Year 5</b>If A=Z, B=Y (Reverse), decode the word "BCZ".</div>
         </div>
     </section>
 
@@ -46,11 +51,11 @@
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
             <svg id="caesar-svg" width="420" height="420" viewBox="0 0 420 420">
-                <circle cx="210" cy="210" r="165" fill="none" stroke="#2d3748" stroke-width="40" />
-                <circle cx="210" cy="210" r="120" fill="none" stroke="#333" stroke-width="40" />
+                <circle cx="210" cy="210" r="165" fill="none" stroke="#2d3748" stroke-width="45" />
+                <circle cx="210" cy="210" r="115" fill="none" stroke="#333" stroke-width="45" />
                 <g id="outer-ring"></g>
                 <g id="inner-ring"></g>
-                <path d="M 210 20 L 210 60" stroke="var(--cognis-gold)" stroke-width="3" />
+                <path d="M 210 20 L 210 65" stroke="var(--cognis-gold)" stroke-width="4" stroke-linecap="round" />
             </svg>
         </div>
     </section>
@@ -60,30 +65,41 @@
         <div class="engine-container">
             <div class="controls">
                 <div class="control-group">
-                    <label>Shift Offset (±)</label>
+                    <label>Shift Alpha (Rotate Inner Ring)</label>
                     <input type="range" id="shift-slider" min="0" max="25" value="1" oninput="run30()">
-                    <div style="text-align: center; font-size: 1.5rem; font-weight: 900; color: var(--cognis-gold); margin-top: 10px;" id="shift-val">+1</div>
+                </div>
+                <div class="control-group">
+                    <label>Alphabet Direction</label>
+                    <button id="btn-reverse" class="btn-toggle" onclick="toggleReverse()">Standard (A→B→C)</button>
                 </div>
                 <div class="control-group">
                     <label>Word to Process</label>
                     <input type="text" id="word-in" class="input-text" value="FISH" maxlength="8" oninput="run30()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-30">Rotate the disk to align the alphabets...</div>
+            <div class="trace-log" id="trace-30">Select a direction and shift to build the key...</div>
         </div>
     </section>
 </div>
 
 <script>
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let isReversed = false;
+
+    function toggleReverse() {
+        isReversed = !isReversed;
+        const btn = document.getElementById('btn-reverse');
+        btn.innerText = isReversed ? "Reverse (Z→Y→X)" : "Standard (A→B→C)";
+        btn.classList.toggle('active', isReversed);
+        run30();
+    }
 
     function run30() {
-        const shift = parseInt(document.getElementById('shift-slider').value);
+        const offset = parseInt(document.getElementById('shift-slider').value);
         const word = document.getElementById('word-in').value.toUpperCase();
         const outerG = document.getElementById('outer-ring');
         const innerG = document.getElementById('inner-ring');
         
-        document.getElementById('shift-val').innerText = shift > 0 ? "+" + shift : shift;
         outerG.innerHTML = '';
         innerG.innerHTML = '';
 
@@ -91,25 +107,39 @@
             const angle = (i / 26) * 2 * Math.PI - Math.PI / 2;
             const ox = 210 + 165 * Math.cos(angle);
             const oy = 210 + 165 * Math.sin(angle);
+            const ix = 210 + 115 * Math.cos(angle);
+            const iy = 210 + 115 * Math.sin(angle);
+
+            // Outer ring is ALWAYS standard A-Z
+            const plainChar = alphabet[i];
             
-            // Cipher letter logic
-            const cipherIdx = (i + shift) % 26;
-            const ix = 210 + 120 * Math.cos(angle);
-            const iy = 210 + 120 * Math.sin(angle);
+            // Inner ring depends on Offset and Direction
+            let cipherIdx;
+            if (!isReversed) {
+                cipherIdx = (i + offset) % 26;
+            } else {
+                cipherIdx = (26 - (i + offset) % 26) % 26;
+            }
+            const cipherChar = alphabet[cipherIdx];
 
-            const isHighlighted = word.includes(alphabet[i]);
+            const isActive = word.includes(plainChar);
 
-            outerG.innerHTML += `<text x="${ox}" y="${oy}" class="ring-text outer-text ${isHighlighted ? 'active-pair' : ''}" text-anchor="middle" dominant-baseline="middle">${alphabet[i]}</text>`;
-            innerG.innerHTML += `<text x="${ix}" y="${iy}" class="ring-text inner-text ${isHighlighted ? 'active-pair' : ''}" text-anchor="middle" dominant-baseline="middle">${alphabet[cipherIdx]}</text>`;
+            outerG.innerHTML += `<text x="${ox}" y="${oy}" class="ring-text outer-text ${isActive ? 'active-pair' : ''}" text-anchor="middle" dominant-baseline="middle">${plainChar}</text>`;
+            innerG.innerHTML += `<text x="${ix}" y="${iy}" class="ring-text inner-text ${isActive ? 'active-pair' : ''}" text-anchor="middle" dominant-baseline="middle">${cipherChar}</text>`;
         }
 
-        // Trace
-        let trace = `<b>Offset:</b> ${shift}<br>`;
+        // Generate dynamic Trace
+        let trace = `<b>Active Key:</b> Outer A = Inner ${alphabet[isReversed ? (26-offset)%26 : offset]}<br>`;
         for (let c of word) {
             const idx = alphabet.indexOf(c);
             if (idx !== -1) {
-                const shifted = alphabet[(idx + shift) % 26];
-                trace += `${c} (Outer) → <b>${shifted}</b> (Inner)<br>`;
+                let codeChar;
+                if (!isReversed) {
+                    codeChar = alphabet[(idx + offset) % 26];
+                } else {
+                    codeChar = alphabet[(offset - idx + 26) % 26];
+                }
+                trace += `${c} (Plain) → <b>${codeChar}</b> (Cipher)<br>`;
             }
         }
         document.getElementById('trace-30').innerHTML = trace;

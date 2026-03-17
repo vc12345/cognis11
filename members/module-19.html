@@ -12,27 +12,35 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
+        /* Phase 1: X-Ray Tiers */
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
         .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
-        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 8px; font-size: 0.7rem; text-transform: uppercase; }
+        .square { display: inline-block; width: 14px; height: 14px; border: 1px solid var(--cognis-blue); vertical-align: middle; margin: 0 4px; background: white; }
 
-        /* The Balance Scale Anatomy */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 50px 20px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; }
-        .scale-beam { width: 400px; height: 10px; background: var(--cognis-blue); border-radius: 5px; position: relative; transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); margin-bottom: 20px; }
-        .scale-base { width: 40px; height: 60px; background: #cbd5e0; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); }
+        /* Phase 2: Physics-Correct Balance Scale */
+        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 30px 0; height: 350px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; overflow: hidden; position: relative; }
+        .scale-pivot { width: 0; height: 0; border-left: 30px solid transparent; border-right: 30px solid transparent; border-bottom: 60px solid #cbd5e0; position: relative; z-index: 1; }
+        .scale-beam { width: 450px; height: 12px; background: var(--cognis-blue); border-radius: 6px; position: absolute; bottom: 54px; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: flex; justify-content: space-between; align-items: center; transform-origin: center center; }
         
-        .pan { position: absolute; top: 10px; width: 140px; background: white; border: 2px solid var(--cognis-blue); border-top: none; border-radius: 0 0 50px 50px; padding: 15px 5px; text-align: center; }
-        #left-pan { left: -70px; }
-        #right-pan { right: -70px; }
+        .pan { width: 160px; height: 100px; position: absolute; top: 12px; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; align-items: center; }
+        .pan-string { width: 100%; height: 60px; border-left: 2px solid #94a3b8; border-right: 2px solid #94a3b8; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); margin-bottom: -10px; }
+        .pan-bowl { width: 100%; background: white; border: 3px solid var(--cognis-blue); border-top: none; border-radius: 0 0 80px 80px; padding: 20px 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         
-        .equation-text { font-size: 1.1rem; font-weight: bold; color: var(--cognis-blue); }
+        #left-pan { left: -80px; }
+        #right-pan { right: -80px; }
 
-        /* Engine Side-by-Side */
+        .equation-text { font-size: 1.1rem; font-weight: 800; color: var(--cognis-blue); }
+        .calc-sub { font-size: 0.7rem; color: #64748b; margin-top: 4px; font-weight: bold; }
+
+        /* Phase 3: Engine Layout */
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group { margin-bottom: 15px; }
-        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
-        .control-group input, .control-group select { width: 100%; padding: 8px; border-radius: 4px; border: none; background: #2d3748; color: white; font-size: 1rem; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); min-height: 120px; }
+        .builder-row { display: flex; gap: 10px; align-items: center; margin-bottom: 20px; }
+        .builder-row input, .builder-row select { background: #2d3748; color: white; border: 1px solid #4a5568; padding: 10px; border-radius: 6px; font-size: 1rem; width: 80px; font-weight: bold; }
+        .builder-row select { width: 110px; border: 1px solid var(--cognis-gold); }
+        .target-group { border-top: 1px solid #4a5568; padding-top: 20px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 4px solid var(--cognis-gold); min-height: 180px; line-height: 1.8; }
+        .step-priority { color: var(--cognis-gold); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -42,11 +50,11 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p><strong>Topic Logic:</strong> Solving "Missing Signs" is the reverse of calculation. It requires testing how operators transform a set of numbers into a <strong>Target Result</strong>, while strictly respecting BODMAS priority.</p>
+        <p>Topic Logic: "Missing Signs" questions are logic puzzles that test your understanding of <strong>Operational Hierarchy (BODMAS)</strong>. You must deduce which operators (+, -, ×, ÷) create the required target result.</p>
         <div class="question-tiers">
-            <div class="tier-card"><span>Entry (Y2)</span>$5 \square 2 = 7$</div>
-            <div class="tier-card"><span>Standard (Y4)</span>$10 \square 2 \square 5 = 15$</div>
-            <div class="tier-card"><span>Advanced (Y5)</span>$12 \square 4 \square 2 = 14$</div>
+            <div class="tier-card"><span>Entry (Year 2)</span>"What sign makes this true?" <br> $8 \begin{smallmatrix}\square\end{smallmatrix} 2 = 10$</div>
+            <div class="tier-card"><span>Average (Year 4)</span>"Choose two signs to balance this:" <br> $12 \begin{smallmatrix}\square\end{smallmatrix} 3 \begin{smallmatrix}\square\end{smallmatrix} 2 = 18$</div>
+            <div class="tier-card"><span>Advanced (Year 5)</span>"Place signs so the result is 4:" <br> $20 \begin{smallmatrix}\square\end{smallmatrix} 2 \begin{smallmatrix}\square\end{smallmatrix} 3 = 13$</div>
         </div>
     </section>
 
@@ -55,15 +63,21 @@
         <div class="simulation-area">
             <div class="scale-beam" id="beam">
                 <div class="pan" id="left-pan">
-                    <div class="equation-text"><span id="v-a">12</span> <span id="v-op1">+</span> <span id="v-b">4</span> <span id="v-op2">+</span> <span id="v-c">2</span></div>
-                    <div style="font-size: 0.7rem; color: #718096; margin-top: 5px;">Calc: <span id="v-calc">18</span></div>
+                    <div class="pan-string"></div>
+                    <div class="pan-bowl">
+                        <div class="equation-text"><span id="v-a">12</span> <span id="v-op1">?</span> <span id="v-b">3</span> <span id="v-op2">?</span> <span id="v-c">2</span></div>
+                        <div class="calc-sub">Result: <span id="v-calc">0</span></div>
+                    </div>
                 </div>
                 <div class="pan" id="right-pan">
-                    <div class="equation-text" id="v-target">14</div>
-                    <div style="font-size: 0.7rem; color: #718096; margin-top: 5px;">Target</div>
+                    <div class="pan-string"></div>
+                    <div class="pan-bowl">
+                        <div class="equation-text" id="v-target">18</div>
+                        <div class="calc-sub">Target</div>
+                    </div>
                 </div>
             </div>
-            <div class="scale-base"></div>
+            <div class="scale-pivot"></div>
         </div>
     </section>
 
@@ -71,33 +85,45 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <div class="control-group">
-                    <label>Value A / Op 1 / Value B</label>
-                    <div style="display:flex; gap:5px;">
-                        <input type="number" id="in-a" value="12">
-                        <select id="in-op1"><option value="+">+</option><option value="-">-</option><option value="x">×</option><option value="/">÷</option></select>
-                        <input type="number" id="in-b" value="4">
-                    </div>
+                <label style="font-size: 0.7rem; color: #a0aec0; text-transform: uppercase;">Expression Setup</label>
+                <div class="builder-row">
+                    <input type="number" id="in-a" value="12">
+                    <select id="in-op1">
+                        <option value="">— Op —</option>
+                        <option value="+">+</option>
+                        <option value="-">-</option>
+                        <option value="x">×</option>
+                        <option value="/">÷</option>
+                    </select>
+                    <input type="number" id="in-b" value="3">
                 </div>
-                <div class="control-group">
-                    <label>Op 2 / Value C / Target</label>
-                    <div style="display:flex; gap:5px;">
-                        <select id="in-op2"><option value="+">+</option><option value="-">-</option><option value="x">×</option><option value="/">÷</option></select>
-                        <input type="number" id="in-c" value="2">
-                        <input type="number" id="in-target" value="14" style="border: 2px solid var(--cognis-gold);">
+                <div class="builder-row">
+                    <select id="in-op2">
+                        <option value="">— Op —</option>
+                        <option value="+">+</option>
+                        <option value="-">-</option>
+                        <option value="x">×</option>
+                        <option value="/">÷</option>
+                    </select>
+                    <input type="number" id="in-c" value="2">
+                </div>
+                <div class="target-group">
+                    <label style="font-size: 0.7rem; color: #a0aec0; text-transform: uppercase;">Target Value</label>
+                    <div class="builder-row">
+                        <input type="number" id="in-target" value="18" style="width: 100%; border: 2px solid var(--cognis-gold);">
                     </div>
                 </div>
             </div>
-            <div class="trace-log" id="logic-trace">Select operators to balance the scale.</div>
+            <div class="trace-log" id="logic-trace">Select operators to begin balancing...</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 25px;">
             <h2 style="color:var(--trap-red);">Phase 4: The Saboteur</h2>
-            <p><strong>The "Left-to-Right" Trap:</strong> Forgetting that $\times$ and $\div$ must be tested first.
-            <br><i>Example: In $12 - 4 \div 2$, a student might do $12-4=8$, then $8\div 2 = 4$. But BODMAS says $4 \div 2$ happens first!</i>
-            <br><br><strong>The Fix:</strong> Always check if your second sign is "heavier" ($\times, \div$) than your first. If it is, solve that pair first before testing the balance.</p>
+            <p><strong>The "Linear" Trap:</strong> Most students test signs from left to right. 
+            <br><i>Example: In $10 + 2 \times 5$, a student might think it's $12 \times 5 = 60$. But it is $10 + 10 = 20$.</i>
+            <br><br><strong>The Fix:</strong> If you pick a "heavy" sign (× or ÷) for your second slot, you must calculate that pair first. The scale handles the weight, but you must handle the order!</p>
         </div>
     </section>
 </div>
@@ -105,47 +131,63 @@
 <script>
     const inputs = ['in-a', 'in-op1', 'in-b', 'in-op2', 'in-c', 'in-target'].map(id => document.getElementById(id));
     const beam = document.getElementById('beam');
+    const lPan = document.getElementById('left-pan');
+    const rPan = document.getElementById('right-pan');
     const trace = document.getElementById('logic-trace');
 
     function refresh() {
         const [a, op1, b, op2, c, target] = inputs.map(i => i.value);
         
-        // Update labels
+        // Update Labels
         document.getElementById('v-a').innerText = a;
-        document.getElementById('v-op1').innerText = op1 === 'x' ? '×' : op1 === '/' ? '÷' : op1;
+        document.getElementById('v-op1').innerText = op1 || '?';
         document.getElementById('v-b').innerText = b;
-        document.getElementById('v-op2').innerText = op2 === 'x' ? '×' : op2 === '/' ? '÷' : op2;
+        document.getElementById('v-op2').innerText = op2 || '?';
         document.getElementById('v-c').innerText = c;
         document.getElementById('v-target').innerText = target;
 
-        // Use LogicProvider (Integrated here for stability)
+        if (!op1 || !op2) {
+            trace.innerHTML = "Choose both operators to see the result.";
+            beam.style.transform = `rotate(0deg)`;
+            lPan.style.transform = `rotate(0deg)`;
+            rPan.style.transform = `rotate(0deg)`;
+            return;
+        }
+
+        // Logic Engine
         const ops = { '+': (x, y) => x + y, '-': (x, y) => x - y, 'x': (x, y) => x * y, '/': (x, y) => x / y };
         let current = 0;
+        let steps = [];
         const p1 = (op1 === 'x' || op1 === '/') ? 2 : 1;
         const p2 = (op2 === 'x' || op2 === '/') ? 2 : 1;
 
         if (p2 > p1) {
             const s1 = ops[op2](parseFloat(b), parseFloat(c));
             current = ops[op1](parseFloat(a), s1);
+            steps = [`<span class="step-priority">BODMAS: ${op2} comes first!</span>`, `${b} ${op2} ${c} = ${s1}`, `${a} ${op1} ${s1} = ${current}`];
         } else {
             const s1 = ops[op1](parseFloat(a), parseFloat(b));
             current = ops[op2](s1, parseFloat(c));
+            steps = [`<span class="step-priority">Linear: ${op1} solved first.</span>`, `${a} ${op1} ${b} = ${s1}`, `${s1} ${op2} ${c} = ${current}`];
         }
 
-        document.getElementById('v-calc').innerText = current.toFixed(1);
+        document.getElementById('v-calc').innerText = current;
+        trace.innerHTML = steps.map(s => `<div>→ ${s}</div>`).join('');
 
-        // Tilt logic: 10 degrees per point of difference, max 30
+        // Correct Physics: Heavier side goes DOWN.
+        // Difference (left - right). If positive, left is heavier.
         const diff = current - parseFloat(target);
-        const tilt = Math.max(-30, Math.min(30, diff * 5));
-        beam.style.transform = `rotate(${tilt}deg)`;
+        // Tilt beam: positive diff = tilt right-up (left down).
+        const tilt = Math.max(-25, Math.min(25, diff * 2));
         
-        // Sync the pans so they stay level while beam tilts
-        document.getElementById('left-pan').style.transform = `rotate(${-tilt}deg)`;
-        document.getElementById('right-pan').style.transform = `rotate(${-tilt}deg)`;
+        beam.style.transform = `rotate(${tilt}deg)`;
+        // Counter-rotate pans to keep them vertical
+        lPan.style.transform = `rotate(${-tilt}deg)`;
+        rPan.style.transform = `rotate(${-tilt}deg)`;
 
-        trace.innerHTML = current === parseFloat(target) 
-            ? '<span style="color:#7cfc00; font-weight:bold;">BALANCED!</span> Operators are correct.' 
-            : 'Scale is tilted. Adjust operators to match the target.';
+        if (current === parseFloat(target)) {
+            trace.innerHTML += `<div style="color:#7cfc00; font-weight:bold; margin-top:10px;">★ SCALE BALANCED! ★</div>`;
+        }
     }
 
     inputs.forEach(i => i.addEventListener('input', refresh));

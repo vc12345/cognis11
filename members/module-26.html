@@ -32,11 +32,11 @@
     <div class="header"><h1>Module 26: Area/Perimeter Invariance</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p><strong>The Logic:</strong> Perimeter is 1-dimensional (length); Area is 2-dimensional (space). In many 11+ puzzles, shapes look different but share the same boundary length. A "Type 2" thinker knows that for a fixed perimeter, a <b>Square</b> always encloses the maximum possible area.</p>
+        <p>Perimeter is 1-dimensional length; Area is 2-dimensional space. While a boundary may remain a fixed length, the internal capacity fluctuates based on the shape's balance. A square configuration maximizes the internal area for any given perimeter.</p>
         <div class="question-tiers">
             <div class="tier-card"><b>Advanced Year 2</b>A garden has a 12m fence. If it's a square, what is the area?</div>
-            <div class="tier-card"><b>Average Year 4</b>Rectangle A is 8x2. Rectangle B is 5x5. Which has a larger perimeter? Which has a larger area?</div>
-            <div class="tier-card"><b>Advanced Year 5</b>A wire is bent into a 6x4 rectangle. If it is re-bent into a square, by how much does the area increase?</div>
+            <div class="tier-card"><b>Average Year 4</b>Rectangle A is 8x2. Rectangle B is 5x5. Which has a larger area?</div>
+            <div class="tier-card"><b>Advanced Year 5</b>A wire is 20cm. If bent into a 6x4 rectangle, how does its area compare to a 5x5 square?</div>
         </div>
     </section>
 
@@ -45,8 +45,8 @@
         <div class="simulation-area">
             <svg id="canvas-26" width="500" height="300" viewBox="0 0 500 300">
                 <rect id="dynamic-rect" x="150" y="50" width="200" height="200" class="boundary" />
-                <text id="dim-w" x="250" y="40" class="label-text" text-anchor="middle">W: 10</text>
-                <text id="dim-h" x="130" y="150" class="label-text" text-anchor="end">H: 10</text>
+                <text id="dim-w" x="250" y="40" class="label-text" text-anchor="middle">Width: 10</text>
+                <text id="dim-h" x="130" y="150" class="label-text" text-anchor="end">Height: 10</text>
                 <text x="250" y="150" fill="var(--cognis-gold)" font-weight="900" font-size="24" text-anchor="middle" id="area-val">100</text>
             </svg>
         </div>
@@ -57,12 +57,18 @@
         <div class="engine-container">
             <div class="controls">
                 <div class="control-group">
-                    <label>Manipulate Rectangle Shape (Fixed Perimeter: 40 units)</label>
+                    <label>Manipulate Shape (Fixed Perimeter: 40 units)</label>
                     <input type="range" id="slider-26" min="2" max="18" value="10" step="0.5" oninput="run26()">
                 </div>
-                <p style="font-size: 0.7rem; color: #a0aec0;">The perimeter is locked at 2(W + H) = 40. Watch the area fluctuate as you change the "balance" of the sides.</p>
             </div>
-            <div class="trace-log" id="trace-26">Adjust the slider to compare narrow vs. balanced shapes.</div>
+            <div class="trace-log" id="trace-26">Adjust the slider to see how the area behaves as the rectangle stretches.</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p>For a fixed perimeter, the closer a rectangle is to a square, the greater its area. When the sides are extremely unequal (long and thin), the area collapses toward zero, even though the total boundary length remains unchanged.</p>
         </div>
     </section>
 </div>
@@ -70,11 +76,10 @@
 <script>
     function run26() {
         const w = parseFloat(document.getElementById('slider-26').value);
-        const h = 20 - w; // Sum of w+h must be 20 for perimeter of 40
+        const h = 20 - w; 
         const area = w * h;
-
         const rect = document.getElementById('dynamic-rect');
-        const scale = 12; // Visual scaling
+        const scale = 12; 
         const visualW = w * scale;
         const visualH = h * scale;
 
@@ -84,21 +89,15 @@
         rect.setAttribute('y', 150 - visualH/2);
 
         document.getElementById('dim-w').textContent = `Width: ${w}`;
-        document.getElementById('dim-w').setAttribute('x', 250);
         document.getElementById('dim-w').setAttribute('y', 150 - visualH/2 - 10);
-        
         document.getElementById('dim-h').textContent = `Height: ${h}`;
         document.getElementById('dim-h').setAttribute('x', 250 - visualW/2 - 10);
-        document.getElementById('dim-h').setAttribute('y', 150);
 
         document.getElementById('area-val').textContent = area.toFixed(1);
-
         document.getElementById('trace-26').innerHTML = `
-            <b>Boundary Constants:</b><br>
-            Perimeter = 2(${w} + ${h}) = 40.0 units<br><br>
-            <b>Spatial Outcome:</b><br>
+            Perimeter = 2(${w} + ${h}) = 40.0 units<br>
             Area = ${w} × ${h} = <b>${area.toFixed(2)} units²</b><br><br>
-            <i>Type 2 Insight: Even though the "fence" is the same length, the internal space is ${w === h ? 'MAXIMIZED' : 'smaller'} because the shape is ${w === h ? 'a Square' : 'stretched'}.</i>
+            Note: Maximum area is achieved at Width: 10, Height: 10 (Square).
         `;
     }
     window.onload = run26;

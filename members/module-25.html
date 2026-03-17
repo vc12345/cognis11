@@ -2,76 +2,169 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 25: Reflection | Cognis11</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../js/logic-provider.js"></script>
+    <title>Module 25: Combinatorics | Cognis11</title>
     <style>
-        :root { --primary: #1e3a8a; --accent: #b45309; --success: #059669; --bg: #f8fafc; --text: #0f172a; --trap: #be123c; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .section { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 30px; border: 1px solid #e2e8f0; }
-        h1, h2 { color: var(--primary); margin-top: 0; }
-        .mirror-stage { display: flex; justify-content: center; align-items: center; gap: 40px; padding: 40px; background: #f1f5f9; border-radius: 12px; margin: 20px 0; }
-        .shape-orig { width: 80px; height: 80px; background: var(--primary); clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%); }
-        .shape-ref { width: 80px; height: 80px; background: var(--primary); clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%); opacity: 0.4; transition: transform 0.5s; }
-        .mirror-line { width: 4px; height: 150px; background: #94a3b8; border-radius: 2px; }
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 1000px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        /* The Matrix Simulation */
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; }
+        .matrix-grid { display: grid; gap: 4px; background: #2d3748; padding: 10px; border-radius: 8px; margin-bottom: 20px; }
+        .cell { width: 30px; height: 30px; border-radius: 3px; background: #4a5568; transition: all 0.4s; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: rgba(255,255,255,0.2); }
+        .cell.active { background: var(--cognis-gold); color: white; font-weight: bold; box-shadow: 0 0 10px var(--cognis-gold); }
+        .cell.self { background: #1a202c; border: 1px dashed #4a5568; }
+        .cell.duplicate { opacity: 0.15; }
+
+        /* Engine */
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 10px; }
+        .control-group input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
+        
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; min-height: 220px; }
+        .btn-action { width: 100%; background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 15px; }
     </style>
 </head>
 <body>
-<div class="container">
-    <header style="text-align: center; margin-bottom: 40px;">
-        <h1>Module 25: Reflection</h1>
-        <p style="color: var(--accent); font-weight: 700;">THE "MIRROR" PRINCIPLE</p>
-    </header>
 
-    <div class="section">
+<div class="module-card">
+    <div class="header"><h1>Module 25: Combinatorics (Handshakes)</h1></div>
+    
+    <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A "Type 1" thinker slides the shape (Translation). A "Type 2" thinker flips the shape. In a reflection, the image is **reversed** and the **same distance** from the mirror line as the original.</p>
-    </div>
+        <p>Combinatorics is the math of counting possibilities. In "Handshake" problems, every person interacts with every other person <b>once</b>. This requires us to eliminate self-interactions and duplicated pairings.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>If 4 friends high-five each other once, how many high-fives happen?</div>
+            <div class="tier-card"><b>Average Year 4</b>8 teams play in a league. Every team plays every other team once. How many games total?</div>
+            <div class="tier-card"><b>Advanced Year 5</b>In a room, 45 handshakes took place. How many people were there?</div>
+        </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        [Image showing a complex shape being reflected across a horizontal axis to demonstrate the flip and equidistant points]
-        <div style="background:#f0fdf4; padding:15px; border-radius:8px;">
-            <strong>Key Check:</strong> Pick a corner on the original. Count the squares to the mirror line. The same corner on the reflection MUST be the same number of squares away on the other side.
+        <div class="simulation-area" id="stage">
+            <div id="matrix" class="matrix-grid"></div>
+            <div style="color: #a0aec0; font-size: 0.8rem; text-align: center;">
+                The <b>Matrix of Possibility</b> for <span id="n-count" style="color:white; font-weight:bold;">5</span> people.<br>
+                <span id="stat-text">Showing all $n \times n$ combinations.</span>
+            </div>
+            <button class="btn-action" style="width: 250px;" onclick="toggleFilter()" id="filter-btn">Filter Duplicates (÷ 2)</button>
         </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <p>Toggle the mirror axis to see how the reflection "flips."</p>
-        <div class="mirror-stage">
-            <div class="shape-orig"></div>
-            <div id="m-line" class="mirror-line"></div>
-            <div id="m-shape" class="shape-ref" style="transform: scaleX(-1);"></div>
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Set Number of People (n)</label>
+                    <input type="range" id="in-n" min="2" max="12" value="5" oninput="resetAndNotify()">
+                </div>
+                <div style="background: rgba(197, 160, 89, 0.1); padding: 20px; border-radius: 8px; border: 1px solid var(--cognis-gold);">
+                    <small style="text-transform: uppercase; font-size: 0.6rem; color: var(--cognis-gold);">Master Formula</small>
+                    <div style="font-size: 1.5rem; font-weight: bold; font-family: 'Courier New', monospace;">n(n - 1) / 2</div>
+                </div>
+            </div>
+            <div class="trace-log" id="trace">Select "Filter Duplicates" to see the logic in action...</div>
         </div>
-        <div class="btn-group">
-            <button class="btn" onclick="setRef('vertical')">Vertical Mirror (Flip X)</button>
-            <button class="btn" style="background:#64748b" onclick="setRef('horizontal')">Horizontal Mirror (Flip Y)</button>
-        </div>
-    </div>
+    </section>
 
-    <div class="section" style="background: #fff1f2; border: 2px solid #fecdd3; padding: 25px; border-radius: 12px;">
-        <h2>Phase 4: The Saboteur</h2>
-        <p style="color: var(--trap); font-weight: 700;">The "Slide" Trap: Drawing the exact same shape on the other side of the line without flipping it. If you can't "fold" the paper along the mirror line and have the shapes match, it's a slide, not a reflection.</p>
-    </div>
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Reflection" Trap:</strong> If there are 10 people, $10 \times 9 = 90$ counts every handshake twice (A shaking B, and B shaking A).
+            <br><br><strong>The Fix:</strong> Look at the matrix above. The top-right triangle is a perfect mirror of the bottom-left. To get the <u>unique</u> handshakes, we must discard one half of the mirror. That is why we divide by 2.</p>
+        </div>
+    </section>
 </div>
+
 <script>
-    function setRef(mode) {
-        const shape = document.getElementById('m-shape');
-        const line = document.getElementById('m-line');
-        const stage = document.querySelector('.mirror-stage');
-        if(mode === 'vertical') {
-            shape.style.transform = 'scaleX(-1)';
-            line.style.width = '4px'; line.style.height = '150px';
-            stage.style.flexDirection = 'row';
+    // LogicProvider re-integrated
+    const LogicProvider = {
+        modules: {
+            combinatorics: {
+                getHandshakes: (n) => {
+                    const raw = n * n;
+                    const minusSelf = n * (n - 1);
+                    const final = minusSelf / 2;
+                    return {
+                        n, raw, minusSelf, final,
+                        steps: [
+                            `1. Grid starts at ${n} x ${n} = ${raw} slots.`,
+                            `2. Remove ${n} self-shakes (diagonal) = ${minusSelf}.`,
+                            `3. Divide by 2 to remove mirrors = ${final}.`
+                        ]
+                    };
+                }
+            }
+        }
+    };
+
+    let isFiltered = false;
+
+    function resetAndNotify() {
+        isFiltered = false;
+        document.getElementById('filter-btn').innerText = "Filter Duplicates (÷ 2)";
+        document.getElementById('stage').classList.remove('merged');
+        renderMatrix();
+    }
+
+    function renderMatrix() {
+        const n = parseInt(document.getElementById('in-n').value);
+        const matrix = document.getElementById('matrix');
+        const trace = document.getElementById('trace');
+        
+        document.getElementById('n-count').innerText = n;
+        matrix.style.gridTemplateColumns = `repeat(${n}, 30px)`;
+        matrix.innerHTML = '';
+
+        for (let r = 0; r < n; r++) {
+            for (let c = 0; c < n; c++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                
+                if (r === c) {
+                    cell.classList.add('self');
+                    cell.innerText = 'X';
+                } else if (isFiltered && r > c) {
+                    cell.classList.add('duplicate');
+                    cell.innerText = '—';
+                } else {
+                    cell.classList.add('active');
+                    cell.innerText = '•';
+                }
+                matrix.appendChild(cell);
+            }
+        }
+
+        const res = LogicProvider.modules.combinatorics.getHandshakes(n);
+        if (isFiltered) {
+            trace.innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('') + 
+            `<div style="color:var(--cognis-gold); font-weight:bold; margin-top:10px;">Unique Handshakes: ${res.final}</div>`;
+            document.getElementById('stat-text').innerText = "Duplicates filtered. Only unique pairs remain.";
         } else {
-            shape.style.transform = 'scaleY(-1)';
-            line.style.width = '150px'; line.style.height = '4px';
-            stage.style.flexDirection = 'column';
+            trace.innerHTML = `Matrix initialized. Total possible pairings (including mirrors and self): ${res.raw}`;
+            document.getElementById('stat-text').innerText = `Showing all ${n} x ${n} grid positions.`;
         }
     }
+
+    function toggleFilter() {
+        isFiltered = !isFiltered;
+        document.getElementById('filter-btn').innerText = isFiltered ? "Reset Matrix" : "Filter Duplicates (÷ 2)";
+        renderMatrix();
+    }
+
+    window.onload = renderMatrix;
 </script>
 </body>
 </html>

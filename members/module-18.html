@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 18: BODMAS — The Bracket Shield | Cognis11</title>
+    <title>Module 18: BODMAS — The Shield Logic | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; }
-        .module-card { max-width: 1100px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --shield-blue: #6366f1; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 1000px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
         .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
@@ -14,48 +14,47 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        /* Sieve Visuals */
+        /* Equation Visuals */
         .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
-        .eq-display { font-size: 2.4rem; font-weight: bold; color: var(--cognis-blue); margin-bottom: 30px; min-height: 60px; }
-        .bracket-highlight { color: #6366f1; border-bottom: 4px solid #6366f1; padding: 0 5px; }
+        .eq-projection { font-size: 2.5rem; font-weight: bold; color: var(--cognis-blue); letter-spacing: 2px; }
+        .shield-wrap { color: var(--shield-blue); border: 3px solid var(--shield-blue); padding: 5px 15px; border-radius: 12px; background: rgba(99, 102, 241, 0.05); margin: 0 5px; position: relative; }
 
-        /* Dynamic Engine */
+        /* Engine Layout */
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .builder-list { display: flex; flex-wrap: wrap; gap: 10px; }
-        .item-box { background: #2d3748; padding: 10px; border-radius: 8px; border: 1px solid #4a5568; position: relative; }
-        .item-box.in-bracket { border-color: #6366f1; background: #1e1b4b; }
+        .builder-strip { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+        .term-card { background: #2d3748; padding: 12px; border-radius: 8px; border: 2px solid transparent; transition: all 0.3s; }
+        .term-card.is-shielded { border-color: var(--shield-blue); background: #1e1b4b; }
         
-        input, select { background: #1a202c; color: white; border: 1px solid #4a5568; padding: 5px; border-radius: 4px; margin-top: 5px; width: 60px; }
-        .bracket-toggle { display: block; margin-top: 10px; font-size: 0.6rem; cursor: pointer; color: var(--cognis-gold); font-weight: bold; text-transform: uppercase; }
+        .term-card input, .term-card select { background: #1a202c; color: white; border: 1px solid #4a5568; padding: 6px; border-radius: 4px; width: 60px; font-weight: bold; }
+        
+        .shield-controls { margin-top: 8px; display: flex; gap: 5px; }
+        .btn-shield { font-size: 0.6rem; padding: 3px 6px; border-radius: 4px; cursor: pointer; background: #4a5568; color: white; border: none; text-transform: uppercase; }
+        .btn-shield.active { background: var(--shield-blue); }
 
-        .solve-btn { background: #48bb78; color: white; border: none; padding: 15px 40px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 25px; transition: transform 0.2s; }
-        .solve-btn:active { transform: scale(0.95); }
-
-        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; border-left: 4px solid var(--cognis-gold); }
-        .step { padding: 8px 0; border-bottom: 1px solid #333; font-size: 0.9rem; }
-        .step b { color: var(--cognis-gold); }
+        .solve-btn { width: 100%; background: #48bb78; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 25px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; border-left: 4px solid var(--cognis-gold); }
+        .log-entry { margin-bottom: 10px; font-size: 0.9rem; border-bottom: 1px solid #333; padding-bottom: 5px; }
     </style>
 </head>
 <body>
 
 <div class="module-card">
-    <div class="header"><h1>Module 18: BODMAS — The Bracket Shield</h1></div>
+    <div class="header"><h1>Module 18: BODMAS — The Shield Logic</h1></div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
         <div class="question-tiers">
-            <div class="tier-card"><span>Entry</span>$10 - (2 + 3)$</div>
-            <div class="tier-card"><span>Standard</span>$(12 \div 3) + 2^2 \times 5$</div>
-            <div class="tier-card"><span>Advanced</span>$50 \div [2 \times (3 + 2)]^2$</div>
+            <div class="tier-card"><span>Advanced Y2</span>$12 - (4 + 2)$</div>
+            <div class="tier-card"><span>Average Y4</span>$(15 \div 3) \times 10 - 2^2$</div>
+            <div class="tier-card"><span>Advanced Y5</span>$100 \div [(2 + 3) \times 2]^2$</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <p style="font-size: 0.8rem; text-transform: uppercase; color: #a0aec0; letter-spacing: 1px;">Live Equation Projection</p>
-            <div class="eq-display" id="display">...</div>
-            <p id="logic-status" style="font-weight: bold; color: var(--cognis-gold);"></p>
+            <div id="eq-output" class="eq-projection"></div>
+            <p id="final-result" style="margin-top:20px; font-size:1.5rem; color:var(--cognis-gold); font-weight:bold;"></p>
         </div>
     </section>
 
@@ -63,90 +62,109 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div>
-                <div class="builder-list" id="builder"></div>
-                <button onclick="addTerm()" style="background:var(--cognis-gold); border:none; color:white; padding:5px 15px; border-radius:4px; cursor:pointer; margin-top:15px;">+ Add Term</button>
-                <button class="solve-btn" onclick="processEquation()">Run BODMAS Scan</button>
+                <div class="builder-strip" id="builder-ui"></div>
+                <button onclick="addTerm()" style="background:var(--cognis-gold); border:none; color:white; padding:8px 15px; border-radius:6px; cursor:pointer; margin-top:15px; font-weight:bold;">+ Add Term</button>
+                <button class="solve-btn" onclick="executeBODMAS()">Process Hierarchy</button>
             </div>
-            <div class="trace-log" id="trace">
-                Use the toggles to "Shield" terms with Brackets.
+            <div class="trace-log" id="trace-output">
+                Configure your shields (brackets) and click Process.
             </div>
         </div>
     </section>
 </div>
 
 <script>
-    let terms = [
-        { val: 10, op: '-', bracket: false },
-        { val: 2, op: '+', bracket: true },
-        { val: 3, op: null, bracket: true }
+    // The "Equation Master" State
+    let equation = [
+        { val: 10, op: '^', shield: false },
+        { val: 2, op: '+', shield: true },
+        { val: 3, op: null, shield: true }
     ];
 
-    function render() {
-        const container = document.getElementById('builder');
-        container.innerHTML = '';
-        let displayStr = '';
+    function renderUI() {
+        const builder = document.getElementById('builder-ui');
+        const projection = document.getElementById('eq-output');
+        builder.innerHTML = '';
+        let projHTML = '';
 
-        terms.forEach((t, i) => {
-            // Build the UI
-            const box = document.createElement('div');
-            box.className = `item-box ${t.bracket ? 'in-bracket' : ''}`;
-            box.innerHTML = `
-                <input type="number" value="${t.val}" onchange="terms[${i}].val=this.value; render()">
-                ${t.op ? `<select onchange="terms[${i}].op=this.value; render()">
+        equation.forEach((t, i) => {
+            // Build Builder Cards
+            const card = document.createElement('div');
+            card.className = `term-card ${t.shield ? 'is-shielded' : ''}`;
+            card.innerHTML = `
+                <input type="number" value="${t.val}" oninput="updateVal(${i}, this.value)">
+                ${t.op ? `<select onchange="updateOp(${i}, this.value)">
                     <option value="+" ${t.op==='+'?'selected':''}>+</option>
                     <option value="-" ${t.op==='-'?'selected':''}>-</option>
                     <option value="x" ${t.op==='x'?'selected':''}>×</option>
                     <option value="/" ${t.op==='/'?'selected':''}>÷</option>
                     <option value="^" ${t.op==='^'?'selected':''}>^</option>
                 </select>` : ''}
-                <span class="bracket-toggle" onclick="toggleBracket(${i})">${t.bracket ? 'Remove Shield' : 'Add Shield'}</span>
+                <div class="shield-controls">
+                    <button class="btn-shield ${t.shield?'active':''}" onclick="toggleShield(${i})">Shield</button>
+                </div>
             `;
-            container.appendChild(box);
+            builder.appendChild(card);
 
-            // Build the Display String
-            let part = '';
-            if (t.bracket && (i === 0 || !terms[i-1].bracket)) part += '( ';
-            part += t.val + ' ';
-            if (t.op) part += t.op + ' ';
-            if (t.bracket && (i === terms.length - 1 || !terms[i+1].bracket)) part += ') ';
+            // Build Projection with Boundary Check
+            const startsShield = t.shield && (i === 0 || !equation[i-1].shield);
+            const endsShield = t.shield && (i === equation.length - 1 || !equation[i+1].shield);
+
+            if(startsShield) projHTML += `<span class="shield-wrap">( `;
             
-            displayStr += t.bracket ? `<span class="bracket-highlight">${part}</span>` : part;
+            projHTML += `${t.val} `;
+            
+            // Critical fix: The operator only goes INSIDE if the shield continues.
+            // If the shield ends, the operator is OUTSIDE.
+            if(t.op) {
+                if(endsShield) {
+                    projHTML += `) ${t.op} `;
+                } else {
+                    projHTML += `${t.op} `;
+                }
+            } else if (endsShield) {
+                projHTML += `) `;
+            }
+            
+            if(endsShield && t.shield) {
+                // If it was the end of a shield, we don't close again here 
+                // because the logic above handles the close bracket position.
+            }
         });
 
-        document.getElementById('display').innerHTML = displayStr;
+        projection.innerHTML = projHTML;
     }
 
-    function toggleBracket(index) {
-        terms[index].bracket = !terms[index].bracket;
-        render();
-    }
-
+    function toggleShield(idx) { equation[idx].shield = !equation[idx].shield; renderUI(); }
+    function updateVal(idx, v) { equation[idx].val = v; renderUI(); }
+    function updateOp(idx, o) { equation[idx].op = o; renderUI(); }
     function addTerm() {
-        if (terms.length > 0) terms[terms.length-1].op = '+';
-        terms.push({ val: 5, op: null, bracket: false });
-        render();
+        if(equation.length > 0) equation[equation.length-1].op = '+';
+        equation.push({ val: 5, op: null, shield: false });
+        renderUI();
     }
 
-    function processEquation() {
-        // Construct raw string for LogicProvider
+    function executeBODMAS() {
         let rawStr = '';
-        terms.forEach((t, i) => {
-            if (t.bracket && (i === 0 || !terms[i-1].bracket)) rawStr += '( ';
+        equation.forEach((t, i) => {
+            const starts = t.shield && (i === 0 || !equation[i-1].shield);
+            const ends = t.shield && (i === equation.length - 1 || !equation[i+1].shield);
+            if(starts) rawStr += '( ';
             rawStr += t.val + ' ';
-            if (t.op) rawStr += t.op + ' ';
-            if (t.bracket && (i === terms.length - 1 || !terms[i+1].bracket)) rawStr += ') ';
+            if(t.op) {
+                if(ends) rawStr += ') ' + t.op + ' ';
+                else rawStr += t.op + ' ';
+            } else if (ends) {
+                rawStr += ') ';
+            }
         });
 
         const result = LogicProvider.modules.bodmas.solveWithBrackets(rawStr);
-        
-        document.getElementById('trace').innerHTML = result.steps.map(s => 
-            `<div class="step"><b>Action:</b> ${s}</div>`
-        ).join('');
-        
-        document.getElementById('logic-status').innerText = `Final Result: ${result.finalRes}`;
+        document.getElementById('trace-output').innerHTML = result.steps.map(s => `<div class="log-entry">→ ${s}</div>`).join('');
+        document.getElementById('final-result').innerText = `Result: ${result.finalRes}`;
     }
 
-    render();
+    renderUI();
 </script>
 </body>
 </html>

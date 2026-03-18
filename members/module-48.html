@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 48: Geometric Generalization | Cognis11</title>
+    <title>Module 48: Blueprint Unfolding | Cognis11</title>
     <style>
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
@@ -12,7 +12,6 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        /* Consistently Formatted Question Tiers */
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
         .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 120px; line-height: 1.5; border: 1px solid #e2e8f0; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
@@ -29,15 +28,14 @@
 </head>
 <body>
 <div class="module-card">
-    <div class="header"><h1>Module 48: Non-Standard Net Generalization</h1></div>
+    <div class="header"><h1>Module 48: Non-Standard Nets</h1></div>
     
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Irregular solids follow the <b>Base-to-Flap Ratio</b>. To find a net, identify the base shape. For Pyramids, every edge of that base must have an attached triangle. For Prisms, the rectangles form a continuous strip capped by two identical bases at either end.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b><p>Count the triangle faces on a square-based pyramid.</p></div>
-            <div class="tier-card"><b>Average Year 4</b><p>Identify the rectangular count for a pentagonal prism.</p></div>
-            <div class="tier-card"><b>Advanced Year 5</b><p>Blueprint an octagonal prism net with precise edge alignment.</p></div>
+            <div class="tier-card"><b>Advanced Year 2</b><p>Count the triangular walls on a square-based pyramid.</p></div>
+            <div class="tier-card"><b>Average Year 4</b><p>Identify the rectangular strip count for a pentagonal prism.</p></div>
+            <div class="tier-card"><b>Advanced Year 5</b><p>Blueprint an octagonal solid with congruent side-edge overlap.</p></div>
         </div>
     </section>
 
@@ -61,14 +59,14 @@
                 <button class="btn-logic" id="side-5" onclick="setSides(5)">Base: Pentagon</button>
                 <button class="btn-logic" id="side-8" onclick="setSides(8)">Base: Octagon</button>
             </div>
-            <div class="trace-log" id="trace-48">Select a type and base shape to generate the net blueprint.</div>
+            <div class="trace-log" id="trace-48">Select a type and base to generate the net blueprint.</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--cognis-gold); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--cognis-gold); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> The "Face Inventory" decoy. Choosing a net that has 6 triangles for a pentagonal pyramid just because "6 looks like a lot."</p>
+            <p><strong>The Trap:</strong> The "Face Inventory" decoy. Choosing a net because it has 6 triangles for a pentagonal pyramid just because "6 looks like a lot."</p>
             <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 15px 0;">
             <p><strong>The Fix:</strong> The Perimeter Match. Count the edges of the base (e.g. Pentagon = 5). That number is exactly how many side-flaps must exist. In a Prism, you need 2 bases; in a Pyramid, you need 1.</p>
         </div>
@@ -99,9 +97,8 @@
         const svg = document.getElementById('net-svg');
         svg.innerHTML = '';
         const cx = 200, cy = 175;
-        const w = 45; 
-        let log = "";
-
+        const w = 42; 
+        
         if(currentType === 'pyramid') {
             const h = 90;
             const r = w / (2 * Math.sin(Math.PI / currentSides));
@@ -120,7 +117,6 @@
                 let x3 = midX + (dx/len) * h, y3 = midY + (dy/len) * h;
                 svg.innerHTML += `<polygon points="${p1[0]},${p1[1]} ${p2[0]},${p2[1]} ${x3},${y3}" />`;
             }
-            log = `Pyramid Mode:<br>Base: ${currentSides} sides<br>Walls: ${currentSides} congruent triangles.`;
         } else {
             const h = 80;
             const startX = cx - (currentSides * w / 2);
@@ -129,9 +125,11 @@
             }
             const apothem = w / (2 * Math.tan(Math.PI / currentSides));
             const r = w / (2 * Math.sin(Math.PI / currentSides));
+            
             const getCap = (centerY, isTop) => {
                 let pts = [];
                 for(let i=0; i<currentSides; i++) {
+                    // This rotation formula ensures the side is always perfectly horizontal to match the rectangle top
                     let a = (i * 2 * Math.PI / currentSides) + (Math.PI/currentSides) + (isTop ? Math.PI : 0);
                     pts.push(`${startX + w/2 + r * Math.cos(a)},${centerY + r * Math.sin(a)}`);
                 }
@@ -139,9 +137,8 @@
             };
             svg.innerHTML += `<polygon points="${getCap(cy - h/2 - apothem, true)}" />`;
             svg.innerHTML += `<polygon points="${getCap(cy + h/2 + apothem, false)}" />`;
-            log = `Prism Mode:<br>Walls: ${currentSides} rectangles<br>Ends: 2 congruent ${currentSides}-gons.`;
         }
-        document.getElementById('trace-48').innerHTML = log;
+        document.getElementById('trace-48').innerHTML = `Mode: ${currentType.toUpperCase()}<br>Sides: ${currentSides}<br>Geometry: Aligned.`;
     }
     window.onload = () => { setSides(3); };
 </script>

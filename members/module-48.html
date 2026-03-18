@@ -2,138 +2,77 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 48: Geometric Generalization | Cognis11</title>
+    <title>Module 48: Blueprint Unfolding</title>
     <style>
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
         .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
-
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 120px; line-height: 1.5; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
-
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
         #net-svg { width: 450px; height: 380px; stroke: var(--cognis-gold); stroke-width: 2; fill: rgba(197, 160, 89, 0.1); }
-
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .btn-logic { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; font-weight: bold; width: 100%; text-align: left; margin-bottom: 5px; }
         .btn-logic.active { background: var(--cognis-gold); border-left: 4px solid white; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.8rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
     </style>
 </head>
 <body>
 <div class="module-card">
     <div class="header"><h1>Module 48: Non-Standard Nets</h1></div>
-    <section class="phase">
-        <h2>Phase 1: The X-Ray</h2>
-        <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b><p>Count the triangular walls on a square-based pyramid.</p></div>
-            <div class="tier-card"><b>Average Year 4</b><p>Identify the net inventory for a pentagonal prism.</p></div>
-            <div class="tier-card"><b>Advanced Year 5</b><p>Blueprint an octagonal prism showing the side-edge overlap.</p></div>
+    <div class="simulation-area"><svg id="net-svg" viewBox="0 0 400 350"></svg></div>
+    <div class="engine-container">
+        <div>
+            <button class="btn-logic active" id="type-pyramid" onclick="setType('pyramid')">Pyramid</button>
+            <button class="btn-logic" id="type-prism" onclick="setType('prism')">Prism</button>
+            <hr style="opacity:0.2">
+            <button class="btn-logic" onclick="setSides(3)">Triangle Base</button>
+            <button class="btn-logic" onclick="setSides(5)">Pentagon Base</button>
+            <button class="btn-logic" onclick="setSides(8)">Octagon Base</button>
         </div>
-    </section>
-
-    <section class="phase">
-        <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area">
-            <svg id="net-svg" viewBox="0 0 400 350"></svg>
+        <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-size: 0.8rem;">
+            <b>Geometric Integrity Check:</b><br>
+            Base side length matches Wall width exactly.<br>
+            Prism base caps share the 1st rectangle edge.
         </div>
-    </section>
-
-    <section class="phase">
-        <h2>Phase 3: The Engine</h2>
-        <div class="engine-container">
-            <div>
-                <div style="display:flex; gap:5px; margin-bottom:10px;">
-                    <button class="btn-logic active" id="type-pyramid" onclick="setType('pyramid')">Pyramid</button>
-                    <button class="btn-logic" id="type-prism" onclick="setType('prism')">Prism</button>
-                </div>
-                <button class="btn-logic" id="side-3" onclick="setSides(3)">Base: Triangle</button>
-                <button class="btn-logic" id="side-4" onclick="setSides(4)">Base: Square</button>
-                <button class="btn-logic" id="side-5" onclick="setSides(5)">Base: Pentagon</button>
-                <button class="btn-logic" id="side-8" onclick="setSides(8)">Base: Octagon</button>
-            </div>
-            <div class="trace-log" id="trace-48">Select a type and base to calibrate the net.</div>
-        </div>
-    </section>
-
-    <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--cognis-gold); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--cognis-gold); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> Picking a net where side faces are detached from the base edges.
-            <br><br><strong>The Fix:</strong> The Perimeter Match. Count the base sides. Every side <b>must</b> share an edge with a wall face in the final form. If the base is an octagon, you need 8 rectangles or 8 triangles.</p>
-        </div>
-    </section>
+    </div>
 </div>
-
 <script>
-    let currentType = 'pyramid';
-    let currentSides = 3;
-
-    function setType(t) {
-        currentType = t;
-        document.getElementById('type-pyramid').classList.toggle('active', t === 'pyramid');
-        document.getElementById('type-prism').classList.toggle('active', t === 'prism');
-        draw();
-    }
-
-    function setSides(s) {
-        currentSides = s;
-        [3,4,5,8].forEach(n => document.getElementById('side-'+n).classList.toggle('active', n === s));
-        draw();
-    }
-
+    let currentType = 'pyramid'; let currentSides = 3;
+    function setType(t) { currentType = t; draw(); }
+    function setSides(s) { currentSides = s; draw(); }
     function draw() {
-        const svg = document.getElementById('net-svg');
-        svg.innerHTML = '';
-        const cx = 200, cy = 175;
-        const w = 40; // Base side length / Rectangle width
-        
+        const svg = document.getElementById('net-svg'); svg.innerHTML = '';
+        const cx = 200, cy = 175, w = 44; 
         if(currentType === 'pyramid') {
-            const h = 85; // Congruent triangle height
-            const r = w / (2 * Math.sin(Math.PI / currentSides));
+            const h = 85, r = w / (2 * Math.sin(Math.PI / currentSides));
             const rot = (Math.PI / currentSides); 
-            
             let pts = [];
             for(let i=0; i<currentSides; i++) {
                 let a = (i * 2 * Math.PI / currentSides) + rot;
                 pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
             }
             svg.innerHTML += `<polygon points="${pts.map(p => p.join(',')).join(' ')}" />`;
-            
             for(let i=0; i<currentSides; i++) {
                 let p1 = pts[i], p2 = pts[(i+1)%currentSides];
                 let midX = (p1[0] + p2[0]) / 2, midY = (p1[1] + p2[1]) / 2;
-                let dx = midX - cx, dy = midY - cy;
-                let len = Math.sqrt(dx*dx + dy*dy);
+                let dx = midX - cx, dy = midY - cy, len = Math.sqrt(dx*dx + dy*dy);
                 let x3 = midX + (dx/len) * h, y3 = midY + (dy/len) * h;
                 svg.innerHTML += `<polygon points="${p1[0]},${p1[1]} ${p2[0]},${p2[1]} ${x3},${y3}" />`;
             }
         } else {
-            const h = 75; // Rectangle height
-            const startX = cx - (currentSides * w / 2);
-            for(let i=0; i<currentSides; i++) {
-                svg.innerHTML += `<rect x="${startX + i*w}" y="${cy-h/2}" width="${w}" height="${h}" />`;
-            }
-            // Precise Polygon Alignment (Apothem overlap)
-            const apothem = w / (2 * Math.tan(Math.PI / currentSides));
-            const r = w / (2 * Math.sin(Math.PI / currentSides));
-            
-            const getCap = (centerY, flip) => {
+            const h = 75, startX = cx - (currentSides * w / 2);
+            for(let i=0; i<currentSides; i++) svg.innerHTML += `<rect x="${startX + i*w}" y="${cy-h/2}" width="${w}" height="${h}" />`;
+            const ap = w / (2 * Math.tan(Math.PI / currentSides)), r = w / (2 * Math.sin(Math.PI / currentSides));
+            const getCap = (cY, flip) => {
                 let pts = [];
                 for(let i=0; i<currentSides; i++) {
                     let a = (i * 2 * Math.PI / currentSides) + (Math.PI/currentSides) + (flip ? Math.PI : 0);
-                    pts.push(`${startX + w/2 + r * Math.cos(a)},${centerY + r * Math.sin(a)}`);
+                    pts.push(`${startX + w/2 + r * Math.cos(a)},${cY + r * Math.sin(a)}`);
                 }
                 return pts.join(' ');
             };
-            
-            svg.innerHTML += `<polygon points="${getCap(cy - h/2 - apothem, true)}" />`;
-            svg.innerHTML += `<polygon points="${getCap(cy + h/2 + apothem, false)}" />`;
+            svg.innerHTML += `<polygon points="${getCap(cy - h/2 - ap, true)}" />`;
+            svg.innerHTML += `<polygon points="${getCap(cy + h/2 + ap, false)}" />`;
         }
     }
     window.onload = draw;

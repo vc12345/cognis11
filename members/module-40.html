@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 40: Odd One Out | Cognis11</title>
+    <title>Module 40: Early-Exit Sieve | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
@@ -13,41 +13,41 @@
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; line-height: 1.4; min-height: 110px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 100px; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; text-align: center; }
-        .sieve { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; perspective: 1000px; }
-        .word-capsule { padding: 15px 25px; background: white; color: var(--cognis-blue); border-radius: 50px; font-weight: bold; font-size: 1.1rem; transition: all 0.5s; position: relative; }
-        .word-capsule.filtered { transform: translateY(100px); opacity: 0; pointer-events: none; }
-        .word-capsule.outlier { border: 3px solid var(--cognis-gold); background: #1a202c; color: white; }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; min-height: 300px; }
+        .word-list { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+        .word-row { display: flex; align-items: center; gap: 20px; width: 300px; padding: 10px 20px; background: #2d3748; border-radius: 8px; color: white; transition: all 0.3s; }
+        .word-row.checking { border: 2px solid var(--cognis-gold); background: #3d495d; }
+        .word-row.match { opacity: 0.3; text-decoration: line-through; }
+        .word-row.outlier { background: #e53e3e; font-weight: bold; border-color: white; transform: scale(1.05); }
+        .status-dot { width: 12px; height: 12px; border-radius: 50%; background: #4a5568; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .btn-filter { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; }
-        .btn-filter.active { background: var(--cognis-gold); }
+        .btn-action { background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; width: 100%; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
     </style>
 </head>
 <body>
 <div class="module-card">
-    <div class="header"><h1>Module 40: Odd One Out (Semantic)</h1></div>
+    <div class="header"><h1>Module 40: Odd One Out (Early Exit)</h1></div>
     
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Odd One Out questions test classification. Success depends on identifying a <b>Rule of Inclusion</b>. If four words are "Mammals" and one is a "Bird," the bird is the outlier. The deeper the rule, the harder the question.</p>
+        <p>Odd One Out questions test your speed of classification. You don't need to read all options. Once you have identified a majority rule (3+ words) and found one that breaks it, you can move on immediately.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>Apple, Banana, Carrot, Grape, Pear. (Which is the outlier?)</div>
-            <div class="tier-card"><b>Average Year 4</b>Spatula, Spoon, Knife, Plate, Fork. (Identify the rule).</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Brave, Bold, Fearless, Reckless, Courageous. (Look for the negative nuance).</div>
+            <div class="tier-card"><b>Advanced Year 2</b>Apple, Banana, Carrot, Grape, Pear.</div>
+            <div class="tier-card"><b>Average Year 4</b>Spatula, Spoon, Knife, Plate, Fork.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Brave, Bold, VALIANT, NOBLE, CRUEL.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div id="sieve" class="sieve">
+            <div class="word-list" id="sieve-list">
                 </div>
-            <button onclick="resetSieve()" style="background:transparent; color:#718096; border:1px solid #4a5568; padding:8px 15px; border-radius:4px; font-size:0.6rem; cursor:pointer;">RESET SIEVE</button>
         </div>
     </section>
 
@@ -55,64 +55,55 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase; margin-bottom:10px; display:block;">Apply Property Filter</label>
-                <button class="btn-filter" onclick="applyFilter('mammal')">Filter: Mammals</button>
-                <button class="btn-filter" onclick="applyFilter('kitchen')">Filter: Kitchen Tools</button>
-                <button class="btn-filter" onclick="applyFilter('positive')">Filter: Positive Traits</button>
+                <button class="btn-action" onclick="scanStep()">Scan Next Word</button>
+                <button onclick="resetSieve()" style="background:transparent; color:#a0aec0; border:none; margin-top:15px; cursor:pointer; font-size:0.7rem;">RESET SCAN</button>
             </div>
-            <div class="trace-log" id="trace-40">Choose a filter to see which words remain in the sieve.</div>
+            <div class="trace-log" id="trace-40">Rule: Items used for eating. Scan to verify.</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Double Identity" Trap:</strong> Choosing a word because it's "different" in a very simple way (e.g., "it starts with the letter S") while ignoring a much stronger category rule.
-            <br><br><strong>The Fix:</strong> Always verify the <b>Majority Rule</b>. If you think SPATULA is the odd one out because it has 7 letters, check if the other four have the same number of letters. If they don't, your rule is too weak. A true outlier is excluded by a rule that 100% of the others obey.</p>
+        <div style="background: #fff5f5; border: 2px solid #e53e3e; border-radius: 12px; padding: 25px;">
+            <h2 style="color:#e53e3e; margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Completion" Trap:</strong> Reading all 5 words even when you've already found the answer at word 3. 
+            <br><br><strong>The Fix:</strong> Use the <b>3-Word Rule</b>. If word 1 and 2 follow Rule A, and word 3 follows Rule B, one of those first three is the answer. Check word 4 only to confirm. Once confirmed, STOP.</p>
         </div>
     </section>
 </div>
 
 <script>
-    const wordBanks = {
-        mammal: ["LION", "TIGER", "BEAR", "WOLF", "EAGLE"],
-        kitchen: ["SPOON", "FORK", "KNIFE", "TONGS", "OVEN"],
-        positive: ["BRAVE", "BOLD", "VALIANT", "NOBLE", "CRUEL"]
-    };
-
-    function applyFilter(type) {
-        const sieve = document.getElementById('sieve');
-        const bank = wordBanks[type];
-        sieve.innerHTML = '';
-        
-        bank.forEach((w, i) => {
-            const isOutlier = (i === 4);
-            const capsule = document.createElement('div');
-            capsule.className = 'word-capsule';
-            capsule.innerText = w;
-            sieve.appendChild(capsule);
-            
-            setTimeout(() => {
-                if(!isOutlier) {
-                    capsule.classList.add('filtered');
-                } else {
-                    capsule.classList.add('outlier');
-                }
-            }, 100 * i);
-        });
-
-        document.getElementById('trace-40').innerHTML = `
-            <b>Rule Check:</b><br>
-            Filter: ${type.toUpperCase()}<br>
-            The majority match the rule. <b>${bank[4]}</b> does not.<br><br>
-            <i>Result: ${bank[4]} is the Odd One Out.</i>
-        `;
-    }
+    const bank = ["SPOON", "FORK", "KNIFE", "TONGS", "OVEN"];
+    let step = 0;
 
     function resetSieve() {
-        document.getElementById('sieve').innerHTML = '';
-        document.getElementById('trace-40').innerText = "Select a filter to begin...";
+        step = 0;
+        const list = document.getElementById('sieve-list');
+        list.innerHTML = bank.map(w => `<div class="word-row"><div class="status-dot"></div>${w}</div>`).join('');
+        document.getElementById('trace-40').innerText = "Rule: Eating Utensils. Scan to identify the outlier.";
     }
+
+    function scanStep() {
+        if(step >= bank.length) return;
+        const rows = document.querySelectorAll('.word-row');
+        rows.forEach(r => r.classList.remove('checking'));
+        
+        const currentRow = rows[step];
+        currentRow.classList.add('checking');
+        
+        const isOutlier = (bank[step] === "OVEN");
+        
+        setTimeout(() => {
+            if(isOutlier) {
+                currentRow.classList.add('outlier');
+                document.getElementById('trace-40').innerHTML = "<b>OUTLIER SPOTTED!</b><br>Oven is an appliance, not a utensil. Stop scanning now.";
+            } else {
+                currentRow.classList.add('match');
+                document.getElementById('trace-40').innerText = `Word ${step+1}: Matches Rule.`;
+            }
+            step++;
+        }, 400);
+    }
+    window.onload = resetSieve;
 </script>
 </body>
 </html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 38: Semantic Precision | Cognis11</title>
+    <style>
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; line-height: 1.4; min-height: 110px; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; text-align: center; }
+        .spectrum-bar { height: 20px; width: 100%; background: linear-gradient(to right, #3182ce, #e53e3e); border-radius: 10px; position: relative; margin-bottom: 40px; }
+        .spectrum-pointer { position: absolute; top: -10px; height: 40px; width: 4px; background: white; box-shadow: 0 0 10px white; transition: left 0.3s ease; }
+        .word-tag { font-family: 'Courier New', monospace; font-size: 2.5rem; font-weight: 900; color: white; transition: 0.3s; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .input-group label { display: block; font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+    </style>
+</head>
+<body>
+<div class="module-card">
+    <div class="header"><h1>Module 38: Synonym/Antonym Precision</h1></div>
+    
+    <section class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>Choosing the "best" word requires measuring nuance. While "cold" and "frigid" are synonyms, they occupy different points on the intensity scale. Success in this module depends on identifying the specific "shade" of meaning required by the context.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>Which word is "stronger" than big? (Huge, Wide, Long).</div>
+            <div class="tier-card"><b>Average Year 4</b>Select the best fit: The ice was [Cold / Chilly / Frigid].</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Contrast "Determined" (Positive) with "Obstinate" (Negative).</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="simulation-area">
+            <div id="active-word" class="word-tag">COLD</div>
+            <div class="spectrum-bar" style="margin-top:40px;">
+                <div id="pointer" class="spectrum-pointer" style="left: 50%;"></div>
+            </div>
+            <p style="color:#a0aec0; font-size:0.7rem;">Slide to adjust the semantic intensity.</p>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <div class="input-group">
+                    <label>Nuance Intensity</label>
+                    <input type="range" id="nuance-slider" min="0" max="100" value="50" oninput="update38()">
+                </div>
+            </div>
+            <div class="trace-log" id="trace-38">Measuring semantic weight...</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The "Near-Miss" Trap:</strong> Choosing a word that is technically a synonym but lacks the correct intensity.
+            <br><br><strong>The Fix:</strong> Use the "Sentence Test." Replace the word in the sentence and see if it makes the meaning too weak or too dramatic. If someone is "ecstatic," saying they are "happy" is a near-miss; it's the right category, but the wrong intensity.</p>
+        </div>
+    </section>
+</div>
+
+<script>
+    const scales = {
+        low: "CHILLY",
+        mid: "COLD",
+        high: "FRIGID"
+    };
+
+    function update38() {
+        const val = document.getElementById('nuance-slider').value;
+        const display = document.getElementById('active-word');
+        const pointer = document.getElementById('pointer');
+        pointer.style.left = val + "%";
+
+        let current = scales.mid;
+        let desc = "Standard intensity.";
+        
+        if(val < 30) { current = scales.low; desc = "Low intensity / Mild."; }
+        if(val > 70) { current = scales.high; desc = "High intensity / Extreme."; }
+        
+        display.innerText = current;
+        document.getElementById('trace-38').innerHTML = `
+            <b>Semantic Weight:</b><br>
+            Word: ${current}<br>
+            Intensity: ${val}%<br><br>
+            <i>Logic: Choosing ${current} suggests a ${desc} context.</i>
+        `;
+    }
+    window.onload = update38;
+</script>
+</body>
+</html>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 51: Block Counting Engine</title>
+    <title>Module 51: Block Counting | Cognis11</title>
     <style>
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
@@ -12,16 +12,24 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; }
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 120px; line-height: 1.5; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 100px 40px; margin: 30px 0; display: flex; justify-content: center; align-items: center; min-height: 400px; }
         
-        /* 3D Isometric Projection */
-        .stack-container { display: grid; grid-template-columns: repeat(3, 60px); gap: 10px; perspective: 1000px; transform: rotateX(45deg) rotateZ(-45deg); }
-        .column { position: relative; width: 60px; height: 60px; }
-        .cube { position: absolute; width: 60px; height: 60px; background: rgba(197, 160, 89, 0.9); border: 2px solid white; transition: 0.4s; box-sizing: border-box; }
-        
-        /* X-Ray Styles */
-        .xray .cube { background: rgba(255, 255, 255, 0.1); border: 1px dashed rgba(197, 160, 89, 0.5); }
-        .xray .foundation { background: rgba(217, 83, 79, 0.7) !important; border: 1px solid white !important; }
+        /* True 3D CSS Stack */
+        .stack-3d { position: relative; width: 150px; height: 150px; transform: rotateX(60deg) rotateZ(45deg); transform-style: preserve-3d; }
+        .cube { position: absolute; width: 40px; height: 40px; transform-style: preserve-3d; transition: 0.4s; }
+        .face { position: absolute; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.4); box-sizing: border-box; }
+        .f-top { transform: translateZ(40px); background: var(--cognis-gold); }
+        .f-left { transform: rotateY(-90deg) translateX(-20px) translateZ(20px); background: #b58d4a; }
+        .f-right { transform: rotateX(-90deg) translateY(20px) translateZ(20px); background: #8e6c38; }
+
+        /* X-Ray Mode */
+        .xray .cube { opacity: 0.2; }
+        .xray .hidden-support { opacity: 1 !important; }
+        .xray .hidden-support .face { background: var(--trap-red) !important; border: 1px solid white; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .btn-action { background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-weight: 900; cursor: pointer; text-transform: uppercase; }
@@ -33,9 +41,19 @@
     <div class="header"><h1>Module 51: Block Counting</h1></div>
     
     <section class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>Block counting is the study of <b>Inferred Volume</b>. You must assume the "Rule of Gravity": if a block is sitting at Level 3, there must be two hidden blocks underneath it. Instead of counting faces, count <b>Vertical Columns</b> to ensure no foundation block is missed.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b><p>A 2x2x2 cube with one corner missing. (7 total).</p></div>
+            <div class="tier-card"><b>Average Year 4</b><p>An irregular stack where one column is completely hidden from the front.</p></div>
+            <div class="tier-card"><b>Advanced Year 5</b><p>Identify the hidden foundation count in a 4-level complex tower.</p></div>
+        </div>
+    </section>
+
+    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div id="stack" class="stack-container"></div>
+            <div id="stack" class="stack-3d"></div>
         </div>
     </section>
 
@@ -43,63 +61,50 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <button class="btn-action" onclick="toggleXRay()">Toggle X-Ray View</button>
-                <button onclick="newStack()" style="background:transparent; color:#a0aec0; border:none; margin-top:15px; cursor:pointer; font-size:0.7rem; text-decoration:underline; width:100%;">GENERATE RANDOM STACK</button>
+                <button class="btn-action" onclick="toggleXRay()">Activate X-Ray Mode</button>
+                <button onclick="renderNew()" style="background:transparent; color:#a0aec0; border:none; margin-top:15px; cursor:pointer; font-size:0.7rem; text-decoration:underline; width:100%;">GENERATE RANDOM STACK</button>
             </div>
-            <div class="trace-log" id="trace-51">Audit: Awaiting stack generation.</div>
+            <div class="trace-log" id="trace-51">Audit: Calculate heights per column.</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> Counting visible faces. A single corner block can show 3 faces (top, front, side), leading students to count it as 3 separate blocks.</p>
-            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin: 15px 0;">
-            <p><strong>The Fix:</strong> The Top-Down Tally. Pick a column and find the top-most block. Note its height (e.g., 3 blocks high). Repeat for all columns and add the numbers. This ensures you count every hidden support block without double-counting visible faces.</p>
+            <p><strong>The Trap:</strong> Counting every visible square as a block. A corner block shows 3 faces, but it is still only 1 block.</p>
+            <hr style="border:0; border-top:1px solid rgba(217,83,79,0.1); margin: 15px 0;">
+            <p><strong>The Fix:</strong> The Column Tally. Look at the top face of every "Skyscraper." Write down its height (e.g. 3 blocks). Move to the next. Summing the column heights is the only way to avoid the face-counting trap.</p>
         </div>
     </section>
 </div>
 
 <script>
-    let heights = [1, 2, 1, 3, 1, 0, 1, 1, 2];
-    
-    function newStack() {
-        heights = Array.from({length: 9}, () => Math.floor(Math.random() * 4));
-        render();
-    }
-
-    function render() {
-        const container = document.getElementById('stack');
-        container.innerHTML = '';
-        let total = 0;
-        let hidden = 0;
-
-        heights.forEach((h, i) => {
-            const col = document.createElement('div');
-            col.className = 'column';
-            for (let j = 0; j < h; j++) {
-                const cube = document.createElement('div');
-                cube.className = 'cube';
-                if (j < h - 1) { cube.classList.add('foundation'); hidden++; }
-                cube.style.transform = `translateZ(${j * 30}px)`;
-                col.appendChild(cube);
-                total++;
+    function renderNew() {
+        const stack = document.getElementById('stack');
+        stack.innerHTML = '';
+        let total = 0, hidden = 0;
+        for(let x=0; x<3; x++) {
+            for(let y=0; y<3; y++) {
+                let h = Math.floor(Math.random() * 4);
+                total += h;
+                for(let z=0; z<h; z++) {
+                    const cube = document.createElement('div');
+                    cube.className = 'cube' + (z < h-1 ? ' hidden-support' : '');
+                    if(z < h-1) hidden++;
+                    cube.style.transform = `translateX(${x*42}px) translateY(${y*42}px) translateZ(${z*42}px)`;
+                    cube.innerHTML = '<div class="face f-top"></div><div class="face f-left"></div><div class="face f-right"></div>';
+                    stack.appendChild(cube);
+                }
             }
-            container.appendChild(col);
-        });
-
-        document.getElementById('trace-51').innerHTML = `
-            Visible Columns: <b>${heights.filter(h => h > 0).length}</b><br>
-            Hidden Supports: <b>${hidden}</b><br>
-            <b>Grand Total: ${total} Blocks</b>
-        `;
+        }
+        document.getElementById('trace-51').innerHTML = `Total Blocks: <b>${total}</b><br>Hidden Foundations: <b>${hidden}</b> (Revealed in X-Ray)`;
     }
 
     function toggleXRay() {
         document.getElementById('stack').classList.toggle('xray');
     }
 
-    window.onload = render;
+    window.onload = renderNew;
 </script>
 </body>
 </html>

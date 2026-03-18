@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 44: Layering Logic | Cognis11</title>
+    <style>
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 115px; line-height: 1.4; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; display: flex; align-items: center; justify-content: center; min-height: 300px; }
+        .stack-stage { width: 300px; height: 300px; position: relative; border: 2px dashed #4a5568; }
+        
+        .shape { position: absolute; transition: all 0.3s ease; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
+        .s-circle { width: 120px; height: 120px; border-radius: 50%; background: #e53e3e; top: 30px; left: 30px; }
+        .s-square { width: 120px; height: 120px; background: #3182ce; top: 90px; left: 90px; }
+        .s-triangle { width: 0; height: 0; border-left: 70px solid transparent; border-right: 70px solid transparent; border-bottom: 120px solid #ecc94b; top: 60px; left: 140px; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+        .btn-action { background: var(--cognis-gold); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; width: 100%; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="module-card">
+    <div class="header"><h1>Module 44: Layering (Z-Order)</h1></div>
+    
+    <section class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>Deciphering depth in a flat image requires identifying which shape's border is continuous. If a shape's perimeter is uninterrupted, it is on top. If its border is "cut" by another shape, it is behind.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>A red circle is over a blue square. Which outline is complete?</div>
+            <div class="tier-card"><b>Average Year 4</b>Order three shapes from front-to-back based on overlap.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the "hidden" shape that is partially obscured by two others.</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="simulation-area">
+            <div class="stack-stage" id="stage">
+                <div class="shape s-circle" id="circle" onclick="bringToFront('circle')">1</div>
+                <div class="shape s-square" id="square" onclick="bringToFront('square')">2</div>
+                <div class="shape s-triangle" id="triangle" onclick="bringToFront('triangle')"><span style="position:relative; top:50px; color:#1a202c">3</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <p style="font-size: 0.8rem; color: #a0aec0;">Click a shape in the diagram above to bring it to the front of the stack.</p>
+                <button class="btn-action" onclick="shuffleStack()">Shuffle Depth</button>
+            </div>
+            <div class="trace-log" id="trace-44">Top Shape: Triangle<br>Middle: Square<br>Bottom: Circle</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The Trap:</strong> The "Shared Edge" Trap. When two shapes share a border of the same color, the brain loses the ability to distinguish depth, often assuming they are a single, merged shape.</p>
+            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin:15px 0;">
+            <p><strong>The Fix:</strong> Corner Logic. Look at the vertices where the shapes meet. If a vertex belongs to Shape A but "points into" Shape B, Shape A is likely on top. Follow the perimeter like a detective—the line that never breaks is the leader of the stack.</p>
+        </div>
+    </section>
+</div>
+
+<script>
+    let stackOrder = ['circle', 'square', 'triangle'];
+    
+    function bringToFront(id) {
+        stackOrder = stackOrder.filter(item => item !== id);
+        stackOrder.push(id);
+        renderStack();
+    }
+
+    function shuffleStack() {
+        stackOrder.sort(() => Math.random() - 0.5);
+        renderStack();
+    }
+
+    function renderStack() {
+        stackOrder.forEach((id, index) => {
+            document.getElementById(id).style.zIndex = index + 1;
+        });
+        document.getElementById('trace-44').innerHTML = `
+            <b>Depth Matrix:</b><br>
+            Front: ${capitalize(stackOrder[2])}<br>
+            Middle: ${capitalize(stackOrder[1])}<br>
+            Back: ${capitalize(stackOrder[0])}
+        `;
+    }
+
+    function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+    window.onload = renderStack;
+</script>
+</body>
+</html>

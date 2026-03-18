@@ -13,12 +13,12 @@
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 120px; line-height: 1.5; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 110px; line-height: 1.5; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; text-align: center; }
-        .net-grid { display: inline-grid; grid-template-columns: repeat(4, 50px); grid-template-rows: repeat(4, 50px); gap: 10px; }
-        .face { width: 50px; height: 50px; background: #2d3748; border: 2px solid #4a5568; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; cursor: pointer; transition: 0.2s; }
+        .net-grid { display: inline-grid; grid-template-columns: repeat(4, 55px); grid-template-rows: repeat(3, 55px); gap: 10px; }
+        .face { width: 55px; height: 55px; background: #2d3748; border: 2px solid #4a5568; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; cursor: pointer; transition: 0.2s; }
         .face.active { background: var(--cognis-gold); border-color: white; transform: scale(1.1); box-shadow: 0 0 15px var(--cognis-gold); }
         .face.opposite { background: var(--trap-red); border-color: white; }
         .face.empty { visibility: hidden; pointer-events: none; }
@@ -31,14 +31,14 @@
 </head>
 <body>
 <div class="module-card">
-    <div class="header"><h1>Module 47: Standard Net Folding</h1></div>
+    <div class="header"><h1>Module 47: Valid Cube Nets</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Success in 3D reasoning depends on identifying **Opposites**. A valid cube net consists of 6 squares arranged so that they can fold into a closed solid. Faces separated by one square in a straight line will always be opposite each other and can never share an edge.</p>
+        <p>A cube net is a flat "blueprint" of a 3D solid. The most critical rule for 11+ success is identifying <b>Opposite Pairs</b>. Since opposite faces never share an edge on a folded cube, finding them allows you to eliminate decoy answers immediately. In a 1-4-1 net, any two faces separated by one square in a straight line are opposites.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b><p>Find the opposite face in a standard 1-4-1 Cross.</p></div>
-            <div class="tier-card"><b>Average Year 4</b><p>Use the Skip-One rule on a 1-4-1 T-variant.</p></div>
-            <div class="tier-card"><b>Advanced Year 5</b><p>Identify all three opposite pairs in a 2-3-1 Z-Net.</p></div>
+            <div class="tier-card"><b>Advanced Year 2</b><p>Find the opposite for Face 1 in a standard Cross net.</p></div>
+            <div class="tier-card"><b>Average Year 4</b><p>Analyze the 1-4-1 T-variant where flaps are aligned on the left.</p></div>
+            <div class="tier-card"><b>Advanced Year 5</b><p>Identify all pairs in the 2-3-1 Z-shape net.</p></div>
         </div>
     </section>
 
@@ -53,20 +53,20 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <button class="btn-variant active" onclick="loadNet('cross', this)">1-4-1 Cross</button>
-                <button class="btn-variant" onclick="loadNet('t-variant', this)">1-4-1 T-Variant</button>
-                <button class="btn-variant" onclick="loadNet('z-net', this)">2-3-1 Z-Net</button>
+                <button class="btn-variant active" onclick="loadNet('cross', this)">1-4-1 (Cross)</button>
+                <button class="btn-variant" onclick="loadNet('t-aligned', this)">1-4-1 T (Aligned Flaps)</button>
+                <button class="btn-variant" onclick="loadNet('z-shape', this)">2-3-1 (Z-Shape)</button>
             </div>
-            <div class="trace-log" id="trace-47">Select a net and click a face to highlight its opposite.</div>
+            <div class="trace-log" id="trace-47">Select a net and click a face to find its opposite.</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> Assuming two squares that share a vertex (corner) are opposites because they aren't touching sides.</p>
+            <p><strong>The Trap:</strong> The "Touching Corner" Illusion. Many students assume that if two squares share a corner on the flat net, they will touch on the cube.</p>
             <hr style="border:0; border-top:1px solid rgba(217,83,79,0.1); margin: 15px 0;">
-            <p><strong>The Fix:</strong> The 1-Step Jump. In a straight row or column of three or more squares, take the first square, skip the second, and land on the third. Those two are your opposites. If an answer choice shows them touching, it's a decoy.</p>
+            <p><strong>The Fix:</strong> The Opposite Shield. Identify your three opposite pairs first. If an answer choice shows two opposites sharing an edge, that choice is a lie. Cross it out and don't look back.</p>
         </div>
     </section>
 </div>
@@ -74,8 +74,8 @@
 <script>
     const nets = {
         'cross': { layout: [0,1,0,0, 2,3,4,5, 0,6,0,0], opps: {1:6, 2:4, 3:5, 4:2, 5:3, 6:1} },
-        't-variant': { layout: [1,0,0,0, 2,3,4,0, 5,0,0,0, 6,0,0,0], opps: {1:4, 2:6, 3:5, 4:1, 5:3, 6:2} },
-        'z-net': { layout: [1,2,0,0, 0,3,4,0, 0,0,5,6], opps: {1:4, 2:5, 3:6, 4:1, 5:2, 6:3} }
+        't-aligned': { layout: [1,0,0,0, 2,3,4,5, 6,0,0,0], opps: {1:6, 2:4, 3:5, 4:2, 5:3, 6:1} },
+        'z-shape': { layout: [1,2,0,0, 0,3,4,0, 0,0,5,6], opps: {1:4, 2:5, 3:6, 4:1, 5:2, 6:3} }
     };
 
     function loadNet(id, btn) {
@@ -93,7 +93,7 @@
                 div.classList.add('active');
                 const opp = nets[id].opps[val];
                 if(opp) document.getElementById('f' + opp).classList.add('opposite');
-                document.getElementById('trace-47').innerHTML = `Face <b>${val}</b> opposite is Face <b>${opp}</b>.`;
+                document.getElementById('trace-47').innerHTML = `Face <b>${val}</b> is opposite Face <b>${opp}</b>.`;
             };
             cont.appendChild(div);
         });

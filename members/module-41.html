@@ -2,112 +2,184 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 41: Relativity Tension | Cognis11</title>
+    <title>Module 41: Logical Ordering | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; --pass-green: #48bb78; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
         .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; min-height: 400px; position: relative; overflow: hidden; }
-        .logical-line { height: 4px; width: 100%; background: #4a5568; position: absolute; top: 140px; left: 0; }
-        .item-node { position: absolute; top: 140px; transform: translate(-50%, -50%); transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center; }
-        .node-box { width: 70px; background: var(--cognis-gold); padding: 10px 0; border-radius: 6px; font-weight: 900; color: #1a202c; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        /* Consistently Formatted Tier Boxes */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; line-height: 1.5; min-height: 120px; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 1px; }
 
-        .column-stage { display: flex; justify-content: space-around; position: absolute; bottom: 30px; width: 100%; }
-        .col { width: 200px; display: flex; flex-direction: column; gap: 10px; align-items: center; border-top: 2px dashed rgba(255,255,255,0.1); padding-top: 20px; }
-        .col-header { font-size: 0.6rem; color: #718096; text-transform: uppercase; margin-bottom: 10px; font-weight: bold; }
-        .pending-box { background: #2d3748; color: white; padding: 12px 20px; border-radius: 8px; cursor: pointer; border: 2px solid var(--cognis-gold); font-weight: bold; font-size: 0.8rem; transition: 0.2s; }
-        .pending-box:hover { background: #3d495d; transform: translateY(-5px); }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; min-height: 400px; }
+        .stats-bar { color: white; margin-bottom: 20px; font-size: 0.8rem; border-bottom: 1px solid #4a5568; padding-bottom: 10px; display: flex; justify-content: space-between; }
+        
+        /* Permutation Grid */
+        #perm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; max-height: 300px; overflow-y: auto; padding-right: 10px; }
+        .perm-box { background: #2d3748; color: #a0aec0; padding: 8px; border-radius: 4px; font-size: 0.65rem; font-family: monospace; text-align: center; border: 1px solid #4a5568; transition: 0.3s; }
+        .perm-box.eliminated { opacity: 0.15; text-decoration: line-through; filter: grayscale(1); transform: scale(0.9); border-color: transparent; }
+        .perm-box.winner { background: var(--pass-green); color: white; border-color: white; transform: scale(1.1); font-weight: bold; opacity: 1; box-shadow: 0 0 15px var(--pass-green); }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .btn-clue { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 10px; width: 100%; text-align: left; font-weight: bold; }
+        .btn-clue:hover { background: var(--cognis-gold); }
+        .btn-clue.active { background: var(--cognis-gold); border-left: 4px solid white; }
+        
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+        
+        .tab-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { background: #2d3748; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; }
+        .tab-btn.active { background: var(--cognis-gold); }
     </style>
 </head>
 <body>
 <div class="module-card">
     <div class="header"><h1>Module 41: Logical Ordering</h1></div>
+    
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
+        <p>Logical ordering is the art of <b>possibility elimination</b>. Instead of trying to guess the one correct order, we acknowledge every possible permutation and use linguistic clues as "filters." By removing what is inconsistent, the only remaining option must be the truth.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>A is taller than B. B is taller than C. Who is shortest?</div>
-            <div class="tier-card"><b>Average Year 4</b>Monday is before Tuesday. Friday is after Wednesday.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Identify the 2nd heaviest person from the clue set.</div>
+            <div class="tier-card"><b>Advanced Year 2</b><br>A is taller than B. <br>B is taller than C. <br>Order them (3 items).</div>
+            <div class="tier-card"><b>Average Year 4</b><br>Sam > Tom. Tom > Ben. <br>Leo > Sam. <br>Order them (4 items).</div>
+            <div class="tier-card"><b>Advanced Year 5</b><br>5-item complexity using "between," "not last," and "adjacent."</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <p style="color:#a0aec0; text-align:center; font-size:0.7rem;">CLUE: SAM IS TALLER THAN TOM BUT SHORTER THAN BEN. LEO IS TALLER THAN BEN.</p>
-            <div class="logical-line"></div>
-            <div id="line-stage"></div>
-            <div class="column-stage">
-                <div class="col"><div class="col-header">Slower/Shorter</div><div id="col-left"></div></div>
-                <div class="col"><div class="col-header">Faster/Taller</div><div id="col-right"></div></div>
+            <div class="tab-group">
+                <button class="tab-btn active" onclick="initEngine(3)">3 Items (6 Perms)</button>
+                <button class="tab-btn" onclick="initEngine(4)">4 Items (24 Perms)</button>
+                <button class="tab-btn" onclick="initEngine(5)">5 Items (120 Perms)</button>
             </div>
+            <div class="stats-bar">
+                <span id="clue-display">Select a difficulty to begin filtering.</span>
+                <span id="counter">Remaining: 0</span>
+            </div>
+            <div id="perm-grid"></div>
         </div>
     </section>
 
     <section class="phase">
+        <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls">
-                <button onclick="resetAll()" style="background:var(--cognis-gold); color:white; border:none; padding:15px; border-radius:8px; width:100%; font-weight:bold; cursor:pointer;">RESTART CHAIN</button>
-            </div>
-            <div class="trace-log" id="trace-41">Click items in the columns to place them relative to Tom.</div>
+            <div id="clue-panel" class="controls">
+                </div>
+            <div class="trace-log" id="trace-41">The "Possibility Space" shows every potential arrangement. Use clues to filter the impossible.</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--cognis-gold); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--cognis-gold); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> Treating the items like a list rather than a map. If you only remember "who is next," you'll lose the gap where a third person might fit.</p>
-            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:15px 0;">
-            <p><strong>The Fix:</strong> The Elastic Line. Place the first person. Everyone else is either to their left or right. As the columns shrink, the line expands, showing you the true relative ranking without needing absolute numbers.</p>
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The Trap:</strong> Fixing an item in a specific position (e.g., "Ben is 1st") based on an early clue, only to find a later clue contradicts it. This creates a "mental knot" that is hard to undo.</p>
+            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin:15px 0;">
+            <p><strong>The Fix:</strong> Permutation Filtering. Don't commit to a position until the logic forces it. Treat clues as "Rules of Exclusion." If the rule says "A > B," then every arrangement where B comes before A is instantly deleted.</p>
         </div>
     </section>
 </div>
 
 <script>
-    let currentLine = ['TOM'];
-    let leftPool = [];
-    let rightPool = ['SAM', 'BEN', 'LEO'];
+    let currentPerms = [];
+    let activeClues = [];
+    let currentItems = [];
 
-    function render() {
-        const stage = document.getElementById('line-stage');
-        const cL = document.getElementById('col-left');
-        const cR = document.getElementById('col-right');
-        stage.innerHTML = ''; cL.innerHTML = ''; cR.innerHTML = '';
+    const datasets = {
+        3: { names: ['A', 'B', 'C'], clues: [
+            { txt: "A is taller than B", filter: (p) => p.indexOf('A') < p.indexOf('B') },
+            { txt: "B is taller than C", filter: (p) => p.indexOf('B') < p.indexOf('C') }
+        ]},
+        4: { names: ['TOM', 'SAM', 'BEN', 'LEO'], clues: [
+            { txt: "Sam is faster than Tom", filter: (p) => p.indexOf('SAM') < p.indexOf('TOM') },
+            { txt: "Tom is faster than Ben", filter: (p) => p.indexOf('TOM') < p.indexOf('BEN') },
+            { txt: "Leo is faster than Sam", filter: (p) => p.indexOf('LEO') < p.indexOf('SAM') }
+        ]},
+        5: { names: ['V', 'W', 'X', 'Y', 'Z'], clues: [
+            { txt: "X is exactly in the middle", filter: (p) => p[2] === 'X' },
+            { txt: "V is heavier than Y", filter: (p) => p.indexOf('V') < p.indexOf('Y') },
+            { txt: "Z is between X and Y", filter: (p) => (p.indexOf('Z') > p.indexOf('X') && p.indexOf('Z') < p.indexOf('Y')) || (p.indexOf('Z') < p.indexOf('X') && p.indexOf('Z') > p.indexOf('Y')) },
+            { txt: "W is the heaviest", filter: (p) => p[0] === 'W' }
+        ]}
+    };
 
-        currentLine.forEach((name, i) => {
-            const pos = ((i + 1) / (currentLine.length + 1)) * 100;
-            stage.innerHTML += `<div class="item-node" style="left:${pos}%"><div class="node-box">${name}</div></div>`;
+    function getPermutations(arr) {
+        if (arr.length <= 1) return [arr];
+        let perms = [];
+        for (let i = 0; i < arr.length; i++) {
+            let rest = getPermutations(arr.slice(0, i).concat(arr.slice(i + 1)));
+            for (let r of rest) perms.push([arr[i]].concat(r));
+        }
+        return perms;
+    }
+
+    function initEngine(size) {
+        // UI Reset
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        currentItems = datasets[size].names;
+        currentPerms = getPermutations(currentItems).map(p => ({ p: p, valid: true }));
+        activeClues = [];
+        
+        const panel = document.getElementById('clue-panel');
+        panel.innerHTML = datasets[size].clues.map((c, i) => 
+            `<button class="btn-clue" onclick="applyClue(${size}, ${i}, this)">Clue: ${c.txt}</button>`
+        ).join('');
+        
+        renderGrid();
+        updateStats();
+    }
+
+    function applyClue(size, clueIdx, btn) {
+        btn.classList.toggle('active');
+        const clue = datasets[size].clues[clueIdx];
+        
+        // Re-calculate all based on all active clues
+        const activeBtns = document.querySelectorAll('.btn-clue.active');
+        const activeIndices = Array.from(activeBtns).map(b => {
+            const txt = b.innerText.replace('Clue: ', '');
+            return datasets[size].clues.findIndex(c => c.txt === txt);
         });
 
-        leftPool.forEach(p => cL.innerHTML += `<div class="pending-box" onclick="moveToLine('${p}', 'left')">${p} ↑</div>`);
-        rightPool.forEach(p => cR.innerHTML += `<div class="pending-box" onclick="moveToLine('${p}', 'right')">${p} ↑</div>`);
+        currentPerms.forEach(item => {
+            item.valid = activeIndices.every(idx => datasets[size].clues[idx].filter(item.p));
+        });
+
+        renderGrid();
+        updateStats();
     }
 
-    function moveToLine(name, dir) {
-        if(dir === 'left') {
-            leftPool = leftPool.filter(n => n !== name);
-            currentLine.unshift(name);
-        } else {
-            rightPool = rightPool.filter(n => n !== name);
-            // Conditional logic for this specific example
-            if(name === 'SAM') currentLine.push('SAM');
-            if(name === 'BEN') currentLine.push('BEN');
-            if(name === 'LEO') currentLine.push('LEO');
-        }
-        render();
-        document.getElementById('trace-41').innerHTML = `<b>${name} placed.</b> Line spacing recalculated to 1/${currentLine.length+1} increments.`;
+    function renderGrid() {
+        const grid = document.getElementById('perm-grid');
+        grid.innerHTML = currentPerms.map(item => `
+            <div class="perm-box ${item.valid ? '' : 'eliminated'} ${isOnlyOne() && item.valid ? 'winner' : ''}">
+                ${item.p.join(' > ')}
+            </div>
+        `).join('');
     }
 
-    function resetAll() { currentLine=['TOM']; leftPool=[]; rightPool=['SAM','BEN','LEO']; render(); }
-    window.onload = render;
+    function isOnlyOne() {
+        return currentPerms.filter(i => i.valid).length === 1;
+    }
+
+    function updateStats() {
+        const remaining = currentPerms.filter(i => i.valid).length;
+        document.getElementById('counter').innerText = `Candidates Remaining: ${remaining} / ${currentPerms.length}`;
+        document.getElementById('trace-41').innerHTML = remaining === 1 
+            ? `<b style="color:var(--pass-green)">TRUTH FOUND:</b> The logical constraints permit only one arrangement.` 
+            : `Filtering possibility space... ${remaining} valid paths left.`;
+    }
+
+    window.onload = () => initEngine(3);
 </script>
 </body>
 </html>

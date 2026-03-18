@@ -2,111 +2,162 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 54: Tone & Purpose Simulator</title>
+    <title>Module 52: Explicit Retrieval | Cognis11</title>
     <style>
-        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #f4f4f4; color: #002d5b; padding: 20px; }
-        #module-container { max-width: 850px; margin: auto; background: white; padding: 40px; border-radius: 0; border-top: 8px solid #002d5b; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        :root { 
+            --cognis-blue: #002d5b; 
+            --cognis-gold: #c5a059; 
+            --cognis-light: #f4f7f9; 
+            --pass-green: #48bb78; 
+            --fail-red: #f56565; 
+            --trace-bg: #1a202c;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; line-height: 1.6; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         
-        .phase-title { font-size: 0.85em; font-weight: bold; text-transform: uppercase; color: #c5a059; letter-spacing: 2px; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        /* Header */
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* The Engine Styles */
-        .simulator-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-        .control-panel { background: #eef2f7; padding: 20px; border-radius: 4px; }
-        .output-panel { background: #fff; border: 2px solid #002d5b; padding: 20px; display: flex; align-items: center; justify-content: center; text-align: center; font-style: italic; font-size: 1.2em; min-height: 100px; }
+        /* Phases */
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; margin-bottom: 15px; }
+
+        /* Phase 1: X-Ray Tiers */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 110px; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        /* Phase 2 & 3: The Engine & Anatomy */
+        .simulation-area { background: var(--trace-bg); border-radius: 12px; padding: 40px; margin: 20px 0; color: white; }
+        .text-database { 
+            font-size: 1.1rem; 
+            line-height: 2; 
+            margin-bottom: 30px; 
+            padding: 20px; 
+            background: rgba(255,255,255,0.05); 
+            border-radius: 8px;
+            border: 1px solid #4a5568;
+        }
+        .data-point { 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            border: 1px solid transparent;
+            display: inline-block;
+        }
+        .data-point:hover { background: rgba(197, 160, 89, 0.2); border-color: var(--cognis-gold); }
+        .data-point.active { background: var(--cognis-gold); color: white; border-color: var(--cognis-gold); box-shadow: 0 0 15px rgba(197, 160, 89, 0.4); }
+        .data-point.wrong { background: var(--fail-red); color: white; border-color: var(--fail-red); text-decoration: line-through; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; align-items: start; }
+        .query-selector { display: flex; flex-direction: column; gap: 10px; }
+        .btn-query { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; text-align: left; transition: 0.2s; border-left: 4px solid transparent; }
+        .btn-query.active { background: var(--cognis-blue); border-left-color: var(--cognis-gold); font-weight: bold; }
         
-        input[type=range] { width: 100%; cursor: pointer; accent-color: #002d5b; }
-        
-        #trace-log { 
-            margin-top: 20px;
-            font-family: 'Consolas', 'Lucida Console', monospace; 
-            background: #1a1a1a; 
-            color: #00ff00; 
-            padding: 15px; 
+        .trace-log { 
+            background: rgba(0,0,0,0.3); 
+            padding: 20px; 
+            border-radius: 8px; 
+            font-family: 'Consolas', monospace; 
+            font-size: 0.85rem; 
+            border-left: 4px solid var(--cognis-gold); 
             height: 140px; 
             overflow-y: auto; 
-            font-size: 0.85em;
-            line-height: 1.4;
+            color: #48bb78;
         }
 
-        .label-row { display: flex; justify-content: space-between; font-size: 0.75em; font-weight: bold; margin-bottom: 10px; color: #666; }
+        /* Phase 4: Saboteur */
+        .saboteur-box { background: #fff5f5; border: 2px solid var(--fail-red); border-radius: 12px; padding: 25px; margin-top: 10px; }
+        .saboteur-box h2 { color: var(--fail-red); }
+        .saboteur-box p { font-size: 0.9rem; margin-bottom: 15px; }
+        .saboteur-box hr { border: 0; border-top: 1px solid rgba(245,101,101,0.2); margin: 15px 0; }
+
+        .highlight-blue { color: var(--cognis-blue); font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div id="module-container">
-    <div class="phase-title">Phase 3: The Engine</div>
-    
-    <div class="simulator-grid">
-        <div class="control-panel">
-            <label><strong>Tone Intensity Slider</strong></label>
-            <div class="label-row">
-                <span>CLINICAL</span>
-                <span>SARCASTIC</span>
-                <span>AGGRESSIVE</span>
-            </div>
-            <input type="range" id="toneSlider" min="0" max="2" value="0" step="1" oninput="updateSimulator()">
-            
-            <p style="font-size: 0.8em; margin-top: 20px;">Move the slider to see how word choice alters the <strong>Purpose</strong> of the statement.</p>
-        </div>
-        
-        <div class="output-panel" id="displayText">
-            The weather is currently raining.
-        </div>
-    </div>
+<div class="module-card">
+    <div class="header"><h1>Module 52: Explicit Retrieval</h1></div>
 
-    <div id="trace-log">> System Ready. Awaiting parameter input...</div>
+    <section class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>Explicit Retrieval is the "Treasure Hunt" of comprehension. You are not looking for meaning; you are looking for <b>Surface Data</b>. By identifying unique <b>Anchor Words</b> in the question (numbers, capitals, or dates), you can scan the text and "retrieve" the answer without needing to interpret the story.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>The cat sat on a <u>checkered</u> rug eating a fish. <br>Q: What pattern was the rug?</div>
+            <div class="tier-card"><b>Average Year 4</b>The patent for the steam engine was filed in <u>1784</u> by James Watt. <br>Q: In which year was the patent filed?</div>
+            <div class="tier-card"><b>Advanced Year 5</b>The expedition arrived at the peak at <u>14:22 GMT</u> despite the blizzard. <br>Q: At what precise time did they arrive?</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <p>Observe the <b>Target-to-Anchor</b> connection. Below is a raw data-block. Select a <b>Search Query</b> to calibrate your radar, then find the correct data point in the text.</p>
+        <div class="simulation-area">
+            <div class="text-database" id="data-stream">
+                In the spring of <span class="data-point" onclick="validate(this, 'year')">1922</span>, 
+                Lord Carnarvon and <span class="data-point" onclick="validate(this, 'name')">Howard Carter</span> 
+                reached the <span class="data-point" onclick="validate(this, 'loc')">Valley of the Kings</span>. 
+                They discovered exactly <span class="data-point" onclick="validate(this, 'qty')">5,398</span> 
+                artifacts inside the <span class="data-point" onclick="validate(this, 'room')">Antechamber</span>.
+            </div>
+
+            <div class="engine-container">
+                <div class="query-selector">
+                    <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase; margin-bottom:5px;">Select Active Query</label>
+                    <button class="btn-query active" onclick="setQuery('year', this)">TARGET: Date of Arrival</button>
+                    <button class="btn-query" onclick="setQuery('name', this)">TARGET: Lead Archaeologist</button>
+                    <button class="btn-query" onclick="setQuery('qty', this)">TARGET: Total Artifact Count</button>
+                    <button class="btn-query" onclick="setQuery('loc', this)">TARGET: Geographic Location</button>
+                </div>
+                <div class="trace-log" id="trace-52">Radar Initialized. Select a target query to begin scanning...</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div class="saboteur-box">
+            <h2>Phase 4: The Saboteur</h2>
+            <p><strong>The Trap:</strong> The <b>Synonym Shift</b>. The question asks for the "location," but the text says "destination." If you scan only for the exact word in the question, your brain will "miss" the data even when looking right at it.</p>
+            <hr>
+            <p><strong>The Fix:</strong> The <b>Category Pivot</b>. Don't scan for words; scan for <b>Data Classes</b>. If the question asks "Where," your eyes should only be looking for capitalized Proper Nouns. If it asks "When," look only for digits. By ignoring vocabulary and focusing on structure, you bypass the trap.</p>
+        </div>
+    </section>
 </div>
 
 <script>
-    const slider = document.getElementById('toneSlider');
-    const display = document.getElementById('displayText');
-    const log = document.getElementById('trace-log');
+    let activeQuery = 'year';
+    const log = document.getElementById('trace-52');
 
-    const data = [
-        { 
-            text: "The weather is currently raining.", 
-            tone: "Clinical / Neutral", 
-            purpose: "To Inform (Data-led)", 
-            color: "#002d5b",
-            size: "1em"
-        },
-        { 
-            text: "What a 'lovely' day for a picnic, isn't it?", 
-            tone: "Sarcastic / Ironical", 
-            purpose: "To Ridicule (Hidden meaning)", 
-            color: "#c5a059",
-            size: "1.2em"
-        },
-        { 
-            text: "This wretched downpour has utterly ruined everything!", 
-            tone: "Aggressive / Emotive", 
-            purpose: "To Complain (Emotion-led)", 
-            color: "#d9534f",
-            size: "1.4em"
+    function setQuery(type, btn) {
+        activeQuery = type;
+        document.querySelectorAll('.btn-query').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Reset visual feedback in text
+        document.querySelectorAll('.data-point').forEach(p => {
+            p.classList.remove('active', 'wrong');
+        });
+
+        log.innerHTML = `TARGET UPDATED: Scanning for <b>[${type.toUpperCase()}]</b> logic...`;
+    }
+
+    function validate(el, dataType) {
+        const val = el.innerText;
+        log.innerHTML += `<br>> Analyzing: "${val}"...`;
+
+        if(dataType === activeQuery) {
+            el.classList.add('active');
+            log.innerHTML += `<br><span style="color:#48bb78;"><b>MATCH CONFIRMED:</b> Anchor found. Logic closed.</span>`;
+            log.scrollTop = log.scrollHeight;
+        } else {
+            el.classList.add('wrong');
+            log.innerHTML += `<br><span style="color:#f56565;"><b>ERROR:</b> Data Type Mismatch. This is a distractor.</span>`;
+            log.scrollTop = log.scrollHeight;
         }
-    ];
-
-    function updateLog(msg) {
-        const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        log.innerHTML += `<br>[${time}] ${msg}`;
-        log.scrollTop = log.scrollHeight;
     }
-
-    function updateSimulator() {
-        const val = slider.value;
-        const current = data[val];
-        
-        display.innerText = current.text;
-        display.style.color = current.color;
-        display.style.fontSize = current.size;
-        
-        updateLog(`Tone Shift Detected: ${current.tone.toUpperCase()}`);
-        updateLog(`Purpose identified as: ${current.purpose}`);
-        updateLog(`Primary Keyword Weight: ${val == 0 ? 'Low' : val == 1 ? 'Medium' : 'High'}`);
-    }
-    
-    // Initial run
-    updateLog("Initializing Module 54...");
 </script>
 
 </body>

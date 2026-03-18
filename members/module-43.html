@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Module 43: Reflection Logic | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --mirror-red: #e53e3e; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
@@ -14,22 +14,27 @@
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 100px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 110px; line-height: 1.4; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        .simulation-area { background: #f8fafc; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; display: flex; align-items: center; justify-content: center; gap: 40px; }
-        .grid-canvas { width: 200px; height: 200px; border: 1px solid #cbd5e0; position: relative; background: white; }
-        .mirror-line { position: absolute; background: var(--trap-red); opacity: 0.6; box-shadow: 0 0 10px var(--trap-red); }
-        .mirror-v { width: 4px; height: 100%; left: 50%; top: 0; transform: translateX(-50%); }
-        .mirror-h { width: 100%; height: 4px; top: 50%; left: 0; transform: translateY(-50%); }
-
-        .shape-box { width: 50px; height: 50px; background: var(--cognis-blue); position: absolute; border-radius: 4px 15px 4px 4px; }
-        #original { left: 40px; top: 75px; }
-        #reflection { transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; position: relative; min-height: 400px; display: flex; align-items: center; justify-content: center; }
+        
+        /* SVG Anatomy */
+        #reflect-svg { width: 350px; height: 350px; overflow: visible; }
+        .grid-line { stroke: #2d3748; stroke-width: 1; }
+        .mirror-line { stroke: var(--mirror-red); stroke-width: 3; stroke-dasharray: 8,4; transition: transform 0.4s ease; filter: drop-shadow(0 0 5px var(--mirror-red)); }
+        
+        /* The F-Shape */
+        .f-shape { fill: var(--cognis-gold); transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-origin: center; }
+        .f-ghost { fill: rgba(255,255,255,0.05); stroke: rgba(255,255,255,0.1); stroke-width: 1; pointer-events: none; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .btn-axis { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; font-weight: bold; }
-        .btn-axis.active { background: var(--cognis-gold); }
+        .btn-axis { background: #4a5568; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; }
+        .btn-axis.active { background: var(--cognis-gold); font-weight: bold; }
+        
+        .btn-action { background: var(--mirror-red); color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; box-shadow: 0 4px 0 #9b2c2c; }
+        .btn-action:active { transform: translateY(2px); box-shadow: none; }
+
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
     </style>
 </head>
@@ -39,22 +44,27 @@
     
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Reflection is a "Mirror Image" operation. Unlike rotation, it creates a version of the shape that cannot be reached by spinning. The distance from the mirror line to the "Original" must be exactly the same as the distance to the "Reflection."</p>
+        <p>Reflection is a "Mirror Operation." In a 2D space, this operation reverses the "handedness" of a shape. To solve these, don't just move the shape—you must flip it so that every point is the exact same distance from the axis as its original counterpart.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>Reflect a square across a vertical axis.</div>
-            <div class="tier-card"><b>Average Year 4</b>Reflect an asymmetric flag horizontally.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Reflect a shape across a diagonal line ($y=x$).</div>
+            <div class="tier-card"><b>Advanced Year 2</b>Reflect a square horizontally. (Is there a change?)</div>
+            <div class="tier-card"><b>Average Year 4</b>Perform a vertical reflection on an "L" shape.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the result of a diagonal reflection (45°) on a flag.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div class="grid-canvas">
-                <div id="m-line" class="mirror-line mirror-v"></div>
-                <div id="original" class="shape-box"></div>
-                <div id="reflection" class="shape-box" style="background: var(--cognis-gold); opacity: 0.5;"></div>
-            </div>
+            <svg id="reflect-svg" viewBox="-150 -150 300 300">
+                <line x1="-150" y1="0" x2="150" y2="0" class="grid-line" />
+                <line x1="0" y1="-150" x2="0" y2="150" class="grid-line" />
+                
+                <path d="M -20,-40 L 40,-40 L 40,-25 L -5,-25 L -5,-10 L 25,-10 L 25,5 L -5,5 L -5,40 L -20,40 Z" class="f-ghost" />
+                
+                <path id="f-shape" d="M -20,-40 L 40,-40 L 40,-25 L -5,-25 L -5,-10 L 25,-10 L 25,5 L -5,5 L -5,40 L -20,40 Z" class="f-shape" />
+                
+                <line id="mirror-line" x1="-140" y1="0" x2="140" y2="0" class="mirror-line" transform="rotate(90)" />
+            </svg>
         </div>
     </section>
 
@@ -62,51 +72,80 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <button class="btn-axis active" onclick="reflect('V', this)">Vertical Axis (X-Flip)</button>
-                <button class="btn-axis" onclick="reflect('H', this)">Horizontal Axis (Y-Flip)</button>
+                <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase; margin-bottom:10px; display:block;">1. Select Axis</label>
+                <button class="btn-axis active" onclick="setAxis(90, this)">Vertical (90°)</button>
+                <button class="btn-axis" onclick="setAxis(0, this)">Horizontal (0°)</button>
+                <button class="btn-axis" onclick="setAxis(45, this)">Diagonal (45°)</button>
+                <button class="btn-axis" onclick="setAxis(135, this)">Diagonal (135°)</button>
+                
+                <button class="btn-action" onclick="performReflection()">Flipping Now</button>
+                <button onclick="resetEngine()" style="background:transparent; color:#a0aec0; border:none; margin-top:10px; cursor:pointer; font-size:0.7rem; text-decoration:underline;">Reset Shape</button>
             </div>
-            <div class="trace-log" id="trace-43">Select an axis to see the "Mirror Space" activate.</div>
+            <div class="trace-log" id="trace-43">Select an axis, then click 'Reflect' to flip the shape.</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> The "Slide" Trap. Students often just move the shape to the other side of the line without flipping it (Translation instead of Reflection).</p>
-            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin:15px 0;">
-            <p><strong>The Fix:</strong> The "Finger Test." If you put your finger on a point of the original, it should be the same distance from the mirror line as the corresponding point on the reflection. If one points left, the other MUST point right.</p>
+        <div style="background: #fff5f5; border: 2px solid var(--mirror-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--mirror-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The Trap:</strong> The "Slide" Illusion. When performing a sequence (like reflecting twice across the same axis), students often think the shape has rotated.
+            <br><br><strong>The Fix:</strong> The "Asymmetry Check." Look at the "arms" of the F. If the arms pointed right and now they point left, you have performed a reflection. If you reflect it *again* across the same axis, it must return exactly to its original state. Reflections always come in pairs—two flips across the same line = original state.</p>
         </div>
     </section>
 </div>
 
 <script>
-    function reflect(axis, btn) {
-        const mLine = document.getElementById('m-line');
-        const refl = document.getElementById('reflection');
+    let currentAxis = 90;
+    let matrix = [1, 0, 0, 1]; // [a, b, c, d] for matrix(a,b,c,d,0,0)
+
+    function setAxis(deg, btn) {
+        currentAxis = deg;
         document.querySelectorAll('.btn-axis').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        document.getElementById('mirror-line').setAttribute('transform', `rotate(${deg})`);
+        updateTrace();
+    }
 
-        if(axis === 'V') {
-            mLine.className = "mirror-line mirror-v";
-            refl.style.left = "110px";
-            refl.style.top = "75px";
-            refl.style.transform = "scaleX(-1)";
-        } else {
-            mLine.className = "mirror-line mirror-h";
-            refl.style.left = "40px";
-            refl.style.top = "75px";
-            // For horizontal reflection, it flips vertically below the line
-            // Original is at top:75. Center is 100. Diff is 25. Mirror is at 125.
-            refl.style.top = "125px";
-            refl.style.transform = "scaleY(-1)";
-        }
+    function performReflection() {
+        const rad = (currentAxis * Math.PI) / 180;
+        const a = Math.cos(2 * rad);
+        const b = Math.sin(2 * rad);
+        
+        // Multiply current matrix by reflection matrix
+        // Ref matrix is: [[cos2a, sin2a], [sin2a, -cos2a]]
+        const m11 = a; const m12 = b;
+        const m21 = b; const m22 = -a;
+
+        const newA = m11 * matrix[0] + m12 * matrix[2];
+        const newB = m11 * matrix[1] + m12 * matrix[3];
+        const newC = m21 * matrix[0] + m22 * matrix[2];
+        const newD = m21 * matrix[1] + m22 * matrix[3];
+
+        matrix = [newA, newB, newC, newD];
+        applyMatrix();
+    }
+
+    function applyMatrix() {
+        const shape = document.getElementById('f-shape');
+        shape.style.transform = `matrix(${matrix[0]}, ${matrix[1]}, ${matrix[2]}, ${matrix[3]}, 0, 0)`;
+        updateTrace();
+    }
+
+    function resetEngine() {
+        matrix = [1, 0, 0, 1];
+        applyMatrix();
+    }
+
+    function updateTrace() {
         document.getElementById('trace-43').innerHTML = `
-            <b>Reflection Matrix:</b><br>
-            Mode: ${axis === 'V' ? 'X-Axis Flip' : 'Y-Axis Flip'}<br>
-            Result: Shape handedness has reversed.
+            <b>Reflection State:</b><br>
+            Current Axis: ${currentAxis}°<br>
+            Operation: matrix(${matrix.map(n => n.toFixed(2)).join(', ')})<br><br>
+            <i>Notice: Reflection across a diagonal (45°) swaps the X and Y properties of the shape.</i>
         `;
     }
-    window.onload = () => reflect('V', document.querySelector('.btn-axis'));
+
+    window.onload = updateTrace;
 </script>
 </body>
 </html>

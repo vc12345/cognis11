@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Module 41: Logical Ordering | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; --pass-green: #48bb78; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; --pass-green: #48bb78; 
+                --color-a: #e53e3e; --color-b: #ecc94b; --color-c: #48bb78; --color-d: #3182ce; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
@@ -13,30 +14,29 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        /* Consistently Formatted Tier Boxes */
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
         .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; line-height: 1.5; min-height: 120px; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 1px; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; min-height: 400px; }
-        .stats-bar { color: white; margin-bottom: 20px; font-size: 0.8rem; border-bottom: 1px solid #4a5568; padding-bottom: 10px; display: flex; justify-content: space-between; }
-        
-        /* Permutation Grid */
-        #perm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; max-height: 300px; overflow-y: auto; padding-right: 10px; }
-        .perm-box { background: #2d3748; color: #a0aec0; padding: 8px; border-radius: 4px; font-size: 0.65rem; font-family: monospace; text-align: center; border: 1px solid #4a5568; transition: 0.3s; }
-        .perm-box.eliminated { opacity: 0.15; text-decoration: line-through; filter: grayscale(1); transform: scale(0.9); border-color: transparent; }
-        .perm-box.winner { background: var(--pass-green); color: white; border-color: white; transform: scale(1.1); font-weight: bold; opacity: 1; box-shadow: 0 0 15px var(--pass-green); }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; min-height: 450px; }
+        .tab-group { display: flex; gap: 10px; margin-bottom: 30px; }
+        .tab-btn { background: #2d3748; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
+        .tab-btn.active { background: var(--cognis-gold); }
+
+        #perm-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; max-height: 350px; overflow-y: auto; padding-bottom: 20px; }
+        .perm-row { display: flex; gap: 8px; justify-content: center; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; border: 1px solid #4a5568; transition: 0.3s; }
+        .token { width: 30px; height: 30px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 0.8rem; }
+        .token-a { background: var(--color-a); } .token-b { background: var(--color-b); color: #1a202c; } .token-c { background: var(--color-c); } .token-d { background: var(--color-d); }
+
+        .perm-row.hidden { opacity: 0.05; filter: grayscale(1) blur(1px); pointer-events: none; }
+        .perm-row.winner { background: rgba(72, 187, 120, 0.2); border-color: var(--pass-green); transform: scale(1.05); }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .btn-clue { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 10px; width: 100%; text-align: left; font-weight: bold; }
-        .btn-clue:hover { background: var(--cognis-gold); }
-        .btn-clue.active { background: var(--cognis-gold); border-left: 4px solid white; }
+        .rule-btn { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; font-weight: bold; }
+        .rule-btn.active { background: var(--cognis-gold); border-left: 5px solid white; }
+        .btn-reset { width: 100%; background: #e53e3e; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
         
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
-        
-        .tab-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { background: #2d3748; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; }
-        .tab-btn.active { background: var(--cognis-gold); }
     </style>
 </head>
 <body>
@@ -45,11 +45,11 @@
     
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Logical ordering is the art of <b>possibility elimination</b>. Instead of trying to guess the one correct order, we acknowledge every possible permutation and use linguistic clues as "filters." By removing what is inconsistent, the only remaining option must be the truth.</p>
+        <p>In logical ordering, we are creating a relative hierarchy. Since we rarely know the exact position of an item, we must use clues to eliminate impossible sequences. By visualizing the items as tokens on a line, we can see which arrangements survive the logic of "Stronger to the Right."</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b><br>A is taller than B. <br>B is taller than C. <br>Order them (3 items).</div>
-            <div class="tier-card"><b>Average Year 4</b><br>Sam > Tom. Tom > Ben. <br>Leo > Sam. <br>Order them (4 items).</div>
-            <div class="tier-card"><b>Advanced Year 5</b><br>5-item complexity using "between," "not last," and "adjacent."</div>
+            <div class="tier-card"><b>Advanced Year 2</b>A is taller than B. <br>Find the 2 possible orders.</div>
+            <div class="tier-card"><b>Average Year 4</b>B is taller than A, but shorter than C. <br>Establish the order.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>D is the tallest. <br>B is taller than A but shorter than C.</div>
         </div>
     </section>
 
@@ -57,129 +57,129 @@
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
             <div class="tab-group">
-                <button class="tab-btn active" onclick="initEngine(3)">3 Items (6 Perms)</button>
-                <button class="tab-btn" onclick="initEngine(4)">4 Items (24 Perms)</button>
-                <button class="tab-btn" onclick="initEngine(5)">5 Items (120 Perms)</button>
+                <button class="tab-btn active" id="tab-2" onclick="startSetup(2)">2 Items</button>
+                <button class="tab-btn" id="tab-3" onclick="startSetup(3)">3 Items</button>
+                <button class="tab-btn" id="tab-4" onclick="startSetup(4)">4 Items</button>
             </div>
-            <div class="stats-bar">
-                <span id="clue-display">Select a difficulty to begin filtering.</span>
-                <span id="counter">Remaining: 0</span>
-            </div>
-            <div id="perm-grid"></div>
+            <div id="perm-container"></div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div id="clue-panel" class="controls">
-                </div>
-            <div class="trace-log" id="trace-41">The "Possibility Space" shows every potential arrangement. Use clues to filter the impossible.</div>
+            <div class="controls">
+                <div id="rule-box"></div>
+                <button class="btn-reset" onclick="resetRules()">Reset Logic</button>
+            </div>
+            <div class="trace-log" id="trace-41">Rules active: None. Every permutation is possible.</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> Fixing an item in a specific position (e.g., "Ben is 1st") based on an early clue, only to find a later clue contradicts it. This creates a "mental knot" that is hard to undo.</p>
+            <p><strong>The Trap:</strong> Fixing an item in "First Place" as soon as a clue mentions it is "stronger," without checking if there is another item stronger still.</p>
             <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin:15px 0;">
-            <p><strong>The Fix:</strong> Permutation Filtering. Don't commit to a position until the logic forces it. Treat clues as "Rules of Exclusion." If the rule says "A > B," then every arrangement where B comes before A is instantly deleted.</p>
+            <p><strong>The Fix:</strong> Relative Anchoring. Instead of guessing a rank, use the clues to eliminate rows where the "Stronger" item is to the left of the "Weaker" one. The survivor is the answer.</p>
         </div>
     </section>
 </div>
 
 <script>
-    let currentPerms = [];
-    let activeClues = [];
     let currentItems = [];
-
-    const datasets = {
-        3: { names: ['A', 'B', 'C'], clues: [
-            { txt: "A is taller than B", filter: (p) => p.indexOf('A') < p.indexOf('B') },
-            { txt: "B is taller than C", filter: (p) => p.indexOf('B') < p.indexOf('C') }
-        ]},
-        4: { names: ['TOM', 'SAM', 'BEN', 'LEO'], clues: [
-            { txt: "Sam is faster than Tom", filter: (p) => p.indexOf('SAM') < p.indexOf('TOM') },
-            { txt: "Tom is faster than Ben", filter: (p) => p.indexOf('TOM') < p.indexOf('BEN') },
-            { txt: "Leo is faster than Sam", filter: (p) => p.indexOf('LEO') < p.indexOf('SAM') }
-        ]},
-        5: { names: ['V', 'W', 'X', 'Y', 'Z'], clues: [
-            { txt: "X is exactly in the middle", filter: (p) => p[2] === 'X' },
-            { txt: "V is heavier than Y", filter: (p) => p.indexOf('V') < p.indexOf('Y') },
-            { txt: "Z is between X and Y", filter: (p) => (p.indexOf('Z') > p.indexOf('X') && p.indexOf('Z') < p.indexOf('Y')) || (p.indexOf('Z') < p.indexOf('X') && p.indexOf('Z') > p.indexOf('Y')) },
-            { txt: "W is the heaviest", filter: (p) => p[0] === 'W' }
-        ]}
+    let activeRules = [];
+    const itemConfig = {
+        'A': 'token-a', 'B': 'token-b', 'C': 'token-c', 'D': 'token-d'
     };
 
-    function getPermutations(arr) {
-        if (arr.length <= 1) return [arr];
-        let perms = [];
-        for (let i = 0; i < arr.length; i++) {
-            let rest = getPermutations(arr.slice(0, i).concat(arr.slice(i + 1)));
-            for (let r of rest) perms.push([arr[i]].concat(r));
-        }
-        return perms;
-    }
-
-    function initEngine(size) {
-        // UI Reset
+    function startSetup(size) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
+        document.getElementById('tab-' + size).classList.add('active');
         
-        currentItems = datasets[size].names;
-        currentPerms = getPermutations(currentItems).map(p => ({ p: p, valid: true }));
-        activeClues = [];
+        currentItems = ['A', 'B', 'C', 'D'].slice(0, size);
+        activeRules = [];
         
-        const panel = document.getElementById('clue-panel');
-        panel.innerHTML = datasets[size].clues.map((c, i) => 
-            `<button class="btn-clue" onclick="applyClue(${size}, ${i}, this)">Clue: ${c.txt}</button>`
-        ).join('');
+        // Generate Rules
+        const ruleBox = document.getElementById('rule-box');
+        ruleBox.innerHTML = '';
+        for(let i=0; i<size; i++) {
+            for(let j=0; j<size; j++) {
+                if(i !== j) {
+                    const r = { t: `${currentItems[i]} > ${currentItems[j]}`, a: currentItems[i], b: currentItems[j] };
+                    const btn = document.createElement('button');
+                    btn.className = 'rule-btn';
+                    btn.innerText = `Clue: ${r.t} (Stronger to Right)`;
+                    btn.onclick = () => toggleRule(r, btn);
+                    ruleBox.appendChild(btn);
+                }
+            }
+        }
         
-        renderGrid();
-        updateStats();
+        updateSim();
     }
 
-    function applyClue(size, clueIdx, btn) {
-        btn.classList.toggle('active');
-        const clue = datasets[size].clues[clueIdx];
-        
-        // Re-calculate all based on all active clues
-        const activeBtns = document.querySelectorAll('.btn-clue.active');
-        const activeIndices = Array.from(activeBtns).map(b => {
-            const txt = b.innerText.replace('Clue: ', '');
-            return datasets[size].clues.findIndex(c => c.txt === txt);
+    function toggleRule(rule, btn) {
+        const idx = activeRules.findIndex(r => r.t === rule.t);
+        if(idx > -1) {
+            activeRules.splice(idx, 1);
+            btn.classList.remove('active');
+        } else {
+            activeRules.push(rule);
+            btn.classList.add('active');
+        }
+        updateSim();
+    }
+
+    function resetRules() {
+        activeRules = [];
+        document.querySelectorAll('.rule-btn').forEach(b => b.classList.remove('active'));
+        updateSim();
+    }
+
+    function getPerms(arr) {
+        if (arr.length <= 1) return [arr];
+        let p = [];
+        for (let i = 0; i < arr.length; i++) {
+            let rest = getPerms(arr.slice(0, i).concat(arr.slice(i + 1)));
+            for (let r of rest) p.push([arr[i]].concat(r));
+        }
+        return p;
+    }
+
+    function updateSim() {
+        const container = document.getElementById('perm-container');
+        container.innerHTML = '';
+        const allPerms = getPerms(currentItems);
+        let validCount = 0;
+
+        allPerms.forEach(p => {
+            // Logic: All active rules must be true.
+            // Clue "A > B" means A index must be GREATER than B index (Larger to Right)
+            const isValid = activeRules.every(r => p.indexOf(r.a) > p.indexOf(r.b));
+            if(isValid) validCount++;
+
+            const row = document.createElement('div');
+            row.className = 'perm-row' + (isValid ? '' : ' hidden');
+            p.forEach(letter => {
+                row.innerHTML += `<div class="token ${itemConfig[letter]}">${letter}</div>`;
+            });
+            container.appendChild(row);
         });
 
-        currentPerms.forEach(item => {
-            item.valid = activeIndices.every(idx => datasets[size].clues[idx].filter(item.p));
-        });
+        // Highlight single winner
+        if(validCount === 1) {
+            document.querySelector('.perm-row:not(.hidden)').classList.add('winner');
+        }
 
-        renderGrid();
-        updateStats();
+        document.getElementById('trace-41').innerHTML = `
+            Active Constraints: <b>${activeRules.length}</b><br>
+            Remaining Possibilities: <b>${validCount}</b><br><br>
+            <i>Result: ${validCount === 1 ? 'Logic complete. One valid order exists.' : 'Apply more clues to filter the list.'}</i>
+        `;
     }
 
-    function renderGrid() {
-        const grid = document.getElementById('perm-grid');
-        grid.innerHTML = currentPerms.map(item => `
-            <div class="perm-box ${item.valid ? '' : 'eliminated'} ${isOnlyOne() && item.valid ? 'winner' : ''}">
-                ${item.p.join(' > ')}
-            </div>
-        `).join('');
-    }
-
-    function isOnlyOne() {
-        return currentPerms.filter(i => i.valid).length === 1;
-    }
-
-    function updateStats() {
-        const remaining = currentPerms.filter(i => i.valid).length;
-        document.getElementById('counter').innerText = `Candidates Remaining: ${remaining} / ${currentPerms.length}`;
-        document.getElementById('trace-41').innerHTML = remaining === 1 
-            ? `<b style="color:var(--pass-green)">TRUTH FOUND:</b> The logical constraints permit only one arrangement.` 
-            : `Filtering possibility space... ${remaining} valid paths left.`;
-    }
-
-    window.onload = () => initEngine(3);
+    window.onload = () => startSetup(2);
 </script>
 </body>
 </html>

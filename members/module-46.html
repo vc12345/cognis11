@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Module 46: Series Progression | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; --step-color: #3182ce; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
@@ -14,22 +14,23 @@
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 110px; line-height: 1.4; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 120px; line-height: 1.5; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
-        
-        /* Series Frames */
-        .series-row { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; }
-        .frame { width: 100px; height: 100px; background: #2d3748; border: 2px solid #4a5568; border-radius: 8px; position: relative; display: flex; align-items: center; justify-content: center; }
-        .frame-label { position: absolute; top: -25px; color: #a0aec0; font-size: 0.6rem; font-weight: bold; width: 100%; }
-        
-        .walker { width: 25px; height: 25px; border-radius: 4px; background: var(--cognis-gold); position: absolute; transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px 20px; margin: 30px 0; text-align: center; }
+        .series-row { display: flex; justify-content: center; gap: 15px; }
+        .frame { width: 110px; height: 110px; background: #2d3748; border: 2px solid #4a5568; border-radius: 8px; position: relative; overflow: hidden; }
+        .frame-label { position: absolute; top: -25px; left: 0; width: 100%; color: #a0aec0; font-size: 0.6rem; font-weight: bold; }
         .target-frame { border: 2px dashed var(--cognis-gold); background: rgba(197, 160, 89, 0.05); }
 
+        /* Moving Elements */
+        .element { position: absolute; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .dot { width: 20px; height: 20px; border-radius: 50%; background: var(--cognis-gold); }
+        .bar { width: 40px; height: 10px; background: white; border-radius: 2px; }
+
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .btn-rule { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; font-weight: bold; transition: 0.2s; }
-        .btn-rule.active { background: var(--cognis-gold); border-left: 5px solid white; }
+        .btn-logic { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 10px; width: 100%; text-align: left; font-weight: bold; border-left: 4px solid transparent; }
+        .btn-logic.active { background: var(--cognis-gold); border-left: 4px solid white; }
         
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
     </style>
@@ -40,23 +41,19 @@
     
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A series is a visual sequence where elements "walk," "pulse," or "rotate" according to fixed rules. To predict the next frame, you must separate the elements and track their movements independently. Usually, there is a <b>Position Rule</b> and a <b>Style Rule</b> (color/shape) happening at the same time.</p>
+        <p>A series is a visual equation. To find the missing piece, you must isolate every attribute (Position, Rotation, Shading) and determine its unique mathematical rule. The final frame is simply the sum of all these rules applied one last time.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>A dot moves one corner clockwise in each frame of a square.</div>
-            <div class="tier-card"><b>Average Year 4</b>A shape alternates color (Black/White) while moving right.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Two elements: One rotates 45°, the other moves 2 steps.</div>
+            <div class="tier-card"><b>Advanced Year 2</b><p>A black dot moves one corner clockwise in a square frame.</p></div>
+            <div class="tier-card"><b>Average Year 4</b><p>A triangle rotates 90° while its color alternates (Black/White).</p></div>
+            <div class="tier-card"><b>Advanced Year 5</b><p>The "Triple Vector": One item orbits, one pulses, one rotates.</p></div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div class="series-row">
-                <div class="frame"><div class="frame-label">FRAME 1</div><div id="w1" class="walker"></div></div>
-                <div class="frame"><div class="frame-label">FRAME 2</div><div id="w2" class="walker"></div></div>
-                <div class="frame"><div class="frame-label">FRAME 3</div><div id="w3" class="walker"></div></div>
-                <div class="frame target-frame"><div class="frame-label">NEXT ?</div><div id="w4" class="walker" style="opacity: 0.3;"></div></div>
-            </div>
+            <div class="series-row" id="series-row">
+                </div>
         </div>
     </section>
 
@@ -64,85 +61,82 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase; margin-bottom:10px; display:block;">Select Sequence Logic</label>
-                <button class="btn-rule active" onclick="setSeries('clockwise', this)">The Clockwise Walk</button>
-                <button class="btn-rule" onclick="setSeries('bounce', this)">The Alternating Pulse</button>
-                <button class="btn-rule" onclick="setSeries('diagonal', this)">The Diagonal Slide</button>
+                <button class="btn-logic active" onclick="loadSeries('orbit', this)">Complex: The Dual Orbit</button>
+                <button class="btn-logic" onclick="loadSeries('binary', this)">Complex: Binary Shading</button>
+                <button class="btn-logic" onclick="loadSeries('expansion', this)">Complex: The Spiral Growth</button>
             </div>
-            <div class="trace-log" id="trace-46">Isolating elements... Tracking Frame-to-Frame delta.</div>
+            <div class="trace-log" id="trace-46">Isolate the elements. Do not look at the whole frame.</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> The "Total Image" Trap. Trying to look at the whole frame at once and feeling overwhelmed by the movement.</p>
-            <hr style="border:0; border-top:1px solid rgba(217,83,79,0.2); margin:15px 0;">
-            <p><strong>The Fix:</strong> Feature Isolation. Use your finger to cover everything except the one element you are tracking. Find its rule (e.g., "Moves top-left to top-right"), write it down, and then move to the next element. Only combine them at the very end to pick your answer.</p>
+            <p><strong>The Trap:</strong> Visual Overload. Trying to track three moving parts at once causes the brain to "average" the movement, leading to a guess.</p>
+            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin: 15px 0;">
+            <p><strong>The Fix:</strong> Feature Isolation. Use your finger to physically block out everything except the small dot. Find its rule. Write it down. Then block the dot and look only at the main shape. Never look at the full picture until the very last second.</p>
         </div>
     </section>
 </div>
 
 <script>
-    const positions = {
-        'top-left': {top: '10px', left: '10px'},
-        'top-right': {top: '10px', left: '65px'},
-        'bot-right': {top: '65px', left: '65px'},
-        'bot-left': {top: '65px', left: '10px'},
-        'center': {top: '37px', left: '37px'}
+    const pos = {
+        TL: {t:'10px', l:'10px'}, TR: {t:'10px', l:'80px'},
+        BR: {t:'80px', l:'80px'}, BL: {t:'80px', l:'10px'},
+        C: {t:'45px', l:'45px'}
     };
 
-    function setSeries(type, btn) {
-        document.querySelectorAll('.btn-rule').forEach(b => b.classList.remove('active'));
+    function loadSeries(type, btn) {
+        document.querySelectorAll('.btn-logic').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         
-        const w = [document.getElementById('w1'), document.getElementById('w2'), document.getElementById('w3'), document.getElementById('w4')];
-        let logicText = "";
+        const row = document.getElementById('series-row');
+        row.innerHTML = '';
+        let traceText = "";
 
-        if(type === 'clockwise') {
-            const steps = ['top-left', 'top-right', 'bot-right', 'bot-left'];
-            w.forEach((el, i) => {
-                applyPos(el, steps[i]);
-                el.style.backgroundColor = 'var(--cognis-gold)';
-                el.style.borderRadius = '4px';
-            });
-            logicText = "Rule: 1 Step Clockwise rotation around corners.";
-        } 
-        else if(type === 'bounce') {
-            const steps = ['center', 'center', 'center', 'center'];
-            w.forEach((el, i) => {
-                applyPos(el, steps[i]);
-                el.style.backgroundColor = (i % 2 === 0) ? '#e53e3e' : '#3182ce';
-                el.style.borderRadius = (i % 2 === 0) ? '50%' : '4px';
-            });
-            logicText = "Rule: Static position. Color alternates Red/Blue. Shape alternates Circle/Square.";
-        }
-        else if(type === 'diagonal') {
-            const steps = ['top-left', 'center', 'bot-right', 'center']; // Note: Actually diagonal would be specialized
-            applyPos(w[0], 'top-left');
-            applyPos(w[1], 'center');
-            applyPos(w[2], 'bot-right');
-            applyPos(w[3], 'top-left'); // Pattern resets or continues
-            w.forEach(el => {
-                el.style.backgroundColor = 'var(--pass-green)';
-                el.style.borderRadius = '50%';
-            });
-            logicText = "Rule: Moving through the center along the main diagonal.";
-        }
+        for(let i=0; i<4; i++) {
+            const frame = document.createElement('div');
+            frame.className = `frame ${i === 3 ? 'target-frame' : ''}`;
+            frame.innerHTML = `<div class="frame-label">${i === 3 ? 'PREDICT' : 'FRAME ' + (i+1)}</div>`;
+            
+            if(type === 'orbit') {
+                // Rule 1: Dot moves CW around corners
+                const dotPos = [pos.TL, pos.TR, pos.BR, pos.BL][i];
+                frame.innerHTML += `<div class="element dot" style="top:${dotPos.t}; left:${dotPos.l}"></div>`;
+                // Rule 2: Bar in center rotates 45 deg CW
+                const rot = i * 45;
+                frame.innerHTML += `<div class="element bar" style="top:50px; left:35px; transform:rotate(${rot}deg); background:var(--cognis-gold)"></div>`;
+                traceText = "Rule A: Dot +1 Corner (CW)<br>Rule B: Central Bar +45° (CW)";
+            }
 
-        document.getElementById('trace-46').innerHTML = `
-            <b>Sequence Logic:</b><br>
-            ${logicText}<br><br>
-            <i>Observation: By Frame 3, the vector of movement is established. Frame 4 is the logical projection.</i>
-        `;
+            if(type === 'binary') {
+                // Rule 1: Circle alternates Gold/White
+                const color = (i % 2 === 0) ? 'var(--cognis-gold)' : 'white';
+                frame.innerHTML += `<div class="element dot" style="top:45px; left:45px; width:40px; height:40px; background:${color}"></div>`;
+                // Rule 2: Small bar "walks" left to right
+                const barL = 10 + (i * 25);
+                frame.innerHTML += `<div class="element bar" style="top:10px; left:${barL}px; width:20px; background:#48bb78"></div>`;
+                traceText = "Rule A: Central Shading Flips (Gold/White)<br>Rule B: Top Bar walks +25px Right";
+            }
+
+            if(type === 'expansion') {
+                // Rule 1: Square gets bigger
+                const size = 20 + (i * 20);
+                const offset = (110 - size) / 2;
+                frame.innerHTML += `<div class="element" style="top:${offset}px; left:${offset}px; width:${size}px; height:${size}px; border:2px solid white; transform:rotate(${i*90}deg)"></div>`;
+                // Rule 2: Background dot moves top to bottom
+                const dotT = 10 + (i * 25);
+                frame.innerHTML += `<div class="element dot" style="top:${dotT}px; left:10px; width:10px; height:10px; opacity:0.5"></div>`;
+                traceText = "Rule A: Central Frame +20px Size & +90° Spin<br>Rule B: Guide Dot moves Down +25px";
+            }
+
+            row.appendChild(frame);
+        }
+        document.getElementById('trace-45').innerHTML = traceText; // Note: Trace ID is 46, fix below
+        document.getElementById('trace-46').innerHTML = traceText;
     }
 
-    function applyPos(el, posKey) {
-        el.style.top = positions[posKey].top;
-        el.style.left = positions[posKey].left;
-    }
-
-    window.onload = () => setSeries('clockwise', document.querySelector('.btn-rule'));
+    window.onload = () => loadSeries('orbit', document.querySelector('.btn-logic'));
 </script>
 </body>
 </html>

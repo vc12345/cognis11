@@ -120,4 +120,34 @@
             </div>
             <div class="saboteur-panel fix">
                 <h3 style="color:var(--pass-green);">The Fix</h3>
-                <p>The <b>Period
+                <p>The <b>Period Replacement Test</b>. If you can replace the punctuation mark with a Full Stop (.) and the sentence still works, you <u>must</u> use either a Semicolon, a Full Stop, or a Conjunction (like 'and'). Never use a comma.</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    const log58 = document.getElementById('log-58');
+    const gap58 = document.getElementById('gap-58');
+
+    function testPunct(mark, msg) {
+        gap58.innerText = mark;
+        document.querySelectorAll('.btn-punct').forEach(b => {
+            b.classList.remove('active');
+            if(b.innerText.includes(mark)) b.classList.add('active');
+        });
+        
+        log58.innerHTML += `<br>> APPLYING: [${mark}]`;
+        if(mark === ';') {
+            log58.innerHTML += `<br>> <span style="color:#48bb78;"><b>SUCCESS:</b> ${msg}</span>`;
+            gap58.style.color = "var(--pass-green)";
+        } else {
+            log58.innerHTML += `<br>> <span style="color:#f56565;"><b>ERROR:</b> ${msg}</span>`;
+            gap58.style.color = "var(--fail-red)";
+        }
+        log58.scrollTop = log58.scrollHeight;
+    }
+</script>
+
+</body>
+</html>

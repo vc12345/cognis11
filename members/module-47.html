@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 47: The Skip-One Engine | Cognis11</title>
+    <style>
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; --pass-green: #48bb78; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 110px; line-height: 1.5; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; text-align: center; }
+        .net-grid { display: inline-grid; grid-template-columns: repeat(4, 60px); grid-template-rows: repeat(3, 60px); gap: 10px; }
+        .face { width: 60px; height: 60px; background: #2d3748; border: 2px solid #4a5568; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .face.active { background: var(--cognis-gold); border-color: white; transform: scale(1.1); }
+        .face.opposite { background: var(--trap-red); border-color: white; opacity: 0.8; }
+        .face.empty { visibility: hidden; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+    </style>
+</head>
+<body>
+<div class="module-card">
+    <div class="header"><h1>Module 47: Standard Net Folding</h1></div>
+    <section class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A cube net is a flat "skin" that folds into a 3D object. The most powerful shortcut is identifying <b>Opposite Faces</b>. If two faces are opposite, they can never share an edge on the final cube. If you see them touching in an answer choice, that choice is a lie.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b><p>Identify which side is opposite the "Top" in a simple cross net.</p></div>
+            <div class="tier-card"><b>Average Year 4</b><p>Use the "Skip-One" rule to find three pairs of opposites in a "T" net.</p></div>
+            <div class="tier-card"><b>Advanced Year 5</b><p>Solve a net where all faces have complex, directional symbols (like arrows).</p></div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="simulation-area">
+            <div class="net-grid">
+                <div class="face empty"></div><div class="face" id="f1" onclick="checkOpposite(1)">1</div><div class="face empty"></div><div class="face empty"></div>
+                <div class="face" id="f2" onclick="checkOpposite(2)">2</div><div class="face" id="f3" onclick="checkOpposite(3)">3</div><div class="face" id="f4" onclick="checkOpposite(4)">4</div><div class="face" id="f5" onclick="checkOpposite(5)">5</div>
+                <div class="face empty"></div><div class="face" id="f6" onclick="checkOpposite(6)">6</div><div class="face empty"></div><div class="face empty"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <p style="font-size:0.8rem; color:#a0aec0;">Click a face to find its mathematical opposite using the Skip-One Rule.</p>
+            </div>
+            <div class="trace-log" id="trace-47">Select a face to analyze adjacency.</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The Trap:</strong> The "Touching Corner" Illusion. Thinking two faces are opposites just because they look far apart on the flat net.</p>
+            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin: 15px 0;">
+            <p><strong>The Fix:</strong> The L-Rule. If you move two squares in one direction and one square to the side, those two squares are almost always opposites. But the "Skip-One" is the gold standard: in a straight line, skip one square to find the enemy face.</p>
+        </div>
+    </section>
+</div>
+
+<script>
+    const opposites = { 1:6, 2:4, 3:5, 4:2, 5:3, 6:1 };
+    function checkOpposite(id) {
+        document.querySelectorAll('.face').forEach(f => f.classList.remove('active', 'opposite'));
+        const target = document.getElementById('f' + id);
+        const oppId = opposites[id];
+        const opp = document.getElementById('f' + oppId);
+        
+        target.classList.add('active');
+        opp.classList.add('opposite');
+        
+        document.getElementById('trace-47').innerHTML = `
+            Face selected: <b>${id}</b><br>
+            Opposite found: <b>${oppId}</b><br><br>
+            <i>Rule: Face ${id} and Face ${oppId} will NEVER touch on the folded cube.</i>
+        `;
+    }
+</script>
+</body>
+</html>

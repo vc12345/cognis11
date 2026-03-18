@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 48: Blueprint Unfolding | Cognis11</title>
+    <title>Module 48: Geometric Generalization | Cognis11</title>
     <style>
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
@@ -16,38 +16,35 @@
         .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 110px; line-height: 1.5; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
-        .solid-choice { width: 140px; height: 140px; background: #2d3748; border: 2px solid var(--cognis-gold); border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.65rem; text-align: center; transition: 0.2s; }
-        .solid-choice:hover { background: #3d495d; transform: translateY(-5px); }
-        
-        #blueprint-display { width: 100%; height: 280px; border: 2px dashed #4a5568; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.02); margin-top: 20px; }
-        .blueprint-svg { width: 100%; height: 100%; stroke: var(--cognis-gold); stroke-width: 2; fill: none; transition: 0.5s; opacity: 0; }
-        .blueprint-svg.active { opacity: 1; }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
+        .canvas-container { width: 100%; height: 350px; display: flex; align-items: center; justify-content: center; }
+        #net-svg { width: 400px; height: 350px; stroke: var(--cognis-gold); stroke-width: 2; fill: rgba(197, 160, 89, 0.15); }
 
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+        .engine-container { display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .control-group { display: flex; flex-direction: column; gap: 10px; }
+        .btn-logic { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; font-weight: bold; width: 100%; text-align: left; }
+        .btn-logic.active { background: var(--cognis-gold); border-left: 4px solid white; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.8rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
     </style>
 </head>
 <body>
 <div class="module-card">
-    <div class="header"><h1>Module 48: Non-Standard Nets</h1></div>
+    <div class="header"><h1>Module 48: Non-Standard Net Generalization</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
+        <p>Irregular solids follow a predictable "Expansion Rule." To identify any net, you must first count the sides of the **Base Shape**. A Pyramid net attaches one triangle to every edge of that base. A Prism net creates a strip of rectangles and caps both ends with the base shape.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b><p>Count the triangular walls on a square pyramid.</p></div>
-            <div class="tier-card"><b>Average Year 4</b><p>Identify the net for a pentagonal prism.</p></div>
-            <div class="tier-card"><b>Advanced Year 5</b><p>Blueprint an octagonal solid from its 3D sketch.</p></div>
+            <div class="tier-card"><b>Advanced Year 2</b><p>Count the triangular flaps on a pentagonal pyramid.</p></div>
+            <div class="tier-card"><b>Average Year 4</b><p>Match an octagonal prism solid to its rectangular strip net.</p></div>
+            <div class="tier-card"><b>Advanced Year 5</b><p>Identify the missing faces in an incomplete hexagonal prism net.</p></div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div class="solid-choice" onclick="reveal('tri-prism')">TRIANGULAR<br>PRISM</div>
-            <div class="solid-choice" onclick="reveal('pent-pyramid')">PENTAGONAL<br>PYRAMID</div>
-            <div class="solid-choice" onclick="reveal('oct-prism')">OCTAGONAL<br>PRISM</div>
-            <div id="blueprint-display">
-                <svg id="svg" class="blueprint-svg" viewBox="0 0 200 200"><path id="path" d="" /></svg>
+            <div class="canvas-container">
+                <svg id="net-svg" viewBox="0 0 400 350"></svg>
             </div>
         </div>
     </section>
@@ -55,43 +52,91 @@
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls"><p style="font-size:0.8rem; color:#a0aec0;">Click a solid to reveal its net blueprint. Observe how the side faces match the base edges exactly.</p></div>
-            <div class="trace-log" id="trace-48">Select a solid to see the net.</div>
+            <div class="control-group">
+                <div style="display:flex; gap:5px; margin-bottom:10px;">
+                    <button class="btn-logic active" id="type-pyramid" onclick="setType('pyramid')">Pyramid</button>
+                    <button class="btn-logic" id="type-prism" onclick="setType('prism')">Prism</button>
+                </div>
+                <button class="btn-logic" id="side-3" onclick="setSides(3)">Base: Triangle</button>
+                <button class="btn-logic" id="side-4" onclick="setSides(4)">Base: Square</button>
+                <button class="btn-logic" id="side-5" onclick="setSides(5)">Base: Pentagon</button>
+                <button class="btn-logic" id="side-8" onclick="setSides(8)">Base: Octagon</button>
+            </div>
+            <div class="trace-log" id="trace-48">Select a type and base shape to generate the net blueprint.</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--cognis-gold); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--cognis-gold); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> The "Face Inventory" Error. Choosing a net because it has 5 triangles, even though the solid only has 4.</p>
+            <p><strong>The Trap:</strong> The "Face Counting" decoy. Choosing a net that has the right number of faces but the wrong shapes (e.g., picking 5 squares for a pentagonal pyramid instead of 5 triangles).</p>
             <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 15px 0;">
-            <p><strong>The Fix:</strong> The Base-Edge Rule. Count the edges of the base (e.g., a pentagon has 5). This number is exactly how many side-flaps must exist. If the base is a triangle, you only need 3 flaps.</p>
+            <p><strong>The Fix:</strong> The Base Match. A prism always has 2 base shapes and N rectangles. A pyramid always has 1 base shape and N triangles. If the base has 8 sides (Octagon), look for exactly 8 side-flaps.</p>
         </div>
     </section>
 </div>
 
 <script>
-    const blueprints = {
-        'tri-prism': {
-            d: "M 20,80 h 40 v 40 h -40 z M 60,80 h 40 v 40 h -40 z M 100,80 h 40 v 40 h -40 z M 60,80 l 20,-34.6 l 20,34.6 M 60,120 l 20,34.6 l 20,-34.6",
-            desc: "3 Rectangular Walls + 2 Equilateral Triangles (Perfect Scale)."
-        },
-        'pent-pyramid': {
-            d: "M 100,100 L 120,114 L 112,138 L 88,138 L 80,114 Z M 100,100 L 110,60 L 120,114 M 120,114 L 160,120 L 112,138 M 112,138 L 100,170 L 88,138 M 88,138 L 40,120 L 80,114 M 80,114 L 90,60 L 100,100",
-            desc: "1 Pentagonal Base + 5 Triangular Flaps."
-        },
-        'oct-prism': {
-            d: "M 20,90 h 20 v 20 h -20 z M 40,90 h 20 v 20 h -20 z M 60,90 h 20 v 20 h -20 z M 80,90 h 20 v 20 h -20 z M 100,90 h 20 v 20 h -20 z M 120,90 h 20 v 20 h -20 z M 140,90 h 20 v 20 h -20 z M 160,90 h 20 v 20 h -20 z",
-            desc: "8 Rectangular Walls + 2 Octagonal Ends."
-        }
-    };
+    let currentType = 'pyramid';
+    let currentSides = 3;
 
-    function reveal(id) {
-        const svg = document.getElementById('svg');
-        document.getElementById('path').setAttribute('d', blueprints[id].d);
-        svg.classList.add('active');
-        document.getElementById('trace-48').innerHTML = `<b>Net Detected:</b><br>${blueprints[id].desc}`;
+    function setType(t) {
+        currentType = t;
+        document.getElementById('type-pyramid').classList.toggle('active', t === 'pyramid');
+        document.getElementById('type-prism').classList.toggle('active', t === 'prism');
+        draw();
     }
+
+    function setSides(s) {
+        currentSides = s;
+        [3,4,5,8].forEach(n => document.getElementById('side-'+n).classList.toggle('active', n === s));
+        draw();
+    }
+
+    function getPolyPoints(sides, r, cx, cy, rot=0) {
+        let pts = [];
+        for(let i=0; i<sides; i++) {
+            let a = (i * 2 * Math.PI / sides) + rot;
+            pts.push(`${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`);
+        }
+        return pts.join(' ');
+    }
+
+    function draw() {
+        const svg = document.getElementById('net-svg');
+        svg.innerHTML = '';
+        const cx = 200, cy = 175;
+        let log = "";
+
+        if(currentType === 'pyramid') {
+            const r = 50;
+            const h = 100; // triangle height
+            svg.innerHTML += `<polygon points="${getPolyPoints(currentSides, r, cx, cy, Math.PI/currentSides)}" />`;
+            for(let i=0; i<currentSides; i++) {
+                let a = (i * 2 * Math.PI / currentSides) + Math.PI/currentSides;
+                let nextA = ((i+1) * 2 * Math.PI / currentSides) + Math.PI/currentSides;
+                let midA = (a + nextA) / 2;
+                let x1 = cx + r * Math.cos(a), y1 = cy + r * Math.sin(a);
+                let x2 = cx + r * Math.cos(nextA), y2 = cy + r * Math.sin(nextA);
+                let x3 = cx + (r+h) * Math.cos(midA), y3 = cy + (r+h) * Math.sin(midA);
+                svg.innerHTML += `<polygon points="${x1},${y1} ${x2},${y2} ${x3},${y3}" />`;
+            }
+            log = `Generated: Pyramid<br>Base: ${currentSides}-gon<br>Walls: ${currentSides} Isosceles Triangles.`;
+        } else {
+            const w = 40, h = 80;
+            const startX = cx - (currentSides * w / 2);
+            for(let i=0; i<currentSides; i++) {
+                svg.innerHTML += `<rect x="${startX + i*w}" y="${cy-h/2}" width="${w}" height="${h}" />`;
+            }
+            // Add top/bottom polygons
+            svg.innerHTML += `<polygon points="${getPolyPoints(currentSides, w/2, startX + w/2, cy-h/2-w/2, Math.PI/2)}" />`;
+            svg.innerHTML += `<polygon points="${getPolyPoints(currentSides, w/2, startX + w/2, cy+h/2+w/2, -Math.PI/2)}" />`;
+            log = `Generated: Prism<br>Base: ${currentSides}-gon (x2)<br>Walls: ${currentSides} Rectangles.`;
+        }
+        document.getElementById('trace-48').innerHTML = log;
+    }
+
+    window.onload = draw;
 </script>
 </body>
 </html>

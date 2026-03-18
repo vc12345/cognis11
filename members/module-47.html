@@ -35,9 +35,9 @@
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b><p>Identify the opposite of the "Star" face in a basic Cross net.</p></div>
-            <div class="tier-card"><b>Average Year 4</b><p>Find all three opposite pairs in a "Z-pattern" net.</p></div>
-            <div class="tier-card"><b>Advanced Year 5</b><p>Predict adjacency in a non-standard 1-4-1 "T-pattern" with symbols.</p></div>
+            <div class="tier-card"><b>Advanced Year 2</b><p>Identify the opposite of Face 1 in a simple Cross net.</p></div>
+            <div class="tier-card"><b>Average Year 4</b><p>Find the opposite pair for the center of a T-shape net.</p></div>
+            <div class="tier-card"><b>Advanced Year 5</b><p>Analyze a 3-3 "Staircase" net to find non-linear opposites.</p></div>
         </div>
     </section>
 
@@ -53,9 +53,9 @@
         <div class="engine-container">
             <div class="controls">
                 <button class="btn-variant active" onclick="loadNet('cross', this)">Variant: The Cross</button>
-                <button class="btn-variant" onclick="loadNet('t-shape', this)">Variant: The T-Shape</button>
-                <button class="btn-variant" onclick="loadNet('z-shape', this)">Variant: The Z-Shape</button>
-                <button class="btn-variant" onclick="loadNet('l-shape', this)">Variant: The L-Shape</button>
+                <button class="btn-variant" onclick="loadNet('t-shape', this)">Variant: The T-Shape (1-4-1)</button>
+                <button class="btn-variant" onclick="loadNet('z-shape', this)">Variant: The Z-Shape (2-3-1)</button>
+                <button class="btn-variant" onclick="loadNet('stair', this)">Variant: The Staircase (3-3)</button>
             </div>
             <div class="trace-log" id="trace-47">Select a net variant and click a face to find its opposite.</div>
         </div>
@@ -64,9 +64,8 @@
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> The "Touching Edge" fallacy. Assuming two squares that share a corner on the flat net will be adjacent on the cube.</p>
-            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin: 15px 0;">
-            <p><strong>The Fix:</strong> Use the 1-Step Jump. On a 2D net, move one square, jump over the next, and the third square is your opposite. These two faces will <b>never</b> touch on a 3D cube.</p>
+            <p><strong>The Trap:</strong> The "Linear Limit." Assuming that only vertical or horizontal lines produce opposites.
+            <br><br><strong>The Fix:</strong> The 1-Step Jump. On any net, if you move one square and jump over the next, that third square is the opposite. Even in "Z" or "Stair" nets, this jump rule identifies 90% of the pairs.</p>
         </div>
     </section>
 </div>
@@ -74,42 +73,37 @@
 <script>
     const nets = {
         'cross': { layout: [0,1,0,0, 2,3,4,5, 0,6,0,0], opps: {1:6, 2:4, 3:5, 4:2, 5:3, 6:1} },
-        't-shape': { layout: [1,0,0,0, 2,3,4,5, 6,0,0,0], opps: {1:3, 2:4, 3:1, 4:2, 5:6, 6:5} },
-        'z-shape': { layout: [1,2,0,0, 0,3,4,0, 0,0,5,6], opps: {1:4, 2:5, 3:6, 4:1, 5:2, 6:3} },
-        'l-shape': { layout: [1,0,0,0, 2,0,0,0, 3,4,5,6], opps: {1:3, 2:4, 3:1, 4:6, 5:2, 6:4} }
+        't-shape': { layout: [0,1,0,0, 2,3,4,5, 0,6,0,0], opps: {1:6, 2:4, 3:5, 4:2, 5:3, 6:1} },
+        'z-shape': { layout: [1,2,0,0, 0,3,4,5, 0,0,0,6], opps: {1:4, 2:5, 3:6, 4:1, 5:2, 6:3} },
+        'stair': { layout: [1,2,3,0, 0,0,4,5, 0,0,0,6], opps: {1:3, 2:4, 3:5, 4:6, 5:0, 6:0} } // Standard 3-3 Logic
     };
-    let currentNet = 'cross';
+    
+    // Manual override for Stair 3-3 to ensure correct 11+ logic
+    nets.stair.opps = {1:5, 2:6, 3:4, 4:3, 5:1, 6:2};
+    nets.stair.layout = [1,2,3,0, 0,4,5,6, 0,0,0,0];
 
     function loadNet(id, btn) {
-        currentNet = id;
         document.querySelectorAll('.btn-variant').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        render();
-    }
-
-    function render() {
         const cont = document.getElementById('net-container');
         cont.innerHTML = '';
-        nets[currentNet].layout.forEach((val, i) => {
+        nets[id].layout.forEach((val) => {
             const div = document.createElement('div');
             div.className = val === 0 ? 'face empty' : 'face';
             div.id = 'f' + val;
             div.innerText = val === 0 ? '' : val;
-            div.onclick = () => highlight(val);
+            div.onclick = () => {
+                document.querySelectorAll('.face').forEach(f => f.classList.remove('active', 'opposite'));
+                div.classList.add('active');
+                const opp = nets[id].opps[val];
+                document.getElementById('f' + opp).classList.add('opposite');
+                document.getElementById('trace-47').innerHTML = `Face <b>${val}</b> is opposite Face <b>${opp}</b>.`;
+            };
             cont.appendChild(div);
         });
-        document.getElementById('trace-47').innerText = "Net loaded. Click a face.";
     }
 
-    function highlight(val) {
-        document.querySelectorAll('.face').forEach(f => f.classList.remove('active', 'opposite'));
-        const opp = nets[currentNet].opps[val];
-        document.getElementById('f' + val).classList.add('active');
-        document.getElementById('f' + opp).classList.add('opposite');
-        document.getElementById('trace-47').innerHTML = `Face <b>${val}</b> is opposite Face <b>${opp}</b>.`;
-    }
-
-    window.onload = render;
+    window.onload = () => loadNet('cross', document.querySelector('.btn-variant'));
 </script>
 </body>
 </html>

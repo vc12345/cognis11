@@ -16,13 +16,14 @@
         .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 100px; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 80px 40px; margin: 30px 0; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 250px; }
-        #word-tag { font-family: 'Courier New', monospace; font-weight: 900; color: white; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); line-height: 1; }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 80px 40px; margin: 30px 0; text-align: center; min-height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #word-tag { font-family: 'Courier New', monospace; font-weight: 900; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
-        .spectrum-bar { height: 8px; width: 100%; background: #2d3748; border-radius: 10px; position: relative; margin-top: 60px; }
-        .spectrum-fill { height: 100%; background: var(--cognis-gold); border-radius: 10px; transition: width 0.2s; }
+        .spectrum-container { width: 100%; height: 12px; background: #2d3748; border-radius: 10px; margin-top: 50px; position: relative; overflow: hidden; }
+        .spectrum-fill { height: 100%; background: linear-gradient(to right, #3182ce, #ecc94b, #e53e3e); width: 0%; transition: width 0.3s; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .slider-box { text-align: center; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; border: 1px dashed var(--cognis-gold); }
         .btn-set { background: #4a5568; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; }
         .btn-set.active { background: var(--cognis-gold); font-weight: bold; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
@@ -31,24 +32,22 @@
 </head>
 <body>
 <div class="module-card">
-    <div class="header"><h1>Module 38: Synonym/Antonym Precision</h1></div>
+    <div class="header"><h1>Module 38: Synonym Precision</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Intensity is the "volume control" of vocabulary. While two words might share a category, they carry different emotional and logical weights. Success requires matching the intensity of the word to the intensity of the situation.</p>
+        <p>Words aren't just definitions; they are <b>intensities</b>. A "breeze" and a "hurricane" are both wind, but they carry different logical weights. To master precision, you must calibrate the word to the event.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>Which is stronger: Large or Colossal?</div>
-            <div class="tier-card"><b>Average Year 4</b>Rank these by intensity: Warm, Burning, Hot.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Contrast "Thrifty" (Positive) with "Stingy" (Negative).</div>
+            <div class="tier-card"><b>Advanced Year 2</b>Which is stronger: <span>"Cool"</span> or <span>"Freezing"</span>?</div>
+            <div class="tier-card"><b>Average Year 4</b>Select the best fit: The light was [Dim / Bright / Dazzling].</div>
+            <div class="tier-card)<b>Advanced Year 5</b>Identify the negative intensity in <span>"Stubborn"</span> vs <span>"Determined"</span>.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div id="word-tag">COLD</div>
-            <div class="spectrum-bar">
-                <div id="fill" class="spectrum-fill" style="width: 50%;"></div>
-            </div>
+            <div id="word-tag" style="color: #3182ce; font-size: 1.5rem;">CHILLY</div>
+            <div class="spectrum-container"><div id="fill" class="spectrum-fill"></div></div>
         </div>
     </section>
 
@@ -56,60 +55,52 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <div style="margin-bottom: 20px;">
-                    <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase; display:block; margin-bottom:10px;">Select Spectrum</label>
-                    <button class="btn-set active" onclick="setScale('CHILLY','COLD','FRIGID', this)">Temp: Cold</button>
-                    <button class="btn-set" onclick="setScale('SMALL','TINY','MINUSCULE', this)">Size: Small</button>
-                    <button class="btn-set" onclick="setScale('HAPPY','JOYFUL','ECSTATIC', this)">Emotion: Happy</button>
-                    <button class="btn-set" onclick="setScale('FAST','QUICK','METEORIC', this)">Speed: Fast</button>
+                <div style="margin-bottom: 15px;">
+                    <button class="btn-set active" onclick="setScale(['CHILLY','COLD','FRIGID'], this)">Scale: Temperature</button>
+                    <button class="btn-set" onclick="setScale(['HAPPY','JOYFUL','ECSTATIC'], this)">Scale: Emotion</button>
+                    <button class="btn-set" onclick="setScale(['DIM','BRIGHT','DAZZLING'], this)">Scale: Light</button>
                 </div>
-                <input type="range" id="nuance-slider" min="0" max="100" value="50" oninput="update38()">
+                <div class="slider-box">
+                    <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase; display:block; margin-bottom:10px;">↔ SLIDE TO INCREASE INTENSITY ↔</label>
+                    <input type="range" id="nuance-slider" min="0" max="100" value="0" oninput="update38()">
+                </div>
             </div>
-            <div class="trace-log" id="trace-38">Slide to adjust the "Volume" of the word.</div>
+            <div class="trace-log" id="trace-38">Intensity at 0%. Awaiting calibration.</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p>Choosing a synonym that is technically correct but "quiet" when the context is "loud." If a building is being destroyed, it isn't "damaged"—it's "demolished." Always check if the word's physical size in your mind matches the event.</p>
+            <p><strong>The Trap:</strong> Choosing a synonym that is technically correct but "quiet" when the context is "loud" (e.g., saying a bomb was "loud" instead of "deafening").</p>
+            <hr style="border:0; border-top:1px solid rgba(217,83,79,0.2); margin: 15px 0;">
+            <p><strong>The Fix:</strong> The "Sentence Volume" test. If the sentence describes a major disaster, look for the word that has the largest "size" and highest "heat" on the spectrum.</p>
         </div>
     </section>
 </div>
 
 <script>
-    let currentScale = ['CHILLY', 'COLD', 'FRIGID'];
-
-    function setScale(s1, s2, s3, btn) {
-        currentScale = [s1, s2, s3];
+    let scale = ['CHILLY','COLD','FRIGID'];
+    function setScale(s, btn) {
+        scale = s;
         document.querySelectorAll('.btn-set').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         update38();
     }
-
     function update38() {
         const val = document.getElementById('nuance-slider').value;
         const tag = document.getElementById('word-tag');
         const fill = document.getElementById('fill');
         fill.style.width = val + "%";
-
-        let word = currentScale[1];
-        if(val < 33) word = currentScale[0];
-        if(val > 66) word = currentScale[2];
-        
+        let word = scale[0];
+        let color = "#3182ce";
+        if(val > 33) { word = scale[1]; color = "#ecc94b"; }
+        if(val > 66) { word = scale[2]; color = "#e53e3e"; }
         tag.innerText = word;
-        // Responsive font-size scaling
-        const size = 1.5 + (val / 30);
-        tag.style.fontSize = size + "rem";
-        tag.style.opacity = 0.4 + (val / 150);
-
-        document.getElementById('trace-38').innerHTML = `
-            Intensity: <b>${val}%</b><br>
-            Selected: <b>${word}</b><br><br>
-            <i>Notice how the word feels "heavier" as the intensity increases.</i>
-        `;
+        tag.style.color = color;
+        tag.style.fontSize = (1.5 + (val/33)) + "rem";
+        document.getElementById('trace-38').innerHTML = `Intensity: <b>${val}%</b><br>Nuance: <b>${word}</b>`;
     }
-    window.onload = update38;
 </script>
 </body>
 </html>

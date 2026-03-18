@@ -13,17 +13,16 @@
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; line-height: 1.4; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 100px; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
         .simulation-area { background: #f8fafc; border-radius: 12px; padding: 60px; margin: 30px 0; text-align: center; }
-        .analogy-stage { display: flex; align-items: center; justify-content: center; gap: 20px; font-weight: 900; font-size: 1.8rem; }
-        .word-node { background: white; border: 3px solid var(--cognis-blue); padding: 15px 25px; border-radius: 8px; color: var(--cognis-blue); min-width: 120px; }
-        .logic-bridge { color: var(--cognis-gold); font-size: 1.2rem; position: relative; padding-top: 20px; }
-        .logic-bridge::before { content: '──────'; display: block; margin-bottom: -10px; }
+        .bridge-stage { display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .node { width: 140px; height: 60px; background: white; border: 3px solid var(--cognis-blue); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--cognis-blue); cursor: grab; font-size: 1.1rem; }
+        .verb-slot { font-size: 0.9rem; color: var(--cognis-gold); font-weight: bold; border-bottom: 2px dashed var(--cognis-gold); padding: 0 10px; min-width: 100px; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .btn-logic { background: #4a5568; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; }
+        .btn-logic { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; }
         .btn-logic.active { background: var(--cognis-gold); }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
     </style>
@@ -31,30 +30,29 @@
 <body>
 <div class="module-card">
     <div class="header"><h1>Module 39: Relationship Analogies</h1></div>
-    
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>An analogy is a logical ratio. The relationship between the first pair must be identical to the relationship between the second pair. Success requires identifying the <b>Logical Compass</b>—the specific direction and type of the connection.</p>
+        <p>An analogy is a logical ratio. The bridge that connects the first pair must be the exact same bridge that connects the second. Test the logic by building a sentence: <b>Word 2 [Verb] Word 1</b>.</p>
         <div class="question-tiers">
             <div class="tier-card"><b>Advanced Year 2</b>Finger : Hand :: Toe : [?].</div>
             <div class="tier-card"><b>Average Year 4</b>Scale : Fish :: Feather : [?].</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Arid : Desert :: [?] : Rainforest.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Arid : Desert :: Humid : [?].</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div class="analogy-stage">
-                <div class="word-node" id="n1">FINGER</div>
-                <div>:</div>
-                <div class="word-node" id="n2">HAND</div>
+            <div class="bridge-stage" id="pair-1">
+                <div class="node" id="p1-2">HAND</div>
+                <div class="verb-slot" id="v1">HAS A</div>
+                <div class="node" id="p1-1">FINGER</div>
             </div>
-            <div class="logic-bridge" id="bridge-text">PART-TO-WHOLE</div>
-            <div class="analogy-stage" style="margin-top:20px;">
-                <div class="word-node" id="n3" style="border-color:var(--cognis-gold)">TOE</div>
-                <div>:</div>
-                <div class="word-node" id="n4" style="border-color:var(--cognis-gold)">FOOT</div>
+            <div style="margin: 20px 0; color: #cbd5e0;">▼ (Exactly Like) ▼</div>
+            <div class="bridge-stage" id="pair-2">
+                <div class="node" id="p2-2" style="border-color:var(--cognis-gold)">FOOT</div>
+                <div class="verb-slot" id="v2" style="color:var(--cognis-blue); border-color:var(--cognis-blue)">HAS A</div>
+                <div class="node" id="p2-1" style="border-color:var(--cognis-gold)">TOE</div>
             </div>
         </div>
     </section>
@@ -63,40 +61,43 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase; margin-bottom:10px; display:block;">Select Category</label>
-                <button class="btn-logic active" onclick="setAnalogy('FINGER','HAND','TOE','FOOT','PART-TO-WHOLE')">Part-to-Whole</button>
-                <button class="btn-logic" onclick="setAnalogy('BRUSH','PAINT','HAMMER','NAIL','OBJECT-TO-ACTION')">Object-to-Action</button>
-                <button class="btn-logic" onclick="setAnalogy('PUPPY','DOG','KITTEN','CAT','JUNIOR-TO-SENIOR')">Junior-to-Senior</button>
+                <button class="btn-logic active" onclick="setLogic('FINGER','HAND','TOE','FOOT','HAS A', this)">Part-to-Whole</button>
+                <button class="btn-logic" onclick="setLogic('SCALE','FISH','FEATHER','BIRD','HAS A', this)">Surface-to-Subject</button>
+                <button class="btn-logic" onclick="setLogic('PUPPY','DOG','KITTEN','CAT','WHEN YOUNG IS', this)">Junior-to-Senior</button>
+                <button class="btn-logic" onclick="setLogic('ARID','DESERT','HUMID','RAINFOREST','IS', this)">Property-to-Object</button>
             </div>
-            <div class="trace-log" id="trace-39">Identify the logical glue...</div>
+            <div class="trace-log" id="trace-39">Verify the connection direction...</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Association" Trap:</strong> Linking words because they are related, but not in the right *way*. 
-            <br><br><strong>The Fix:</strong> Verbalize the rule as a sentence. For "Finger : Hand," the sentence is: "A finger is a <b>part of</b> a hand." Now test the second pair: "A toe is a <b>part of</b> a foot." If the sentence works for both, the analogy is solid.</p>
+            <p><strong>The "Inversion" Trap:</strong> Getting the relationship right but the order wrong. If the first pair is Part:Whole, the second cannot be Whole:Part. 
+            <br><br><strong>The Fix:</strong> Always use the "Sentence Check." If you can say "A Hand HAS A Finger," you must be able to say "A Foot HAS A Toe." If you say "A Toe HAS A Foot," the bridge has collapsed.</p>
         </div>
     </section>
 </div>
 
 <script>
-    function setAnalogy(w1, w2, w3, w4, cat) {
-        document.getElementById('n1').innerText = w1;
-        document.getElementById('n2').innerText = w2;
-        document.getElementById('n3').innerText = w3;
-        document.getElementById('n4').innerText = w4;
-        document.getElementById('bridge-text').innerText = cat;
+    function setLogic(w1, w2, w3, w4, verb, btn) {
+        document.querySelectorAll('.btn-logic').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
         
+        document.getElementById('p1-1').innerText = w1;
+        document.getElementById('p1-2').innerText = w2;
+        document.getElementById('p2-1').innerText = w3;
+        document.getElementById('p2-2').innerText = w4;
+        document.getElementById('v1').innerText = verb;
+        document.getElementById('v2').innerText = verb;
+
         document.getElementById('trace-39').innerHTML = `
-            <b>Logic Compass:</b><br>
-            Rule: ${w1} is a ${cat.toLowerCase().replace(/-/g,' ')} of ${w2}.<br>
-            Verification: ${w3} is a ${cat.toLowerCase().replace(/-/g,' ')} of ${w4}.<br><br>
-            <i>Result: MATCH.</i>
+            <b>Testing Bridge:</b><br>
+            Pair 1: ${w2} ${verb} ${w1}<br>
+            Pair 2: ${w4} ${verb} ${w3}<br><br>
+            <i>Result: Valid Analogy.</i>
         `;
     }
-    window.onload = () => setAnalogy('FINGER','HAND','TOE','FOOT','PART-TO-WHOLE');
 </script>
 </body>
 </html>

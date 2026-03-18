@@ -23,18 +23,21 @@
         .tab-btn { background: #2d3748; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
         .tab-btn.active { background: var(--cognis-gold); }
 
-        #perm-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; max-height: 350px; overflow-y: auto; padding-bottom: 20px; }
-        .perm-row { display: flex; gap: 8px; justify-content: center; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; border: 1px solid #4a5568; transition: 0.3s; }
-        .token { width: 30px; height: 30px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 0.8rem; }
+        #perm-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; max-height: 380px; overflow-y: auto; padding-bottom: 20px; }
+        .perm-row { display: flex; gap: 8px; justify-content: center; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; border: 1px solid #4a5568; position: relative; transition: 0.3s; }
+        .token { width: 28px; height: 28px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 0.75rem; }
         .token-a { background: var(--color-a); } .token-b { background: var(--color-b); color: #1a202c; } .token-c { background: var(--color-c); } .token-d { background: var(--color-d); }
 
-        .perm-row.hidden { opacity: 0.05; filter: grayscale(1) blur(1px); pointer-events: none; }
-        .perm-row.winner { background: rgba(72, 187, 120, 0.2); border-color: var(--pass-green); transform: scale(1.05); }
+        /* The Crossing Out Logic */
+        .perm-row.eliminated { opacity: 0.3; filter: grayscale(0.8); }
+        .perm-row.eliminated::after { content: ''; position: absolute; top: 50%; left: 10%; right: 10%; height: 3px; background: var(--trap-red); transform: rotate(-10deg); border-radius: 2px; box-shadow: 0 0 5px var(--trap-red); }
+        .perm-row.winner { background: rgba(72, 187, 120, 0.2); border-color: var(--pass-green); transform: scale(1.05); box-shadow: 0 0 15px var(--pass-green); }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .rule-btn { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; font-weight: bold; }
-        .rule-btn.active { background: var(--cognis-gold); border-left: 5px solid white; }
-        .btn-reset { width: 100%; background: #e53e3e; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
+        .rule-btn { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; font-weight: bold; border-left: 4px solid transparent; transition: 0.2s; }
+        .rule-btn:hover { background: #5a677a; }
+        .rule-btn.active { background: var(--cognis-gold); border-left: 4px solid white; color: white; }
+        .btn-reset { width: 100%; background: #4a5568; color: white; border: 1px solid #718096; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
         
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
     </style>
@@ -45,11 +48,11 @@
     
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In logical ordering, we are creating a relative hierarchy. Since we rarely know the exact position of an item, we must use clues to eliminate impossible sequences. By visualizing the items as tokens on a line, we can see which arrangements survive the logic of "Stronger to the Right."</p>
+        <p>In logical ordering, we use clues to eliminate impossible sequences. By visualizing the items as color-coded tokens, we can systematically cross out any arrangement where the "Stronger" item is to the left of the "Weaker" one. Success comes from identifying the clues that narrow the field without over-relying on memory.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>A is taller than B. <br>Find the 2 possible orders.</div>
-            <div class="tier-card"><b>Average Year 4</b>B is taller than A, but shorter than C. <br>Establish the order.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>D is the tallest. <br>B is taller than A but shorter than C.</div>
+            <div class="tier-card"><b>Advanced Year 2</b><p>A is taller than B.</p><b>Goal:</b> Find the only valid arrangement on the line.</div>
+            <div class="tier-card"><b>Average Year 4</b><p>B is taller than A.<br>C is taller than B.</p><b>Goal:</b> Find the sequence.</div>
+            <div class="tier-card"><b>Advanced Year 5</b><p>D is the tallest.<br>B is taller than A.<br>C is taller than B.</p><b>Goal:</b> Determine the 2nd heaviest.</div>
         </div>
     </section>
 
@@ -70,9 +73,9 @@
         <div class="engine-container">
             <div class="controls">
                 <div id="rule-box"></div>
-                <button class="btn-reset" onclick="resetRules()">Reset Logic</button>
+                <button class="btn-reset" onclick="resetRules()">Reset All Clues</button>
             </div>
-            <div class="trace-log" id="trace-41">Rules active: None. Every permutation is possible.</div>
+            <div class="trace-log" id="trace-41">Toggle clues to cross out the impossible options.</div>
         </div>
     </section>
 
@@ -80,8 +83,8 @@
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
             <p><strong>The Trap:</strong> Fixing an item in "First Place" as soon as a clue mentions it is "stronger," without checking if there is another item stronger still.</p>
-            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin:15px 0;">
-            <p><strong>The Fix:</strong> Relative Anchoring. Instead of guessing a rank, use the clues to eliminate rows where the "Stronger" item is to the left of the "Weaker" one. The survivor is the answer.</p>
+            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin: 15px 0;">
+            <p><strong>The Fix:</strong> Permutation Elimination. Instead of guessing, look at the full "Possibility Space." Cross out every row where the Clue Rule is broken. The rows that aren't crossed out are your only remaining possibilities.</p>
         </div>
     </section>
 </div>
@@ -89,45 +92,37 @@
 <script>
     let currentItems = [];
     let activeRules = [];
-    const itemConfig = {
-        'A': 'token-a', 'B': 'token-b', 'C': 'token-c', 'D': 'token-d'
-    };
+    const itemConfig = { 'A': 'token-a', 'B': 'token-b', 'C': 'token-c', 'D': 'token-d' };
 
     function startSetup(size) {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById('tab-' + size).classList.add('active');
-        
         currentItems = ['A', 'B', 'C', 'D'].slice(0, size);
         activeRules = [];
         
-        // Generate Rules
         const ruleBox = document.getElementById('rule-box');
         ruleBox.innerHTML = '';
-        for(let i=0; i<size; i++) {
-            for(let j=0; j<size; j++) {
-                if(i !== j) {
-                    const r = { t: `${currentItems[i]} > ${currentItems[j]}`, a: currentItems[i], b: currentItems[j] };
-                    const btn = document.createElement('button');
-                    btn.className = 'rule-btn';
-                    btn.innerText = `Clue: ${r.t} (Stronger to Right)`;
-                    btn.onclick = () => toggleRule(r, btn);
-                    ruleBox.appendChild(btn);
-                }
-            }
-        }
         
+        // Custom meaningful clues for each size
+        let clues = [];
+        if(size === 2) clues = [{t:"A > B", a:"A", b:"B"}];
+        if(size === 3) clues = [{t:"B > A", a:"B", b:"A"}, {t:"C > B", a:"C", b:"B"}];
+        if(size === 4) clues = [{t:"D > A", a:"D", b:"A"}, {t:"B > A", a:"B", b:"A"}, {t:"C > B", a:"C", b:"B"}, {t:"D > C", a:"D", b:"C"}];
+
+        clues.forEach(r => {
+            const btn = document.createElement('button');
+            btn.className = 'rule-btn';
+            btn.innerText = `Clue: ${r.t} (Right is Stronger)`;
+            btn.onclick = () => toggleRule(r, btn);
+            ruleBox.appendChild(btn);
+        });
         updateSim();
     }
 
     function toggleRule(rule, btn) {
         const idx = activeRules.findIndex(r => r.t === rule.t);
-        if(idx > -1) {
-            activeRules.splice(idx, 1);
-            btn.classList.remove('active');
-        } else {
-            activeRules.push(rule);
-            btn.classList.add('active');
-        }
+        if(idx > -1) { activeRules.splice(idx, 1); btn.classList.remove('active'); }
+        else { activeRules.push(rule); btn.classList.add('active'); }
         updateSim();
     }
 
@@ -154,31 +149,25 @@
         let validCount = 0;
 
         allPerms.forEach(p => {
-            // Logic: All active rules must be true.
-            // Clue "A > B" means A index must be GREATER than B index (Larger to Right)
             const isValid = activeRules.every(r => p.indexOf(r.a) > p.indexOf(r.b));
             if(isValid) validCount++;
-
             const row = document.createElement('div');
-            row.className = 'perm-row' + (isValid ? '' : ' hidden');
-            p.forEach(letter => {
-                row.innerHTML += `<div class="token ${itemConfig[letter]}">${letter}</div>`;
-            });
+            row.className = 'perm-row' + (isValid ? '' : ' eliminated');
+            p.forEach(letter => { row.innerHTML += `<div class="token ${itemConfig[letter]}">${letter}</div>`; });
             container.appendChild(row);
         });
 
-        // Highlight single winner
         if(validCount === 1) {
-            document.querySelector('.perm-row:not(.hidden)').classList.add('winner');
+            const winner = document.querySelector('.perm-row:not(.eliminated)');
+            if(winner) winner.classList.add('winner');
         }
 
         document.getElementById('trace-41').innerHTML = `
-            Active Constraints: <b>${activeRules.length}</b><br>
-            Remaining Possibilities: <b>${validCount}</b><br><br>
-            <i>Result: ${validCount === 1 ? 'Logic complete. One valid order exists.' : 'Apply more clues to filter the list.'}</i>
+            Active Clues: <b>${activeRules.length}</b><br>
+            Surviving Solutions: <b>${validCount}</b><br><br>
+            <i>Note: The red strikes indicate impossible sequences.</i>
         `;
     }
-
     window.onload = () => startSetup(2);
 </script>
 </body>

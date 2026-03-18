@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 41: Relative Ordering | Cognis11</title>
+    <title>Module 41: Relativity Tension | Cognis11</title>
     <style>
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
@@ -12,20 +12,16 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 100px; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; min-height: 400px; position: relative; overflow: hidden; }
+        .logical-line { height: 4px; width: 100%; background: #4a5568; position: absolute; top: 140px; left: 0; }
+        .item-node { position: absolute; top: 140px; transform: translate(-50%, -50%); transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center; }
+        .node-box { width: 70px; background: var(--cognis-gold); padding: 10px 0; border-radius: 6px; font-weight: 900; color: #1a202c; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; position: relative; min-height: 350px; }
-        .logical-line { height: 4px; width: 100%; background: #4a5568; position: absolute; top: 120px; left: 0; }
-        .item { position: absolute; top: 120px; transform: translate(-50%, -50%); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center; color: white; }
-        .item-box { background: var(--cognis-gold); width: 60px; padding: 10px 0; border-radius: 4px; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-
-        .candidate-pool { display: flex; justify-content: space-around; position: absolute; bottom: 30px; width: 100%; padding: 0 20px; box-sizing: border-box; }
-        .col { display: flex; flex-direction: column; gap: 8px; align-items: center; }
-        .col-label { font-size: 0.6rem; color: #718096; text-transform: uppercase; margin-bottom: 5px; }
-        .pool-item { background: #2d3748; color: white; padding: 8px 12px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; border: 1px solid var(--cognis-gold); opacity: 0.8; transition: 0.2s; }
-        .pool-item:hover { opacity: 1; transform: translateY(-5px); }
+        .column-stage { display: flex; justify-content: space-around; position: absolute; bottom: 30px; width: 100%; }
+        .col { width: 200px; display: flex; flex-direction: column; gap: 10px; align-items: center; border-top: 2px dashed rgba(255,255,255,0.1); padding-top: 20px; }
+        .col-header { font-size: 0.6rem; color: #718096; text-transform: uppercase; margin-bottom: 10px; font-weight: bold; }
+        .pending-box { background: #2d3748; color: white; padding: 12px 20px; border-radius: 8px; cursor: pointer; border: 2px solid var(--cognis-gold); font-weight: bold; font-size: 0.8rem; transition: 0.2s; }
+        .pending-box:hover { background: #3d495d; transform: translateY(-5px); }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
@@ -36,75 +32,81 @@
     <div class="header"><h1>Module 41: Logical Ordering</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Logical ordering is about <b>Relativity</b>. You are rarely given an absolute start. You must "seed" the first item and then build the chain around it, pushing existing items aside as new spatial relationships are established.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>Sam is taller than Ben but shorter than Leo.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>A is taller than B. B is taller than C. Who is shortest?</div>
             <div class="tier-card"><b>Average Year 4</b>Monday is before Tuesday. Friday is after Wednesday.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Establish the 2nd heaviest from a complex clue set.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the 2nd heaviest person from the clue set.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <p style="color:#a0aec0; font-size:0.6rem; text-align:center; margin-bottom:40px;">CLUE: SAM IS TALLER THAN TOM BUT SHORTER THAN BEN. LEO IS TALLER THAN BEN.</p>
+            <p style="color:#a0aec0; text-align:center; font-size:0.7rem;">CLUE: SAM IS TALLER THAN TOM BUT SHORTER THAN BEN. LEO IS TALLER THAN BEN.</p>
             <div class="logical-line"></div>
             <div id="line-stage"></div>
-            <div class="candidate-pool">
-                <div class="col" id="col-left"><span class="col-label">SHORTER THAN TOM</span></div>
-                <div class="col" id="col-right"><span class="col-label">TALLER THAN TOM</span></div>
+            <div class="column-stage">
+                <div class="col"><div class="col-header">Slower/Shorter</div><div id="col-left"></div></div>
+                <div class="col"><div class="col-header">Faster/Taller</div><div id="col-right"></div></div>
             </div>
         </div>
     </section>
 
     <section class="phase">
-        <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <button onclick="resetOrdering()" style="background:var(--cognis-gold); color:white; border:none; padding:12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%;">RESET LOGIC</button>
+                <button onclick="resetAll()" style="background:var(--cognis-gold); color:white; border:none; padding:15px; border-radius:8px; width:100%; font-weight:bold; cursor:pointer;">RESTART CHAIN</button>
             </div>
             <div class="trace-log" id="trace-41">Click items in the columns to place them relative to Tom.</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid #e53e3e; border-radius: 12px; padding: 25px;">
-            <h2 style="color:#e53e3e; margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> Trying to memorize the list as you read it. In multi-step clues, your brain will often "swap" the positions of the middle items because it lacks a physical anchor.</p>
-            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin:15px 0;">
-            <p><strong>The Fix:</strong> The Spaced Anchor. Draw a line. Place the first person in the middle. Place everyone else as a "Neighbor" to that person. Let the line expand naturally as you fill the gaps.</p>
+        <div style="background: #fff5f5; border: 2px solid var(--cognis-gold); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--cognis-gold); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The Trap:</strong> Treating the items like a list rather than a map. If you only remember "who is next," you'll lose the gap where a third person might fit.</p>
+            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:15px 0;">
+            <p><strong>The Fix:</strong> The Elastic Line. Place the first person. Everyone else is either to their left or right. As the columns shrink, the line expands, showing you the true relative ranking without needing absolute numbers.</p>
         </div>
     </section>
 </div>
 
 <script>
-    let line = ['TOM'];
-    let pool = ['SAM', 'BEN', 'LEO'];
+    let currentLine = ['TOM'];
+    let leftPool = [];
+    let rightPool = ['SAM', 'BEN', 'LEO'];
+
     function render() {
         const stage = document.getElementById('line-stage');
-        const cLeft = document.getElementById('col-left');
-        const cRight = document.getElementById('col-right');
-        stage.innerHTML = '';
-        line.forEach((p, i) => {
-            const pos = ((i + 1) / (line.length + 1)) * 100;
-            stage.innerHTML += `<div class="item" style="left:${pos}%"><div class="item-box">${p}</div></div>`;
+        const cL = document.getElementById('col-left');
+        const cR = document.getElementById('col-right');
+        stage.innerHTML = ''; cL.innerHTML = ''; cR.innerHTML = '';
+
+        currentLine.forEach((name, i) => {
+            const pos = ((i + 1) / (currentLine.length + 1)) * 100;
+            stage.innerHTML += `<div class="item-node" style="left:${pos}%"><div class="node-box">${name}</div></div>`;
         });
-        cLeft.innerHTML = '<span class="col-label">SHORTER</span>';
-        cRight.innerHTML = '<span class="col-label">TALLER</span>';
-        pool.forEach(p => {
-            const el = `<div class="pool-item" onclick="place('${p}')">${p} ↑</div>`;
-            cRight.innerHTML += el; // All start as "Taller" for this specific example
-        });
+
+        leftPool.forEach(p => cL.innerHTML += `<div class="pending-box" onclick="moveToLine('${p}', 'left')">${p} ↑</div>`);
+        rightPool.forEach(p => cR.innerHTML += `<div class="pending-box" onclick="moveToLine('${p}', 'right')">${p} ↑</div>`);
     }
-    function place(p) {
-        pool = pool.filter(x => x !== p);
-        if(p === 'SAM') line.push('SAM'); // In reality, would insert at correct index
-        if(p === 'BEN') line.push('BEN');
-        if(p === 'LEO') line.push('LEO');
+
+    function moveToLine(name, dir) {
+        if(dir === 'left') {
+            leftPool = leftPool.filter(n => n !== name);
+            currentLine.unshift(name);
+        } else {
+            rightPool = rightPool.filter(n => n !== name);
+            // Conditional logic for this specific example
+            if(name === 'SAM') currentLine.push('SAM');
+            if(name === 'BEN') currentLine.push('BEN');
+            if(name === 'LEO') currentLine.push('LEO');
+        }
         render();
-        document.getElementById('trace-41').innerHTML = `Item <b>${p}</b> positioned. Spacing calibrated.`;
+        document.getElementById('trace-41').innerHTML = `<b>${name} placed.</b> Line spacing recalculated to 1/${currentLine.length+1} increments.`;
     }
-    function resetOrdering() { line=['TOM']; pool=['SAM','BEN','LEO']; render(); }
+
+    function resetAll() { currentLine=['TOM']; leftPool=[]; rightPool=['SAM','BEN','LEO']; render(); }
     window.onload = render;
 </script>
 </body>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 38: Semantic Precision | Cognis11</title>
+    <title>Module 38: Synonym Precision | Cognis11</title>
     <style>
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
@@ -17,17 +17,17 @@
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 80px 40px; margin: 30px 0; text-align: center; min-height: 250px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        #word-tag { font-family: 'Courier New', monospace; font-weight: 900; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #word-tag { font-family: 'Courier New', monospace; font-weight: 900; transition: all 0.2s ease-out; line-height: 1; }
         
-        .spectrum-container { width: 100%; height: 12px; background: #2d3748; border-radius: 10px; margin-top: 50px; position: relative; overflow: hidden; }
-        .spectrum-fill { height: 100%; background: linear-gradient(to right, #3182ce, #ecc94b, #e53e3e); width: 0%; transition: width 0.3s; }
+        .spectrum-container { width: 100%; height: 12px; background: #2d3748; border-radius: 10px; margin-top: 60px; position: relative; }
+        .spectrum-fill { height: 100%; background: linear-gradient(to right, #3182ce, #ecc94b, #e53e3e); width: 0%; border-radius: 10px; transition: width 0.1s; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .slider-box { text-align: center; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; border: 1px dashed var(--cognis-gold); }
+        .slider-control { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; border: 2px dashed var(--cognis-gold); text-align: center; }
         .btn-set { background: #4a5568; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; }
         .btn-set.active { background: var(--cognis-gold); font-weight: bold; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
         input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
     </style>
 </head>
 <body>
@@ -35,18 +35,17 @@
     <div class="header"><h1>Module 38: Synonym Precision</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Words aren't just definitions; they are <b>intensities</b>. A "breeze" and a "hurricane" are both wind, but they carry different logical weights. To master precision, you must calibrate the word to the event.</p>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>Which is stronger: <span>"Cool"</span> or <span>"Freezing"</span>?</div>
-            <div class="tier-card"><b>Average Year 4</b>Select the best fit: The light was [Dim / Bright / Dazzling].</div>
-            <div class="tier-card)<b>Advanced Year 5</b>Identify the negative intensity in <span>"Stubborn"</span> vs <span>"Determined"</span>.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>Which is stronger: <span>"Warm"</span> or <span>"Scorching"</span>?</div>
+            <div class="tier-card"><b>Average Year 4</b>Rank by intensity: Dim, Bright, Dazzling.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Contrast "Stingy" (Extreme) with "Thrifty" (Mild).</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div id="word-tag" style="color: #3182ce; font-size: 1.5rem;">CHILLY</div>
+            <div id="word-tag" style="color: #3182ce; font-size: 1.2rem;">CHILLY</div>
             <div class="spectrum-container"><div id="fill" class="spectrum-fill"></div></div>
         </div>
     </section>
@@ -55,26 +54,24 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <div style="margin-bottom: 15px;">
-                    <button class="btn-set active" onclick="setScale(['CHILLY','COLD','FRIGID'], this)">Scale: Temperature</button>
-                    <button class="btn-set" onclick="setScale(['HAPPY','JOYFUL','ECSTATIC'], this)">Scale: Emotion</button>
-                    <button class="btn-set" onclick="setScale(['DIM','BRIGHT','DAZZLING'], this)">Scale: Light</button>
-                </div>
-                <div class="slider-box">
-                    <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase; display:block; margin-bottom:10px;">↔ SLIDE TO INCREASE INTENSITY ↔</label>
+                <button class="btn-set active" onclick="setScale(['CHILLY','COLD','FRIGID'], this)">Temperature</button>
+                <button class="btn-set" onclick="setScale(['HAPPY','JOYFUL','ECSTATIC'], this)">Emotion</button>
+                <button class="btn-set" onclick="setScale(['DISLIKED','HATED','LOATHED'], this)">Aversion</button>
+                <div class="slider-control" style="margin-top:20px;">
+                    <label style="font-size:0.6rem; color:#a0aec0; display:block; margin-bottom:10px; text-transform:uppercase;">↔ Slide to Increase Nuance ↔</label>
                     <input type="range" id="nuance-slider" min="0" max="100" value="0" oninput="update38()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-38">Intensity at 0%. Awaiting calibration.</div>
+            <div class="trace-log" id="trace-38">Intensity: 0%. Word is at base level.</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> Choosing a synonym that is technically correct but "quiet" when the context is "loud" (e.g., saying a bomb was "loud" instead of "deafening").</p>
-            <hr style="border:0; border-top:1px solid rgba(217,83,79,0.2); margin: 15px 0;">
-            <p><strong>The Fix:</strong> The "Sentence Volume" test. If the sentence describes a major disaster, look for the word that has the largest "size" and highest "heat" on the spectrum.</p>
+            <p><strong>The Trap:</strong> Choosing a synonym that is technically correct but "quiet" when the context is "loud" (e.g. saying a fire was "warm" instead of "scorching").</p>
+            <hr style="border:0; border-top:1px solid rgba(217,83,79,0.2); margin:15px 0;">
+            <p><strong>The Fix:</strong> The "Sentence Volume" test. Look for the word whose intensity matches the drama of the event. If the event is extreme, choose the word that sits at the far right of the thermal scale.</p>
         </div>
     </section>
 </div>
@@ -85,6 +82,7 @@
         scale = s;
         document.querySelectorAll('.btn-set').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        document.getElementById('nuance-slider').value = 0;
         update38();
     }
     function update38() {
@@ -98,8 +96,8 @@
         if(val > 66) { word = scale[2]; color = "#e53e3e"; }
         tag.innerText = word;
         tag.style.color = color;
-        tag.style.fontSize = (1.5 + (val/33)) + "rem";
-        document.getElementById('trace-38').innerHTML = `Intensity: <b>${val}%</b><br>Nuance: <b>${word}</b>`;
+        tag.style.fontSize = (1.2 + (val/25)) + "rem";
+        document.getElementById('trace-38').innerHTML = `<b>Intensity:</b> ${val}%<br><b> Nuance:</b> ${word}`;
     }
 </script>
 </body>

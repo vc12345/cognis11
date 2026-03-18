@@ -12,24 +12,15 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 120px; line-height: 1.5; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
-
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 100px 40px; margin: 30px 0; display: flex; justify-content: center; align-items: center; min-height: 400px; }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
+        #stack-svg { width: 100%; max-width: 400px; height: 350px; }
         
-        /* True 3D CSS Stack */
-        .stack-3d { position: relative; width: 150px; height: 150px; transform: rotateX(60deg) rotateZ(45deg); transform-style: preserve-3d; }
-        .cube { position: absolute; width: 40px; height: 40px; transform-style: preserve-3d; transition: 0.4s; }
-        .face { position: absolute; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.4); box-sizing: border-box; }
-        .f-top { transform: translateZ(40px); background: var(--cognis-gold); }
-        .f-left { transform: rotateY(-90deg) translateX(-20px) translateZ(20px); background: #b58d4a; }
-        .f-right { transform: rotateX(-90deg) translateY(20px) translateZ(20px); background: #8e6c38; }
+        .cube-top { fill: var(--cognis-gold); stroke: #fff; stroke-width: 1; }
+        .cube-left { fill: #b58d4a; stroke: #fff; stroke-width: 1; }
+        .cube-right { fill: #8e6c38; stroke: #fff; stroke-width: 1; }
 
-        /* X-Ray Mode */
-        .xray .cube { opacity: 0.2; }
-        .xray .hidden-support { opacity: 1 !important; }
-        .xray .hidden-support .face { background: var(--trap-red) !important; border: 1px solid white; }
+        .xray .cube-top, .xray .cube-left, .xray .cube-right { opacity: 0.1; }
+        .xray .hidden-marker { fill: var(--trap-red) !important; opacity: 1 !important; stroke: #fff; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .btn-action { background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-weight: 900; cursor: pointer; text-transform: uppercase; }
@@ -41,19 +32,9 @@
     <div class="header"><h1>Module 51: Block Counting</h1></div>
     
     <section class="phase">
-        <h2>Phase 1: The X-Ray</h2>
-        <p>Block counting is the study of <b>Inferred Volume</b>. You must assume the "Rule of Gravity": if a block is sitting at Level 3, there must be two hidden blocks underneath it. Instead of counting faces, count <b>Vertical Columns</b> to ensure no foundation block is missed.</p>
-        <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b><p>A 2x2x2 cube with one corner missing. (7 total).</p></div>
-            <div class="tier-card"><b>Average Year 4</b><p>An irregular stack where one column is completely hidden from the front.</p></div>
-            <div class="tier-card"><b>Advanced Year 5</b><p>Identify the hidden foundation count in a 4-level complex tower.</p></div>
-        </div>
-    </section>
-
-    <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div id="stack" class="stack-3d"></div>
+            <svg id="stack-svg" viewBox="0 0 400 350"></svg>
         </div>
     </section>
 
@@ -61,50 +42,68 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <button class="btn-action" onclick="toggleXRay()">Activate X-Ray Mode</button>
-                <button onclick="renderNew()" style="background:transparent; color:#a0aec0; border:none; margin-top:15px; cursor:pointer; font-size:0.7rem; text-decoration:underline; width:100%;">GENERATE RANDOM STACK</button>
+                <button class="btn-action" onclick="toggleXRay()">Toggle X-Ray Vision</button>
+                <button onclick="render()" style="background:transparent; color:#a0aec0; border:none; margin-top:15px; cursor:pointer; font-size:0.7rem; text-decoration:underline; width:100%;">GENERATE NEW STACK</button>
             </div>
-            <div class="trace-log" id="trace-51">Audit: Calculate heights per column.</div>
+            <div class="trace-log" id="trace-51">Audit: Counting heights per coordinate.</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> Counting every visible square as a block. A corner block shows 3 faces, but it is still only 1 block.</p>
+            <p><strong>The Trap:</strong> Counting visible faces. A single corner block can show 3 faces, making you count it as 3 blocks.</p>
             <hr style="border:0; border-top:1px solid rgba(217,83,79,0.1); margin: 15px 0;">
-            <p><strong>The Fix:</strong> The Column Tally. Look at the top face of every "Skyscraper." Write down its height (e.g. 3 blocks). Move to the next. Summing the column heights is the only way to avoid the face-counting trap.</p>
+            <p><strong>The Fix:</strong> The Column Tally. Pick the top-most face in a column. Note its height (e.g. 3 blocks). Move to the next. Summing column heights prevents double-counting.</p>
         </div>
     </section>
 </div>
 
 <script>
-    function renderNew() {
-        const stack = document.getElementById('stack');
-        stack.innerHTML = '';
+    function drawCube(svg, x, y, z, isHidden) {
+        const isoX = 200 + (x - y) * 35;
+        const isoY = 250 + (x + y) * 20 - z * 40;
+        
+        const top = `M${isoX},${isoY-40} l35,20 l-35,20 l-35,-20 z`;
+        const left = `M${isoX-35},${isoY-20} l0,40 l35,20 l0,-40 z`;
+        const right = `M${isoX},${isoY} l0,40 l35,-20 l0,-40 z`;
+
+        const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        if(isHidden) group.setAttribute("class", "hidden-group");
+        
+        group.innerHTML = `
+            <path d="${top}" class="cube-top ${isHidden ? 'hidden-marker' : ''}" />
+            <path d="${left}" class="cube-left ${isHidden ? 'hidden-marker' : ''}" />
+            <path d="${right}" class="cube-right ${isHidden ? 'hidden-marker' : ''}" />
+        `;
+        svg.appendChild(group);
+    }
+
+    function render() {
+        const svg = document.getElementById('stack-svg');
+        svg.innerHTML = '';
         let total = 0, hidden = 0;
+        
+        // Use back-to-front rendering for correct overlap
         for(let x=0; x<3; x++) {
             for(let y=0; y<3; y++) {
                 let h = Math.floor(Math.random() * 4);
                 total += h;
                 for(let z=0; z<h; z++) {
-                    const cube = document.createElement('div');
-                    cube.className = 'cube' + (z < h-1 ? ' hidden-support' : '');
-                    if(z < h-1) hidden++;
-                    cube.style.transform = `translateX(${x*42}px) translateY(${y*42}px) translateZ(${z*42}px)`;
-                    cube.innerHTML = '<div class="face f-top"></div><div class="face f-left"></div><div class="face f-right"></div>';
-                    stack.appendChild(cube);
+                    let isUnder = (z < h - 1);
+                    if(isUnder) hidden++;
+                    drawCube(svg, x, y, z, isUnder);
                 }
             }
         }
-        document.getElementById('trace-51').innerHTML = `Total Blocks: <b>${total}</b><br>Hidden Foundations: <b>${hidden}</b> (Revealed in X-Ray)`;
+        document.getElementById('trace-51').innerHTML = `Total Blocks: <b>${total}</b><br>Hidden Foundations: <b>${hidden}</b>`;
     }
 
     function toggleXRay() {
-        document.getElementById('stack').classList.toggle('xray');
+        document.getElementById('stack-svg').classList.toggle('xray');
     }
 
-    window.onload = renderNew;
+    window.onload = render;
 </script>
 </body>
 </html>

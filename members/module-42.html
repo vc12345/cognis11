@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 42: Rotational Invariance | Cognis11</title>
+    <style>
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 120px; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; text-align: center; }
+        .spin-chamber { width: 200px; height: 200px; margin: 0 auto; position: relative; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .shape-l { width: 40px; height: 120px; background: var(--cognis-gold); position: absolute; left: 80px; top: 40px; border-radius: 4px; }
+        .shape-l::after { content: ''; width: 60px; height: 40px; background: var(--cognis-gold); position: absolute; bottom: 0; left: 0; border-radius: 4px; }
+        .dot { width: 10px; height: 10px; background: white; border-radius: 50%; position: absolute; top: 5px; left: 5px; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .btn-angle { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; font-weight: bold; }
+        .btn-angle.active { background: var(--cognis-gold); }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+    </style>
+</head>
+<body>
+<div class="module-card">
+    <div class="header"><h1>Module 42: Rotational Invariance</h1></div>
+    
+    <section class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A shape remains identical even if it is spinning. The key to solving "Which shape is the same?" is <b>Vertex Tracking</b>—picking a specific feature (like a dot or a notch) and checking if its position relative to the rest of the shape remains constant as it turns.</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>Identify a triangle after a 90° turn.</div>
+            <div class="tier-card"><b>Average Year 4</b>Distinguish between a turned "L" and a flipped "L".</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the shape after a 135° clockwise rotation.</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="simulation-area">
+            <div id="chamber" class="spin-chamber">
+                <div class="shape-l"><div class="dot"></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <button class="btn-angle" onclick="rotate(0, this)">0° (Original)</button>
+                <button class="btn-angle" onclick="rotate(90, this)">90° Clockwise</button>
+                <button class="btn-angle" onclick="rotate(180, this)">180° Inversion</button>
+                <button class="btn-angle" onclick="rotate(270, this)">270° (90° ACW)</button>
+            </div>
+            <div class="trace-log" id="trace-42">Watch the white dot. It tracks the "top" vertex during the spin.</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The Trap:</strong> Confusing a <b>Rotation</b> with a <b>Reflection</b>. A rotation can be undone by spinning the page; a reflection (flip) can only be undone by looking at it in a mirror.</p>
+            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin:15px 0;">
+            <p><strong>The Fix:</strong> Use the "Clockwise Rule." Look at the sequence of features going clockwise around the shape. In a rotation, the order stays the same. In a reflection, the order reverses.</p>
+        </div>
+    </section>
+</div>
+
+<script>
+    function rotate(deg, btn) {
+        document.getElementById('chamber').style.transform = `rotate(${deg}deg)`;
+        document.querySelectorAll('.btn-angle').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('trace-42').innerHTML = `
+            <b>Rotation Engine:</b><br>
+            Angle: ${deg}°<br>
+            Vertex Logic: The white dot has moved, but its relationship to the long arm is unchanged.
+        `;
+    }
+</script>
+</body>
+</html>

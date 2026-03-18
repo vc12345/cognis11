@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 43: Reflection Logic | Cognis11</title>
+    <style>
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 100px; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #f8fafc; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; display: flex; align-items: center; justify-content: center; gap: 40px; }
+        .grid-canvas { width: 200px; height: 200px; border: 1px solid #cbd5e0; position: relative; background: white; }
+        .mirror-line { position: absolute; background: var(--trap-red); opacity: 0.6; box-shadow: 0 0 10px var(--trap-red); }
+        .mirror-v { width: 4px; height: 100%; left: 50%; top: 0; transform: translateX(-50%); }
+        .mirror-h { width: 100%; height: 4px; top: 50%; left: 0; transform: translateY(-50%); }
+
+        .shape-box { width: 50px; height: 50px; background: var(--cognis-blue); position: absolute; border-radius: 4px 15px 4px 4px; }
+        #original { left: 40px; top: 75px; }
+        #reflection { transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .btn-axis { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; font-weight: bold; }
+        .btn-axis.active { background: var(--cognis-gold); }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+    </style>
+</head>
+<body>
+<div class="module-card">
+    <div class="header"><h1>Module 43: Reflection Logic</h1></div>
+    
+    <section class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>Reflection is a "Mirror Image" operation. Unlike rotation, it creates a version of the shape that cannot be reached by spinning. The distance from the mirror line to the "Original" must be exactly the same as the distance to the "Reflection."</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>Reflect a square across a vertical axis.</div>
+            <div class="tier-card"><b>Average Year 4</b>Reflect an asymmetric flag horizontally.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Reflect a shape across a diagonal line ($y=x$).</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="simulation-area">
+            <div class="grid-canvas">
+                <div id="m-line" class="mirror-line mirror-v"></div>
+                <div id="original" class="shape-box"></div>
+                <div id="reflection" class="shape-box" style="background: var(--cognis-gold); opacity: 0.5;"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <button class="btn-axis active" onclick="reflect('V', this)">Vertical Axis (X-Flip)</button>
+                <button class="btn-axis" onclick="reflect('H', this)">Horizontal Axis (Y-Flip)</button>
+            </div>
+            <div class="trace-log" id="trace-43">Select an axis to see the "Mirror Space" activate.</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The Trap:</strong> The "Slide" Trap. Students often just move the shape to the other side of the line without flipping it (Translation instead of Reflection).</p>
+            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin:15px 0;">
+            <p><strong>The Fix:</strong> The "Finger Test." If you put your finger on a point of the original, it should be the same distance from the mirror line as the corresponding point on the reflection. If one points left, the other MUST point right.</p>
+        </div>
+    </section>
+</div>
+
+<script>
+    function reflect(axis, btn) {
+        const mLine = document.getElementById('m-line');
+        const refl = document.getElementById('reflection');
+        document.querySelectorAll('.btn-axis').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        if(axis === 'V') {
+            mLine.className = "mirror-line mirror-v";
+            refl.style.left = "110px";
+            refl.style.top = "75px";
+            refl.style.transform = "scaleX(-1)";
+        } else {
+            mLine.className = "mirror-line mirror-h";
+            refl.style.left = "40px";
+            refl.style.top = "75px";
+            // For horizontal reflection, it flips vertically below the line
+            // Original is at top:75. Center is 100. Diff is 25. Mirror is at 125.
+            refl.style.top = "125px";
+            refl.style.transform = "scaleY(-1)";
+        }
+        document.getElementById('trace-43').innerHTML = `
+            <b>Reflection Matrix:</b><br>
+            Mode: ${axis === 'V' ? 'X-Axis Flip' : 'Y-Axis Flip'}<br>
+            Result: Shape handedness has reversed.
+        `;
+    }
+    window.onload = () => reflect('V', document.querySelector('.btn-axis'));
+</script>
+</body>
+</html>

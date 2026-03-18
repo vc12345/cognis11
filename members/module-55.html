@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 55: Fact vs. Opinion | Cognis11</title>
+    <style>
+        :root { 
+            --cognis-blue: #002d5b; 
+            --cognis-gold: #c5a059; 
+            --cognis-light: #f4f7f9; 
+            --pass-green: #48bb78; 
+            --fail-red: #d9534f; 
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; line-height: 1.6; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; margin-bottom: 20px; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 120px; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .anatomy-container { text-align: center; padding: 20px 0; }
+        .parent-bridge { background: #fffbeb; border-left: 4px solid #f6e05e; padding: 15px; margin-top: 20px; font-size: 0.85rem; color: #744210; border-radius: 0 8px 8px 0; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 20px 0; color: white; }
+        .logic-well { 
+            font-size: 1.2rem; 
+            margin-bottom: 30px; 
+            padding: 30px; 
+            background: rgba(255,255,255,0.05); 
+            border-radius: 8px;
+            border: 1px solid #4a5568;
+            text-align: center;
+        }
+        .token { 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            border: 1px solid transparent;
+            margin: 0 2px;
+            transition: 0.2s;
+        }
+        .token:hover { background: rgba(255,255,255,0.1); }
+        .token.fact { border-color: var(--pass-green); color: var(--pass-green); }
+        .token.opinion { border-color: var(--cognis-gold); color: var(--cognis-gold); font-style: italic; }
+
+        .engine-interface { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
+        .trace-log { 
+            background: rgba(0,0,0,0.3); 
+            padding: 20px; 
+            border-radius: 8px; 
+            font-family: 'Consolas', monospace; 
+            font-size: 0.85rem; 
+            border-left: 4px solid var(--cognis-gold); 
+            height: 140px; 
+            overflow-y: auto; 
+            color: #48bb78;
+        }
+        
+        .btn-reset { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; font-weight: bold; }
+
+        .saboteur-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px; }
+        .saboteur-panel { border-radius: 12px; padding: 25px; font-size: 0.9rem; }
+        .trap { background: #fff5f5; border: 2px solid var(--fail-red); }
+        .fix { background: #f0fff4; border: 2px solid var(--pass-green); }
+        .saboteur-panel h3 { margin-top: 0; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="module-card">
+    <div class="header"><h1>Module 55: Fact vs. Opinion</h1></div>
+
+    <section class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A <b>Fact</b> is a statement that can be proven true or false with data, a ruler, or a clock. An <b>Opinion</b> is a value judgment—a feeling or belief that cannot be measured. The logic of 11+ exams often hides opinions inside sentences that look like facts.</p>
+        
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>The sun is a star. (Fact) <br>The sun is pretty. (Opinion)</div>
+            <div class="tier-card"><b>Average Year 4</b>Everest is 8,848m high. (Fact) <br>Everest is the best mountain. (Opinion)</div>
+            <div class="tier-card"><b>Advanced Year 5</b>The 40-minute speech was a boring waste of time. <br><b>Mix:</b> [Fact] + [Opinion]</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="anatomy-container">
+            <svg width="500" height="100" viewBox="0 0 500 100">
+                <rect x="20" y="30" width="150" height="40" rx="5" fill="#002d5b"/>
+                <text x="95" y="55" font-family="Segoe UI" font-size="12" text-anchor="middle" fill="white" font-weight="bold">THE DATA BASE</text>
+                
+                <text x="210" y="55" font-family="Segoe UI" font-size="20" fill="#c5a059">+</text>
+                
+                <rect x="250" y="30" width="150" height="40" rx="5" fill="none" stroke="#c5a059" stroke-width="2" stroke-dasharray="4"/>
+                <text x="325" y="55" font-family="Segoe UI" font-size="12" text-anchor="middle" fill="#002d5b" font-weight="bold">OPINION FILTER</text>
+            </svg>
+        </div>
+        <div class="parent-bridge">
+            <strong>Parent Instruction:</strong> Use the "Prove It" test. Ask your child: "Could I prove this with a camera or a calculator?" If the answer is "No," it's an opinion. Words like <i>should, best, beautiful,</i> and <i>worst</i> are always opinions.
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="simulation-area">
+            <div class="logic-well" id="logic-well">
+                "The <span class="token" onclick="classify(this, 'o')">stunning</span> <span class="token" onclick="classify(this, 'f')">5-star hotel</span> has <span class="token" onclick="classify(this, 'f')">42 rooms</span>."
+            </div>
+
+            <div class="engine-interface">
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase;">Classification Task</label>
+                    <p style="font-size:0.8rem; color:#cbd5e0;">Click on the words to identify the <b>Facts</b> and the <b>Opinion Filters</b>.</p>
+                    <button class="btn-reset" onclick="resetSim()">Reset Analysis</button>
+                </div>
+                <div class="trace-log" id="log-55">READY. CLICK WORDS TO ANALYZE...</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 4: The Saboteur</h2>
+        <div class="saboteur-grid">
+            <div class="saboteur-panel trap">
+                <h3 style="color:var(--fail-red);">The Trap</h3>
+                <p>The <b>Expert Fallacy</b>. If the text says, "The world-famous scientist said the movie was terrible," students often label "terrible" as a fact because a famous person said it. It remains an opinion regardless of who said it.</p>
+            </div>
+            <div class="saboteur-panel fix">
+                <h3 style="color:var(--pass-green);">The Fix</h3>
+                <p>The <b>Quotation Shield</b>. Any word that describes a <i>feeling</i> or uses a <i>value-adjective</i> (good, bad, difficult) is an opinion, even if it is inside a quote. If you can't measure it with a machine, it's not a fact.</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    const log = document.getElementById('log-55');
+
+    function classify(el, type) {
+        if (type === 'f') {
+            el.classList.add('fact');
+            log.innerHTML += `<br>> FACT CONFIRMED: "${el.innerText}" can be verified by counting or records.`;
+        } else {
+            el.classList.add('opinion');
+            log.innerHTML += `<br>> OPINION FILTER: "${el.innerText}" is a personal judgment.`;
+        }
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function resetSim() {
+        document.querySelectorAll('.token').forEach(t => t.className = 'token');
+        log.innerHTML = "SYSTEM RESET. RE-CALIBRATING...";
+    }
+</script>
+
+</body>
+</html>

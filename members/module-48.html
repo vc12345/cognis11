@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 48: Unfold Engine | Cognis11</title>
+    <title>Module 48: Blueprint Engine | Cognis11</title>
     <style>
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
@@ -12,22 +12,14 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; text-align: center; }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; display: flex; justify-content: space-around; align-items: center; }
         
-        /* The Unfolding Visual */
-        .stage { width: 300px; height: 300px; margin: 0 auto; position: relative; perspective: 1000px; cursor: pointer; }
-        .base { position: absolute; width: 100px; height: 100px; background: var(--cognis-gold); top: 100px; left: 100px; border: 2px solid white; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        .flap { position: absolute; width: 0; height: 0; border-left: 50px solid transparent; border-right: 50px solid transparent; border-bottom: 90px solid #4a5568; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); transform-origin: bottom; }
+        .solid-icon { width: 100px; height: 100px; background: #2d3748; border: 2px solid var(--cognis-gold); border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.6rem; text-align: center; }
+        .solid-icon:hover { background: #3d495d; }
         
-        .flap-top { bottom: 100%; left: 0; transform: rotateX(70deg); }
-        .flap-bottom { top: 100%; left: 0; transform: rotateX(-70deg) rotate(180deg); transform-origin: top; }
-        .flap-left { right: 100%; top: 5px; transform: rotateY(-70deg) rotate(-90deg); transform-origin: right; }
-        .flap-right { left: 100%; top: 5px; transform: rotateY(70deg) rotate(90deg); transform-origin: left; }
-
-        .stage.open .flap-top { transform: rotateX(0deg); }
-        .stage.open .flap-bottom { transform: rotateX(0deg) rotate(180deg); }
-        .stage.open .flap-left { transform: rotateY(0deg) rotate(-90deg); }
-        .stage.open .flap-right { transform: rotateY(0deg) rotate(90deg); }
+        .net-reveal { width: 200px; height: 200px; background: rgba(255,255,255,0.05); border: 1px dashed #4a5568; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        .net-svg { width: 150px; height: 150px; fill: none; stroke: var(--cognis-gold); stroke-width: 2; transition: 0.5s; opacity: 0; }
+        .net-svg.visible { opacity: 1; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
@@ -35,27 +27,25 @@
 </head>
 <body>
 <div class="module-card">
-    <div class="header"><h1>Module 48: Non-Standard Net Unfolding</h1></div>
+    <div class="header"><h1>Module 48: Non-Standard Nets</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>Count the triangles in a pyramid net.</div>
-            <div class="tier-card"><b>Average Year 4</b>Match a square-based pyramid to its flat net.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Identify the net for an irregular triangular prism.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>Count the triangles in a pyramid.</div>
+            <div class="tier-card"><b>Average Year 4</b>Match a triangular prism to its net.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the base shape of an irregular solid.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <p style="color:#a0aec0; font-size:0.6rem; text-transform:uppercase; margin-bottom:20px;">Click the shape to open the net</p>
-            <div class="stage" id="pyramid" onclick="toggleNet()">
-                <div class="base">
-                    <div class="flap flap-top"></div>
-                    <div class="flap flap-bottom"></div>
-                    <div class="flap flap-left"></div>
-                    <div class="flap flap-right"></div>
-                </div>
+            <div class="solid-icon" onclick="showNet('pyramid')">SQUARE<br>PYRAMID</div>
+            <div class="solid-icon" onclick="showNet('prism')">TRIANGULAR<br>PRISM</div>
+            <div class="net-reveal">
+                <svg id="net-svg" class="net-svg" viewBox="0 0 100 100">
+                    <path id="net-path" d="" />
+                </svg>
             </div>
         </div>
     </section>
@@ -64,29 +54,41 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <p style="font-size:0.8rem; color:#a0aec0;">Observe how the 4 triangular faces lay flat when the 3D bond is broken.</p>
+                <p style="font-size:0.8rem; color:#a0aec0;">Click a solid on the left to reveal its 2D net blueprint.</p>
             </div>
-            <div class="trace-log" id="trace-48">Shape State: Folded (3D)</div>
+            <div class="trace-log" id="trace-48">Select a solid to see the net.</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--cognis-gold); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--cognis-gold); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> The "Floating Flap." Picking a net where the side faces are not attached to the edges of the base.</p>
-            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 15px 0;">
-            <p><strong>The Fix:</strong> Edge Counting. If the base has 4 sides, there <b>must</b> be 4 flaps. If the base is a hexagon, there must be 6. Always count the perimeter of the main base first.</p>
+            <p><strong>The Trap:</strong> The "Face Inventory" Error. Choosing a net that has the right number of faces, but the wrong shapes (e.g., a prism with 5 squares instead of 3 rectangles and 2 triangles).
+            <br><br><strong>The Fix:</strong> The Perimeter Match. Count the sides of the "Base" shape. Every side of the base must have exactly one face attached to it in the final 3D form.</p>
         </div>
     </section>
 </div>
 
 <script>
-    function toggleNet() {
-        const stage = document.getElementById('pyramid');
+    const blueprints = {
+        'pyramid': {
+            d: "M 40,40 h 20 v 20 h -20 z M 40,40 l 10,-30 l 10,30 M 60,40 l 30,10 l -30,10 M 60,60 l -10,30 l -10,-30 M 40,60 l -30,-10 l 30,-10",
+            desc: "Square Base + 4 Triangular Flaps"
+        },
+        'prism': {
+            d: "M 20,40 h 20 v 20 h -20 z M 40,40 h 20 v 20 h -20 z M 60,40 h 20 v 20 h -20 z M 40,40 l 10,-30 l 10,30 M 40,60 l 10,30 l 10,-30",
+            desc: "3 Rectangular Sides + 2 Triangular Ends"
+        }
+    };
+
+    function showNet(id) {
+        const path = document.getElementById('net-path');
+        const svg = document.getElementById('net-svg');
         const trace = document.getElementById('trace-48');
-        stage.classList.toggle('open');
-        const isOpen = stage.classList.contains('open');
-        trace.innerHTML = isOpen ? "Shape State: Unfolded (Net View)" : "Shape State: Folded (3D View)";
+        
+        path.setAttribute('d', blueprints[id].d);
+        svg.classList.add('visible');
+        trace.innerHTML = `<b>Net Detected:</b><br>${blueprints[id].desc}`;
     }
 </script>
 </body>

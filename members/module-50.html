@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 50: The Crease Mirror | Cognis11</title>
+    <title>Module 50: Paper Folding | Cognis11</title>
     <style>
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
@@ -12,14 +12,18 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 120px; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; text-align: center; }
-        .paper-canvas { width: 200px; height: 200px; background: white; margin: 0 auto; position: relative; border: 2px solid #4a5568; }
-        .crease { position: absolute; background: var(--cognis-gold); opacity: 0.3; }
-        .crease-v { width: 2px; height: 100%; left: 50%; top: 0; }
-        .crease-h { height: 2px; width: 100%; top: 50%; left: 0; }
+        .paper-canvas { width: 220px; height: 220px; background: white; margin: 0 auto; position: relative; border: 4px solid #4a5568; }
+        .fold-line { position: absolute; background: var(--cognis-gold); opacity: 0.4; pointer-events: none; }
+        .fold-v { width: 2px; height: 100%; left: 50%; top: 0; }
+        .fold-h { height: 2px; width: 100%; top: 50%; left: 0; }
         
-        .hole { width: 20px; height: 20px; background: #1a202c; border-radius: 50%; position: absolute; transition: transform 0.4s, opacity 0.4s; transform: scale(0); opacity: 0; }
-        .hole.visible { transform: scale(1); opacity: 1; }
+        .punch { width: 20px; height: 20px; background: #1a202c; border-radius: 50%; position: absolute; transform: scale(0); transition: 0.4s; }
+        .punch.active { transform: scale(1); box-shadow: 0 0 10px rgba(0,0,0,0.5); }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .btn-unfold { background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; width: 100%; }
@@ -32,22 +36,21 @@
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b><p>One fold (Half). One hole. Where is the second hole?</p></div>
-            <div class="tier-card"><b>Average Year 4</b><p>Two folds (Quarter). One hole. Predict the 4-hole pattern.</p></div>
-            <div class="tier-card"><b>Advanced Year 5</b><p>Diagonal folds with multiple punches in complex positions.</p></div>
+            <div class="tier-card"><b>Advanced Year 2</b><p>One fold, one punch. Predict the final 2 holes.</p></div>
+            <div class="tier-card"><b>Average Year 4</b><p>Horizontal and vertical folds. Predict the 4-hole pattern.</p></div>
+            <div class="tier-card"><b>Advanced Year 5</b><p>Multiple punches in a triple-folded complex grid.</p></div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div class="paper-canvas" id="canvas">
-                <div class="crease crease-v"></div>
-                <div class="crease crease-h"></div>
-                <div class="hole" id="h1" style="top:40px; left:40px;"></div>
-                <div class="hole" id="h2" style="top:40px; left:140px;"></div>
-                <div class="hole" id="h3" style="top:140px; left:40px;"></div>
-                <div class="hole" id="h4" style="top:140px; left:140px;"></div>
+            <div class="paper-canvas">
+                <div class="fold-line fold-v"></div><div class="fold-line fold-h"></div>
+                <div class="punch" id="p1" style="top:40px; left:40px;"></div>
+                <div class="punch" id="p2" style="top:40px; left:160px;"></div>
+                <div class="punch" id="p3" style="top:160px; left:40px;"></div>
+                <div class="punch" id="p4" style="top:160px; left:160px;"></div>
             </div>
         </div>
     </section>
@@ -56,42 +59,34 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <button class="btn-unfold" onclick="unfold()">Unfold (Step-by-Step)</button>
-                <button onclick="resetPaper()" style="background:transparent; color:#a0aec0; border:none; margin-top:15px; cursor:pointer; font-size:0.7rem;">RESET FOLDS</button>
+                <button class="btn-unfold" onclick="unfold()">Unfold Page Step-by-Step</button>
+                <button onclick="resetPaper()" style="background:transparent; color:#a0aec0; border:none; margin-top:15px; cursor:pointer; font-size:0.7rem;">RESET PAGE</button>
             </div>
-            <div class="trace-log" id="trace-50">State: Folded into Quarter. Punching Top-Left...</div>
+            <div class="trace-log" id="trace-50">State: Folded into Quarters. Punching Top-Left...</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--cognis-gold); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--cognis-gold); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> The "Distance Drift." Students often put the reflected hole in the wrong part of the quadrant (e.g., reflecting a corner hole into the center).</p>
+            <p><strong>The Trap:</strong> The "Asymmetric Slide." Thinking the hole simply moves to the other side without mirroring its position (Translation instead of Reflection).</p>
             <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 15px 0;">
-            <p><strong>The Fix:</strong> Mirror Invariance. If the hole is 1cm from the fold line, its reflection **must** be 1cm from the fold line on the other side. Use the crease as a ruler, not just a line.</p>
+            <p><strong>The Fix:</strong> The Crease Ruler. If the punch is 2cm from the fold, its twin must be 2cm from the fold on the other side. Always work backwards from the last fold to the first.</p>
         </div>
     </section>
 </div>
 
 <script>
-    let foldState = 0;
+    let step = 0;
     function unfold() {
-        if(foldState === 0) {
-            document.getElementById('h1').classList.add('visible');
-            document.getElementById('trace-50').innerText = "Step 1: Original punch in Top-Left.";
-        } else if(foldState === 1) {
-            document.getElementById('h2').classList.add('visible');
-            document.getElementById('trace-50').innerText = "Step 2: Unfolding Vertical. Hole reflects Right.";
-        } else if(foldState === 2) {
-            document.getElementById('h3').classList.add('visible');
-            document.getElementById('h4').classList.add('visible');
-            document.getElementById('trace-50').innerText = "Step 3: Unfolding Horizontal. Both holes reflect Down.";
-        }
-        foldState++;
+        if(step === 0) { document.getElementById('p1').classList.add('active'); document.getElementById('trace-50').innerText = "Step 1: Original punch applied."; }
+        else if(step === 1) { document.getElementById('p2').classList.add('active'); document.getElementById('trace-50').innerText = "Step 2: Unfolded Vertically. Hole reflected Right."; }
+        else if(step === 2) { document.getElementById('p3').classList.add('active'); document.getElementById('p4').classList.add('active'); document.getElementById('trace-50').innerText = "Step 3: Unfolded Horizontally. All holes reflected Down."; }
+        step++;
     }
     function resetPaper() {
-        foldState = 0;
-        document.querySelectorAll('.hole').forEach(h => h.classList.remove('visible'));
+        step = 0;
+        document.querySelectorAll('.punch').forEach(p => p.classList.remove('active'));
         document.getElementById('trace-50').innerText = "Reset. Ready to unfold.";
     }
 </script>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 49: The Cube Spinner | Cognis11</title>
+    <style>
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 120px; line-height: 1.5; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 100px 40px; margin: 30px 0; perspective: 1000px; display: flex; justify-content: center; }
+        
+        /* 3D Cube CSS */
+        .cube { width: 100px; height: 100px; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .face { position: absolute; width: 100px; height: 100px; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; background: rgba(197, 160, 89, 0.9); color: #1a202c; }
+        
+        .front  { transform: rotateY(0deg) translateZ(50px); }
+        .back   { transform: rotateY(180deg) translateZ(50px); background: #3182ce; color: white; }
+        .right  { transform: rotateY(90deg) translateZ(50px); background: #48bb78; color: white; }
+        .left   { transform: rotateY(-90deg) translateZ(50px); background: #e53e3e; color: white; }
+        .top    { transform: rotateX(90deg) translateZ(50px); background: #f6ad55; color: white; }
+        .bottom { transform: rotateX(-90deg) translateZ(50px); background: #805ad5; color: white; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .btn-spin { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; font-weight: bold; }
+        .btn-spin:hover { background: var(--cognis-gold); }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+    </style>
+</head>
+<body>
+<div class="module-card">
+    <div class="header"><h1>Module 49: Rotated Cubes</h1></div>
+    <section class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>A cube has 6 faces, but you only see 3 at a time. To solve rotation puzzles, pick one symbol and treat it as the "Top." Then, track where the other two symbols "live" relative to it. If the Circle is to the right of the Star on the Target, it MUST be to the right of the Star on the Answer (assuming the Star is oriented the same way).</p>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b><p>Identify a cube after one 90° turn to the right.</p></div>
+            <div class="tier-card"><b>Average Year 4</b><p>Spot the "Impossible Neighbor" (a face that should be opposite but is shown touching).</p></div>
+            <div class="tier-card"><b>Advanced Year 5</b><p>Analyze orientation: Does the arrow point toward or away from the adjacent dot?</p></div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="simulation-area">
+            <div class="cube" id="cube">
+                <div class="face front">★</div>
+                <div class="face back">●</div>
+                <div class="face right">▲</div>
+                <div class="face left">■</div>
+                <div class="face top">♦</div>
+                <div class="face bottom">♣</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <button class="btn-spin" onclick="rotateCube('y', 90)">Spin Right (Y-axis)</button>
+                <button class="btn-spin" onclick="rotateCube('x', 90)">Flip Up (X-axis)</button>
+                <button class="btn-spin" onclick="rotateCube('z', 90)">Tilt (Z-axis)</button>
+                <button onclick="resetCube()" style="background:transparent; color:#a0aec0; border:none; margin-top:10px; cursor:pointer; font-size:0.7rem; text-decoration:underline;">Reset Orientation</button>
+            </div>
+            <div class="trace-log" id="trace-49">Orientation: Front (Star). Top (Diamond). Right (Triangle).</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The Trap:</strong> The "Impossible Neighbor." Picking an answer where two symbols are touching, even though you know from the net (or a previous view) that they are **Opposites**.</p>
+            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin: 15px 0;">
+            <p><strong>The Fix:</strong> Use the "Elimination of Opposites." If the Star and the Circle are opposites, any option showing both at once is instantly wrong. Cross it out immediately and don't waste time checking its rotation.</p>
+        </div>
+    </section>
+</div>
+
+<script>
+    let x = 0, y = 0, z = 0;
+    function rotateCube(axis, deg) {
+        if(axis === 'x') x += deg;
+        if(axis === 'y') y += deg;
+        if(axis === 'z') z += deg;
+        document.getElementById('cube').style.transform = `rotateX(${x}deg) rotateY(${y}deg) rotateZ(${z}deg)`;
+        updateTrace();
+    }
+    function resetCube() { x=0; y=0; z=0; rotateCube('x', 0); }
+    function updateTrace() {
+        document.getElementById('trace-49').innerHTML = `Current Rotation:<br>X: ${x % 360}° | Y: ${y % 360}° | Z: ${z % 360}°<br><br><i>Check the neighbors!</i>`;
+    }
+</script>
+</body>
+</html>

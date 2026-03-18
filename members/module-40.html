@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 40: Logic Filter | Cognis11</title>
+    <title>Module 40: Sequential Logic | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
@@ -16,14 +16,15 @@
         .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 100px; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; min-height: 350px; display: flex; flex-direction: column; align-items: center; }
-        .logic-gate { border: 4px solid #4a5568; border-radius: 12px; padding: 20px; width: 320px; background: #2d3748; }
-        .word-item { padding: 12px; margin: 8px 0; background: white; border-radius: 6px; cursor: pointer; font-weight: bold; text-align: center; color: var(--cognis-blue); transition: 0.3s; }
-        .word-item.locked { background: #48bb78; color: white; border: 2px solid white; transform: scale(0.95); opacity: 0.6; }
-        .word-item.outlier { background: #e53e3e; color: white; border: 2px solid white; transform: translateX(20px); }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px 40px; margin: 30px 0; text-align: center; }
+        .word-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
+        .word-box { width: 120px; height: 60px; background: #2d3748; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: transparent; font-weight: bold; border: 2px dashed #4a5568; transition: 0.3s; }
+        .word-box.revealed { color: white; border-style: solid; background: #3d495d; }
+        .word-box.majority { border: 3px solid #48bb78; box-shadow: 0 0 15px rgba(72, 187, 120, 0.4); }
+        .word-box.outlier { border: 3px solid #f56565; box-shadow: 0 0 15px rgba(245, 101, 101, 0.4); }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .btn-set { background: #4a5568; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; }
+        .btn-action { background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; width: 100%; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
     </style>
 </head>
@@ -32,19 +33,19 @@
     <div class="header"><h1>Module 40: Odd One Out</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Odd One Out is a game of **Majority Rule**. You aren't looking for the "weird" word; you are looking for the word that breaks the rule shared by at least three others. Speed comes from finding the rule early.</p>
+        <p>Speed in Semantic Logic comes from early identification. You only need to compare the first three words to establish the majority rule. Once the rule is set, you are simply scanning for the intruder.</p>
         <div class="question-tiers">
             <div class="tier-card"><b>Advanced Year 2</b>Apple, Banana, Carrot, Grape, Pear.</div>
-            <div class="tier-card"><b>Average Year 4</b>Silver, Gold, Copper, Iron, Wood.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Brave, Bold, Fearless, Reckless, Courageous.</div>
+            <div class="tier-card"><b>Average Year 4</b>Spatula, Spoon, Knife, Plate, Fork.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the trait that breaks the majority pattern.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <p style="color:#a0aec0; font-size:0.7rem; margin-bottom:15px;">CLICK 3 WORDS TO "LOCK IN" THE MAJORITY RULE</p>
-            <div id="gate" class="logic-gate"></div>
+            <div class="word-row" id="sieve-row"></div>
+            <button class="btn-action" onclick="unmaskNext()" style="width: auto; padding: 10px 30px;">Unmask Next Word</button>
         </div>
     </section>
 
@@ -52,53 +53,47 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <button class="btn-set" onclick="loadGate(['IRON','GOLD','SILVER','COPPER','WOOD'])">Topic: Metals</button>
-                <button class="btn-set" onclick="loadGate(['LION','TIGER','BEAR','WOLF','EAGLE'])">Topic: Mammals</button>
-                <button class="btn-set" onclick="loadGate(['APPLE','PEAR','PEACH','PLUM','ONION'])">Topic: Fruits</button>
+                <button class="btn-set" style="background:#4a5568; color:white; border:none; padding:10px; border-radius:6px; cursor:pointer; font-size:0.7rem; width:100%; margin-bottom:10px;" onclick="loadExample(0)">Ex 1: Outlier at Pos 4</button>
+                <button class="btn-set" style="background:#4a5568; color:white; border:none; padding:10px; border-radius:6px; cursor:pointer; font-size:0.7rem; width:100%; margin-bottom:10px;" onclick="loadExample(1)">Ex 2: Outlier at Pos 2</button>
             </div>
-            <div class="trace-log" id="trace-40">Lock in 3 words to see the early-exit logic.</div>
+            <div class="trace-log" id="trace-40">Reveal words from left to right to build the rule.</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> Reading all 5 options slowly. In time-pressured exams, every second spent reading word #5 after finding the answer is a lost mark elsewhere.</p>
-            <hr style="border:0; border-top:1px solid rgba(217,83,79,0.2); margin: 15px 0;">
-            <p><strong>The Fix:</strong> The 3-Word Rule. Once three words agree on a category, scan for the one that disagrees. As soon as you find it, STOP. Don't read the rest.</p>
+        <div style="background: #fff5f5; border: 2px solid #f56565; border-radius: 12px; padding: 25px;">
+            <h2 style="color:#f56565; margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The Trap:</strong> Reading all 5 options before thinking. This wastes 40% of your available time on words that only confirm what you already know.</p>
+            <hr style="border:0; border-top:1px solid rgba(245,101,101,0.2); margin:15px 0;">
+            <p><strong>The Fix:</strong> The 3-Word Threshold. By word three, you must have a "Locked Rule." If words 1 and 2 match but 3 doesn't, word 3 is the outlier. If 1 and 3 match but 2 doesn't, word 2 is the outlier. STOP scanning once found.</p>
         </div>
     </section>
 </div>
 
 <script>
-    let lockedCount = 0;
-    function loadGate(words) {
-        lockedCount = 0;
-        const gate = document.getElementById('gate');
-        gate.innerHTML = '';
-        words.forEach(w => {
-            const div = document.createElement('div');
-            div.className = 'word-item';
-            div.innerText = w;
-            div.onclick = () => lockWord(div, w);
-            gate.appendChild(div);
-        });
-        document.getElementById('trace-40').innerText = "Rule search active...";
+    const examples = [
+        {words: ["LION", "TIGER", "BEAR", "EAGLE", "WOLF"], out: 3},
+        {words: ["GOLD", "WOOD", "SILVER", "IRON", "COPPER"], out: 1}
+    ];
+    let currentIdx = 0; let currentStep = 0;
+    function loadExample(idx) {
+        currentIdx = idx; currentStep = 0;
+        const row = document.getElementById('sieve-row');
+        row.innerHTML = examples[idx].words.map(() => `<div class="word-box">?</div>`).join('');
+        document.getElementById('trace-40').innerText = "Awaiting first word...";
     }
-    function lockWord(el, w) {
-        if(el.classList.contains('locked')) return;
-        el.classList.add('locked');
-        lockedCount++;
-        if(lockedCount === 3) {
-            document.querySelectorAll('.word-item:not(.locked)').forEach(item => {
-                if(item.innerText === 'WOOD' || item.innerText === 'EAGLE' || item.innerText === 'ONION') {
-                    item.classList.add('outlier');
-                    document.getElementById('trace-40').innerHTML = "<b>EARLY EXIT:</b> Rule established. Outlier found.";
-                }
-            });
-        }
+    function unmaskNext() {
+        const boxes = document.querySelectorAll('.word-box');
+        if(currentStep >= boxes.length) return;
+        const box = boxes[currentStep];
+        box.innerText = examples[currentIdx].words[currentStep];
+        box.classList.add('revealed');
+        if(currentStep === examples[currentIdx].out) box.classList.add('outlier');
+        else box.classList.add('majority');
+        currentStep++;
+        if(currentStep >= 3) document.getElementById('trace-40').innerHTML = "<b>RULE CONFIRMED.</b> Outlier identified.";
     }
-    window.onload = () => loadGate(['IRON','GOLD','SILVER','COPPER','WOOD']);
+    window.onload = () => loadExample(0);
 </script>
 </body>
 </html>

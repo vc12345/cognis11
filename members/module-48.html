@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Module 48: Irregular Nets | Cognis11</title>
+    <style>
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
+        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 100px; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; text-align: center; }
+        .shape-preview { width: 0; height: 0; margin: 0 auto; border-left: 60px solid transparent; border-right: 60px solid transparent; border-bottom: 100px solid var(--cognis-gold); transition: 0.5s; }
+
+        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
+        .btn-net { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; }
+        .btn-net.active { background: var(--cognis-gold); font-weight: bold; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+    </style>
+</head>
+<body>
+<div class="module-card">
+    <div class="header"><h1>Module 48: Non-Standard Nets</h1></div>
+    <section class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <div class="question-tiers">
+            <div class="tier-card"><b>Advanced Year 2</b>Count the triangles needed to make a square-based pyramid.</div>
+            <div class="tier-card"><b>Average Year 4</b>Match a net to a triangular prism.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the net for a hexagonal pyramid with one missing face.</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="simulation-area">
+            <div id="shape" class="shape-preview"></div>
+            <p id="label" style="color:white; margin-top:20px; font-weight:bold;">PYRAMID</p>
+        </div>
+    </section>
+
+    <section class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <button class="btn-net active" onclick="setShape('pyramid', this)">Square Pyramid</button>
+                <button class="btn-net" onclick="setShape('prism', this)">Triangular Prism</button>
+                <button class="btn-net" onclick="setShape('tetra', this)">Tetrahedron</button>
+            </div>
+            <div class="trace-log" id="trace-48">Select a 3D shape to see its net inventory.</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div style="background: #fff5f5; border: 2px solid var(--cognis-gold); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--cognis-gold); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The Trap:</strong> Forgetting the "Base." Students often focus on the side flaps and ignore that the bottom face might be a different shape (e.g., a square base for a pyramid vs. a triangular base).</p>
+            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 15px 0;">
+            <p><strong>The Fix:</strong> The Perimeter Check. Count the edges of the base. That is exactly how many flaps must be attached to the net. If there are fewer or more, the net is a fake.</p>
+        </div>
+    </section>
+</div>
+
+<script>
+    function setShape(type, btn) {
+        const shape = document.getElementById('shape');
+        const label = document.getElementById('label');
+        const trace = document.getElementById('trace-48');
+        document.querySelectorAll('.btn-net').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        if(type === 'pyramid') {
+            shape.style.width = '0'; shape.style.borderLeft = '60px solid transparent'; shape.style.borderRight = '60px solid transparent'; shape.style.borderBottom = '100px solid var(--cognis-gold)';
+            label.innerText = "SQUARE PYRAMID";
+            trace.innerHTML = "Inventory:<br>1 x Square Base<br>4 x Triangular Flaps";
+        } else if(type === 'prism') {
+            shape.style.width = '100px'; shape.style.height = '60px'; shape.style.border = 'none'; shape.style.background = 'var(--cognis-gold)';
+            label.innerText = "TRIANGULAR PRISM";
+            trace.innerHTML = "Inventory:<br>2 x Triangular Ends<br>3 x Rectangular Sides";
+        } else {
+            shape.style.width = '0'; shape.style.borderLeft = '40px solid transparent'; shape.style.borderRight = '40px solid transparent'; shape.style.borderBottom = '70px solid var(--cognis-gold)';
+            label.innerText = "TETRAHEDRON";
+            trace.innerHTML = "Inventory:<br>4 x Identical Triangles";
+        }
+    }
+</script>
+</body>
+</html>

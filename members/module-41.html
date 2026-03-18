@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 41: Logical Ordering | Cognis11</title>
+    <title>Module 41: Elastic Ordering | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
@@ -13,17 +13,18 @@
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
         .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; line-height: 1.4; min-height: 110px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 100px; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; }
-        .ladder { display: flex; flex-direction: column-reverse; gap: 10px; max-width: 300px; margin: 0 auto; }
-        .step { background: white; padding: 15px; border-radius: 8px; text-align: center; font-weight: 900; color: var(--cognis-blue); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
-        .step::after { content: attr(data-rank); position: absolute; left: -40px; color: #718096; font-size: 0.8rem; top: 50%; transform: translateY(-50%); }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 100px 40px; margin: 30px 0; position: relative; min-height: 150px; }
+        .elastic-line { height: 4px; background: #4a5568; width: 100%; position: absolute; top: 50%; left: 0; transform: translateY(-50%); }
+        .person { position: absolute; top: 50%; transform: translate(-50%, -50%); transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); text-align: center; }
+        .person-icon { width: 40px; height: 40px; background: white; border: 3px solid var(--cognis-gold); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .person-name { color: white; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .clue-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; border-left: 4px solid var(--cognis-gold); font-size: 0.9rem; font-style: italic; margin-bottom: 20px; }
-        .btn-step { background: var(--cognis-gold); color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; text-transform: uppercase; width: 100%; margin-top: 10px; }
+        .btn-clue { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; }
+        .btn-clue.active { background: var(--cognis-gold); }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
     </style>
 </head>
@@ -33,75 +34,77 @@
     
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Ranking items requires processing relative clues. You must position each item correctly in relation to others, even when the absolute start or end is unknown. The "Ladder" grows as you link the information together.</p>
         <div class="question-tiers">
             <div class="tier-card"><b>Advanced Year 2</b>A is taller than B. B is taller than C. Who is shortest?</div>
             <div class="tier-card"><b>Average Year 4</b>Monday is before Tuesday. Friday is after Wednesday. Order all four.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Sam is heavier than Ben but lighter than Leo. Leo is lighter than Gus. Who is 2nd heaviest?</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Leo is lighter than Gus but heavier than Sam. Sam is heavier than Ben.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area">
-            <div id="ladder" class="ladder">
-                <div class="step" data-rank="4th" id="s4">BEN</div>
-                <div class="step" data-rank="3rd" id="s3">SAM</div>
-                <div class="step" data-rank="2nd" id="s2">LEO</div>
-                <div class="step" data-rank="1st" id="s1">GUS</div>
+        <div class="simulation-area" id="stage">
+            <div class="elastic-line"></div>
             </div>
-        </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <div class="clue-box" id="clue-text">"Sam is heavier than Ben, but lighter than Leo. Leo is lighter than Gus."</div>
-                <button class="btn-step" onclick="reorder('sam','ben','leo','gus')">Apply Logic</button>
-                <button class="btn-step" onclick="reorder('gus','leo','sam','ben')" style="background:#4a5568; margin-top:10px;">Reset Order</button>
+                <button class="btn-clue" onclick="addPerson('BEN')">1. Start with Ben</button>
+                <button class="btn-clue" onclick="addPerson('SAM')">2. Sam > Ben (Add Sam)</button>
+                <button class="btn-clue" onclick="addPerson('LEO')">3. Leo > Sam (Add Leo)</button>
+                <button class="btn-clue" onclick="addPerson('GUS')">4. Gus > Leo (Add Gus)</button>
+                <button onclick="resetOrdering()" style="background:transparent; color:#a0aec0; border:none; margin-top:10px; cursor:pointer; font-size:0.6rem;">RESET QUEUE</button>
             </div>
-            <div class="trace-log" id="trace-41">Build the logic chain...</div>
+            <div class="trace-log" id="trace-41">Space out the clues horizontally...</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Absolute" Trap:</strong> Assuming a person is "first" just because they are mentioned first in the sentence.
-            <br><br><strong>The Fix:</strong> Use a **Vertical Line**. As you read a clue like "A is taller than B," draw A above B. Then, if the next clue is "C is taller than A," draw C above A. This physical sketch prevents your memory from "overwriting" the correct relative positions.</p>
+        <div style="background: #fff5f5; border: 2px solid var(--cognis-gold); border-radius: 12px; padding: 25px;">
+            <h2 style="color:var(--cognis-gold); margin-top:0;">Phase 4: The Saboteur</h2>
+            <p>Don't store the list in your memory—store it on a line. As each new person is added, they push the others aside. If the clues say "A is between B and C," you don't need to know exactly where they are—you only need to know their <b>Relative Spacing</b>.</p>
         </div>
     </section>
 </div>
 
 <script>
-    function reorder(p1, p2, p3, p4) {
-        const ladder = document.getElementById('ladder');
-        const items = [p1, p2, p3, p4];
+    let people = [];
+
+    function resetOrdering() {
+        people = [];
+        document.getElementById('stage').innerHTML = '<div class="elastic-line"></div>';
+        document.getElementById('trace-41').innerText = "Awaiting the first clue...";
+        document.querySelectorAll('.btn-clue').forEach(b => b.classList.remove('active'));
+    }
+
+    function addPerson(name) {
+        if(people.includes(name)) return;
+        people.push(name);
+        renderPeople();
+    }
+
+    function renderPeople() {
+        const stage = document.getElementById('stage');
+        stage.innerHTML = '<div class="elastic-line"></div>';
         
-        // This simulates the 'logic' jump by re-sorting the visual divs
-        const s1 = document.getElementById('s1');
-        const s2 = document.getElementById('s2');
-        const s3 = document.getElementById('s3');
-        const s4 = document.getElementById('s4');
-        
-        // Reverse order for the flex-direction: column-reverse logic
-        ladder.innerHTML = '';
-        items.forEach((id, idx) => {
-            const div = document.createElement('div');
-            div.className = 'step';
-            div.setAttribute('data-rank', (4-idx) + (idx===3?'st':idx===2?'nd':idx===1?'rd':'th'));
-            div.innerText = items[3-idx].toUpperCase();
-            ladder.appendChild(div);
+        const count = people.length;
+        people.forEach((p, i) => {
+            const pos = ((i + 1) / (count + 1)) * 100;
+            stage.innerHTML += `
+                <div class="person" style="left: ${pos}%">
+                    <div class="person-icon">${p[0]}</div>
+                    <div class="person-name">${p}</div>
+                </div>
+            `;
         });
 
         document.getElementById('trace-41').innerHTML = `
-            <b>Chain Processing:</b><br>
-            1. Ben is Base.<br>
-            2. Sam > Ben.<br>
-            3. Leo > Sam.<br>
-            4. Gus > Leo.<br><br>
-            <i>Result: Gus is the heaviest.</i>
+            Items in Queue: <b>${count}</b><br>
+            Current Spacing: <b>1/${count+1}</b> increments.<br><br>
+            <i>Notice how the existing people shift left to make room for new logic on the right.</i>
         `;
     }
 </script>

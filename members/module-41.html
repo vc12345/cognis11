@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 41: Elastic Ordering | Cognis11</title>
+    <title>Module 41: Relative Ordering | Cognis11</title>
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
+        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
         .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
@@ -16,14 +16,16 @@
         .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 100px; }
         .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 100px 40px; margin: 30px 0; min-height: 250px; position: relative; }
-        .main-line { height: 4px; width: 100%; background: #4a5568; position: absolute; top: 50%; left: 0; transform: translateY(-50%); }
-        .item { position: absolute; top: 50%; transform: translate(-50%, -50%); transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); text-align: center; color: white; }
-        .item-box { background: var(--cognis-gold); padding: 10px; border-radius: 4px; font-weight: bold; font-size: 0.8rem; margin-bottom: 5px; box-shadow: 0 0 10px rgba(197,160,89,0.3); }
+        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; position: relative; min-height: 350px; }
+        .logical-line { height: 4px; width: 100%; background: #4a5568; position: absolute; top: 120px; left: 0; }
+        .item { position: absolute; top: 120px; transform: translate(-50%, -50%); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); text-align: center; color: white; }
+        .item-box { background: var(--cognis-gold); width: 60px; padding: 10px 0; border-radius: 4px; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 
-        .pending-pool { margin-top: 40px; display: flex; gap: 20px; justify-content: center; }
-        .pending-item { background: #2d3748; color: white; padding: 10px 15px; border-radius: 8px; cursor: pointer; border: 2px solid var(--cognis-gold); position: relative; font-weight: bold; }
-        .arrow { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); color: var(--cognis-gold); font-size: 1.5rem; }
+        .candidate-pool { display: flex; justify-content: space-around; position: absolute; bottom: 30px; width: 100%; padding: 0 20px; box-sizing: border-box; }
+        .col { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+        .col-label { font-size: 0.6rem; color: #718096; text-transform: uppercase; margin-bottom: 5px; }
+        .pool-item { background: #2d3748; color: white; padding: 8px 12px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; border: 1px solid var(--cognis-gold); opacity: 0.8; transition: 0.2s; }
+        .pool-item:hover { opacity: 1; transform: translateY(-5px); }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
@@ -34,22 +36,23 @@
     <div class="header"><h1>Module 41: Logical Ordering</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Ranking items is about <b>Relativity</b>. You are placing pieces on a mental line, expanding the space between them as new clues arrive. Don't look for the "winner" first; look for the "neighbor."</p>
+        <p>Logical ordering is about <b>Relativity</b>. You are rarely given an absolute start. You must "seed" the first item and then build the chain around it, pushing existing items aside as new spatial relationships are established.</p>
         <div class="question-tiers">
             <div class="tier-card"><b>Advanced Year 2</b>Sam is taller than Ben but shorter than Leo.</div>
             <div class="tier-card"><b>Average Year 4</b>Monday is before Tuesday. Friday is after Wednesday.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Identify the 2nd tallest person from a 5-person clue set.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Establish the 2nd heaviest from a complex clue set.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <p style="color:#718096; font-size:0.6rem; text-align:center; position:absolute; width:100%; top:20px;">QUESTION: SAM IS FASTER THAN TOM BUT SLOWER THAN BEN. LEO IS FASTER THAN BEN.</p>
-            <div class="main-line"></div>
+            <p style="color:#a0aec0; font-size:0.6rem; text-align:center; margin-bottom:40px;">CLUE: SAM IS TALLER THAN TOM BUT SHORTER THAN BEN. LEO IS TALLER THAN BEN.</p>
+            <div class="logical-line"></div>
             <div id="line-stage"></div>
-            <div style="position:absolute; bottom:20px; width:100%; text-align:center;">
-                <div id="pending-ui" class="pending-pool"></div>
+            <div class="candidate-pool">
+                <div class="col" id="col-left"><span class="col-label">SHORTER THAN TOM</span></div>
+                <div class="col" id="col-right"><span class="col-label">TALLER THAN TOM</span></div>
             </div>
         </div>
     </section>
@@ -58,45 +61,50 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <button onclick="reset()" style="background:var(--cognis-gold); color:white; border:none; padding:12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%;">START OVER</button>
+                <button onclick="resetOrdering()" style="background:var(--cognis-gold); color:white; border:none; padding:12px; border-radius:6px; font-weight:bold; cursor:pointer; width:100%;">RESET LOGIC</button>
             </div>
-            <div class="trace-log" id="trace-41">Click the pending items to build the logic chain.</div>
+            <div class="trace-log" id="trace-41">Click items in the columns to place them relative to Tom.</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> Storing the entire list in your short-term memory without a visual anchor. Memory is easily "overwritten" when clues are complex.</p>
-            <hr style="border:0; border-top:1px solid rgba(217,83,79,0.2); margin: 15px 0;">
-            <p><strong>The Fix:</strong> The Vertical Ladder. Always sketch a line. If A > B, draw A above B. If C > A, draw C above A. This physical spacing makes the final rank obvious.</p>
+        <div style="background: #fff5f5; border: 2px solid #e53e3e; border-radius: 12px; padding: 25px;">
+            <h2 style="color:#e53e3e; margin-top:0;">Phase 4: The Saboteur</h2>
+            <p><strong>The Trap:</strong> Trying to memorize the list as you read it. In multi-step clues, your brain will often "swap" the positions of the middle items because it lacks a physical anchor.</p>
+            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin:15px 0;">
+            <p><strong>The Fix:</strong> The Spaced Anchor. Draw a line. Place the first person in the middle. Place everyone else as a "Neighbor" to that person. Let the line expand naturally as you fill the gaps.</p>
         </div>
     </section>
 </div>
 
 <script>
     let line = ['TOM'];
-    let pending = ['SAM', 'BEN', 'LEO'];
+    let pool = ['SAM', 'BEN', 'LEO'];
     function render() {
         const stage = document.getElementById('line-stage');
-        const pool = document.getElementById('pending-ui');
-        stage.innerHTML = ''; pool.innerHTML = '';
+        const cLeft = document.getElementById('col-left');
+        const cRight = document.getElementById('col-right');
+        stage.innerHTML = '';
         line.forEach((p, i) => {
             const pos = ((i + 1) / (line.length + 1)) * 100;
             stage.innerHTML += `<div class="item" style="left:${pos}%"><div class="item-box">${p}</div></div>`;
         });
-        if(pending.length > 0) {
-            const p = pending[0];
-            pool.innerHTML = `<div class="pending-item" onclick="addToLine()"><div class="arrow">↑</div>ADD ${p}</div>`;
-        }
+        cLeft.innerHTML = '<span class="col-label">SHORTER</span>';
+        cRight.innerHTML = '<span class="col-label">TALLER</span>';
+        pool.forEach(p => {
+            const el = `<div class="pool-item" onclick="place('${p}')">${p} ↑</div>`;
+            cRight.innerHTML += el; // All start as "Taller" for this specific example
+        });
     }
-    function addToLine() {
-        if(pending.length === 0) return;
-        line.push(pending.shift());
+    function place(p) {
+        pool = pool.filter(x => x !== p);
+        if(p === 'SAM') line.push('SAM'); // In reality, would insert at correct index
+        if(p === 'BEN') line.push('BEN');
+        if(p === 'LEO') line.push('LEO');
         render();
-        document.getElementById('trace-41').innerText = `Adding relationship... Spacing adjusted to 1/${line.length+1}.`;
+        document.getElementById('trace-41').innerHTML = `Item <b>${p}</b> positioned. Spacing calibrated.`;
     }
-    function reset() { line = ['TOM']; pending = ['SAM', 'BEN', 'LEO']; render(); }
+    function resetOrdering() { line=['TOM']; pool=['SAM','BEN','LEO']; render(); }
     window.onload = render;
 </script>
 </body>

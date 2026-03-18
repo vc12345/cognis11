@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 48: Irregular Nets | Cognis11</title>
+    <title>Module 48: Unfold Engine | Cognis11</title>
     <style>
         :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
         body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
@@ -12,36 +12,51 @@
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
         .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
 
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 100px; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
-
         .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; text-align: center; }
-        .shape-preview { width: 0; height: 0; margin: 0 auto; border-left: 60px solid transparent; border-right: 60px solid transparent; border-bottom: 100px solid var(--cognis-gold); transition: 0.5s; }
+        
+        /* The Unfolding Visual */
+        .stage { width: 300px; height: 300px; margin: 0 auto; position: relative; perspective: 1000px; cursor: pointer; }
+        .base { position: absolute; width: 100px; height: 100px; background: var(--cognis-gold); top: 100px; left: 100px; border: 2px solid white; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        .flap { position: absolute; width: 0; height: 0; border-left: 50px solid transparent; border-right: 50px solid transparent; border-bottom: 90px solid #4a5568; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); transform-origin: bottom; }
+        
+        .flap-top { bottom: 100%; left: 0; transform: rotateX(70deg); }
+        .flap-bottom { top: 100%; left: 0; transform: rotateX(-70deg) rotate(180deg); transform-origin: top; }
+        .flap-left { right: 100%; top: 5px; transform: rotateY(-70deg) rotate(-90deg); transform-origin: right; }
+        .flap-right { left: 100%; top: 5px; transform: rotateY(70deg) rotate(90deg); transform-origin: left; }
+
+        .stage.open .flap-top { transform: rotateX(0deg); }
+        .stage.open .flap-bottom { transform: rotateX(0deg) rotate(180deg); }
+        .stage.open .flap-left { transform: rotateY(0deg) rotate(-90deg); }
+        .stage.open .flap-right { transform: rotateY(0deg) rotate(90deg); }
 
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .btn-net { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; }
-        .btn-net.active { background: var(--cognis-gold); font-weight: bold; }
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
     </style>
 </head>
 <body>
 <div class="module-card">
-    <div class="header"><h1>Module 48: Non-Standard Nets</h1></div>
+    <div class="header"><h1>Module 48: Non-Standard Net Unfolding</h1></div>
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>Count the triangles needed to make a square-based pyramid.</div>
-            <div class="tier-card"><b>Average Year 4</b>Match a net to a triangular prism.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Identify the net for a hexagonal pyramid with one missing face.</div>
+            <div class="tier-card"><b>Advanced Year 2</b>Count the triangles in a pyramid net.</div>
+            <div class="tier-card"><b>Average Year 4</b>Match a square-based pyramid to its flat net.</div>
+            <div class="tier-card"><b>Advanced Year 5</b>Identify the net for an irregular triangular prism.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
         <div class="simulation-area">
-            <div id="shape" class="shape-preview"></div>
-            <p id="label" style="color:white; margin-top:20px; font-weight:bold;">PYRAMID</p>
+            <p style="color:#a0aec0; font-size:0.6rem; text-transform:uppercase; margin-bottom:20px;">Click the shape to open the net</p>
+            <div class="stage" id="pyramid" onclick="toggleNet()">
+                <div class="base">
+                    <div class="flap flap-top"></div>
+                    <div class="flap flap-bottom"></div>
+                    <div class="flap flap-left"></div>
+                    <div class="flap flap-right"></div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -49,45 +64,29 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <button class="btn-net active" onclick="setShape('pyramid', this)">Square Pyramid</button>
-                <button class="btn-net" onclick="setShape('prism', this)">Triangular Prism</button>
-                <button class="btn-net" onclick="setShape('tetra', this)">Tetrahedron</button>
+                <p style="font-size:0.8rem; color:#a0aec0;">Observe how the 4 triangular faces lay flat when the 3D bond is broken.</p>
             </div>
-            <div class="trace-log" id="trace-48">Select a 3D shape to see its net inventory.</div>
+            <div class="trace-log" id="trace-48">Shape State: Folded (3D)</div>
         </div>
     </section>
 
     <section class="phase">
         <div style="background: #fff5f5; border: 2px solid var(--cognis-gold); border-radius: 12px; padding: 25px;">
             <h2 style="color:var(--cognis-gold); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> Forgetting the "Base." Students often focus on the side flaps and ignore that the bottom face might be a different shape (e.g., a square base for a pyramid vs. a triangular base).</p>
+            <p><strong>The Trap:</strong> The "Floating Flap." Picking a net where the side faces are not attached to the edges of the base.</p>
             <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 15px 0;">
-            <p><strong>The Fix:</strong> The Perimeter Check. Count the edges of the base. That is exactly how many flaps must be attached to the net. If there are fewer or more, the net is a fake.</p>
+            <p><strong>The Fix:</strong> Edge Counting. If the base has 4 sides, there <b>must</b> be 4 flaps. If the base is a hexagon, there must be 6. Always count the perimeter of the main base first.</p>
         </div>
     </section>
 </div>
 
 <script>
-    function setShape(type, btn) {
-        const shape = document.getElementById('shape');
-        const label = document.getElementById('label');
+    function toggleNet() {
+        const stage = document.getElementById('pyramid');
         const trace = document.getElementById('trace-48');
-        document.querySelectorAll('.btn-net').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-
-        if(type === 'pyramid') {
-            shape.style.width = '0'; shape.style.borderLeft = '60px solid transparent'; shape.style.borderRight = '60px solid transparent'; shape.style.borderBottom = '100px solid var(--cognis-gold)';
-            label.innerText = "SQUARE PYRAMID";
-            trace.innerHTML = "Inventory:<br>1 x Square Base<br>4 x Triangular Flaps";
-        } else if(type === 'prism') {
-            shape.style.width = '100px'; shape.style.height = '60px'; shape.style.border = 'none'; shape.style.background = 'var(--cognis-gold)';
-            label.innerText = "TRIANGULAR PRISM";
-            trace.innerHTML = "Inventory:<br>2 x Triangular Ends<br>3 x Rectangular Sides";
-        } else {
-            shape.style.width = '0'; shape.style.borderLeft = '40px solid transparent'; shape.style.borderRight = '40px solid transparent'; shape.style.borderBottom = '70px solid var(--cognis-gold)';
-            label.innerText = "TETRAHEDRON";
-            trace.innerHTML = "Inventory:<br>4 x Identical Triangles";
-        }
+        stage.classList.toggle('open');
+        const isOpen = stage.classList.contains('open');
+        trace.innerHTML = isOpen ? "Shape State: Unfolded (Net View)" : "Shape State: Folded (3D View)";
     }
 </script>
 </body>

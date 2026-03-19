@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Cognis11</title>
     <link rel="stylesheet" href="../css/dashboard.css">
     
@@ -30,81 +31,100 @@
     <script src="../js/registry.js"></script>
     <script>
         async function loadDashboard() {
-            // 1. Get Logged-in User (Updated to supabaseClient)
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            
-            if (!user) return; // Should be handled by auth-guard
-
-            document.getElementById('user-welcome').innerText = `Welcome, ${user.email}`;
-
-            // 2. Fetch Subscription Status from 'profiles' table
-            const { data: profile } = await supabaseClient
-                .from('profiles')
-                .select('subscription_status')
-                .eq('id', user.id)
-                .single();
-
-            if (profile) {
-                const statusEl = document.getElementById('account-status');
-                const status = profile.subscription_status || 'inactive';
-                
-                statusEl.innerText = status.charAt(0).toUpperCase() + status.slice(1);
-                
-                // Color coding for status
-                if (status === 'active') {
-                    statusEl.style.color = '#10b981'; // Green
-                } else {
-                    statusEl.style.color = '#ef4444'; // Red
-                }
+            // Safety: Wait up to 2 seconds for supabaseClient to initialize if needed
+            let attempts = 0;
+            while (!window.supabaseClient && attempts < 20) {
+                await new Promise(res => setTimeout(res, 100));
+                attempts++;
             }
 
-            // 3. Fetch Completed Modules (Updated to supabaseClient)
-            const { data: completedData } = await supabaseClient
-                .from('module_progress')
-                .select('module_id')
-                .eq('user_id', user.id);
+            if (!window.supabaseClient) {
+                console.error("Dashboard Error: supabaseClient not found after waiting.");
+                document.getElementById('user-welcome').innerText = "Connection Error. Please refresh.";
+                return;
+            }
 
-            const completedIds = completedData ? completedData.map(item => item.module_id) : [];
-
-            // 4. Render the 59-Module Lattice
-            const root = document.getElementById('lattice-root');
-            root.innerHTML = ''; // Clear existing content
-            
-            const pillars = [...new Set(COGNIS_MODULES.map(m => m.pillar))];
-
-            pillars.forEach(pillarName => {
-                const section = document.createElement('section');
-                section.className = 'pillar-section';
+            try {
+                // 1. Get Logged-in User
+                const { data: { user }, error: userError } = await window.supabaseClient.auth.getUser();
                 
-                section.innerHTML = `
-                    <div class="pillar-header">
-                        <div style="width: 4px; height: 24px; background: var(--pillar-${pillarName.toLowerCase()})"></div>
-                        ${pillarName}
-                    </div>
-                    <div class="category-group" id="group-${pillarName}"></div>
-                `;
-                
-                root.appendChild(section);
-                const groupContainer = document.getElementById(`group-${pillarName}`);
+                if (userError || !user) {
+                    console.log("No user found by dashboard script.");
+                    return; 
+                }
 
-                COGNIS_MODULES.filter(m => m.pillar === pillarName).forEach(mod => {
-                    const isDone = completedIds.includes(mod.id);
-                    const card = document.createElement('a');
+                document.getElementById('user-welcome').innerText = `Welcome, ${user.email}`;
+
+                // 2. Fetch Subscription Status from 'profiles' table
+                const { data: profile, error: profileError } = await window.supabaseClient
+                    .from('profiles')
+                    .select('subscription_status')
+                    .eq('id', user.id)
+                    .single();
+
+                if (profile) {
+                    const statusEl = document.getElementById('account-status');
+                    const status = profile.subscription_status || 'inactive';
                     
-                    card.className = `module-card ${isDone ? 'module-done' : ''}`;
-                    card.href = mod.path;
+                    statusEl.innerText = status.charAt(0).toUpperCase() + status.slice(1);
                     
-                    card.innerHTML = `
-                        <span class="category-tag">Category ${mod.cat} ${isDone ? '✅' : ''}</span>
-                        <span class="module-title">${mod.title}</span>
-                        <span class="module-id" style="${isDone ? 'color: #059669;' : ''}">MOD-${String(mod.id).padStart(2, '0')}</span>
+                    if (status === 'active') {
+                        statusEl.style.color = '#10b981'; // Green
+                    } else {
+                        statusEl.style.color = '#ef4444'; // Red
+                    }
+                }
+
+                // 3. Fetch Completed Modules
+                const { data: completedData } = await window.supabaseClient
+                    .from('module_progress')
+                    .select('module_id')
+                    .eq('user_id', user.id);
+
+                const completedIds = completedData ? completedData.map(item => item.module_id) : [];
+
+                // 4. Render the 59-Module Lattice
+                const root = document.getElementById('lattice-root');
+                root.innerHTML = ''; 
+                
+                const pillars = [...new Set(COGNIS_MODULES.map(m => m.pillar))];
+
+                pillars.forEach(pillarName => {
+                    const section = document.createElement('section');
+                    section.className = 'pillar-section';
+                    
+                    section.innerHTML = `
+                        <div class="pillar-header">
+                            <div style="width: 4px; height: 24px; background: var(--pillar-${pillarName.toLowerCase()})"></div>
+                            ${pillarName}
+                        </div>
+                        <div class="category-group" id="group-${pillarName}"></div>
                     `;
-                    groupContainer.appendChild(card);
+                    
+                    root.appendChild(section);
+                    const groupContainer = document.getElementById(`group-${pillarName}`);
+
+                    COGNIS_MODULES.filter(m => m.pillar === pillarName).forEach(mod => {
+                        const isDone = completedIds.includes(mod.id);
+                        const card = document.createElement('a');
+                        
+                        card.className = `module-card ${isDone ? 'module-done' : ''}`;
+                        card.href = mod.path;
+                        
+                        card.innerHTML = `
+                            <span class="category-tag">Category ${mod.cat} ${isDone ? '✅' : ''}</span>
+                            <span class="module-title">${mod.title}</span>
+                            <span class="module-id" style="${isDone ? 'color: #059669;' : ''}">MOD-${String(mod.id).padStart(2, '0')}</span>
+                        `;
+                        groupContainer.appendChild(card);
+                    });
                 });
-            });
+            } catch (err) {
+                console.error("Dashboard Load Crash:", err);
+            }
         }
 
-        // Run on load
+        // Initialize
         loadDashboard();
     </script>
 </body>

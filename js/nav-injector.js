@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", async function() {
             <div style="display: flex; align-items: center; gap: 20px;">
                 <a href="/cognis11/members/dashboard.html" style="color: white; text-decoration: none; font-weight: bold; font-size: 1.2rem;">Cognis11</a>
                 <a href="/cognis11/members/dashboard.html" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">Dashboard</a>
-                <a href="/cognis11/diagnostic.html" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">Diagnostic</a>
             </div>
             <div style="display: flex; gap: 15px; align-items: center;">
                 <span id="nav-user" style="color: #64748b; font-size: 0.8rem;"></span>
@@ -16,56 +15,15 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     document.body.insertAdjacentHTML('afterbegin', navHTML);
 
-    // Use the new supabaseClient name to fetch the user
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    
-    if (user) {
-        const navUserSpan = document.getElementById('nav-user');
-        if (navUserSpan) {
-            navUserSpan.innerText = user.email;
+    if (window.supabaseClient) {
+        const { data: { user } } = await window.supabaseClient.auth.getUser();
+        if (user) {
+            document.getElementById('nav-user').innerText = user.email;
         }
     }
 });
 
-// Logic to save progress to Supabase
-async function markModuleComplete(moduleId) {
-    const { data: { user } } = await supabaseClient.auth.getUser();
-
-    if (!user) {
-        alert("Please log in to save progress.");
-        return;
-    }
-
-    // 1. Check if already marked complete (renamed to supabaseClient)
-    const { data: existing } = await supabaseClient
-        .from('module_progress')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('module_id', moduleId)
-        .maybeSingle();
-
-    if (existing) {
-        alert("You have already completed this module!");
-        window.location.href = "/cognis11/members/dashboard.html";
-        return;
-    }
-
-    // 2. Insert new completion record (renamed to supabaseClient)
-    const { error } = await supabaseClient
-        .from('module_progress')
-        .insert([{ user_id: user.id, module_id: moduleId }]);
-
-    if (error) {
-        console.error("Error saving progress:", error);
-        alert("System error: Could not sync progress.");
-    } else {
-        window.location.href = "/cognis11/members/dashboard.html";
-    }
-}
-
-// Supabase-powered Logout
 async function logout() {
-    await supabaseClient.auth.signOut();
-    localStorage.removeItem('cognis_session'); // Clean up old MVP data
+    await window.supabaseClient.auth.signOut();
     window.location.href = "/cognis11/login.html";
 }

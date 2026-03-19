@@ -1,12 +1,15 @@
 // js/auth-guard.js
-(function() {
-    const session = JSON.parse(localStorage.getItem('cognis_session'));
-    const now = new Date();
+(async function() {
+    // Check if a user session exists in Supabase
+    const { data: { user } } = await supabase.auth.getUser();
 
-    if (!session || new Date(session.expiryDate) < now) {
-        alert("Session expired or unauthorized. Redirecting to home.");
-        window.location.href = "/index.html"; // Adjust to your landing page
-    } else {
-        console.log(`Welcome back, ${session.userName}. Access granted.`);
+    if (!user) {
+        // No user? Boot them to login.
+        console.warn("Unauthorized access attempt.");
+        window.location.href = "/login.html";
+        return;
     }
+
+    // Optional: Check if their subscription is active (we'll add this later)
+    console.log("Access granted for:", user.email);
 })();

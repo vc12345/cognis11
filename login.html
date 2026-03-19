@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unlock | Cognis11</title>
+    <link rel="stylesheet" href="css/dashboard.css"> <style>
+        .login-box {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 2rem;
+            background: var(--card-bg);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 20px 0;
+            background: #0f172a;
+            border: 1px solid #475569;
+            color: white;
+            border-radius: 6px;
+            font-family: monospace;
+            text-align: center;
+            font-size: 1.2rem;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--pillar-math);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        button:hover { opacity: 0.9; }
+        .error { color: #ef4444; font-size: 0.8rem; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>Access Cognis11</h2>
+        <p style="color: #94a3b8; font-size: 0.9rem;">Enter your unique access key to begin.</p>
+        
+        <input type="text" id="access-key" placeholder="XXXX-XXXX-XXXX" spellcheck="false">
+        <button onclick="handleLogin()">Unlock Platform</button>
+        <p id="error-msg" class="error">Invalid or expired access key.</p>
+    </div>
+
+    <script src="js/auth-system.js"></script>
+</body>
+</html>

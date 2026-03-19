@@ -72,7 +72,7 @@ async function handleSubscriptionSignup() {
     } else {
         // SUCCESS: Redirect to Stripe
         // Note: Make sure YOUR_LINK_ID is replaced with your actual Stripe Payment Link ID
-        const stripeLink = "https://buy.stripe.com/YOUR_LINK_ID"; 
+        const stripeLink = "https://buy.stripe.com/test_3cIfZj0ybgFcejO20agUM00"; 
         const userId = data.user.id;
         
         // Pass the user ID to Stripe so the Webhook can find them later

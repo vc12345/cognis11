@@ -7,6 +7,7 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
+    
     <script src="../js/auth-guard.js"></script>
     <script src="../js/nav-injector.js"></script>
 </head>
@@ -18,7 +19,7 @@
                 <p id="user-welcome">Syncing your progress...</p>
             </div>
             <div id="expiry-notice" style="font-size: 0.8rem; text-align: right; color: #94a3b8;">
-                Account Status: <span id="account-status">Checking...</span>
+                Account Status: <span id="account-status" style="font-weight: bold; color: #f59e0b;">Checking...</span>
             </div>
         </header>
 
@@ -29,25 +30,46 @@
     <script src="../js/registry.js"></script>
     <script>
         async function loadDashboard() {
-            // 1. Get Logged-in User
-            const { data: { user } } = await supabase.auth.getUser();
+            // 1. Get Logged-in User (Updated to supabaseClient)
+            const { data: { user } } = await supabaseClient.auth.getUser();
             
-            if (user) {
-                document.getElementById('user-welcome').innerText = `Welcome, ${user.email}`;
-                document.getElementById('account-status').innerText = "Active Scholar";
+            if (!user) return; // Should be handled by auth-guard
+
+            document.getElementById('user-welcome').innerText = `Welcome, ${user.email}`;
+
+            // 2. Fetch Subscription Status from 'profiles' table
+            const { data: profile } = await supabaseClient
+                .from('profiles')
+                .select('subscription_status')
+                .eq('id', user.id)
+                .single();
+
+            if (profile) {
+                const statusEl = document.getElementById('account-status');
+                const status = profile.subscription_status || 'inactive';
+                
+                statusEl.innerText = status.charAt(0).toUpperCase() + status.slice(1);
+                
+                // Color coding for status
+                if (status === 'active') {
+                    statusEl.style.color = '#10b981'; // Green
+                } else {
+                    statusEl.style.color = '#ef4444'; // Red
+                }
             }
 
-            // 2. Fetch Completed Modules from Database
-            const { data: completedData, error } = await supabase
+            // 3. Fetch Completed Modules (Updated to supabaseClient)
+            const { data: completedData } = await supabaseClient
                 .from('module_progress')
                 .select('module_id')
                 .eq('user_id', user.id);
 
-            // Create a simple list of completed IDs: [1, 4, 12...]
             const completedIds = completedData ? completedData.map(item => item.module_id) : [];
 
-            // 3. Render the 59-Module Lattice
+            // 4. Render the 59-Module Lattice
             const root = document.getElementById('lattice-root');
+            root.innerHTML = ''; // Clear existing content
+            
             const pillars = [...new Set(COGNIS_MODULES.map(m => m.pillar))];
 
             pillars.forEach(pillarName => {
@@ -69,7 +91,6 @@
                     const isDone = completedIds.includes(mod.id);
                     const card = document.createElement('a');
                     
-                    // Add 'module-done' class if they finished it
                     card.className = `module-card ${isDone ? 'module-done' : ''}`;
                     card.href = mod.path;
                     
@@ -83,7 +104,7 @@
             });
         }
 
-        // Initialize
+        // Run on load
         loadDashboard();
     </script>
 </body>

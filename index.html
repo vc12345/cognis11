@@ -44,6 +44,67 @@
   .btn-white{background:#fff;color:var(--navy);padding:16px 36px;border-radius:6px;text-decoration:none;font-size:.95rem;font-weight:700;display:inline-block}
   .cta-note{margin-top:14px;font-size:.82rem;color:rgba(255,255,255,.5)}
   footer{border-top:1px solid var(--lgrey);padding:32px;text-align:center;font-size:.82rem;color:var(--grey)}
+  /* Navigation Subscribe Button */
+  .nav-sub {
+      background: transparent;
+      color: var(--navy);
+      border: 1px solid var(--navy);
+      padding: 10px 22px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+  }
+  
+  .nav-sub:hover {
+      background: var(--navy);
+      color: #fff;
+  }
+  
+  /* Modal Styling (Type 2 Logic: Dark & Focused) */
+  .auth-card {
+      background: #1e293b;
+      padding: 2.5rem;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  }
+  
+  .auth-card h2 { color: #fff; margin-bottom: 0.5rem; }
+  .auth-card p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem; }
+  
+  .form-group { margin-bottom: 1.2rem; text-align: left; }
+  .form-group label { display: block; font-size: 0.75rem; color: #94a3b8; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+  
+  .form-group input {
+      width: 100%;
+      padding: 12px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 1rem;
+  }
+  
+  #sub-btn {
+      width: 100%;
+      padding: 14px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+  }
+  
+  #sub-btn:disabled { background: #334155; cursor: not-allowed; }
+  .error-msg { color: #ef4444; font-size: 0.8rem; margin-top: 10px; display: none; }
 </style>
 </head>
 <body>

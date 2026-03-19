@@ -1,0 +1,14 @@
+# Ignore the massive dependency folder
+node_modules/
+
+# Ignore local Supabase data (Docker creates this)
+supabase/.temp/
+supabase/.storage/
+supabase/functions/.import_map.json
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore environment variables (we set these in the cloud, never in GitHub)
+.env

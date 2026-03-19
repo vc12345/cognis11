@@ -9,7 +9,7 @@ async function handleLogin() {
     const password = document.getElementById('login-password').value;
     const errorDiv = document.getElementById('error-msg');
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
         email: email,
         password: password,
     });
@@ -31,7 +31,7 @@ async function handleSignUp() {
     const password = document.getElementById('signup-password').value;
     const errorDiv = document.getElementById('error-msg');
 
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabaseClient.auth.signUp({
         email: email,
         password: password,
     });
@@ -59,7 +59,7 @@ async function handleSubscriptionSignup() {
     btn.innerText = "Creating Account...";
     btn.disabled = true;
 
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabaseClient.auth.signUp({
         email: email,
         password: password,
     });

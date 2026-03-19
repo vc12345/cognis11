@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | Cognis11</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <script src="../js/auth-guard.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <div>
+                <h1>Cognis11 <span style="font-weight: 200;">Master Schema</span></h1>
+                <p id="user-welcome">Welcome, Scholar</p>
+            </div>
+            <div id="expiry-notice" style="font-size: 0.8rem; text-align: right; color: #94a3b8;">
+                Access expires: <span id="expiry-date">--/--/----</span>
+            </div>
+        </header>
+
+        <main id="lattice-root">
+            </main>
+    </div>
+
+    <script src="../js/registry.js"></script>
+    <script>
+        // Display User Info
+        const session = JSON.parse(localStorage.getItem('cognis_session'));
+        if (session) {
+            document.getElementById('user-welcome').innerText = `Welcome, ${session.userName}`;
+            document.getElementById('expiry-date').innerText = new Date(session.expiryDate).toLocaleDateString();
+        }
+
+        // Render the 59-Module Lattice
+        const root = document.getElementById('lattice-root');
+        
+        // Helper to group by Pillar
+        const pillars = [...new Set(COGNIS_MODULES.map(m => m.pillar))];
+
+        pillars.forEach(pillarName => {
+            const section = document.createElement('section');
+            section.className = 'pillar-section';
+            
+            section.innerHTML = `
+                <div class="pillar-header">
+                    <div style="width: 4px; height: 24px; background: var(--pillar-${pillarName.toLowerCase()})"></div>
+                    ${pillarName}
+                </div>
+                <div class="category-group" id="group-${pillarName}"></div>
+            `;
+            
+            root.appendChild(section);
+            const groupContainer = document.getElementById(`group-${pillarName}`);
+
+            COGNIS_MODULES.filter(m => m.pillar === pillarName).forEach(mod => {
+                const card = document.createElement('a');
+                card.className = 'module-card';
+                card.href = mod.path;
+                card.innerHTML = `
+                    <span class="category-tag">Category ${mod.cat}</span>
+                    <span class="module-title">${mod.title}</span>
+                    <span class="module-id">MOD-${String(mod.id).padStart(2, '0')}</span>
+                `;
+                groupContainer.appendChild(card);
+            });
+        });
+    </script>
+</body>
+</html>

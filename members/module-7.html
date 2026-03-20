@@ -117,7 +117,8 @@
     </section>
 </div>
 
-<script src="js/logic-provider.js"></script>
+<script src="../js/logic-provider.js"></script>
+
 <script>
     const vIn = document.getElementById('v-in');
     const pIn = document.getElementById('p-in');
@@ -130,6 +131,12 @@
     const bOp = document.getElementById('bot-op');
 
     function refresh() {
+        // Safety check: Make sure the logic provider actually loaded
+        if (typeof LogicProvider === 'undefined') {
+            console.error("LogicProvider not found. Check the file path!");
+            return;
+        }
+
         const val = parseFloat(vIn.value) || 0;
         const per = parseFloat(pIn.value) || 0;
         const isInc = tIn.value === 'inc';
@@ -146,13 +153,19 @@
         traceBox.innerHTML = res.steps.map(s => `<div class="trace-step">→ ${s}</div>`).join('');
     }
 
+    // Use Event Listeners instead of window.onload to prevent conflicts
     [vIn, pIn, tIn].forEach(el => el.addEventListener('input', refresh));
-    window.onload = refresh;
+    
+    // This ensures the engine fires as soon as the logic file is ready
+    document.addEventListener('DOMContentLoaded', () => {
+        // Small delay to ensure LogicProvider is fully parsed
+        setTimeout(refresh, 100);
+    });
 </script>
 
 <button onclick="markComplete(7)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
-</body>
+    Complete Module & Save Progress
+</button>
+
 </body>
 </html>

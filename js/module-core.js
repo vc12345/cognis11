@@ -49,19 +49,19 @@ function injectModuleNav(email) {
     const navHTML = `
         <style>
             .cognis-m-nav {
-                background: #fff;
+                background: #ffffff !important; /* Changed from black to white */
                 border-bottom: 1px solid #E5E3DD;
-                padding: 15px 30px;
+                padding: 12px 30px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 font-family: 'DM Sans', sans-serif;
                 position: sticky;
                 top: 0;
-                z-index: 100;
+                z-index: 1000;
             }
             .cognis-m-nav a {
-                color: #1B3A5C;
+                color: #1B3A5C !important;
                 text-decoration: none;
                 font-size: 0.85rem;
                 font-weight: 600;
@@ -69,25 +69,23 @@ function injectModuleNav(email) {
                 align-items: center;
                 gap: 8px;
             }
-            .cognis-m-nav .student-tag {
-                font-size: 0.7rem;
+            .cognis-m-nav .user-tag {
+                font-size: 0.75rem;
                 color: #888;
-                text-transform: uppercase;
-                letter-spacing: 0.05em;
+                font-weight: 400;
             }
-            /* Global Module Style Override to match Subscribe page */
-            body { background-color: #FAFAF6 !important; }
-            .module-card { border: 1px solid #E5E3DD !important; box-shadow: 0 4px 20px rgba(0,0,0,0.03) !important; }
-            .header { background: #1B3A5C !important; border-bottom: 4px solid #2E6DA4 !important; }
+            /* Clean up module background */
+            body { background-color: #FAFAF6 !important; margin: 0; }
         </style>
         <nav class="cognis-m-nav">
             <a href="/members/dashboard.html">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                Dashboard
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back to Dashboard
             </a>
-            <div class="student-tag">Scholar: ${email}</div>
+            <div class="user-tag">${email}</div> 
         </nav>
     `;
+    // Note: "Scholar" text has been removed above
     document.body.insertAdjacentHTML('afterbegin', navHTML);
 }
 

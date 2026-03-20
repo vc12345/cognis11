@@ -4,7 +4,7 @@ function injectNav() {
     const navHTML = `
         <style>
             .cognis-global-nav {
-                background: #ffffff;
+                background: #ffffff !important; /* Force White */
                 border-bottom: 1px solid #E5E3DD;
                 padding: 14px 32px;
                 display: flex;
@@ -18,10 +18,9 @@ function injectNav() {
             .global-nav-brand {
                 font-family: 'Playfair Display', serif;
                 font-size: 1.1rem;
-                color: #1B3A5C;
+                color: #1B3A5C !important; /* Force Navy */
                 font-weight: 700;
                 text-decoration: none;
-                letter-spacing: -0.01em;
             }
             .global-nav-right {
                 display: flex;
@@ -33,25 +32,16 @@ function injectNav() {
                 color: #1B3A5C;
                 font-size: 0.85rem;
                 font-weight: 500;
-                transition: color 0.15s;
-            }
-            .global-nav-link:hover {
-                color: #2E6DA4;
             }
             .global-nav-logout {
                 background: #1B3A5C;
                 color: #ffffff;
                 padding: 8px 18px;
                 border-radius: 5px;
-                text-decoration: none;
                 font-size: 0.85rem;
                 font-weight: 600;
                 border: none;
                 cursor: pointer;
-                transition: all 0.2s;
-            }
-            .global-nav-logout:hover {
-                background: #2E6DA4;
             }
         </style>
         <nav class="cognis-global-nav">
@@ -77,9 +67,4 @@ async function handleLogout() {
     window.location.href = "/login.html";
 }
 
-// Ensure it runs once the DOM is ready
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', injectNav);
-} else {
-    injectNav();
-}
+document.addEventListener('DOMContentLoaded', injectNav);

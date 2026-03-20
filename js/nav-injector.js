@@ -25,5 +25,5 @@ document.addEventListener("DOMContentLoaded", async function() {
 
 async function logout() {
     await window.supabaseClient.auth.signOut();
-    window.location.href = "/cognis11/login.html";
+    window.location.href = "/login.html";
 }

@@ -47,13 +47,45 @@ async function initModule(moduleId) {
 
 function injectModuleNav(email) {
     const navHTML = `
-        <nav class="module-nav" style="background: #0f172a; padding: 1rem; display: flex; justify-content: space-between; align-items: center; color: white; border-bottom: 2px solid #334155; font-family: sans-serif;">
-            <div style="display: flex; gap: 20px; align-items: center;">
-                <a href="/members/dashboard.html" style="color: #38bdf8; text-decoration: none; font-weight: bold;">← Back to Dashboard</a>
-                <span style="color: #334155;">|</span>
-                <span style="font-size: 0.9rem; font-weight: 500; color: #94a3b8;">Cognis 11+ Learning System</span>
-            </div>
-            <div style="font-size: 0.8rem; color: #64748b;">Student: ${email}</div>
+        <style>
+            .cognis-m-nav {
+                background: #fff;
+                border-bottom: 1px solid #E5E3DD;
+                padding: 15px 30px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-family: 'DM Sans', sans-serif;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+            .cognis-m-nav a {
+                color: #1B3A5C;
+                text-decoration: none;
+                font-size: 0.85rem;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .cognis-m-nav .student-tag {
+                font-size: 0.7rem;
+                color: #888;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+            /* Global Module Style Override to match Subscribe page */
+            body { background-color: #FAFAF6 !important; }
+            .module-card { border: 1px solid #E5E3DD !important; box-shadow: 0 4px 20px rgba(0,0,0,0.03) !important; }
+            .header { background: #1B3A5C !important; border-bottom: 4px solid #2E6DA4 !important; }
+        </style>
+        <nav class="cognis-m-nav">
+            <a href="/members/dashboard.html">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Dashboard
+            </a>
+            <div class="student-tag">Scholar: ${email}</div>
         </nav>
     `;
     document.body.insertAdjacentHTML('afterbegin', navHTML);

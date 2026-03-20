@@ -47,6 +47,15 @@
         .saboteur { border: 2px solid var(--trap-red); background: #fff5f5; }
         .trap-warning { color: var(--trap-red); font-weight: bold; }
     </style>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+
+    <script src="../js/module-core.js"></script>
+
+    <script>
+        // This connects this file to the 'id: 16' in your registry
+        document.addEventListener('DOMContentLoaded', () => initModule(1)); 
+    </script>
 </head>
 <body>
 
@@ -159,5 +168,8 @@
     update();
 </script>
 
+    <button onclick="markComplete(16)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
+        Complete Module & Save Progress
+    </button>
 </body>
 </html>

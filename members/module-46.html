@@ -34,6 +34,14 @@
         
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
     </style>
+    <script src="../js/supabase-config.js"></script>
+
+    <script src="../js/module-core.js"></script>
+
+    <script>
+        // This connects this file to the 'id: 46' in your registry
+        document.addEventListener('DOMContentLoaded', () => initModule(4)); 
+    </script>
 </head>
 <body>
 <div class="module-card">
@@ -137,5 +145,9 @@
 
     window.onload = () => loadSeries('slider', document.querySelector('.btn-logic.easy'));
 </script>
+
+    <button onclick="markComplete(46)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
+        Complete Module & Save Progress
+    </button>
 </body>
 </html>

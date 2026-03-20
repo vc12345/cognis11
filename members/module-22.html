@@ -32,6 +32,14 @@
         .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
         .btn-merge { width: 250px; background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
     </style>
+    <script src="../js/supabase-config.js"></script>
+
+    <script src="../js/module-core.js"></script>
+
+    <script>
+        // This connects this file to the 'id: 22' in your registry
+        document.addEventListener('DOMContentLoaded', () => initModule(22)); 
+    </script>
 </head>
 <body>
 <div class="module-card">
@@ -125,5 +133,9 @@
     }
     updateV3();
 </script>
+
+    <button onclick="markComplete(22)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
+        Complete Module & Save Progress
+    </button>
 </body>
 </html>

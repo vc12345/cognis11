@@ -41,6 +41,15 @@
         .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
         .trace-step { margin-bottom: 10px; line-height: 1.4; color: #e2e8f0; }
     </style>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+
+    <script src="../js/module-core.js"></script>
+
+    <script>
+        // This connects this file to the 'id: 8' in your registry
+        document.addEventListener('DOMContentLoaded', () => initModule(8)); 
+    </script>
 </head>
 <body>
 
@@ -159,5 +168,10 @@
     [tIn, nIn, dIn].forEach(el => el.addEventListener('input', refresh));
     window.onload = refresh;
 </script>
+
+<button onclick="markComplete(8)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
+        Complete Module & Save Progress
+    </button>
+</body>
 </body>
 </html>

@@ -67,6 +67,14 @@
         .fix { background: #f0fff4; border: 2px solid var(--pass-green); }
         .saboteur-panel h3 { margin-top: 0; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
     </style>
+    <script src="../js/supabase-config.js"></script>
+
+    <script src="../js/module-core.js"></script>
+
+    <script>
+        // This connects this file to the 'id: 5' in your registry
+        document.addEventListener('DOMContentLoaded', () => initModule(54)); 
+    </script>
 </head>
 <body>
 
@@ -161,5 +169,8 @@
     }
 </script>
 
+    <button onclick="markComplete(54)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
+        Complete Module & Save Progress
+    </button>
 </body>
 </html>

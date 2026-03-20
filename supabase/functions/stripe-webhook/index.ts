@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
   // 1. Safety Check: Is this actually Stripe calling?
   try {
     const body = await req.text()
-    const event = stripe.webhooks.constructEvent(
+    const event = await stripe.webhooks.constructEventAsync(
       body, 
       signature!, 
       Deno.env.get('STRIPE_WEBHOOK_SECRET') as string

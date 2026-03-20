@@ -39,6 +39,14 @@
         .shake-btn { background: var(--cognis-gold); color: white; border: none; padding: 15px 40px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 1rem; margin-top: 20px; transition: transform 0.1s; }
         .shake-btn:active { transform: scale(0.95); }
     </style>
+    <script src="../js/supabase-config.js"></script>
+
+    <script src="../js/module-core.js"></script>
+
+    <script>
+        // This connects this file to the 'id: 36' in your registry
+        document.addEventListener('DOMContentLoaded', () => initModule(3)); 
+    </script>
 </head>
 <body>
 <div class="module-card">
@@ -139,5 +147,9 @@
 
     window.onload = () => loadPair('LISTEN', 'SILENT');
 </script>
+
+    <button onclick="markComplete(36)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
+        Complete Module & Save Progress
+    </button>
 </body>
 </html>

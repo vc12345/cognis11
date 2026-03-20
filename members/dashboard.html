@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Cognis11</title>
+    <title>Learning Lattice | Cognis 11+</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/dashboard.css">
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -13,15 +14,20 @@
     <script src="../js/nav-injector.js"></script>
 </head>
 <body>
+    <div id="nav-placeholder"></div>
+
     <div class="dashboard-container">
-        <header>
-            <div>
-                <h1>Cognis11 <span style="font-weight: 200;">Master Schema</span></h1>
-                <p id="user-welcome">Syncing your progress...</p>
+        <header class="welcome-section">
+            <div class="header-left">
+                <h1 id="user-greeting">Welcome back.</h1>
+                <div class="status-bar">
+                    <span id="user-welcome">Syncing your progress...</span>
+                    <span class="dot-separator">•</span>
+                    <span id="account-status" class="status-badge status-checking">Checking Status</span>
+                </div>
             </div>
-            <div id="expiry-notice" style="font-size: 0.8rem; text-align: right; color: #94a3b8;">
-                Account Status: <span id="account-status" style="font-weight: bold; color: #f59e0b;">Checking...</span>
-            </div>
+            <div class="header-right">
+                </div>
         </header>
 
         <main id="lattice-root">
@@ -31,34 +37,34 @@
     <script src="../js/registry.js"></script>
     <script>
         async function loadDashboard() {
-            // Ensure connection is ready
             if (!window.supabaseClient) {
                 setTimeout(loadDashboard, 100);
                 return;
             }
 
             try {
-                // 1. Get Logged-in User
+                // 1. Authenticate User
                 const { data: { user }, error: authError } = await window.supabaseClient.auth.getUser();
                 if (authError || !user) return;
 
-                document.getElementById('user-welcome').innerText = `Welcome, ${user.email}`;
+                // Update UI with user info
+                document.getElementById('user-welcome').innerText = user.email;
 
                 // 2. Fetch Subscription Status
-                const { data: profile, error: profileError } = await window.supabaseClient
+                const { data: profile } = await window.supabaseClient
                     .from('profiles')
                     .select('subscription_status')
                     .eq('id', user.id)
                     .maybeSingle();
 
+                const statusEl = document.getElementById('account-status');
                 if (profile) {
-                    const statusEl = document.getElementById('account-status');
                     const status = profile.subscription_status || 'inactive';
-                    statusEl.innerText = status.charAt(0).toUpperCase() + status.slice(1);
-                    statusEl.style.color = (status === 'active') ? '#10b981' : '#ef4444';
+                    statusEl.innerText = status.toUpperCase();
+                    statusEl.className = `status-badge status-${status}`;
                 }
 
-                // 3. Fetch Progress
+                // 3. Fetch Completed Modules
                 const { data: completedData } = await window.supabaseClient
                     .from('module_progress')
                     .select('module_id')
@@ -66,39 +72,49 @@
 
                 const completedIds = completedData ? completedData.map(item => item.module_id) : [];
 
-                // 4. Render Lattice
+                // 4. Render the Lattice
                 const root = document.getElementById('lattice-root');
                 root.innerHTML = ''; 
+                
                 const pillars = [...new Set(COGNIS_MODULES.map(m => m.pillar))];
 
                 pillars.forEach(pillarName => {
                     const section = document.createElement('section');
                     section.className = 'pillar-section';
+                    
                     section.innerHTML = `
                         <div class="pillar-header">
-                            <div style="width: 4px; height: 24px; background: var(--pillar-${pillarName.toLowerCase()})"></div>
-                            ${pillarName}
+                            <span class="pillar-indicator" style="background: var(--pillar-${pillarName.toLowerCase()})"></span>
+                            <h2>${pillarName}</h2>
                         </div>
-                        <div class="category-group" id="group-${pillarName}"></div>
+                        <div class="category-grid" id="group-${pillarName}"></div>
                     `;
                     root.appendChild(section);
+                    
                     const groupContainer = document.getElementById(`group-${pillarName}`);
 
                     COGNIS_MODULES.filter(m => m.pillar === pillarName).forEach(mod => {
                         const isDone = completedIds.includes(mod.id);
                         const card = document.createElement('a');
-                        card.className = `module-card ${isDone ? 'module-done' : ''}`;
+                        card.className = `module-card ${isDone ? 'is-complete' : ''}`;
                         card.href = mod.path;
+                        
                         card.innerHTML = `
-                            <span class="category-tag">Category ${mod.cat} ${isDone ? '✅' : ''}</span>
-                            <span class="module-title">${mod.title}</span>
-                            <span class="module-id" style="${isDone ? 'color: #059669;' : ''}">MOD-${String(mod.id).padStart(2, '0')}</span>
+                            <div class="card-top">
+                                <span class="cat-tag">Category ${mod.cat}</span>
+                                ${isDone ? '<span class="check-mark">✓</span>' : ''}
+                            </div>
+                            <h3 class="mod-title">${mod.title}</h3>
+                            <div class="card-bottom">
+                                <span class="mod-id">UNIT ${String(mod.id).padStart(2, '0')}</span>
+                                <span class="status-text">${isDone ? 'Completed' : 'View Module →'}</span>
+                            </div>
                         `;
                         groupContainer.appendChild(card);
                     });
                 });
             } catch (err) {
-                console.error("Dashboard Load Error:", err);
+                console.error("Lattice Sync Error:", err);
             }
         }
         loadDashboard();

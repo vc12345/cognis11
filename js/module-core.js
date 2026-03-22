@@ -48,14 +48,27 @@ async function initModule(moduleId) {
 function injectModuleNav(email) {
     const navHTML = `
         <style>
+            /* 1. MASTER BRANDING OVERRIDES */
+            body { 
+                background-color: #FAFAF6 !important; 
+                color: #1B3A5C !important;
+                font-family: 'DM Sans', sans-serif !important;
+            }
+            .module-card { 
+                max-width: 920px !important; 
+                border: 1px solid #E5E3DD !important; 
+                box-shadow: 0 10px 40px rgba(0,0,0,0.03) !important;
+                background: white !important;
+            }
+
+            /* 2. NAVIGATION BAR */
             .cognis-m-nav {
-                background: #ffffff !important; /* Changed from black to white */
+                background: #ffffff !important;
                 border-bottom: 1px solid #E5E3DD;
                 padding: 12px 30px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                font-family: 'DM Sans', sans-serif;
                 position: sticky;
                 top: 0;
                 z-index: 1000;
@@ -69,13 +82,78 @@ function injectModuleNav(email) {
                 align-items: center;
                 gap: 8px;
             }
-            .cognis-m-nav .user-tag {
-                font-size: 0.75rem;
-                color: #888;
-                font-weight: 400;
+            .cognis-m-nav .user-tag { font-size: 0.75rem; color: #888; }
+
+            /* 3. THE ENGINE (Dark Logic Center) */
+            .simulation-area, .engine-container { 
+                background: #1B3A5C !important; 
+                color: white !important;
+                border-radius: 12px !important;
+                border: none !important;
             }
-            /* Clean up module background */
-            body { background-color: #FAFAF6 !important; margin: 0; }
+            .trace-log, [id*="trace"], [id*="logic"] { 
+                background: rgba(0,0,0,0.25) !important; 
+                border-left: 4px solid #c5a059 !important;
+                color: #48bb78 !important; /* Terminal Green */
+                font-family: 'Consolas', monospace !important;
+                font-size: 0.85rem !important;
+                line-height: 1.6 !important;
+            }
+
+            /* 4. THE SABOTEUR (Phase 4 Face-Off) */
+            .saboteur-grid { 
+                display: grid !important; 
+                grid-template-columns: 1fr 1fr !important; 
+                gap: 20px !important; 
+                margin-top: 20px !important; 
+            }
+            
+            /* The Trap Panel (Red) */
+            .saboteur-panel.trap, .phase:last-of-type div[style*="background: #fff5f5"] { 
+                background: #FFF5F5 !important; 
+                border: 2px solid #d9534f !important; 
+                border-radius: 12px !important;
+                padding: 25px !important;
+                color: #1B3A5C !important;
+            }
+            
+            /* The Fix Panel (Green) */
+            .saboteur-panel.fix, .phase:last-of-type div[style*="background: #f0fff4"] { 
+                background: #F0FFF4 !important; 
+                border: 2px solid #48bb78 !important; 
+                border-radius: 12px !important;
+                padding: 25px !important;
+                color: #1B3A5C !important;
+            }
+
+            .saboteur-panel h3 {
+                margin: 0 0 10px 0 !important;
+                font-size: 0.75rem !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.1em !important;
+                font-weight: 800 !important;
+            }
+
+            /* 5. THE COMPLETE BUTTON */
+            button[onclick*="markComplete"] {
+                background: #1B3A5C !important;
+                border: none !important;
+                border-radius: 6px !important;
+                color: white !important;
+                padding: 18px 40px !important;
+                font-weight: 700 !important;
+                font-family: 'DM Sans', sans-serif !important;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            button[onclick*="markComplete"]:hover {
+                background: #2E6DA4 !important;
+                transform: translateY(-2px);
+            }
+
+            @media (max-width: 600px) {
+                .saboteur-grid { grid-template-columns: 1fr !important; }
+            }
         </style>
         <nav class="cognis-m-nav">
             <a href="/members/dashboard.html">
@@ -85,7 +163,6 @@ function injectModuleNav(email) {
             <div class="user-tag">${email}</div> 
         </nav>
     `;
-    // Note: "Scholar" text has been removed above
     document.body.insertAdjacentHTML('afterbegin', navHTML);
 }
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deep Understander · Cognitive Profile Checklist</title>
+<title>Cognitive Profile Diagnostic · Cognis 11+</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -22,440 +22,229 @@
 html{scroll-behavior:smooth}
 body{font-family:var(--font-body);background:var(--cream);color:var(--dgrey);min-height:100vh;font-size:16px;line-height:1.6}
 
-/* PROGRESS */
+/* PROGRESS & NAV */
 #progressBar{position:fixed;top:0;left:0;right:0;height:3px;background:var(--lgrey);z-index:200}
 #progressFill{height:100%;background:var(--steel);transition:width .6s ease;width:0%}
 
-/* NAV */
 nav{position:fixed;top:3px;left:0;right:0;background:rgba(250,250,246,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--lgrey);padding:13px 44px;display:flex;align-items:center;justify-content:space-between;z-index:199}
-.nav-brand{font-family:var(--font-display);font-size:1.05rem;font-weight:600;color:var(--navy);letter-spacing:-.01em}
+.nav-brand{font-family:var(--font-display);font-size:1.05rem;font-weight:600;color:var(--navy);letter-spacing:-.01em;text-decoration:none}
 .nav-right{display:flex;align-items:center;gap:20px}
 .nav-step{font-size:.72rem;color:var(--mgrey);font-weight:500;letter-spacing:.08em;text-transform:uppercase}
-.nav-save-badge{font-size:.72rem;font-weight:600;color:var(--green);letter-spacing:.04em;opacity:0;transition:opacity .3s;background:var(--lgreen);padding:3px 10px;border-radius:12px}
-.nav-save-badge.show{opacity:1}
 
-/* GATE */
-#gate{display:none;min-height:100vh;padding:0 44px;max-width:860px;margin:0 auto;flex-direction:column;justify-content:center}
-#gate.active{display:flex}
-.gate-wrap{padding-top:80px;max-width:520px}
-.gate-tag{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin-bottom:20px}
-.gate-h1{font-family:var(--font-display);font-size:clamp(2rem,4.5vw,2.9rem);line-height:1.12;font-weight:700;color:var(--navy);margin-bottom:14px}
-.gate-h1 em{font-style:italic;color:var(--steel)}
-.gate-sub{font-size:.97rem;color:var(--mgrey);font-weight:300;line-height:1.7;margin-bottom:32px}
-.gate-promises{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;background:var(--offwhite);border:1px solid var(--lgrey);border-radius:var(--radius);padding:20px 22px}
-.gate-promise{display:flex;gap:12px;align-items:flex-start;font-size:.88rem;line-height:1.5;color:var(--dgrey)}
-.gate-promise-icon{width:20px;height:20px;border-radius:50%;background:var(--steel);color:var(--white);font-size:.62rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-.gate-fields{display:flex;flex-direction:column;gap:16px;margin-bottom:8px}
-.gate-field{display:flex;flex-direction:column;gap:8px}
-.gate-field label{font-size:.74rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--navy)}
-.gate-field input{padding:13px 17px;border:1.5px solid var(--xgrey);border-radius:6px;background:var(--white);font-family:var(--font-body);font-size:1rem;color:var(--dgrey);outline:none;transition:border-color .2s;width:100%}
-.gate-field input:focus{border-color:var(--steel)}
-.gate-err{font-size:.79rem;color:var(--red);margin-top:2px;display:none}
-.gate-field.has-error .gate-err{display:block}
-.gate-field.has-error input{border-color:var(--red)}
-.gate-legal{font-size:.76rem;color:var(--mgrey);line-height:1.6;margin-top:14px}
+/* GATE & CHECKLIST */
+#gate, #checklist, #result { display:none; padding:120px 44px; max-width:1100px; margin:0 auto; }
+#gate.active { display:flex; flex-direction:column; justify-content:center; min-height:80vh; }
+#checklist.active, #result.active { display:block; }
 
-/* BUTTONS */
-.btn-primary{display:inline-flex;align-items:center;gap:9px;background:var(--navy);color:var(--white);font-family:var(--font-body);font-size:.93rem;font-weight:600;padding:15px 34px;border-radius:6px;border:none;cursor:pointer;transition:background .2s,transform .12s;letter-spacing:.01em}
-.btn-primary:hover{background:var(--steel);transform:translateY(-1px)}
-.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--navy);font-family:var(--font-body);font-size:.88rem;font-weight:500;padding:11px 22px;border-radius:6px;border:1.5px solid var(--xgrey);cursor:pointer;transition:border-color .2s,background .2s}
-.btn-secondary:hover{border-color:var(--navy);background:var(--offwhite)}
-.btn-row{display:flex;gap:14px;align-items:center;margin-top:36px;flex-wrap:wrap}
+.gate-wrap { max-width:520px; }
+.lists-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:40px; }
+.list-col { border:1px solid var(--lgrey); border-radius:var(--radius); overflow:hidden; background:var(--white); box-shadow:var(--shadow); }
+.list-head-a { background:var(--lblue); padding:20px; border-bottom:1px solid #cdddf0; }
+.list-head-b { background:var(--offwhite); padding:20px; border-bottom:1px solid var(--lgrey); }
 
-/* CHECKLIST SCREEN */
-#checklist{display:none;padding:96px 44px 140px;max-width:1100px;margin:0 auto}
-#checklist.active{display:block}
-
-.checklist-header{max-width:660px;margin:0 auto 36px;text-align:center}
-.checklist-header h1{font-family:var(--font-display);font-size:clamp(1.6rem,3vw,2.1rem);font-weight:700;color:var(--navy);line-height:1.22;margin-bottom:10px}
-.checklist-header p{font-size:.93rem;color:var(--mgrey);line-height:1.65}
-
-/* TWO LISTS */
-.lists-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
-.list-col{border:1px solid var(--lgrey);border-radius:var(--radius);overflow:hidden;background:var(--white);box-shadow:var(--shadow)}
-.list-col-head{padding:20px 24px 18px;border-bottom:1px solid var(--lgrey)}
-.list-col-head.head-a{background:var(--lblue);border-bottom-color:#cdddf0}
-.list-col-head.head-b{background:var(--offwhite)}
-.list-col-tag{font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
-.head-a .list-col-tag{color:var(--steel)}
-.head-b .list-col-tag{color:var(--mgrey)}
-.list-col-head h2{font-family:var(--font-display);font-size:1.12rem;font-weight:700;color:var(--navy);margin-bottom:4px}
-.list-col-head p{font-size:.81rem;color:var(--mgrey);line-height:1.45;margin:0}
-
-/* TRAIT ITEMS */
-.trait-list{padding:4px 0}
-.trait-item{display:flex;align-items:flex-start;gap:13px;padding:13px 20px;cursor:pointer;transition:background .1s;user-select:none;border-bottom:1px solid var(--lgrey)}
-.trait-item:last-child{border-bottom:none}
-.trait-item:hover{background:var(--offwhite)}
-.trait-item.checked.a{background:#edf4fc}
-.trait-item.checked.b{background:#fdf8f0}
-.trait-box{flex-shrink:0;width:19px;height:19px;border:1.5px solid var(--xgrey);border-radius:4px;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .15s;font-size:.7rem;color:transparent;font-weight:700}
-.trait-item.checked.a .trait-box{background:var(--steel);border-color:var(--steel);color:var(--white)}
-.trait-item.checked.b .trait-box{background:#8a6020;border-color:#8a6020;color:var(--white)}
-.trait-content{flex:1}
-.trait-main{font-size:.9rem;color:var(--dgrey);line-height:1.45;margin-bottom:4px}
-.trait-example{font-size:.79rem;color:var(--mgrey);line-height:1.45;font-style:italic}
-
-/* TALLY */
-.tally-row{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:20px}
-.tally-cell{text-align:center;padding:16px;border:1px solid var(--lgrey);border-radius:var(--radius);background:var(--white)}
-.tally-cell.tally-a{background:var(--lblue);border-color:#cdddf0}
-.tally-n{font-family:var(--font-display);font-size:2.8rem;font-weight:700;color:var(--navy);line-height:1}
-.tally-label{font-size:.7rem;font-weight:600;color:var(--mgrey);margin-top:5px;letter-spacing:.06em;text-transform:uppercase}
-
-/* STICKY FOOT */
-.sticky-foot{position:fixed;bottom:0;left:0;right:0;background:rgba(250,250,246,.97);backdrop-filter:blur(8px);border-top:1px solid var(--lgrey);padding:14px 44px;display:flex;justify-content:space-between;align-items:center;z-index:199}
-.sticky-foot-left{display:flex;flex-direction:column;gap:2px}
-.sticky-foot-info{font-size:.82rem;color:var(--mgrey)}
-.sticky-foot-hint{font-size:.76rem;color:var(--xgrey)}
-
-/* SAVE TOAST */
-#saveToast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--navy);color:var(--white);padding:10px 22px;border-radius:20px;font-size:.85rem;font-weight:500;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;z-index:300;white-space:nowrap}
-#saveToast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.trait-item { display:flex; align-items:flex-start; gap:13px; padding:15px 20px; cursor:pointer; border-bottom:1px solid var(--lgrey); transition: background 0.1s; }
+.trait-item:hover { background: var(--offwhite); }
+.trait-item.checked.a { background:#edf4fc; }
+.trait-item.checked.b { background:#fdf8f0; }
+.trait-box { flex-shrink:0; width:19px; height:19px; border:1.5px solid var(--xgrey); border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:.7rem; color:transparent; margin-top:2px; }
+.trait-item.checked .trait-box { background:var(--navy); border-color:var(--navy); color:white; }
+.trait-main { font-size:.88rem; color:var(--dgrey); line-height:1.4; margin-bottom:2px; }
+.trait-example { font-size:.78rem; color:var(--mgrey); font-style:italic; }
 
 /* RESULT */
-#result{display:none;padding:96px 44px 80px;max-width:860px;margin:0 auto}
-#result.active{display:block}
+.report-hero { background:var(--navy); border-radius:12px; padding:44px; margin-bottom:36px; color:white; }
+.rh-type { font-family:var(--font-display); font-size:2.2rem; margin-bottom:10px; }
+.report-body h2 { font-family:var(--font-display); color:var(--navy); margin:40px 0 15px; font-size:1.5rem; }
 
-.report-hero{background:var(--navy);border-radius:12px;padding:44px;margin-bottom:36px;position:relative;overflow:hidden}
-.report-hero::before{content:'';position:absolute;top:-70px;right:-70px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.04)}
-.report-hero::after{content:'';position:absolute;bottom:-50px;left:50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.03)}
-.rh-tag{font-size:.7rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:9px}
-.rh-type{font-family:var(--font-display);font-size:2rem;font-weight:700;color:var(--white);line-height:1.22;margin-bottom:10px}
-.rh-type em{font-style:italic;opacity:.85}
-.score-pills-row{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
-.score-pill{padding:7px 16px;border-radius:20px;font-size:.83rem;font-weight:600;display:flex;align-items:center;gap:8px}
-.score-pill.pill-a{background:rgba(46,109,164,.28);color:rgba(255,255,255,.9)}
-.score-pill.pill-b{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
-.score-pill-n{font-family:var(--font-display);font-size:1.2rem;font-weight:700}
-.rh-pills{display:flex;flex-wrap:wrap;gap:8px}
-.rpill{padding:5px 13px;border-radius:16px;font-size:.75rem;font-weight:600;letter-spacing:.02em}
-.rpill-a{background:rgba(46,109,164,.3);color:rgba(255,255,255,.85)}
-.rpill-b{background:rgba(39,98,69,.35);color:rgba(255,255,255,.85)}
-.rpill-mx{background:rgba(160,88,0,.3);color:rgba(255,255,255,.85)}
+/* TIERS */
+.tier-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:40px; }
+.tier-card { background:white; border:1px solid var(--lgrey); padding:30px; border-radius:12px; display:flex; flex-direction:column; }
+.tier-price { font-size:1.8rem; font-weight:700; color:var(--steel); margin-bottom:15px; }
+.tier-price span { font-size:0.9rem; color:var(--mgrey); font-weight:400; }
+.btn-tier { background:var(--navy); color:white; text-decoration:none; padding:15px; border-radius:6px; text-align:center; font-weight:600; margin-top:auto; }
 
-.report-body{font-size:.95rem;line-height:1.75;color:var(--dgrey)}
-.report-body h2{font-family:var(--font-display);font-size:1.3rem;font-weight:600;color:var(--navy);margin:32px 0 12px}
-.report-body p{margin-bottom:13px}
-.report-body strong{color:var(--navy);font-weight:600}
+.sticky-foot { position:fixed; bottom:0; left:0; right:0; background:rgba(250,250,246,.97); backdrop-filter:blur(8px); border-top:1px solid var(--lgrey); padding:18px 44px; display:flex; justify-content:space-between; align-items:center; z-index:199; }
+.btn-primary { background:var(--navy); color:white; border:none; padding:15px 30px; border-radius:6px; font-weight:600; cursor:pointer; }
 
-.nudge-box{background:var(--lblue);border-left:3px solid var(--steel);padding:18px 22px;border-radius:0 var(--radius) var(--radius) 0;margin:24px 0}
-.nudge-box p{color:var(--navy);margin-bottom:8px;font-size:.93rem;line-height:1.65}
-.nudge-box p:last-child{margin-bottom:0}
-.note-box{background:var(--lamber);border-left:3px solid var(--amber);padding:18px 22px;border-radius:0 var(--radius) var(--radius) 0;margin:24px 0}
-.note-box p{color:var(--dgrey);margin-bottom:8px;font-size:.93rem;line-height:1.65}
-.note-box p:last-child{margin-bottom:0}
+footer { border-top:1px solid var(--lgrey); padding:60px; text-align:center; font-size:.85rem; color:var(--mgrey); margin-top:80px; }
+footer a { color: var(--navy); text-decoration: none; font-weight: 500; }
 
-.free-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.free-links a{font-size:.83rem;color:var(--steel);text-decoration:none;border-bottom:1px solid currentColor}
-.free-links a:hover{opacity:.75}
-
-/* UPSELL */
-.upsell{background:linear-gradient(135deg,var(--navy) 0%,#2a4f7a 100%);border-radius:12px;padding:44px;margin-top:44px;color:var(--white);position:relative;overflow:hidden}
-.upsell::before{content:'';position:absolute;top:-80px;right:-40px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.04)}
-.upsell-tag{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:12px}
-.upsell-title{font-family:var(--font-display);font-size:1.65rem;font-weight:700;line-height:1.22;margin-bottom:12px}
-.upsell-desc{font-size:.92rem;line-height:1.7;color:rgba(255,255,255,.72);max-width:520px;margin-bottom:28px}
-.upsell-feats{display:flex;flex-direction:column;gap:9px;margin-bottom:32px}
-.upsell-feat{display:flex;gap:11px;align-items:flex-start;font-size:.88rem;color:rgba(255,255,255,.78);line-height:1.5}
-.ucheck{width:19px;height:19px;border-radius:50%;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.62rem;font-weight:700;color:var(--white);margin-top:1px}
-.upsell-price-row{display:flex;align-items:baseline;gap:9px;margin-bottom:22px}
-.upsell-price{font-family:var(--font-display);font-size:2.3rem;font-weight:700;color:var(--white)}
-.upsell-price-sub{font-size:.86rem;color:rgba(255,255,255,.45)}
-.btn-upsell{display:inline-flex;align-items:center;gap:9px;background:var(--white);color:var(--navy);font-family:var(--font-body);font-size:.95rem;font-weight:700;padding:17px 38px;border-radius:6px;border:none;cursor:pointer;transition:transform .14s,box-shadow .14s;letter-spacing:.01em}
-.btn-upsell:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.22)}
-.upsell-note{margin-top:14px;font-size:.75rem;color:rgba(255,255,255,.3)}
-
-/* RESPONSIVE */
-@media(max-width:720px){
-  nav{padding:11px 20px}
-  #gate,#checklist,#result{padding-left:20px;padding-right:20px}
-  .lists-grid{grid-template-columns:1fr}
-  .tally-row{grid-template-columns:1fr 1fr}
-  .sticky-foot{padding:13px 20px}
-  .report-hero,.upsell{padding:28px 24px}
-}
-@media(max-width:420px){
-  .tally-row{grid-template-columns:1fr}
-}
+@media(max-width:750px){ .lists-grid, .tier-grid { grid-template-columns:1fr; } .sticky-foot { flex-direction:column; gap:10px; text-align:center; } }
 </style>
 </head>
 <body>
 
 <div id="progressBar"><div id="progressFill"></div></div>
-<div id="saveToast">Progress saved ✓</div>
 
 <nav>
-  <div class="nav-brand">Cognis 11+ · Diagnostic</div>
+  <a href="index.html" class="nav-brand">Cognis 11+</a>
   <div class="nav-right">
-    <div class="nav-step" id="navStep"></div>
-    <div class="nav-save-badge" id="saveBadge">Saved ✓</div>
+    <div class="nav-step" id="navStep">Diagnostic</div>
   </div>
 </nav>
 
-<!-- GATE -->
-<div id="gate">
+<div id="gate" class="active">
   <div class="gate-wrap">
-    <div class="gate-tag">Cognitive Profile Checklist · Free · 5 minutes</div>
-    <h1 class="gate-h1">Is your child a<br><em>Deep Understander?</em></h1>
-    <p class="gate-sub">Two short lists. Tick what applies. See what your observations suggest — and what it means for your child's 11+ preparation.</p>
-    <div class="gate-promises">
-      <div class="gate-promise"><div class="gate-promise-icon">✓</div><span>No scoring, no judgement. You are observing, not testing.</span></div>
-      <div class="gate-promise"><div class="gate-promise-icon">✉</div><span>We'll send a copy of your result to this address so you always have it to hand.</span></div>
-      <div class="gate-promise"><div class="gate-promise-icon">→</div><span>Takes around 5 minutes. No preparation or materials needed.</span></div>
+    <h1 style="font-family:var(--font-display); font-size:2.8rem; color:var(--navy); line-height:1.1; margin-bottom:20px;">Is your child a<br><em>Deep Understander?</em></h1>
+    <p style="margin-bottom:30px; color:var(--mgrey); font-size:1.05rem;">We'll compare your observations against two distinct cognitive profiles to identify the preparation path your child actually needs.</p>
+    <div style="display:flex; flex-direction:column; gap:15px; margin-bottom:24px;">
+      <input type="text" id="gateName" placeholder="Child's first name" style="padding:15px; border:1.5px solid var(--lgrey); border-radius:6px; font-size:1rem;">
+      <input type="email" id="gateEmail" placeholder="Your email address" style="padding:15px; border:1.5px solid var(--lgrey); border-radius:6px; font-size:1rem;">
     </div>
-    <div class="gate-fields">
-      <div class="gate-field" id="fieldEmail">
-        <label for="gateEmail">Your email address</label>
-        <input type="email" id="gateEmail" placeholder="you@example.com" autocomplete="email" autocapitalize="none">
-        <div class="gate-err">Please enter a valid email address.</div>
-      </div>
-      <div class="gate-field" id="fieldName">
-        <label for="gateName">Your child's first name</label>
-        <input type="text" id="gateName" placeholder="e.g. Priya" maxlength="40" autocomplete="off">
-        <div class="gate-err">Please enter your child's name.</div>
-      </div>
-    </div>
-    <div class="btn-row" style="margin-top:24px">
-      <button class="btn-primary" onclick="submitGate()">Begin →</button>
-    </div>
-    <p class="gate-legal">We'll only use your email to send your result. No marketing without your consent.</p>
+    <button class="btn-primary" onclick="submitGate()">Begin Observations →</button>
   </div>
 </div>
 
-<!-- CHECKLIST -->
 <div id="checklist">
-  <div class="checklist-header">
-    <h1>Tick everything that describes <span id="nameHeading">your child</span> most of the time.</h1>
-    <p>Think about everyday situations — schoolwork, games, decisions. There are no right answers. You are observing, not scoring.</p>
+  <div style="text-align:center; margin-bottom:40px;">
+    <h1 style="font-family:var(--font-display); color:var(--navy);">Observation Checklist: <span id="nameHeading"></span></h1>
   </div>
 
   <div class="lists-grid">
-
-    <!-- LIST A -->
     <div class="list-col">
-      <div class="list-col-head head-a">
-        <div class="list-col-tag">List A</div>
-        <h2>The Deep Understander</h2>
-        <p>Thinks before acting. Wants to know why, not just what.</p>
+      <div class="list-head-a">
+        <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--steel); margin-bottom:4px;">Profile Type A</div>
+        <h2 style="font-family:var(--font-display);">The Deep Understander</h2>
       </div>
-      <div class="trait-list">
-        <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Asks "why" more than "what" — wants to understand how something works, not just what to do.</div><div class="trait-example">After learning that 3 × 4 = 12, asks: "But why does multiplying make it bigger?"</div></div></div>
-        <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Reads or listens carefully before starting — pauses to understand before acting.</div><div class="trait-example">In a board game, waits for all the rules before touching any pieces, even if others have started.</div></div></div>
-        <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Performs noticeably well on unfamiliar or unusual problems — ones that can't be pattern-matched.</div><div class="trait-example">A tricky word problem they haven't seen before often gets a better response than a fast drill question.</div></div></div>
-        <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Explains their reasoning clearly — can walk you through how they got an answer step by step.</div><div class="trait-example">"I knew it was addition because the total was missing, not one of the parts."</div></div></div>
-        <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Becomes bored or disengaged quickly during repetitive drilling — seems to plateau early.</div><div class="trait-example">After 8 or 9 of the same question type, visibly loses focus even when getting them right.</div></div></div>
-        <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Wants to understand why they got something wrong — won't just accept a correction and move on.</div><div class="trait-example">"But I don't understand — why is the answer 5p and not 10p?"</div></div></div>
-        <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Under time pressure, performance drops noticeably — more than you'd expect given their ability in relaxed conditions.</div><div class="trait-example">Gets most things right with no clock; runs out of time or makes careless errors toward the end of timed papers.</div></div></div>
-        <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">When stuck, pauses and thinks before trying something — doesn't just guess and see what happens.</div><div class="trait-example">Sits quietly looking at a puzzle for 30 seconds before moving a single piece.</div></div></div>
-        <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Gets noticeably bothered by not knowing something — persists until they understand.</div><div class="trait-example">A single unexplained word will hold them up even when it isn't needed to understand the rest.</div></div></div>
-        <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">When a rule is disputed, argues their position with reasoning — "but that doesn't make sense because…"</div><div class="trait-example">Insists on finding the correct answer rather than accepting a majority view and moving on.</div></div></div>
-      </div>
+      <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Asks "why" more than "what" — wants the underlying logic.</div><div class="trait-example">"But why does multiplying by a fraction make it smaller?"</div></div></div>
+      <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Pauses to understand before acting — avoids rushing.</div><div class="trait-example">Waits until all rules are explained before starting a game.</div></div></div>
+      <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Performance drops noticeably under time pressure.</div><div class="trait-example">Gets most things right with no clock; makes careless errors in timed tests.</div></div></div>
+      <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Performs well on unfamiliar or unusual problems.</div><div class="trait-example">Tricky word problems often get a better response than simple drills.</div></div></div>
+      <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Explains reasoning clearly and step-by-step.</div><div class="trait-example">"I knew it was subtraction because the total was already there."</div></div></div>
+      <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Bored or plateauing on repetitive drilling.</div><div class="trait-example">Visibly loses focus after 8 or 9 of the same question type.</div></div></div>
+      <div class="trait-item a" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Persists until a specific gap is understood.</div><div class="trait-example">Will dwell on one single word they don't know before moving on.</div></div></div>
     </div>
 
-    <!-- LIST B -->
     <div class="list-col">
-      <div class="list-col-head head-b">
-        <div class="list-col-tag">List B</div>
-        <h2>The Pattern Recogniser</h2>
-        <p>Acts quickly. Trusts instincts. Matches to what they've seen before.</p>
+      <div class="list-head-b">
+        <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--mgrey); margin-bottom:4px;">Profile Type B</div>
+        <h2 style="font-family:var(--font-display);">The Pattern Recogniser</h2>
       </div>
-      <div class="trait-list">
-        <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Jumps into problems quickly — starts before finishing reading the question.</div><div class="trait-example">Begins writing an answer while you're still reading the problem aloud.</div></div></div>
-        <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Spots patterns quickly and confidently — seems to "just know" the answer without being able to explain how.</div><div class="trait-example">Looks at a number sequence and says "32" immediately, without being able to name the rule.</div></div></div>
-        <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Performs well under time pressure — speed feels natural, not stressful.</div><div class="trait-example">Timed tests don't seem to affect accuracy much — they finish with time to spare.</div></div></div>
-        <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Benefits noticeably from repetitive practice — scores improve steadily as the same question types recur.</div><div class="trait-example">After a week on the same question type, answers become noticeably faster and more confident.</div></div></div>
-        <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Accepts a correction and moves on without needing to understand why they were wrong.</div><div class="trait-example">"Oh, it's 5p — ok." Then immediately moves to the next question.</div></div></div>
-        <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Struggles more with unusual or novel questions — performs better on familiar formats.</div><div class="trait-example">A question phrased in an unfamiliar way throws them off, even if the underlying maths is easy.</div></div></div>
-        <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Prefers action over analysis — gets restless when asked to plan or reflect before doing.</div><div class="trait-example">In a group project, wants to start building immediately rather than spend time planning.</div></div></div>
-        <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Finds it hard to explain their working — gets the right answer but struggles to say how.</div><div class="trait-example">"I just knew it was 8." Can't reconstruct the steps even when the answer is correct.</div></div></div>
-        <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Moves on easily when they don't know something — doesn't dwell on gaps.</div><div class="trait-example">Encounters an unfamiliar word, skips it, keeps going without it seeming to bother them.</div></div></div>
-        <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Happy to learn rules as they go — will start a new game before fully understanding it.</div><div class="trait-example">Wants to start a new board game immediately; picks up the rules from the first round of play.</div></div></div>
-      </div>
-    </div>
-
-  </div><!-- /lists-grid -->
-
-  <div class="tally-row">
-    <div class="tally-cell tally-a">
-      <div class="tally-n" id="countA">0</div>
-      <div class="tally-label">List A ticked</div>
-    </div>
-    <div class="tally-cell">
-      <div class="tally-n" id="countB">0</div>
-      <div class="tally-label">List B ticked</div>
+      <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Jumps into problems quickly — trusts first instincts.</div><div class="trait-example">Starts writing an answer while the problem is still being read.</div></div></div>
+      <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Spots patterns confidently but struggles to explain "how".</div><div class="trait-example">"I just knew the next number was 32."</div></div></div>
+      <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Speed feels natural; finishes timed tests with ease.</div><div class="trait-example">Timed papers don't seem to affect their accuracy much.</div></div></div>
+      <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Scores improve steadily with high-volume practice.</div><div class="trait-example">Confidence grows the more they see the same format.</div></div></div>
+      <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Accepts a correction and moves on without dwelling.</div><div class="trait-example">"Oh, it's 12. Okay, next one."</div></div></div>
+      <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Restless when asked to plan or reflect before doing.</div><div class="trait-example">Wants to start building/doing immediately rather than analyzing.</div></div></div>
+      <div class="trait-item b" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Struggles with novel questions phrased in unfamiliar ways.</div><div class="trait-example">A simple maths problem hidden in a weird story throws them off.</div></div></div>
     </div>
   </div>
-</div><!-- /checklist -->
 
-<!-- Sticky CTA -->
-<div class="sticky-foot" id="stickyFoot" style="display:none">
-  <div class="sticky-foot-left">
-    <div class="sticky-foot-info">Tick everything that applies — then continue.</div>
-    <div class="sticky-foot-hint">You don't need to tick everything. Only tick what genuinely applies.</div>
+  <div class="sticky-foot">
+    <div style="color:var(--mgrey); font-size:0.85rem;">Tick all that apply to see the profile comparison.</div>
+    <button class="btn-primary" onclick="showResult()">Complete Diagnostic →</button>
   </div>
-  <button class="btn-primary" onclick="showResult()">See what your observations suggest →</button>
 </div>
 
-<!-- RESULT -->
 <div id="result">
-  <div class="report-hero">
-    <div class="rh-tag" id="resultTag">Your observations</div>
-    <div class="rh-type" id="resultType"></div>
-    <div class="score-pills-row">
-      <div class="score-pill pill-a"><span class="score-pill-n" id="resultCountA">0</span>&thinsp; List A — Deep Understander</div>
-      <div class="score-pill pill-b"><span class="score-pill-n" id="resultCountB">0</span>&thinsp; List B — Pattern Recogniser</div>
-    </div>
-    <div class="rh-pills" id="resultPills"></div>
-  </div>
-  <div class="report-body" id="resultBody"></div>
+  <div id="reportContent"></div>
 </div>
+
+<footer>
+  <p>Questions? Email <a href="mailto:hello@cognis11.com">hello@cognis11.com</a></p>
+  <p style="margin-top:15px">
+    <a href="index.html">Home</a> &nbsp;•&nbsp; 
+    <a href="about.html">About</a> &nbsp;•&nbsp; 
+    <a href="privacy.html">Privacy Policy</a>
+  </p>
+</footer>
 
 <script>
 let countA = 0, countB = 0, childName = '';
 
-function goTo(id) {
-  ['gate','checklist','result'].forEach(s => {
-    const el = document.getElementById(s);
-    el.style.display = 'none';
-    el.classList.remove('active');
-  });
-  const el = document.getElementById(id);
-  el.style.display = (id === 'gate') ? 'flex' : 'block';
-  el.classList.add('active');
-  document.getElementById('stickyFoot').style.display = (id === 'checklist') ? 'flex' : 'none';
-  const labels = {gate:'', checklist:'Checklist', result:'Your Result'};
-  document.getElementById('navStep').textContent = labels[id] || '';
-  const pct = {gate:0, checklist:50, result:100}[id] || 0;
-  document.getElementById('progressFill').style.width = pct + '%';
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-
-function submitGate() {
-  const ev = document.getElementById('gateEmail').value.trim();
-  const nv = document.getElementById('gateName').value.trim();
-  const fe = document.getElementById('fieldEmail');
-  const fn = document.getElementById('fieldName');
-  let ok = true;
-  fe.classList.remove('has-error'); fn.classList.remove('has-error');
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ev)) { fe.classList.add('has-error'); ok = false; }
-  if (!nv) { fn.classList.add('has-error'); ok = false; }
-  if (!ok) return;
-  childName = nv;
-  document.getElementById('nameHeading').textContent = childName;
-  subscribeToKit(ev, nv);
-  goTo('checklist');
-}
-
-async function subscribeToKit(email, name) {
-  const ID = 'YOUR_FORM_ID';
-  if (ID === 'YOUR_FORM_ID') return;
-  try {
-    await fetch('https://app.convertkit.com/forms/' + ID + '/subscriptions', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({email_address:email, first_name:name})
-    });
-  } catch(e){}
-}
-
 function toggle(el, list) {
   el.classList.toggle('checked');
   const d = el.classList.contains('checked') ? 1 : -1;
-  if (list === 'a') { countA = Math.max(0, countA+d); document.getElementById('countA').textContent = countA; }
-  else              { countB = Math.max(0, countB+d); document.getElementById('countB').textContent = countB; }
-  const badge = document.getElementById('saveBadge');
-  badge.classList.add('show');
-  clearTimeout(badge._t);
-  badge._t = setTimeout(() => badge.classList.remove('show'), 1800);
+  if (list === 'a') countA += d; else countB += d;
+}
+
+function submitGate() {
+  childName = document.getElementById('gateName').value.trim() || 'Your child';
+  document.getElementById('nameHeading').innerText = childName;
+  document.getElementById('gate').classList.remove('active');
+  document.getElementById('checklist').classList.add('active');
+  document.getElementById('progressFill').style.width = '50%';
+  window.scrollTo(0,0);
 }
 
 function showResult() {
-  const n = childName || 'your child';
-  document.getElementById('resultCountA').textContent = countA;
-  document.getElementById('resultCountB').textContent = countB;
-  const total = countA + countB;
+  document.getElementById('checklist').classList.remove('active');
+  document.getElementById('result').classList.add('active');
+  document.getElementById('progressFill').style.width = '100%';
+  window.scrollTo(0,0);
 
-  if (total === 0) {
-    document.getElementById('resultTag').textContent = 'Before you continue';
-    document.getElementById('resultType').textContent = 'Tick a few traits first.';
-    document.getElementById('resultPills').innerHTML = '';
-    document.getElementById('resultBody').innerHTML = '<p>Go back and tick the traits from either list that describe ' + n + '. There are no right or wrong answers.</p><div class="btn-row"><button class="btn-secondary" onclick="goTo(\'checklist\')">← Back to checklist</button></div>';
-    goTo('result'); return;
+  const mostlyA = countA >= countB;
+  const content = document.getElementById('reportContent');
+
+  if (mostlyA) {
+    content.innerHTML = renderDU(childName);
+  } else {
+    content.innerHTML = renderPR(childName);
   }
-
-  const mostlyA = countA >= 6 && countA > countB + 2;
-  const mostlyB = countB >= 6 && countB > countA + 2;
-
-  if (mostlyA)      renderA(n);
-  else if (mostlyB) renderB(n);
-  else              renderMixed(n);
-  goTo('result');
 }
 
-function pills(items, cls) {
-  document.getElementById('resultPills').innerHTML = items.map(p => '<span class="rpill ' + cls + '">' + p + '</span>').join('');
+function renderDU(n) {
+  return `
+    <div class="report-hero">
+      <div style="font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; opacity:0.6;">Observation Analysis</div>
+      <h1 class="rh-type">${n} is a <em>Deep Understander.</em></h1>
+    </div>
+    <div class="report-body">
+      <h2>The Diagnostic Profile</h2>
+      <p>Your observations suggests ${n} builds reasoning from first principles. They don't just want the answer; they want to master the <strong>structural logic</strong>. While this is a profound academic strength, the timed format of the 11+ often punishes those who reconstruct methods from scratch for every question.</p>
+      
+      <div style="background:var(--lblue); padding:25px; border-left:4px solid var(--steel); margin:30px 0; border-radius:4px;">
+        <p><strong>The Strategy Shift:</strong> Instead of drilling, ${n} needs to learn to <em>classify</em> questions by their underlying structure. When they see the structure, they don't have to re-derive the logic.</p>
+        <a href="members/module-40.html" style="color:var(--navy); font-weight:700; text-decoration:none; display:inline-block; margin-top:10px;">Explore the Module 40: Bridge Logic →</a>
+      </div>
+      
+      ${renderTiers(n)}
+    </div>
+  `;
 }
 
-function renderA(n) {
-  document.getElementById('resultTag').textContent = n + ' \u00B7 Your observations';
-  document.getElementById('resultType').innerHTML = n + ' shows the traits of a<br><em>Deep Understander.</em>';
-  pills(['Constructs before acting','Explanation-seeking','High transfer ability','Low repetition tolerance','Time-pressure sensitive'], 'rpill-a');
-  document.getElementById('resultBody').innerHTML =
-    '<h2>What this suggests</h2>' +
-    '<p>You ticked <strong>' + countA + ' traits from List A</strong> and ' + countB + ' from List B. That is a clear lean toward the Deep Understander profile — a child whose instinct is to understand before acting, and who builds reasoning from first principles rather than matching to patterns they have seen before.</p>' +
-    '<p>This profile has real strengths. Deep Understanders tend to be resilient on novel problems, precise in their reasoning, and capable of explaining their thinking clearly. The challenge is speed. In the 11+, time pressure is the variable that separates results from potential for this profile. A Deep Understander, left to their natural approach, reconstructs the method for each question from scratch — which takes seconds more per question and compounds across a full paper.</p>' +
-    '<div class="nudge-box"><p>If what you\'ve ticked resonates with what you observe day to day, the preparation most 11+ children receive is probably not the right fit for ' + n + '.</p><p>Standard drilling builds pattern recognition. ' + n + ' does not primarily learn through patterns — they learn through understanding. The Scholar Subscription is built for exactly this: it teaches the underlying structure of each question type first, so ' + n + ' can classify quickly without losing the reasoning ability that is already there.</p></div>' +
-    '<h2>What to do next</h2>' +
-    '<p>Three sample structures are available to read free — no subscription needed. They show the approach in full before you commit to anything.</p>' +
-    '<div class="free-links"><a href="structure-01.html">Structure 1: The \u201cmore than\u201d trap</a><span style="color:var(--lgrey)"> \u00B7 </span><a href="structure-02.html">Structure 2: Rate invariance</a><span style="color:var(--lgrey)"> \u00B7 </span><a href="structure-03.html">Structure 3: Doubling backwards</a></div>' +
-    upsell(n);
+function renderPR(n) {
+  return `
+    <div class="report-hero" style="background:var(--steel)">
+      <div style="font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; opacity:0.6;">Observation Analysis</div>
+      <h1 class="rh-type">${n} is a <em>Pattern Recogniser.</em></h1>
+    </div>
+    <div class="report-body">
+      <h2>The Diagnostic Profile</h2>
+      <p>${n} has a natural affinity for the speed of the 11+. They spot connections quickly and build momentum through drills. However, even the fastest recognisers often hit a "Complexity Ceiling" when they encounter novel or trap-based questions.</p>
+      
+      <div style="background:var(--lgreen); padding:25px; border-left:4px solid var(--green); margin:30px 0; border-radius:4px;">
+        <p><strong>Refining the Instinct:</strong> Even if speed is a strength, ${n} will benefit from our structure-first approach. By mastering the 59 core structures, they move from "guessing the pattern" to "knowing the rule," making them bulletproof against novel question formats.</p>
+      </div>
+      
+      ${renderTiers(n)}
+    </div>
+  `;
 }
 
-function renderB(n) {
-  document.getElementById('resultTag').textContent = n + ' \u00B7 Your observations';
-  document.getElementById('resultType').innerHTML = n + ' shows the traits of a<br><em>Pattern Recogniser.</em>';
-  pills(['Fast pattern-matching','High drilling tolerance','Action before understanding','Strong repetition response'], 'rpill-b');
-  document.getElementById('resultBody').innerHTML =
-    '<h2>What this suggests</h2>' +
-    '<p>You ticked <strong>' + countB + ' traits from List B</strong> and ' + countA + ' from List A. This leans toward the Pattern Recogniser profile — a child who acts quickly, builds speed through repetition, and is generally well-matched to the format of the 11+.</p>' +
-    '<p>Standard preparation — practice papers, timed drills, and high-volume question sets — tends to work well for this profile. The instinct to pattern-match is exactly what the 11+ rewards under time pressure.</p>' +
-    '<div class="note-box"><p>If you find that ' + n + '\'s scores are plateauing despite sustained practice, it may be worth revisiting the List A traits — particularly those that apply under time pressure specifically. Some children mask a Deep Understander profile when there is no clock running.</p></div>' +
-    '<div class="btn-row"><button class="btn-secondary" onclick="window.location.href=\'structure-01.html\'">Read a free sample structure \u2192</button></div>';
+function renderTiers(n) {
+  return `
+    <h2 style="text-align:center; margin-top:60px;">Select the right path for ${n}</h2>
+    <div class="tier-grid">
+      <div class="tier-card">
+        <div style="color:var(--steel); font-size:0.65rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">Ideal for Years 2–3</div>
+        <h3>The Foundation</h3>
+        <div class="tier-price">£6<span>/month</span></div>
+        <p style="font-size:0.85rem; color:var(--mgrey); margin-bottom:20px;">Master one structure at a time. Sequential access ensures a steady, logical build of reasoning instincts.</p>
+        <a href="subscribe.html?plan=foundation" class="btn-tier">Start Foundation</a>
+      </div>
+      
+      <div class="tier-card" style="border-color:var(--navy); box-shadow:var(--shadow);">
+        <div style="color:var(--navy); font-size:0.65rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">Ideal for Years 4–5</div>
+        <h3>Full Access</h3>
+        <div class="tier-price">£9<span>/month</span></div>
+        <p style="font-size:0.85rem; color:var(--mgrey); margin-bottom:20px;">Total immediate access to the full 59-module lattice. Perfect for targeted revision and breaking speed plateaus.</p>
+        <a href="subscribe.html?plan=full" class="btn-tier">Unlock All Modules</a>
+      </div>
+    </div>
+  `;
 }
-
-function renderMixed(n) {
-  document.getElementById('resultTag').textContent = n + ' \u00B7 Your observations';
-  document.getElementById('resultType').innerHTML = n + '\'s observations suggest a<br><em>mixed profile.</em>';
-  pills(['Context-adaptive','Task-dependent','Switches between approaches'], 'rpill-mx');
-  document.getElementById('resultBody').innerHTML =
-    '<h2>What this suggests</h2>' +
-    '<p>You ticked <strong>' + countA + ' traits from List A</strong> and <strong>' + countB + ' from List B</strong>. Most children sit somewhere in the middle — the two thinking styles are tendencies, not fixed categories, and many children switch between them depending on the subject or the type of pressure they are under.</p>' +
-    '<p>The most useful thing at this point is to consider which traits feel most consistently true — across different subjects and tasks, and specifically under time pressure. The two profiles often diverge most clearly when a clock is running.</p>' +
-    '<div class="note-box"><p>If the List A traits feel most true in timed conditions specifically — even if List B traits appear in relaxed settings — ' + n + ' may benefit from the Classification Speed Programme. Deep Understanders often appear more like Pattern Recognisers when there is no time pressure, because the slower approach works fine and the difference is invisible.</p></div>' +
-    '<div class="btn-row"><button class="btn-primary" onclick="window.location.href=\'subscribe.html\'">See the programme \u2192</button><button class="btn-secondary" onclick="window.location.href=\'structure-01.html\'">Read a free sample \u2192</button></div>';
-}
-
-function upsell(n) {
-  return '<div class="upsell">' +
-    '<div class="upsell-tag">The next step for ' + n + '</div>' +
-    '<div class="upsell-title">The Scholar Subscription</div>' +
-    '<div class="upsell-desc">Unlock the full 59-module learning lattice. Build classification speed across Maths, Verbal, and Non-Verbal reasoning. Designed specifically for Deep Understanders.</div>' +
-    '<div class="upsell-feats">' +
-      '<div class="upsell-feat"><div class="ucheck">\u2713</div>Full access to the 59-module Learning Lattice</div>' +
-      '<div class="upsell-feat"><div class="ucheck">\u2713</div>Interactive simulations for deep comprehension</div>' +
-      '<div class="upsell-feat"><div class="ucheck">\u2713</div>Personalised student progress dashboard</div>' +
-    '</div>' +
-    '<div class="upsell-price-row"><div class="upsell-price">\u00A39</div><div class="upsell-price-sub">/ month \u00B7 billed annually \u00A0\u00B7\u00A0 or \u00A314/month</div></div>' +
-    '<button class="btn-upsell" onclick="window.location.href=\'subscribe.html\'">Start the subscription for ' + n + ' \u2192</button>' +
-    '<div class="upsell-note">No commitment. Cancel any time.</div>' +
-  '</div>';
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  goTo('gate');
-  document.getElementById('gateEmail').addEventListener('keydown', e => { if (e.key==='Enter') document.getElementById('gateName').focus(); });
-  document.getElementById('gateName').addEventListener('keydown',  e => { if (e.key==='Enter') submitGate(); });
-});
 </script>
+
 </body>
 </html>

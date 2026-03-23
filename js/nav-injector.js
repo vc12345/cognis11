@@ -4,7 +4,7 @@ function injectNav() {
     const navHTML = `
         <style>
             .cognis-global-nav {
-                background: #ffffff !important; /* Force White */
+                background: #ffffff !important; 
                 border-bottom: 1px solid #E5E3DD;
                 padding: 14px 32px;
                 display: flex;
@@ -18,9 +18,13 @@ function injectNav() {
             .global-nav-brand {
                 font-family: 'Playfair Display', serif;
                 font-size: 1.1rem;
-                color: #1B3A5C !important; /* Force Navy */
+                color: #1B3A5C !important; 
                 font-weight: 700;
                 text-decoration: none;
+                transition: opacity 0.2s;
+            }
+            .global-nav-brand:hover {
+                opacity: 0.8;
             }
             .global-nav-right {
                 display: flex;
@@ -31,7 +35,9 @@ function injectNav() {
                 text-decoration: none;
                 color: #1B3A5C;
                 font-size: 0.85rem;
-                font-weight: 500;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
             }
             .global-nav-logout {
                 background: #1B3A5C;
@@ -42,12 +48,16 @@ function injectNav() {
                 font-weight: 600;
                 border: none;
                 cursor: pointer;
+                transition: background 0.2s;
+            }
+            .global-nav-logout:hover {
+                background: #c5a059; /* Cognis Gold on hover */
             }
         </style>
         <nav class="cognis-global-nav">
-            <a href="/index.html" class="global-nav-brand">Cognis 11+</a>
+            <a href="/members/dashboard.html" class="global-nav-brand">Cognis 11+</a>
+            
             <div class="global-nav-right">
-                <a href="/members/dashboard.html" class="global-nav-link">Dashboard</a>
                 <a href="/members/account.html" class="global-nav-link">Account</a>
                 <button onclick="handleLogout()" class="global-nav-logout">Logout</button>
             </div>
@@ -64,6 +74,7 @@ async function handleLogout() {
     if (window.supabaseClient) {
         await window.supabaseClient.auth.signOut();
     }
+    // Redirect to public index or login
     window.location.href = "/login.html";
 }
 

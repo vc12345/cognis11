@@ -2,69 +2,116 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 29: Alpha-Numeric Decoder | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 29: Alpha-Numeric Decoder | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+        /* UNIQUE CSS FOR CIPHER DIAL */
+        .anatomy-display { padding: 40px; background: #1a202c; border: none; }
+        
+        #cipher-svg { 
+            background: #0f172a; 
+            border-radius: 50%; 
+            box-shadow: 0 0 40px rgba(0,0,0,0.5), inset 0 0 20px rgba(197, 160, 89, 0.1);
+        }
 
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        .ring-text { 
+            font-family: 'Consolas', monospace; 
+            font-weight: 900; 
+            font-size: 13px; 
+            fill: #4a5568; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            cursor: default; 
+        }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
-        svg { background: #1a202c; border-radius: 50%; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
-        .ring-text { font-family: 'Courier New', monospace; font-weight: bold; font-size: 13px; fill: #64748b; transition: all 0.5s ease; cursor: default; }
         .letter-text { fill: #a0aec0; }
-        .number-text { fill: var(--cognis-gold); font-size: 11px; }
-        .active { fill: white; font-size: 18px; filter: drop-shadow(0 0 8px var(--cognis-gold)); }
+        .number-text { fill: var(--cognis-gold); font-size: 11px; opacity: 0.6; }
         
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group { margin-bottom: 20px; }
-        .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 10px; }
-        .input-text { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; text-transform: uppercase; letter-spacing: 4px; }
+        .active-char { 
+            fill: white; 
+            font-size: 18px; 
+            filter: drop-shadow(0 0 8px var(--cognis-gold)); 
+            opacity: 1;
+        }
+
+        /* Nav Correction */
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        .nav-back:hover { color: white; }
+        .nav-back span { margin-right: 8px; font-size: 1rem; }
+
+        .engine-container { grid-template-columns: 1fr 1.2fr; }
+        .input-text { 
+            width: 100%; padding: 12px; border-radius: 8px; border: none; 
+            background: #2d3748; color: white; font-weight: 900; 
+            text-transform: uppercase; letter-spacing: 4px; font-size: 1.1rem;
+        }
         
-        .btn-toggle { background: #4a5568; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-toggle.active { background: var(--cognis-gold); }
-        
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; min-height: 150px; }
-        input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
+        .btn-toggle { 
+            background: #2d3748; color: #a0aec0; border: 1px solid #4a5568; 
+            padding: 10px 15px; border-radius: 6px; font-size: 0.7rem; 
+            cursor: pointer; text-transform: uppercase; font-weight: 800;
+            width: 100%; transition: 0.3s;
+        }
+        .btn-toggle.active { background: var(--cognis-gold); color: white; border-color: white; }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 2' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(29)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(29));</script>
 </head>
 <body>
-<div class="module-card">
-    <div class="header"><h1>Module 29: Alpha-Numeric Decoder</h1></div>
+
+<div class="module-card" style="margin-top: 40px;">
+    <div class="header">
+        <a href="../dashboard.html" class="nav-back"><span>&larr;</span> BACK TO LATTICE</a>
+        <h1>Module 29: Alpha-Numeric Decoder</h1>
+    </div>
+
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
+        <p>Alpha-Numeric decoding is the process of translating linguistic symbols into mathematical values. It requires <b>Mapping Consistency</b>: whether the code is a direct sequence (A=1), a reversed sequence (A=26), or a shifted sequence (A=3), the logic must be applied uniformly across the entire string without breaking the pattern.</p>
+        
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>If A=1, what is the numerical code for "FISH"?</div>
-            <div class="tier-card"><b>Average Year 4</b>If A=26 (Reverse), what is the code for "CAT"?</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Decode "4-18-21-13" where A=3 (Offset Shift).</div>
+            <div class="tier-card">
+                <b>Advanced Year 2</b>
+                "If A=1 and B=2, what is the numerical code for the word 'FISH'?"
+            </div>
+            <div class="tier-card">
+                <b>Average Year 4</b>
+                "If the alphabet is reversed so A=26 and Z=1, what is the code for 'CAT'?"
+            </div>
+            <div class="tier-card">
+                <b>Advanced Year 5</b>
+                "A secret code uses a +3 offset (A=4). Decode the sequence '4-18-21-13' to find the word."
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area">
-            <svg id="cipher-svg" width="420" height="420" viewBox="0 0 420 420">
-                <circle cx="210" cy="210" r="160" fill="none" stroke="#2d3748" stroke-width="45" />
-                <circle cx="210" cy="210" r="115" fill="none" stroke="#333" stroke-width="45" />
+        <p>The <b>Cipher Dial</b>. Rotate the dial to change the mapping. The gold line indicates the "Key" (which letter equals 1).</p>
+        
+        <div class="anatomy-display">
+            <svg id="cipher-svg" width="100%" height="400" viewBox="0 0 420 420" preserveAspectRatio="xMidYMid meet">
+                <circle cx="210" cy="210" r="165" fill="none" stroke="#2d3748" stroke-width="40" />
+                <circle cx="210" cy="210" r="120" fill="none" stroke="#1e293b" stroke-width="40" />
+                
                 <g id="letters-group"></g>
                 <g id="numbers-group"></g>
-                <line x1="210" y1="30" x2="210" y2="70" stroke="var(--cognis-gold)" stroke-width="4" />
+                
+                <line x1="210" y1="25" x2="210" y2="65" stroke="var(--cognis-gold)" stroke-width="4" stroke-linecap="round" />
             </svg>
         </div>
     </section>
@@ -72,24 +119,34 @@
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls">
+            <div class="inputs">
                 <div class="control-group">
-                    <label>Shift Alpha (Rotate Dial)</label>
+                    <label>Rotate Alpha Dial (Shift)</label>
                     <input type="range" id="shift-dial" min="0" max="25" value="0" oninput="run29()">
                 </div>
                 <div class="control-group">
-                    <label>Dial Direction</label>
-                    <button id="btn-reverse" class="btn-toggle" onclick="toggleReverse()">Clockwise (A→B)</button>
+                    <label>Mapping Direction</label>
+                    <button id="btn-reverse" class="btn-toggle" onclick="toggleReverse()">Standard (A→B)</button>
                 </div>
                 <div class="control-group">
-                    <label>Test Word</label>
-                    <input type="text" id="word-in" class="input-text" value="CODE" maxlength="8" oninput="run29()">
+                    <label>Target Word</label>
+                    <input type="text" id="word-in" class="input-text" value="CODE" maxlength="10" oninput="run29()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-29">Adjust the dial to change the mapping...</div>
+            <div class="trace-log" id="trace-29">Adjust the dial to calculate the code...</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "Wrap-Around" Trap:</strong> When a shift moves past Z (26) or before A (1), students often get confused and stop. For example, in a -2 shift, they might think A has no value.</p>
+            <p><strong>The Fix:</strong> Use <b>Circular Logic</b>. Treat the alphabet like a clock face. If you are at Z and go forward 1, you land back on A. If you are at A and go back 1, you land on Z. The sequence 1-26 is a continuous loop that never ends.</p>
         </div>
     </section>
 </div>
+
+<button class="btn-complete" onclick="markComplete(29)">Complete Module & Update Lattice</button>
 
 <script>
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -98,64 +155,72 @@
     function toggleReverse() {
         isReversed = !isReversed;
         const btn = document.getElementById('btn-reverse');
-        btn.innerText = isReversed ? "Counter-Clockwise (A←B)" : "Clockwise (A→B)";
+        btn.innerText = isReversed ? "Reverse (Z=1)" : "Standard (A=1)";
         btn.classList.toggle('active', isReversed);
         run29();
     }
 
     function run29() {
         const offset = parseInt(document.getElementById('shift-dial').value);
-        const word = document.getElementById('word-in').value.toUpperCase();
+        const word = document.getElementById('word-in').value.toUpperCase().replace(/[^A-Z]/g, '');
         const lGroup = document.getElementById('letters-group');
         const nGroup = document.getElementById('numbers-group');
         
         lGroup.innerHTML = '';
         nGroup.innerHTML = '';
 
-        // Generate the Alpha Ring based on Offset and Direction
+        // Draw the rings
         for (let i = 0; i < 26; i++) {
-            // Letter selection
-            let alphaIdx = (i + offset) % 26;
-            if (isReversed) {
+            // Letter Index calculation
+            let alphaIdx;
+            if (!isReversed) {
+                alphaIdx = (i + offset) % 26;
+            } else {
+                // Reverse logic: i=0 is A, but if reversed we map backwards from Z
                 alphaIdx = (26 - (i + offset) % 26) % 26;
             }
             
             const char = alphabet[alphaIdx];
             const isActive = word.includes(char);
             
-            // Positioning (i=0 is Top)
+            // Circular Positioning (i=0 is Top)
             const angle = (i / 26) * 2 * Math.PI - Math.PI / 2;
-            const lx = 210 + 160 * Math.cos(angle);
-            const ly = 210 + 160 * Math.sin(angle);
-            const nx = 210 + 115 * Math.cos(angle);
-            const ny = 210 + 115 * Math.sin(angle);
+            const lx = 210 + 165 * Math.cos(angle);
+            const ly = 210 + 165 * Math.sin(angle);
+            const nx = 210 + 120 * Math.cos(angle);
+            const ny = 210 + 120 * Math.sin(angle);
 
-            lGroup.innerHTML += `<text x="${lx}" y="${ly}" class="ring-text letter-text ${isActive ? 'active' : ''}" text-anchor="middle" dominant-baseline="middle">${char}</text>`;
-            nGroup.innerHTML += `<text x="${nx}" y="${ny}" class="ring-text number-text ${isActive ? 'active' : ''}" text-anchor="middle" dominant-baseline="middle">${i+1}</text>`;
+            lGroup.innerHTML += `<text x="${lx}" y="${ly}" class="ring-text letter-text ${isActive ? 'active-char' : ''}" text-anchor="middle" dominant-baseline="middle">${char}</text>`;
+            nGroup.innerHTML += `<text x="${nx}" y="${ny}" class="ring-text number-text ${isActive ? 'active-char' : ''}" text-anchor="middle" dominant-baseline="middle">${i+1}</text>`;
         }
 
-        // Trace calculation
-        let trace = `<b>Key:</b> ${alphabet[isReversed ? (26-offset)%26 : offset]} = 1<br>`;
+        // Generate Trace
+        const keyChar = alphabet[isReversed ? (26-offset)%26 : offset];
+        let trace = `<div class="trace-step">→ 1. Active Key: <b>${keyChar} = 1</b></div>`;
+        let results = [];
+        
         for (let c of word) {
             const charIdx = alphabet.indexOf(c);
-            if (charIdx !== -1) {
-                let num;
-                if (!isReversed) {
-                    num = ((charIdx - offset + 26) % 26) + 1;
-                } else {
-                    num = ((offset - charIdx + 26) % 26) + 1;
-                }
-                trace += `${c} → ${num}<br>`;
+            let num;
+            if (!isReversed) {
+                num = ((charIdx - offset + 26) % 26) + 1;
+            } else {
+                num = ((offset - charIdx + 26) % 26) + 1;
             }
+            results.push(num);
+            trace += `<div class="trace-step" style="font-size:0.75rem;">${c} map to pos ${charIdx+1} w/ shift → <b>${num}</b></div>`;
         }
+
+        trace += `
+            <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+                → FINAL CODE: ${results.join('-') || '...'}
+            </div>
+        `;
         document.getElementById('trace-29').innerHTML = trace;
     }
 
     window.onload = run29;
 </script>
 
-    <button onclick="markComplete(29)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
 </body>
 </html>

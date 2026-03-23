@@ -2,60 +2,103 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 31: Vowel/Consonant Ciphers | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 31: Vowel/Consonant Ciphers | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --vowel-color: #3182ce; --consonant-color: #e53e3e; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+        /* UNIQUE CSS FOR GATEKEEPER TILES */
+        .anatomy-display { 
+            background: #1a202c; 
+            padding: 40px; 
+            display: flex; 
+            justify-content: center; 
+            min-height: 200px;
+            border: none;
+        }
 
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        .word-stream { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 50px; margin: 30px 0; min-height: 200px; display: flex; align-items: center; justify-content: center; }
-        .word-stream { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
-        .char-tile { width: 100px; height: 80px; background: white; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; transition: all 0.4s; }
-        .char-tile.vowel { border: 4px solid var(--vowel-color); color: var(--vowel-color); }
-        .char-tile.consonant { border: 4px solid var(--consonant-color); color: var(--consonant-color); }
-        .char-tile .io { font-size: 1.2rem; margin-bottom: 5px; }
-        .char-tile small { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
+        .char-tile { 
+            width: 90px; 
+            height: 90px; 
+            background: white; 
+            border-radius: 12px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: 900; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
 
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 10px; }
-        .input-text { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; text-transform: uppercase; letter-spacing: 4px; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
+        .char-tile.vowel { border: 4px solid #3182ce; color: #3182ce; }
+        .char-tile.consonant { border: 4px solid #e53e3e; color: #e53e3e; }
+        
+        .char-tile .io { font-size: 1.3rem; margin-bottom: 2px; }
+        .char-tile small { 
+            font-size: 0.6rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            opacity: 0.7; 
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .engine-container { grid-template-columns: 1fr 1.2fr; }
+        .input-text { 
+            width: 100%; padding: 12px; border-radius: 8px; border: none; 
+            background: #2d3748; color: white; font-weight: 900; 
+            text-transform: uppercase; letter-spacing: 4px; font-size: 1.1rem;
+        }
+
+        .shift-controls { display: flex; gap: 10px; margin-top: 20px; }
+        .shift-box { flex: 1; }
+        .shift-box label { font-size: 0.6rem !important; margin-bottom: 5px !important; }
+        .shift-box input { 
+            width: 100%; padding: 10px; border-radius: 6px; 
+            background: #2d3748; color: white; border: 1px solid #4a5568; 
+            text-align: center; font-weight: 800;
+        }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 3' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(31)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(31));</script>
 </head>
 <body>
-<div class="module-card">
-    <div class="header"><h1>Module 31: Vowel/Consonant Ciphers</h1></div>
-    
+
+<div class="module-card" style="margin-top: 40px;">
+    <div class="header">
+        <h1>Module 31: Vowel/Consonant Ciphers</h1>
+    </div>
+
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In advanced coding, the rule depends on the <b>property</b> of the letter. Vowels ($A, E, I, O, U$) and Consonants are treated as separate groups. You must categorize each letter before applying its specific transformation rule.</p>
+        <p>In advanced coding, the rule depends on the <b>property</b> of the letter. Vowels (A, E, I, O, U) and Consonants are treated as separate groups. You must categorize every letter through a mental gatekeeper before applying its specific transformation rule.</p>
+        
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>If Vowels move +1 and Consonants stay same, what is "BAT"?</div>
-            <div class="tier-card"><b>Average Year 4</b>Vowels shift +2, Consonants shift -1. Find the code for "DOG".</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Decode "QMANFU" back to "PLANET" using split rules.</div>
+            <div class="tier-card">
+                <b>Advanced Year 2</b>
+                "If Vowels shift +1 and Consonants stay the same, what is the code for the word 'BAT'?"
+            </div>
+            <div class="tier-card">
+                <b>Average Year 4</b>
+                "Vowels shift +2, Consonants shift -1. Find the code for the word 'DOG'."
+            </div>
+            <div class="tier-card">
+                <b>Advanced Year 5</b>
+                "A word is encoded using split rules to become 'QMANFU'. Decode it back to 'PLANET'."
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area">
+        <p>The <b>Property Gatekeeper</b>. Each tile identified the letter type (Blue for Vowel, Red for Consonant) and applies the unique math for that group.</p>
+        <div class="anatomy-display">
             <div class="word-stream" id="gate-display"></div>
         </div>
     </section>
@@ -63,47 +106,59 @@
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls">
+            <div class="inputs">
                 <div class="control-group">
                     <label>Test Word</label>
-                    <input type="text" id="word-in" class="input-text" value="BRAIN" maxlength="8" oninput="run31()">
+                    <input type="text" id="word-in" class="input-text" value="BRAIN" maxlength="10" oninput="run31()">
                 </div>
-                <div style="display: flex; gap: 15px; margin-top: 15px;">
-                    <div style="flex: 1;"><small>Vowel Shift</small><input type="number" id="v-shift" value="1" style="width:100%; padding:10px; border-radius:6px; background:#2d3748; color:white; border:none;" oninput="run31()"></div>
-                    <div style="flex: 1;"><small>Cons. Shift</small><input type="number" id="c-shift" value="-1" style="width:100%; padding:10px; border-radius:6px; background:#2d3748; color:white; border:none;" oninput="run31()"></div>
+                
+                <div class="shift-controls">
+                    <div class="shift-box">
+                        <label>VOWEL SHIFT</label>
+                        <input type="number" id="v-shift" value="1" oninput="run31()">
+                    </div>
+                    <div class="shift-box">
+                        <label>CONS. SHIFT</label>
+                        <input type="number" id="c-shift" value="-1" oninput="run31()">
+                    </div>
                 </div>
             </div>
-            <div class="trace-log" id="trace-31">Awaiting logic input...</div>
+            <div class="trace-log" id="trace-31">Awaiting data for categorization...</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid #d9534f; border-radius: 12px; padding: 25px;">
-            <h2 style="color:#d9534f; margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The "One-Track" Trap:</strong> Students often apply the first rule they find to the entire word.
-            <br><br><strong>The Fix:</strong> Before shifting anything, "tag" every letter as either a Vowel or a Consonant. Only once the word is sorted can you safely apply the math. If you don't sort first, you'll miss the pivot point where the rule changes.</p>
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "One-Track" Trap:</strong> Students often apply the first rule they read to the entire word, forgetting that the rule "re-evaluates" itself at every single letter.</p>
+            <p><strong>The Fix:</strong> Use <b>Property Tagging</b>. Before shifting anything, physically or mentally "tag" every letter as a V (Vowel) or C (Consonant). Only once the word is mapped should you apply the math. If you don't tag first, you will miss the pivot point where the rule flips.</p>
         </div>
     </section>
 </div>
+
+<button class="btn-complete" onclick="markComplete(31)">Complete Module & Update Lattice</button>
 
 <script>
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const vowels = "AEIOU";
 
     function run31() {
-        const word = document.getElementById('word-in').value.toUpperCase();
+        const word = document.getElementById('word-in').value.toUpperCase().replace(/[^A-Z]/g, '');
         const vShift = parseInt(document.getElementById('v-shift').value) || 0;
         const cShift = parseInt(document.getElementById('c-shift').value) || 0;
+        
         const display = document.getElementById('gate-display');
         display.innerHTML = '';
+        
         let trace = "";
+        let finalResult = "";
 
         for (let char of word) {
-            if (!alphabet.includes(char)) continue;
             const isVowel = vowels.includes(char);
             const shift = isVowel ? vShift : cShift;
             const charIdx = alphabet.indexOf(char);
             const newChar = alphabet[(charIdx + shift + 26) % 26];
+            finalResult += newChar;
 
             display.innerHTML += `
                 <div class="char-tile ${isVowel ? 'vowel' : 'consonant'}">
@@ -111,15 +166,20 @@
                     <div class="io">${char} → ${newChar}</div>
                 </div>
             `;
-            trace += `<div>→ ${char} (${isVowel ? 'V' : 'C'}): Shift ${shift} = ${newChar}</div>`;
+            
+            trace += `<div class="trace-step" style="font-size:0.75rem;">${char} [${isVowel?'V':'C'}] shifts ${shift > 0 ? '+' + shift : shift} → <b>${newChar}</b></div>`;
         }
-        document.getElementById('trace-31').innerHTML = trace;
+
+        document.getElementById('trace-31').innerHTML = `
+            ${trace}
+            <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+                → ENCODED WORD: ${finalResult || '...'}
+            </div>
+        `;
     }
+
     window.onload = run31;
 </script>
 
-    <button onclick="markComplete(31)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
 </body>
 </html>

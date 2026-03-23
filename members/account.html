@@ -28,7 +28,6 @@
         .label-group { display: flex; flex-direction: column; gap: 4px; }
         .label { font-weight: 700; font-size: 0.9rem; color: var(--navy); }
         .desc { font-size: 0.8rem; color: var(--grey); }
-        
         .value { color: var(--navy); font-size: 0.95rem; font-weight: 500; }
         
         /* Badges */
@@ -45,7 +44,7 @@
         .btn-manage:disabled { opacity: 0.7; cursor: not-allowed; }
         
         .footer-actions { text-align: center; margin-top: 40px; border-top: 1px solid var(--lgrey); padding-top: 24px; }
-        .btn-logout { color: var(--red); font-size: 0.85rem; text-decoration: none; font-weight: 700; }
+        .btn-logout { color: var(--red); font-size: 0.85rem; text-decoration: none; font-weight: 700; cursor: pointer; }
         
         /* Email Modal */
         .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(27, 58, 92, 0.8); z-index:1000; justify-content:center; align-items:center; }
@@ -68,7 +67,7 @@
 </nav>
 
 <div class="container">
-    <h1>Account Settings</h1>
+    <h1>Account <small style="font-size: 0.4em; vertical-align: middle; opacity: 0.5;">V3.0</small></h1>
     <p class="sub-h1">Manage your profile and subscription preferences.</p>
     
     <div class="settings-card">
@@ -88,7 +87,7 @@
         <div class="setting-row">
             <div class="label-group">
                 <div class="label">Current Plan</div>
-                <div class="desc" id="plan-desc">Your active learning tier.</div>
+                <div class="desc">Your active learning tier.</div>
             </div>
             <div id="plan-badge-container">
                 <span class="badge badge-inactive">Checking...</span>
@@ -117,14 +116,14 @@
     </div>
     
     <div class="footer-actions">
-        <a href="#" class="btn-logout" onclick="handleLogout()">Sign Out of All Devices</a>
+        <div class="btn-logout" onclick="handleLogout()">Sign Out of All Devices</div>
     </div>
 </div>
 
 <div id="email-modal" class="modal">
     <div class="modal-content">
         <h3>Update Email</h3>
-        <p class="desc">A confirmation link will be sent to your new address.</p>
+        <p class="desc" style="font-size: 0.8rem;">A confirmation link will be sent to your new address.</p>
         <input type="email" id="new-email" placeholder="new-email@example.com">
         <div style="display: flex; gap: 10px;">
             <button class="btn-manage" style="margin-top:0" onclick="updateEmail()">Update Address</button>
@@ -135,6 +134,11 @@
 
 <script>
     async function loadAccountData() {
+        if (!window.supabaseClient) {
+            setTimeout(loadAccountData, 100);
+            return;
+        }
+
         const { data: { user } } = await window.supabaseClient.auth.getUser();
         if (!user) { window.location.href = "/login.html"; return; }
 
@@ -164,11 +168,7 @@
             // 3. Status Badge
             const statusContainer = document.getElementById('status-badge-container');
             const status = profile.subscription_status || 'inactive';
-            if (status === 'active') {
-                statusContainer.innerHTML = '<span class="badge badge-active">Active</span>';
-            } else {
-                statusContainer.innerHTML = '<span class="badge badge-inactive">Inactive</span>';
-            }
+            statusContainer.innerHTML = `<span class="badge badge-${status === 'active' ? 'active' : 'inactive'}">${status.toUpperCase()}</span>`;
         }
     }
 
@@ -198,32 +198,27 @@
 
     async function redirectToStripePortal() {
         const btn = document.getElementById('portal-btn');
-        const originalText = btn.innerText;
         btn.innerText = "Connecting to Stripe...";
         btn.disabled = true;
 
         try {
-            // This is the 'Native' way. 
-            // It automatically handles the 'apikey' and 'Authorization' headers for you.
+            // NATIVE INVOKE: This automatically handles apikey and auth headers
             const { data, error } = await window.supabaseClient.functions.invoke('create-portal-session');
 
             if (error) {
-                console.error("Function Error Object:", error);
-                // This pulls the error message directly from the Supabase response
-                throw new Error(error.message || "Gateway Refusal");
+                throw new Error(error.message || "Unauthorized Gateway access");
             }
 
             if (data && data.url) {
                 window.location.href = data.url;
             } else {
-                throw new Error("No redirect URL received from billing server.");
+                throw new Error("No URL returned from billing server.");
             }
 
         } catch (e) {
-            console.error("Full Portal Error:", e);
-            // If you see this alert, we are finally catching a REAL server error, not a manual one
-            alert("Billing Access Error: " + e.message);
-            btn.innerText = originalText;
+            console.error("V3.0 Error:", e);
+            alert("Billing Access Error (V3.0): " + e.message);
+            btn.innerText = "Manage Billing & Cancellation";
             btn.disabled = false;
         }
     }

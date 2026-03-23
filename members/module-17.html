@@ -21,52 +21,29 @@
         }
 
         .node { 
-            width: 85px; 
-            height: 85px; 
-            background: white; 
-            border: 4px solid var(--cognis-blue); 
-            border-radius: 18px; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            font-weight: 800; 
-            font-size: 1.3rem; 
+            width: 85px; height: 85px; 
+            background: white; border: 4px solid var(--cognis-blue); 
+            border-radius: 18px; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; 
+            font-weight: 800; font-size: 1.3rem; 
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            position: relative; 
-            z-index: 2; 
+            position: relative; z-index: 2; 
         }
 
         .node small { 
-            font-size: 0.6rem; 
-            color: #a0aec0; 
-            margin-bottom: 4px; 
-            text-transform: uppercase;
+            font-size: 0.6rem; color: #a0aec0; 
+            margin-bottom: 4px; text-transform: uppercase;
             letter-spacing: 1px;
         }
         
-        .path { 
-            flex-grow: 1; 
-            height: 6px; 
-            background: #e2e8f0; 
-            margin: 0 -5px; 
-            position: relative; 
-            border-radius: 3px;
-        }
+        .path { flex-grow: 1; height: 6px; background: #e2e8f0; margin: 0 -5px; position: relative; border-radius: 3px; }
 
         .op-badge { 
-            position: absolute; 
-            top: -40px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            background: var(--cognis-blue); 
-            color: white; 
-            padding: 5px 15px; 
-            border-radius: 20px; 
-            font-size: 0.85rem; 
-            font-weight: 800; 
-            transition: all 0.4s ease; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: absolute; top: -40px; left: 50%; transform: translateX(-50%); 
+            background: var(--cognis-blue); color: white; 
+            padding: 5px 15px; border-radius: 20px; 
+            font-size: 0.85rem; font-weight: 800; 
+            transition: all 0.4s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         
         /* Animation States */
@@ -82,16 +59,10 @@
 
         .sim-btn-wrapper { text-align: center; margin-top: 30px; }
         .sim-btn { 
-            background: var(--cognis-gold); 
-            color: white; 
-            border: none; 
-            padding: 14px 35px; 
-            border-radius: 10px; 
-            font-weight: 800; 
-            cursor: pointer; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: transform 0.2s;
+            background: var(--cognis-gold); color: white; border: none; 
+            padding: 14px 35px; border-radius: 10px; 
+            font-weight: 800; cursor: pointer; text-transform: uppercase;
+            letter-spacing: 1px; transition: transform 0.2s;
         }
         .sim-btn:hover { transform: scale(1.05); }
 
@@ -99,6 +70,10 @@
         .op-row { display: flex; gap: 10px; align-items: center; margin-top: 5px; }
         .op-row select { flex: 1; }
         .op-row input { flex: 1.5; }
+
+        /* Saboteur Tightening */
+        .trap-box p { margin: 8px 0; }
+        .trap-box h3 { margin-bottom: 12px; }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -108,7 +83,7 @@
 </head>
 <body>
 
-<div class="module-card">
+<div class="module-card" style="margin-top: 40px;">
     <div class="header"><h1>Module 17: Reverse Operations</h1></div>
 
     <section class="phase">
@@ -133,7 +108,7 @@
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Watch the <b>Rewinder</b>. The logic flows from right to left, flipping the operations as it passes through the junctions.</p>
+        <p>Watch the <b>Rewinder</b>. To go back, we don't just move backwards; we <b>invert</b> the math symbols (e.g., + becomes -).</p>
         
         <div class="anatomy-display">
             <div class="simulation-area" id="machine">
@@ -191,8 +166,7 @@
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
             <p><strong>The "Clockwise" Trap:</strong> Attempting to reverse the first instruction before the last one, just because it was written first in the sentence.</p>
-            <br>
-            <p><strong>The Fix:</strong> Use "Last In, First Out" (LIFO). Think of putting on socks, then shoes. To reverse the process, you <b>must</b> take off the shoes first! Always start reversing from the final result.</p>
+            <p><strong>The Fix:</strong> Use "Last In, First Out" (LIFO). Think of putting on socks, then shoes. To reverse the process, you <b>must</b> take off the shoes first! Always start from the final result.</p>
         </div>
     </section>
 </div>
@@ -202,13 +176,14 @@
 <script>
     const inputs = ['in-res', 'in-o1t', 'in-o1v', 'in-o2t', 'in-o2v'].map(id => document.getElementById(id));
     const symbols = {add:'+', sub:'-', mul:'x', div:'÷'};
+    const inverse = {add:'-', sub:'+', mul:'÷', div:'x'};
     const machine = document.getElementById('machine');
     const engineTrace = document.getElementById('engine-trace');
 
     function refresh() {
         const [res, o1t, o1v, o2t, o2v] = inputs.map(i => i.value);
         
-        // Reset Viz Labels
+        // Reset Viz Labels to Forward State
         document.getElementById('v-res').innerText = res;
         document.getElementById('v-op1').innerText = symbols[o1t] + o1v;
         document.getElementById('v-op2').innerText = symbols[o2t] + o2v;
@@ -216,7 +191,7 @@
         document.getElementById('v-start').innerText = "?";
         machine.classList.remove('rewind-active');
 
-        // Logic Trace Update
+        // Logic
         const rVal = parseFloat(res) || 0;
         const v1 = parseFloat(o1v) || 0;
         const v2 = parseFloat(o2v) || 0;
@@ -226,6 +201,7 @@
             if(type==='sub') return v + n;
             if(type==='mul') return v / n;
             if(type==='div') return v * n;
+            return v;
         };
 
         const mid = solve(rVal, o2t, v2);
@@ -233,26 +209,34 @@
 
         engineTrace.innerHTML = `
             <div class="trace-step">→ 1. Start at Result: <b>${rVal}</b></div>
-            <div class="trace-step">→ 2. Undo Step 2 (${symbols[o2t]}${v2}): <b>${mid.toFixed(1)}</b></div>
-            <div class="trace-step">→ 3. Undo Step 1 (${symbols[o1t]}${v1}): <b>${start.toFixed(1)}</b></div>
+            <div class="trace-step">→ 2. Undo Step 2 (${inverse[o2t]}${v2}): <b>${mid.toFixed(1)}</b></div>
+            <div class="trace-step">→ 3. Undo Step 1 (${inverse[o1t]}${v1}): <b>${start.toFixed(1)}</b></div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
                 → ORIGINAL NUMBER: ${start.toFixed(2)}
             </div>
         `;
         
-        return { mid, start };
+        return { mid, start, o1t, o1v, o2t, o2v };
     }
 
     function runReverse() {
         const data = refresh();
+        const op1 = document.getElementById('v-op1');
+        const op2 = document.getElementById('v-op2');
+
         machine.classList.add('rewind-active');
         
-        // Staggered reveal
+        // VISUALLY FLIP SIGNS DURING REWIND
+        op1.innerText = inverse[data.o1t] + data.o1v;
+        op2.innerText = inverse[data.o2t] + data.o2v;
+
+        // Staggered reveal of values
         setTimeout(() => { document.getElementById('v-mid').innerText = data.mid.toFixed(1); }, 600);
         setTimeout(() => { document.getElementById('v-start').innerText = data.start.toFixed(1); }, 1200);
     }
 
     inputs.forEach(i => i.addEventListener('input', refresh));
+    // INITIAL TRIGGER TO LOAD "RESULT" ON PAGE LOAD
     window.onload = refresh;
 </script>
 

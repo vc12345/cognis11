@@ -22,10 +22,11 @@
 
         .node { 
             width: 85px; height: 85px; 
-            background: white; border: 4px solid var(--cognis-blue); 
+            background: white; border: 4px solid #002d5b; /* Explicit Navy */
             border-radius: 18px; display: flex; flex-direction: column; 
             align-items: center; justify-content: center; 
             font-weight: 800; font-size: 1.3rem; 
+            color: #002d5b; /* Explicit Color */
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             position: relative; z-index: 2; 
         }
@@ -40,7 +41,7 @@
 
         .op-badge { 
             position: absolute; top: -40px; left: 50%; transform: translateX(-50%); 
-            background: var(--cognis-blue); color: white; 
+            background: #002d5b; color: white; 
             padding: 5px 15px; border-radius: 20px; 
             font-size: 0.85rem; font-weight: 800; 
             transition: all 0.4s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -48,18 +49,18 @@
         
         /* Animation States */
         .rewind-active .op-badge { 
-            background: var(--cognis-gold); 
+            background: #c5a059; /* Gold */
             transform: translateX(-50%) translateY(65px); 
         }
         
         .rewind-active .node { 
-            border-color: var(--cognis-gold); 
+            border-color: #c5a059; 
             box-shadow: 0 0 25px rgba(197, 160, 89, 0.3); 
         }
 
         .sim-btn-wrapper { text-align: center; margin-top: 30px; }
         .sim-btn { 
-            background: var(--cognis-gold); color: white; border: none; 
+            background: #c5a059; color: white; border: none; 
             padding: 14px 35px; border-radius: 10px; 
             font-weight: 800; cursor: pointer; text-transform: uppercase;
             letter-spacing: 1px; transition: transform 0.2s;
@@ -68,11 +69,11 @@
 
         .engine-container { grid-template-columns: 1fr 1fr; }
         .op-row { display: flex; gap: 10px; align-items: center; margin-top: 5px; }
-        .op-row select { flex: 1; }
+        .op-row select { flex: 1; height: 40px; border-radius: 8px; }
         .op-row input { flex: 1.5; }
 
         /* Saboteur Spacing Fix */
-        .trap-box p { margin-bottom: 20px; }
+        .trap-box p { margin: 0 0 15px 0; }
         .trap-box p:last-child { margin-bottom: 0; }
     </style>
 
@@ -116,7 +117,7 @@
                 <div class="path"><div class="op-badge" id="v-op1">+5</div></div>
                 <div class="node"><small>Middle</small><span id="v-mid">?</span></div>
                 <div class="path"><div class="op-badge" id="v-op2">x2</div></div>
-                <div class="node" style="border-color: var(--cognis-gold);"><small>Result</small><span id="v-res">20</span></div>
+                <div class="node" style="border-color: #c5a059;"><small>Result</small><span id="v-res">20</span></div>
             </div>
             
             <div class="sim-btn-wrapper">
@@ -166,7 +167,7 @@
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
             <p><strong>The "Clockwise" Trap:</strong> Attempting to reverse the first instruction before the last one, just because it was written first in the sentence.</p>
-            <p><strong>The Fix:</strong> Use "Last In, First Out" (LIFO). Think of putting on socks, then shoes. To reverse the process, you <b>must</b> take off the shoes first! Always start from the final result.</p>
+            <p><strong>The Fix:</strong> Use "Last In, First Out" (LIFO). Think of socks and shoes. To reverse, you <b>must</b> take off the shoes first! Always start from the final result.</p>
         </div>
     </section>
 </div>
@@ -174,36 +175,32 @@
 <button class="btn-complete" onclick="markComplete(17)">Complete Module & Update Lattice</button>
 
 <script>
-    const inputs = ['in-res', 'in-o1t', 'in-o1v', 'in-o2t', 'in-o2v'].map(id => document.getElementById(id));
+    // Robust mappings
     const symbols = {add:'+', sub:'-', mul:'x', div:'÷'};
     const inverse = {add:'-', sub:'+', mul:'÷', div:'x'};
-    const machine = document.getElementById('machine');
-    const engineTrace = document.getElementById('engine-trace');
 
     function refresh() {
-        const res = document.getElementById('in-res').value || 0;
+        // Collect inputs
+        const resInput = document.getElementById('in-res').value;
         const o1t = document.getElementById('in-o1t').value;
-        const o1v = document.getElementById('in-o1v').value || 0;
+        const o1v = document.getElementById('in-o1v').value;
         const o2t = document.getElementById('in-o2t').value;
-        const o2v = document.getElementById('in-o2v').value || 0;
-        
-        // Lock the Result value immediately
-        document.getElementById('v-res').innerText = res;
-        
-        // Show Forward symbols initially
-        document.getElementById('v-op1').innerText = symbols[o1t] + o1v;
-        document.getElementById('v-op2').innerText = symbols[o2t] + o2v;
-        
-        // Reset mystery nodes
+        const o2v = document.getElementById('in-o2v').value;
+
+        // Numerical conversion with fallback
+        const rVal = parseFloat(resInput) || 0;
+        const v1 = parseFloat(o1v) || 0;
+        const v2 = parseFloat(o2v) || 0;
+
+        // Update visual nodes to baseline state
+        document.getElementById('v-res').innerText = rVal;
+        document.getElementById('v-op1').innerText = symbols[o1t] + v1;
+        document.getElementById('v-op2').innerText = symbols[o2t] + v2;
         document.getElementById('v-mid').innerText = "?";
         document.getElementById('v-start').innerText = "?";
-        machine.classList.remove('rewind-active');
+        document.getElementById('machine').classList.remove('rewind-active');
 
-        // Math Logic
-        const rVal = parseFloat(res);
-        const v1 = parseFloat(o1v);
-        const v2 = parseFloat(o2v);
-
+        // Logic calculations
         const solve = (v, type, n) => {
             if(type==='add') return v - n;
             if(type==='sub') return v + n;
@@ -215,42 +212,46 @@
         const mid = solve(rVal, o2t, v2);
         const start = solve(mid, o1t, v1);
 
-        engineTrace.innerHTML = `
+        // Update Logic Trace
+        document.getElementById('engine-trace').innerHTML = `
             <div class="trace-step">→ 1. Start at Result: <b>${rVal}</b></div>
             <div class="trace-step">→ 2. Undo Step 2 (${inverse[o2t]}${v2}): <b>${mid.toFixed(1)}</b></div>
             <div class="trace-step">→ 3. Undo Step 1 (${inverse[o1t]}${v1}): <b>${start.toFixed(1)}</b></div>
-            <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+            <div class="trace-step" style="color:#c5a059; font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
                 → ORIGINAL NUMBER: ${start.toFixed(2)}
             </div>
         `;
         
-        return { mid, start, o1t, o1v, o2t, o2v };
+        return { mid, start, o1t, v1, o2t, v2 };
     }
 
     function runReverse() {
         const data = refresh();
-        const op1 = document.getElementById('v-op1');
-        const op2 = document.getElementById('v-op2');
+        const machine = document.getElementById('machine');
+        
+        // VISUALLY FLIP SIGNS
+        document.getElementById('v-op1').innerText = inverse[data.o1t] + data.v1;
+        document.getElementById('v-op2').innerText = inverse[data.o2t] + data.v2;
 
         machine.classList.add('rewind-active');
-        
-        // VISUALLY FLIP SIGNS DURING REWIND
-        op1.innerText = inverse[data.o1t] + data.o1v;
-        op2.innerText = inverse[data.o2t] + data.o2v;
 
-        // Reveal Middle node
+        // Staggered population of values
         setTimeout(() => { 
-            document.getElementById('v-mid').innerText = data.mid.toFixed(1); 
+            document.getElementById('v-mid').innerText = isFinite(data.mid) ? data.mid.toFixed(1) : "Error"; 
         }, 600);
 
-        // Reveal Start node
         setTimeout(() => { 
-            document.getElementById('v-start').innerText = data.start.toFixed(1); 
+            document.getElementById('v-start').innerText = isFinite(data.start) ? data.start.toFixed(1) : "Error"; 
         }, 1200);
     }
 
-    inputs.forEach(i => i.addEventListener('input', refresh));
-    window.onload = refresh; // Force Result population on load
+    // Attach listeners to all control elements
+    const controlIds = ['in-res', 'in-o1t', 'in-o1v', 'in-o2t', 'in-o2v'];
+    controlIds.forEach(id => {
+        document.getElementById(id).addEventListener('input', refresh);
+    });
+
+    window.onload = refresh;
 </script>
 
 </body>

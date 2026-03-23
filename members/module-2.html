@@ -5,56 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Module 2: Shared Ratios | Cognis 11+</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root {
-            --cognis-blue: #002d5b;
-            --cognis-gold: #c5a059;
-            --cognis-light: #f4f7f9;
-            --trap-red: #d9534f;
-            --part-a: #1b3a5c;
-            --part-b: #c5a059;
+        /* UNIQUE CSS FOR RATIO PARTITIONING */
+        .anatomy-display { 
+            background: #f8fafc; 
+            padding: 40px; 
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid #e2e8f0;
         }
-        body { font-family: 'DM Sans', sans-serif; background: #eaeff2; color: #2c3e50; padding: 40px 20px; line-height: 1.6; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        
-        /* Header Template */
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; font-family: 'Playfair Display', serif; }
 
-        /* Section Template */
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; margin-top: 0; letter-spacing: 2px; font-weight: 700; }
+        .ratio-bar { 
+            display: flex; 
+            width: 100%; 
+            height: 60px; 
+            border-radius: 8px; 
+            overflow: hidden; 
+            border: 3px solid var(--cognis-blue); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); 
+        }
 
-        /* X-Ray Template (Ref: Mod 21) */
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; min-height: 100px; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 1px; }
+        .ratio-box { 
+            flex: 1; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            font-weight: 800; 
+            font-size: 0.9rem; 
+            border-right: 1px solid rgba(255,255,255,0.2); 
+            transition: all 0.3s ease; 
+        }
 
-        /* Anatomy Template: Interactive Visualization */
-        .anatomy-display { margin: 30px 0; display: flex; flex-direction: column; align-items: center; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; }
-        .ratio-bar { display: flex; width: 100%; height: 60px; border-radius: 8px; overflow: hidden; border: 3px solid var(--cognis-blue); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .ratio-box { flex: 1; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.9rem; border-right: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease; }
         .ratio-box:last-child { border-right: none; }
-        .box-a { background: var(--part-a); }
-        .box-b { background: var(--part-b); }
-        .anatomy-labels { display: flex; justify-content: space-between; width: 100%; margin-top: 15px; font-weight: bold; color: var(--cognis-blue); }
+        .box-a { background: #1b3a5c; }
+        .box-b { background: var(--cognis-gold); }
 
-        /* Engine Template (Ref: Mod 11) */
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group { margin-bottom: 20px; }
-        .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
-        .control-group input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1.1rem; accent-color: var(--cognis-gold); }
-        .val-out { float: right; color: var(--cognis-gold); }
+        .anatomy-labels { 
+            display: flex; 
+            justify-content: space-between; 
+            width: 100%; 
+            margin-top: 15px; 
+            font-weight: 800; 
+            color: var(--cognis-blue);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .engine-container { grid-template-columns: 1fr 1.3fr; }
         
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
-        .trace-step { margin-bottom: 8px; color: #e2e8f0; }
+        .control-group label { 
+            display: flex; 
+            justify-content: space-between; 
+            font-weight: 800 !important; 
+        }
 
-        /* Saboteur Template (Ref: Mod 4) */
-        .trap-box { background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px; margin-top: 10px; }
-        .trap-box h3 { color: var(--trap-red); margin-top: 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
-
-        .btn-complete { width: 100%; background: #10b981; color: white; border: none; padding: 20px; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 40px; font-size: 1rem; transition: background 0.2s; }
-        .btn-complete:hover { background: #059669; }
+        input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
+        .val-display { color: var(--cognis-gold); }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -64,16 +77,19 @@
 </head>
 <body>
 
-<div class="module-card">
-    <div class="header"><h1>Module 2: Shared Ratios</h1></div>
+<div class="module-card" style="margin-top: 40px;">
+    <div class="header">
+        <h1>Module 2: Shared Ratios</h1>
+    </div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>This module identifies questions where a <b>Total Amount</b> must be split using a specific proportion. The key is to see the ratio as a set of equal-sized "boxes" that together hold the entire value.</p>
+        <p>Ratio sharing is the art of <b>Proportional Splitting</b>. When a total is shared in a ratio, we aren't just looking at two numbers; we are looking at a collection of equal "parts." The most important step is finding the <b>Sum of Parts</b>. Once you know what "one part" is worth, you can find any share.</p>
+        
         <div class="question-tiers">
             <div class="tier-card">
                 <b>Advanced Year 2</b>
-                "Share 15 sweets between Ben and Sam in the ratio 2:1. How many sweets does Ben get?"
+                "Share 15 sweets between Ben and Sam in the ratio 2:1. How many does Ben get?"
             </div>
             <div class="tier-card">
                 <b>Average Year 4</b>
@@ -81,19 +97,21 @@
             </div>
             <div class="tier-card">
                 <b>Advanced Year 5</b>
-                "A line 1.5m long is divided in the ratio 3:2. Find the difference in length between the two parts."
+                "A 1.5m line is divided in the ratio 3:2. Find the difference in length between the two parts."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Think of the ratio as a single bar made of equal parts. If you know the <b>Total Value</b>, you must find the value of <b>one part</b> first.</p>
+        <p>The <b>Partition Bar</b>. Every segment in this bar represents a single "part" and holds exactly the same value. To find that value, we must divide the <b>Total Amount</b> by the <b>Total Number of Segments</b>.</p>
+        
         <div class="anatomy-display">
-            <div class="ratio-bar" id="ratio-bar"></div>
+            <div class="ratio-bar" id="ratio-bar">
+                </div>
             <div class="anatomy-labels">
                 <span id="label-total">Total: £100</span>
-                <span id="label-parts">Total Parts: 5</span>
+                <span id="label-parts" style="color: var(--cognis-gold);">Total Parts: 5</span>
             </div>
         </div>
     </section>
@@ -103,28 +121,28 @@
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Total Value (£) <span class="val-out" id="v-val">100</span></label>
-                    <input type="range" id="in-v" min="10" max="500" step="10" value="100">
+                    <label>Total Value (£): <span class="val-display" id="v-disp">£100</span></label>
+                    <input type="range" id="in-v" min="10" max="500" step="10" value="100" oninput="run2()">
                 </div>
-                <div class="control-group">
-                    <label>Ratio Part A <span class="val-out" id="a-val">3</span></label>
-                    <input type="range" id="in-a" min="1" max="10" value="3">
+                <div class="control-group" style="margin-top:15px;">
+                    <label>Ratio Part A: <span class="val-display" id="a-disp">3</span></label>
+                    <input type="range" id="in-a" min="1" max="10" value="3" oninput="run2()">
                 </div>
-                <div class="control-group">
-                    <label>Ratio Part B <span class="val-out" id="b-val">2</span></label>
-                    <input type="range" id="in-b" min="1" max="10" value="2">
+                <div class="control-group" style="margin-top:15px;">
+                    <label>Ratio Part B: <span class="val-display" id="b-disp">2</span></label>
+                    <input type="range" id="in-b" min="1" max="10" value="2" oninput="run2()">
                 </div>
             </div>
-            <div class="trace-log" id="engine-trace"></div>
+            <div class="trace-log" id="trace-2">Awaiting partition logic...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The Single-Side Trap:</strong> Students often divide the total by only one side of the ratio (e.g., £100 ÷ 3). 
-            <br><br>
-            <strong>The Fix:</strong> Always <b>SUM</b> the ratio parts first. The Total Value covers the whole bar, so you must divide by the <i>total</i> number of parts to find the value of one share.</p>
+            <p><strong>The "Single-Side" Trap:</strong> Dividing the total by only one side of the ratio (e.g., trying to find one part by doing $£100 \div 3$). This assumes that the £100 only belongs to Part A.</p>
+            
+            <p><strong>The Fix:</strong> Use the <b>Unity Check</b>. Because the Total Value covers the <i>entire</i> bar, you must divide by the <b>Total Number of Parts</b> $(A + B)$ to find the value of one segment. Only then can you multiply to find the individual shares.</p>
         </div>
     </section>
 </div>
@@ -132,57 +150,52 @@
 <button class="btn-complete" onclick="markComplete(2)">Complete Module & Update Lattice</button>
 
 <script>
-    const inV = document.getElementById('in-v');
-    const inA = document.getElementById('in-a');
-    const inB = document.getElementById('in-b');
-    const ratioBar = document.getElementById('ratio-bar');
-    const engineTrace = document.getElementById('engine-trace');
-
-    function refresh() {
-        const total = parseInt(inV.value);
-        const a = parseInt(inA.value);
-        const b = parseInt(inB.value);
+    function run2() {
+        const total = parseInt(document.getElementById('in-v').value);
+        const a = parseInt(document.getElementById('in-a').value);
+        const b = parseInt(document.getElementById('in-b').value);
+        
         const sumParts = a + b;
         const unitValue = total / sumParts;
         const shareA = unitValue * a;
         const shareB = unitValue * b;
 
         // Update Labels
-        document.getElementById('v-val').innerText = '£' + total;
-        document.getElementById('a-val').innerText = a;
-        document.getElementById('b-val').innerText = b;
+        document.getElementById('v-disp').innerText = '£' + total;
+        document.getElementById('a-disp').innerText = a;
+        document.getElementById('b-disp').innerText = b;
         document.getElementById('label-total').innerText = `Total: £${total}`;
         document.getElementById('label-parts').innerText = `Total Parts: ${sumParts}`;
 
         // Update Visualization
-        ratioBar.innerHTML = '';
+        const bar = document.getElementById('ratio-bar');
+        bar.innerHTML = '';
         for(let i=0; i<a; i++) {
             const div = document.createElement('div');
             div.className = 'ratio-box box-a';
             div.innerText = `£${unitValue.toFixed(0)}`;
-            ratioBar.appendChild(div);
+            bar.appendChild(div);
         }
         for(let i=0; i<b; i++) {
             const div = document.createElement('div');
             div.className = 'ratio-box box-b';
             div.innerText = `£${unitValue.toFixed(0)}`;
-            ratioBar.appendChild(div);
+            bar.appendChild(div);
         }
 
-        // Update Trace
-        engineTrace.innerHTML = `
-            <div class="trace-step">→ 1. Add parts: ${a} + ${b} = <b>${sumParts} total shares</b></div>
-            <div class="trace-step">→ 2. Find 1 share: £${total} ÷ ${sumParts} = <b>£${unitValue.toFixed(2)}</b></div>
-            <div class="trace-step">→ 3. Calculate Part A: ${a} × £${unitValue.toFixed(2)} = £${shareA.toFixed(2)}</div>
-            <div class="trace-step">→ 4. Calculate Part B: ${b} × £${unitValue.toFixed(2)} = £${shareB.toFixed(2)}</div>
+        // Trace Output
+        document.getElementById('trace-2').innerHTML = `
+            <div class="trace-step">→ 1. Total Parts: ${a} + ${b} = <b>${sumParts}</b></div>
+            <div class="trace-step">→ 2. Unit Value: £${total} ÷ ${sumParts} = <b>£${unitValue.toFixed(2)}</b></div>
+            <div class="trace-step">→ 3. Share A: ${a} parts × £${unitValue.toFixed(2)} = £${shareA.toFixed(2)}</div>
+            <div class="trace-step">→ 4. Share B: ${b} parts × £${unitValue.toFixed(2)} = £${shareB.toFixed(2)}</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → Check: £${shareA.toFixed(2)} + £${shareB.toFixed(2)} = £${total}
+                → FINAL SPLIT: £${shareA.toFixed(2)} : £${shareB.toFixed(2)}
             </div>
         `;
     }
 
-    [inV, inA, inB].forEach(input => input.addEventListener('input', refresh));
-    window.onload = refresh;
+    window.onload = run2;
 </script>
 
 </body>

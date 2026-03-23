@@ -1,7 +1,33 @@
 // js/module-core.js
 
+/**
+ * SMART LOADER: Automatically fetches the registry if missing from the HTML
+ */
+async function ensureRegistry() {
+    if (typeof COGNIS_MODULES !== 'undefined') return true;
+
+    return new Promise((resolve) => {
+        console.log("Core: Registry missing. Injecting dynamically...");
+        const script = document.createElement('script');
+        // This path assumes your modules are in /members/modules/ and registry is in /js/
+        script.src = '../js/registry.js'; 
+        script.onload = () => {
+            console.log("Core: Registry loaded successfully.");
+            resolve(true);
+        };
+        script.onerror = () => {
+            console.error("Core: Critical Error - Could not find registry.js at " + script.src);
+            resolve(false);
+        };
+        document.head.appendChild(script);
+    });
+}
+
 async function initModule(moduleId) {
-    // 1. GATEKEEPER: Check Auth & Subscription
+    // 1. Ensure Registry is available before proceeding
+    await ensureRegistry();
+
+    // 2. GATEKEEPER: Check Supabase Initialization
     if (!window.supabaseClient) {
         let attempts = 0;
         while (!window.supabaseClient && attempts < 20) {
@@ -15,29 +41,26 @@ async function initModule(moduleId) {
         return;
     }
 
+    // 3. AUTH CHECK
     const { data: { user }, error: authError } = await window.supabaseClient.auth.getUser();
-    
-    // Redirect if not logged in
     if (authError || !user) {
         window.location.href = "/login.html";
         return;
     }
 
-    // 2. FETCH PROFILE
+    // 4. SUBSCRIPTION & SEQUENTIAL LOGIC
     const { data: profile } = await window.supabaseClient
         .from('profiles')
         .select('subscription_status, subscription_plan')
         .eq('id', user.id)
         .maybeSingle();
 
-    // Block if not active
     if (!profile || profile.subscription_status !== 'active') {
         alert("This module requires an active subscription.");
         window.location.href = "/members/dashboard.html";
         return;
     }
 
-    // 3. SEQUENTIAL LOCKDOWN (For Foundational Path)
     const currentModuleId = Number(moduleId);
     const userPlan = profile.subscription_plan || 'none';
 
@@ -58,16 +81,15 @@ async function initModule(moduleId) {
         }
     }
 
-    // 4. UI INJECTION: Header & Footer Navigation
+    // 5. UI INJECTION (Header & Footer Nav)
     injectModuleUI(user.email, currentModuleId);
-    console.log(`Module ${moduleId} authorized for ${user.email} (${userPlan})`);
 }
 
 function injectModuleUI(email, currentId) {
-    // A. FIND ADJACENT MODULES FROM REGISTRY
     let prevMod = null;
     let nextMod = null;
 
+    // Resolve Adjacent Modules
     if (typeof COGNIS_MODULES !== 'undefined') {
         const currentIndex = COGNIS_MODULES.findIndex(m => Number(m.id) === Number(currentId));
         if (currentIndex !== -1) {
@@ -76,26 +98,25 @@ function injectModuleUI(email, currentId) {
         }
     }
 
-    // B. GENERATE CSS & HTML
     const uiHTML = `
         <style>
-            /* 1. MASTER BRANDING OVERRIDES */
+            /* MASTER BRANDING & LAYOUT OVERRIDES */
             body { 
                 background-color: #FAFAF6 !important; 
                 color: #1B3A5C !important;
                 font-family: 'DM Sans', sans-serif !important;
                 margin: 0;
-                padding-bottom: 80px; /* Space for footer nav */
+                padding-bottom: 60px; 
             }
             .module-card { 
                 max-width: 920px !important; 
                 border: 1px solid #E5E3DD !important; 
                 box-shadow: 0 10px 40px rgba(0,0,0,0.03) !important;
                 background: white !important;
-                margin-bottom: 40px !important;
+                margin-bottom: 20px !important;
             }
 
-            /* 2. TOP NAVIGATION BAR */
+            /* TOP NAVIGATION */
             .cognis-m-nav {
                 background: #ffffff !important;
                 border-bottom: 1px solid #E5E3DD;
@@ -118,12 +139,7 @@ function injectModuleUI(email, currentId) {
             }
             .cognis-m-nav .user-tag { font-size: 0.75rem; color: #888; font-weight: 500; }
 
-            /* 3. ENGINE & TRACE STYLES */
-            .simulation-area, .engine-container { 
-                background: #1B3A5C !important; 
-                color: white !important;
-                border-radius: 12px !important;
-            }
+            /* ENGINE TRACE LOGS */
             .trace-log, [id*="trace"], [id*="logic"] { 
                 background: rgba(0,0,0,0.25) !important; 
                 border-left: 4px solid #c5a059 !important;
@@ -131,11 +147,11 @@ function injectModuleUI(email, currentId) {
                 font-family: 'Consolas', monospace !important;
             }
 
-            /* 4. BOTTOM CTA NAVIGATION */
+            /* FOOTER NAVIGATION BUTTONS */
             .module-footer-nav {
                 max-width: 920px;
-                margin: 60px auto;
-                display: flex;
+                margin: 40px auto 80px;
+                display: ${(!prevMod && !nextMod) ? 'none' : 'flex'};
                 justify-content: space-between;
                 gap: 20px;
                 padding: 0 20px;
@@ -158,10 +174,8 @@ function injectModuleUI(email, currentId) {
                 margin-bottom: 6px;
                 opacity: 0.7;
             }
-            .nav-cta .cta-title {
-                font-size: 1rem;
-                font-weight: 700;
-            }
+            .nav-cta .cta-title { font-size: 0.95rem; font-weight: 700; }
+            
             .nav-prev {
                 background: white;
                 color: #1B3A5C;
@@ -180,16 +194,16 @@ function injectModuleUI(email, currentId) {
             
             .nav-placeholder { flex: 1; visibility: hidden; }
 
-            /* 5. COMPLETE BUTTON */
+            /* COMPLETE BUTTON STYLING */
             button[onclick*="markComplete"] {
                 background: #1B3A5C !important;
+                border: none !important;
                 border-radius: 6px !important;
                 color: white !important;
                 padding: 18px 40px !important;
                 font-weight: 700 !important;
                 cursor: pointer;
                 transition: all 0.2s;
-                border: none;
             }
             button[onclick*="markComplete"]:hover { background: #2E6DA4 !important; transform: translateY(-2px); }
 
@@ -201,51 +215,47 @@ function injectModuleUI(email, currentId) {
         <nav class="cognis-m-nav">
             <a href="/members/dashboard.html">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                Lattice Dashboard
+                Learning Lattice
             </a>
             <div class="user-tag">${email}</div> 
         </nav>
-
-        <div id="bottom-nav-anchor"></div>
     `;
 
     document.body.insertAdjacentHTML('afterbegin', uiHTML);
 
-    // INJECT BOTTOM BUTTONS
-    const footerHTML = `
-        <div class="module-footer-nav">
-            ${prevMod ? `
-                <a href="${prevMod.path}" class="nav-cta nav-prev">
-                    <span class="cta-label">← Previous Module</span>
-                    <span class="cta-title">${prevMod.title}</span>
-                </a>
-            ` : '<div class="nav-placeholder"></div>'}
+    // Render Bottom Nav only if modules are found in registry
+    if (prevMod || nextMod) {
+        const footerHTML = `
+            <div class="module-footer-nav">
+                ${prevMod ? `
+                    <a href="${prevMod.path}" class="nav-cta nav-prev">
+                        <span class="cta-label">← Previous Module</span>
+                        <span class="cta-title">${prevMod.title}</span>
+                    </a>
+                ` : '<div class="nav-placeholder"></div>'}
 
-            ${nextMod ? `
-                <a href="${nextMod.path}" class="nav-cta nav-next">
-                    <span class="cta-label">Next Module →</span>
-                    <span class="cta-title">${nextMod.title}</span>
-                </a>
-            ` : '<div class="nav-placeholder"></div>'}
-        </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', footerHTML);
+                ${nextMod ? `
+                    <a href="${nextMod.path}" class="nav-cta nav-next">
+                        <span class="cta-label">Next Module →</span>
+                        <span class="cta-title">${nextMod.title}</span>
+                    </a>
+                ` : '<div class="nav-placeholder"></div>'}
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', footerHTML);
+    }
 }
 
-// 3. TRACKER: The "Complete" Function
 async function markComplete(moduleId) {
     const { data: { user } } = await window.supabaseClient.auth.getUser();
     if (!user) return;
 
     const { error } = await window.supabaseClient
         .from('module_progress')
-        .upsert([
-            { user_id: user.id, module_id: moduleId }
-        ], { onConflict: 'user_id, module_id' });
+        .upsert([{ user_id: user.id, module_id: moduleId }], { onConflict: 'user_id, module_id' });
 
     if (error) {
-        console.error("Error saving progress:", error);
-        alert("There was an error saving your progress.");
+        alert("Error saving progress.");
     } else {
         alert("Module Completed! ✅");
         window.location.href = "/members/dashboard.html";

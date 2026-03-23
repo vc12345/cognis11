@@ -16,7 +16,7 @@
             margin: 20px 0; 
             text-align: center;
             border: none;
-            min-height: 400px;
+            min-height: 420px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -60,7 +60,7 @@
 
         .toggle-btn {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             border: none;
             border-radius: 6px;
             background: #4a5568;
@@ -88,27 +88,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A net is the <b>Topological DNA</b> of a 3D object. While cube nets are common, advanced spatial reasoning requires you to map more complex solids. The logic is simple: the number of sides on the <b>Base Shape</b> must exactly match the number of "wall" faces. Prisms require a rectangular belt and two bases; Pyramids require a single base and a radial array of triangles.</p>
+        <p>A net is the <b>Structural Blueprint</b> of a 3D object. Success in advanced Non-Verbal Reasoning depends on identifying two constants: the <b>Base Geometry</b> (which determines the number of faces) and the <b>Connection Logic</b> (how those faces are arranged). Prisms always feature a "Belt" of rectangles connected to two identical bases, while Pyramids feature a single base with a "Star" of triangles.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
                 <b>Advanced Year 2</b>
-                "Identify the net for a square-based pyramid. How many triangles should be attached to the square?"
+                "Count the triangular faces on a square-based pyramid. Why must there be exactly four?"
             </div>
             <div class="tier-card">
                 <b>Average Year 4</b>
-                "A pentagonal prism has two pentagon bases. How many rectangular faces are needed to wrap around them?"
+                "A pentagonal prism is unfolded. Identify the number of rectangular panels required to wrap the shape."
             </div>
             <div class="tier-card">
                 <b>Advanced Year 5</b>
-                "Examine a complex hexagonal net. If one face is removed, can it still form a closed solid without gaps?"
+                "Examine an octagonal solid blueprint. How many side-flaps must exist to prevent gaps in the 3D form?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Blueprint Generator</b>. Watch how the geometry shifts to accommodate different bases. Notice how prisms create "belts" while pyramids create "stars."</p>
+        <p>The <b>Blueprint Generator</b>. Watch how the geometry shifts to accommodate different bases. Notice how the Prism "Caps" flip to maintain a perfect overlapping edge with the central belt.</p>
         
         <div class="anatomy-display">
             <svg id="net-svg" viewBox="0 0 400 400"></svg>
@@ -138,8 +138,8 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Inventory Only" Trap:</strong> Assuming a net is correct just because it has the right number of shapes (e.g., seeing 5 triangles for a pentagonal pyramid and clicking 'Yes' immediately).</p>
-            <p><strong>The Fix:</strong> Use the <b>Perimeter Contact Test</b>. Count the edges of the base shape. Every single edge of that base must be able to meet a "wall" face. If the base is a pentagon but 3 triangles are attached to one side and none to the others, the shape cannot close. Connection logic matters more than counting.</p>
+            <p><strong>The "Inventory Only" Trap:</strong> Assuming a net is correct just because it has the right number of shapes (e.g., seeing 5 triangles for a pentagonal pyramid and clicking 'Correct' immediately).</p>
+            <p><strong>The Fix:</strong> Use the <b>Perimeter Contact Test</b>. Count the edges of the base shape. Every single edge of that base must touch a "wall" face. If the base is a pentagon but the triangles are all clumped on one side, the shape cannot close. Connection logic is more important than face counts.</p>
         </div>
     </section>
 </div>
@@ -173,7 +173,6 @@
         const edgeLength = 50; 
 
         if (currentType === 'pyramid') {
-            // Pyramid Logic: Central Polygon with triangles radiating out
             const r = edgeLength / (2 * Math.sin(Math.PI / currentSides));
             const angleOffset = -Math.PI / 2 - (Math.PI / currentSides);
             
@@ -183,53 +182,42 @@
                 basePts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
             }
             
-            // Draw Base
             svg.innerHTML += `<polygon points="${basePts.map(p => p.join(',')).join(' ')}" style="fill:rgba(197, 160, 89, 0.3); stroke-width:3;"/>`;
 
-            // Draw Triangles
             const triHeight = 80;
             for (let i = 0; i < currentSides; i++) {
-                let p1 = basePts[i];
-                let p2 = basePts[(i + 1) % currentSides];
-                
-                let midX = (p1[0] + p2[0]) / 2;
-                let midY = (p1[1] + p2[1]) / 2;
-                
-                let dx = midX - cx;
-                let dy = midY - cy;
+                let p1 = basePts[i], p2 = basePts[(i + 1) % currentSides];
+                let midX = (p1[0] + p2[0]) / 2, midY = (p1[1] + p2[1]) / 2;
+                let dx = midX - cx, dy = midY - cy;
                 let mag = Math.sqrt(dx * dx + dy * dy);
-                
-                let tipX = midX + (dx / mag) * triHeight;
-                let tipY = midY + (dy / mag) * triHeight;
-                
+                let tipX = midX + (dx / mag) * triHeight, tipY = midY + (dy / mag) * triHeight;
                 svg.innerHTML += `<polygon points="${p1[0]},${p1[1]} ${p2[0]},${p2[1]} ${tipX},${tipY}" />`;
             }
         } else {
-            // Prism Logic: Belt of rectangles with two polygon bases
-            const rectH = 100;
+            const rectH = 80;
             const totalWidth = currentSides * edgeLength;
             const startX = cx - (totalWidth / 2);
             const startY = cy - (rectH / 2);
 
-            // Draw Rectangular Belt
             for (let i = 0; i < currentSides; i++) {
                 svg.innerHTML += `<rect x="${startX + i * edgeLength}" y="${startY}" width="${edgeLength}" height="${rectH}" />`;
             }
 
-            // Draw Two Polygon Bases (attached to the first rectangle)
             const apothem = edgeLength / (2 * Math.tan(Math.PI / currentSides));
+            const r = edgeLength / (2 * Math.sin(Math.PI / currentSides));
             
             const drawBase = (isTop) => {
                 let pts = [];
                 const centerY = isTop ? (startY - apothem) : (startY + rectH + apothem);
                 const centerX = startX + (edgeLength / 2);
                 
-                // Rotation logic to ensure a flat edge aligns with the rectangle
-                const rot = isTop ? Math.PI : 0; 
-                const r = edgeLength / (2 * Math.sin(Math.PI / currentSides));
+                // MATH FIX: Offset by PI/2 for top/bottom side alignment
+                // Top base needs its BOTTOM side flat (angle PI/2)
+                // Bottom base needs its TOP side flat (angle -PI/2)
+                const offset = isTop ? (Math.PI / 2 - Math.PI / currentSides) : (-Math.PI / 2 - Math.PI / currentSides);
 
                 for (let i = 0; i < currentSides; i++) {
-                    let a = rot + (i * 2 * Math.PI / currentSides) + (Math.PI / currentSides) + Math.PI/2;
+                    let a = offset + (i * 2 * Math.PI / currentSides);
                     pts.push(`${centerX + r * Math.cos(a)},${centerY + r * Math.sin(a)}`);
                 }
                 svg.innerHTML += `<polygon points="${pts.join(' ')}" style="fill:rgba(197, 160, 89, 0.3); stroke-width:3;"/>`;
@@ -242,7 +230,7 @@
         document.getElementById('trace-48').innerHTML = `
             <div class="trace-step">→ 1. Solid: <b>${currentSides}-Sided ${currentType}</b></div>
             <div class="trace-step">→ 2. Base Edges: <b>${currentSides}</b></div>
-            <div class="trace-step">→ 3. Face Count: ${currentType === 'prism' ? (currentSides + ' Rects + 2 Bases') : (currentSides + ' Tris + 1 Base')}</div>
+            <div class="trace-step">→ 3. Geometry: All edges aligned</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
                 → TOPOLOGY MAPPED
             </div>

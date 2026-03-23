@@ -12,12 +12,13 @@
         .anatomy-display { 
             background: #0f172a; 
             padding: 60px 20px; 
-            perspective: 1000px; /* Crucial for 3D effect */
+            perspective: 1200px; 
             overflow: hidden;
             border: none;
             display: flex;
             flex-direction: column;
             align-items: center;
+            border-radius: 12px;
         }
 
         .stack-stage {
@@ -25,13 +26,12 @@
             height: 300px;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: rotateX(0deg) rotateY(0deg);
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* 3D View Class triggered by slider */
         .view-3d .stack-stage {
-            transform: rotateX(45deg) rotateZ(-30deg);
+            transform: rotateX(50deg) rotateZ(-30deg);
         }
 
         .shape-layer {
@@ -47,37 +47,23 @@
             color: rgba(255,255,255,0.9);
             cursor: pointer;
             transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 2px solid rgba(255,255,255,0.1);
         }
 
-        /* Explode distances managed by CSS variables in JS */
-        .view-3d #layer-top { transform: translateZ(100px); }
-        .view-3d #layer-mid { transform: translateZ(0px); }
-        .view-3d #layer-bot { transform: translateZ(-100px); }
-
-        #layer-top { background: #ef4444; top: 40px; left: 40px; border-radius: 50%; }
-        #layer-mid { background: #3b82f6; top: 100px; left: 100px; border-radius: 12px; }
-        #layer-bot { 
+        /* Shapes */
+        #shape-circle { background: #ef4444; top: 40px; left: 40px; border-radius: 50%; }
+        #shape-square { background: #3b82f6; top: 100px; left: 100px; border-radius: 12px; }
+        #shape-triangle { 
             background: #eab308; top: 70px; left: 130px; 
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%); 
         }
-
-        .layer-shadow {
-            position: absolute;
-            bottom: -20px;
-            width: 200px;
-            height: 40px;
-            background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%);
-            transform: rotateX(90deg);
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-        .view-3d .layer-shadow { opacity: 1; }
+        #shape-triangle span { margin-top: 40px; }
 
         .depth-control-box {
             width: 100%;
             max-width: 400px;
-            margin-top: 50px;
+            margin-top: 60px;
             text-align: center;
             z-index: 10;
         }
@@ -87,12 +73,21 @@
         
         .btn-stack {
             background: #2d3748; color: #a0aec0; border: 1px solid #4a5568; 
-            padding: 10px; border-radius: 8px; cursor: pointer; 
+            padding: 12px; border-radius: 8px; cursor: pointer; 
             font-size: 0.7rem; text-transform: uppercase; font-weight: 800;
             width: 100%; text-align: left; margin-bottom: 8px; transition: 0.2s;
+            display: flex; justify-content: space-between;
         }
         .btn-stack:hover { background: #4a5568; color: white; }
-        .btn-stack.active { background: var(--cognis-gold); color: white; border-color: white; }
+        .btn-stack.active { background: var(--cognis-blue); color: var(--cognis-gold); border-color: var(--cognis-gold); }
+
+        .label-3d {
+            font-size: 0.6rem;
+            color: #94a3b8;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -133,18 +128,17 @@
         
         <div class="anatomy-display" id="anatomy-stage">
             <div class="stack-stage" id="stack-container">
-                <div class="shape-layer" id="layer-bot">3</div>
-                <div class="shape-layer" id="layer-mid">2</div>
-                <div class="shape-layer" id="layer-top">1</div>
-                <div class="layer-shadow"></div>
+                <div class="shape-layer" id="shape-circle" onclick="reorder('circle')">1</div>
+                <div class="shape-layer" id="shape-square" onclick="reorder('square')">2</div>
+                <div class="shape-layer" id="shape-triangle" onclick="reorder('triangle')"><span>3</span></div>
             </div>
 
             <div class="depth-control-box">
                 <div style="display:flex; justify-content: space-between; margin-bottom: 12px;">
-                    <span style="font-size:0.6rem; color:#94a3b8; font-weight:800; text-transform:uppercase;">2D (FLAT)</span>
-                    <span style="font-size:0.6rem; color:#94a3b8; font-weight:800; text-transform:uppercase;">3D (EXPLODED)</span>
+                    <span class="label-3d">2D (FLAT)</span>
+                    <span class="label-3d">3D (EXPLODED)</span>
                 </div>
-                <input type="range" id="depth-slider" min="0" max="1" step="1" value="0" oninput="toggle3D()">
+                <input type="range" id="depth-slider" min="0" max="1" step="1" value="0" oninput="renderStack()">
             </div>
         </div>
     </section>
@@ -153,10 +147,11 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="inputs">
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Rearrange Stack</label>
-                <button class="btn-stack" onclick="reorder('circle')">Bring Circle to Front</button>
-                <button class="btn-stack" onclick="reorder('square')">Bring Square to Front</button>
-                <button class="btn-stack" onclick="reorder('triangle')">Bring Triangle to Front</button>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Set Front Shape</label>
+                <button class="btn-stack" id="btn-circle" onclick="reorder('circle')">Red Circle <span>Front</span></button>
+                <button class="btn-stack" id="btn-square" onclick="reorder('square')">Blue Square <span>Front</span></button>
+                <button class="btn-stack" id="btn-triangle" onclick="reorder('triangle')">Gold Triangle <span>Front</span></button>
+                
                 <button class="btn-stack" style="margin-top:10px; border-color:var(--cognis-gold); color:var(--cognis-gold);" onclick="randomize()">Randomize Depth</button>
             </div>
             <div class="trace-log" id="trace-44">Scanning boundary intersections...</div>
@@ -175,21 +170,16 @@
 <button class="btn-complete" onclick="markComplete(44)">Complete Module & Update Lattice</button>
 
 <script>
-    let currentOrder = ['triangle', 'square', 'circle']; // Back to Front
+    // Internal state: Back to Front
+    let currentOrder = ['triangle', 'square', 'circle']; 
     const shapes = {
-        'circle': { id: 'layer-top', name: 'Red Circle', color: '#ef4444' },
-        'square': { id: 'layer-mid', name: 'Blue Square', color: '#3b82f6' },
-        'triangle': { id: 'layer-bot', name: 'Gold Triangle', color: '#eab308' }
+        'circle': { id: 'shape-circle', name: 'Red Circle', btn: 'btn-circle' },
+        'square': { id: 'shape-square', name: 'Blue Square', btn: 'btn-square' },
+        'triangle': { id: 'shape-triangle', name: 'Gold Triangle', btn: 'btn-triangle' }
     };
 
-    function toggle3D() {
-        const is3D = document.getElementById('depth-slider').value === "1";
-        document.getElementById('anatomy-stage').classList.toggle('view-3d', is3D);
-        updateTrace();
-    }
-
     function reorder(key) {
-        // Move selected key to the end of the array (the front)
+        // Remove and push to end (making it front)
         currentOrder = currentOrder.filter(k => k !== key);
         currentOrder.push(key);
         renderStack();
@@ -201,18 +191,39 @@
     }
 
     function renderStack() {
+        const is3D = document.getElementById('depth-slider').value === "1";
+        const stage = document.getElementById('anatomy-stage');
+        
+        // Toggle the 3D rotation class
+        stage.classList.toggle('view-3d', is3D);
+
         currentOrder.forEach((key, index) => {
-            const el = document.getElementById(shapes[key].id);
-            // Higher index = higher z-index and higher visual label
-            el.style.zIndex = index + 1;
-            el.innerText = 3 - index; // Label 1 for front, 3 for back
+            const config = shapes[key];
+            const el = document.getElementById(config.id);
+            const btn = document.getElementById(config.btn);
             
-            // Adjust explode positions based on new hierarchy
-            // We dynamically re-map IDs to positions for the CSS variables
-            if (index === 2) el.setAttribute('id', 'layer-top');
-            else if (index === 1) el.setAttribute('id', 'layer-mid');
-            else el.setAttribute('id', 'layer-bot');
+            // Set Z-Index (0 to 2)
+            el.style.zIndex = index + 10;
+            
+            // Text label: 1 for Front, 3 for Back
+            const depthRank = 3 - index;
+            if(key === 'triangle') el.querySelector('span').innerText = depthRank;
+            else el.innerText = depthRank;
+
+            // Handle 3D Translation
+            if (is3D) {
+                // Front is +100, Mid is 0, Back is -100
+                const zPos = (index - 1) * 100;
+                el.style.transform = `translateZ(${zPos}px)`;
+            } else {
+                el.style.transform = `translateZ(0px)`;
+            }
+
+            // Update Engine Buttons
+            if(index === 2) btn.classList.add('active');
+            else btn.classList.remove('active');
         });
+
         updateTrace();
     }
 
@@ -231,10 +242,7 @@
         `;
     }
 
-    window.onload = () => {
-        renderStack();
-        updateTrace();
-    };
+    window.onload = renderStack;
 </script>
 
 </body>

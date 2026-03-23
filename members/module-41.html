@@ -2,101 +2,171 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 41: Logical Ordering | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 41: Logical Ordering | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; --pass-green: #48bb78; 
-                --color-a: #e53e3e; --color-b: #ecc94b; --color-c: #48bb78; --color-d: #3182ce; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        /* UNIQUE CSS FOR ORDERING LAB */
+        .anatomy-display { 
+            background: #1a202c; 
+            border-radius: 12px; 
+            padding: 40px; 
+            min-height: 450px;
+            border: none;
+        }
+
+        .tab-group { display: flex; gap: 10px; margin-bottom: 30px; justify-content: center; }
+        .tab-btn { 
+            background: #2d3748; color: #a0aec0; border: 1px solid #4a5568; 
+            padding: 10px 20px; border-radius: 8px; cursor: pointer; 
+            font-size: 0.75rem; text-transform: uppercase; font-weight: 800;
+            transition: 0.2s;
+        }
+        .tab-btn.active { background: var(--cognis-gold); color: white; border-color: white; }
+
+        #perm-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+            gap: 15px; 
+            max-height: 380px; 
+            overflow-y: auto; 
+            padding: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--cognis-gold) #2d3748;
+        }
+
+        .perm-row { 
+            display: flex; gap: 8px; justify-content: center; 
+            background: rgba(255,255,255,0.05); padding: 15px; 
+            border-radius: 10px; border: 1px solid #4a5568; 
+            position: relative; transition: all 0.3s; 
+        }
+
+        .token { 
+            width: 30px; height: 30px; border-radius: 6px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: 900; color: white; font-size: 0.8rem; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .token-a { background: #e53e3e; } 
+        .token-b { background: #ecc94b; color: #1a202c; } 
+        .token-c { background: #48bb78; } 
+        .token-d { background: #3182ce; }
+
+        /* Elimination Visuals */
+        .perm-row.eliminated { opacity: 0.2; filter: grayscale(1); transform: scale(0.95); }
+        .perm-row.eliminated::after { 
+            content: ''; position: absolute; top: 50%; left: 10%; right: 10%; 
+            height: 2px; background: #f87171; transform: rotate(-12deg); 
+            box-shadow: 0 0 8px #f87171;
+        }
+
+        .perm-row.winner { 
+            background: rgba(197, 160, 89, 0.15); 
+            border: 2px solid var(--cognis-gold); 
+            transform: scale(1.05); 
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.3); 
+        }
+
+        .engine-container { grid-template-columns: 1fr 1.2fr; }
         
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+        .rule-btn { 
+            background: #2d3748; color: #a0aec0; border: 1px solid #4a5568; 
+            padding: 12px; border-radius: 8px; cursor: pointer; 
+            font-size: 0.7rem; text-transform: uppercase; margin-bottom: 8px; 
+            width: 100%; text-align: left; font-weight: 800; 
+            border-left: 4px solid transparent; transition: 0.2s; 
+        }
+        .rule-btn:hover { background: #4a5568; color: white; }
+        .rule-btn.active { 
+            background: var(--cognis-blue); 
+            border-left: 4px solid var(--cognis-gold); 
+            color: var(--cognis-gold); 
+            border-color: #4a5568;
+        }
 
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; line-height: 1.5; min-height: 120px; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
-
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; min-height: 450px; }
-        .tab-group { display: flex; gap: 10px; margin-bottom: 30px; }
-        .tab-btn { background: #2d3748; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
-        .tab-btn.active { background: var(--cognis-gold); }
-
-        #perm-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; max-height: 380px; overflow-y: auto; padding-bottom: 20px; }
-        .perm-row { display: flex; gap: 8px; justify-content: center; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; border: 1px solid #4a5568; position: relative; transition: 0.3s; }
-        .token { width: 28px; height: 28px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white; font-size: 0.75rem; }
-        .token-a { background: var(--color-a); } .token-b { background: var(--color-b); color: #1a202c; } .token-c { background: var(--color-c); } .token-d { background: var(--color-d); }
-
-        /* The Crossing Out Logic */
-        .perm-row.eliminated { opacity: 0.3; filter: grayscale(0.8); }
-        .perm-row.eliminated::after { content: ''; position: absolute; top: 50%; left: 10%; right: 10%; height: 3px; background: var(--trap-red); transform: rotate(-10deg); border-radius: 2px; box-shadow: 0 0 5px var(--trap-red); }
-        .perm-row.winner { background: rgba(72, 187, 120, 0.2); border-color: var(--pass-green); transform: scale(1.05); box-shadow: 0 0 15px var(--pass-green); }
-
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .rule-btn { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; text-align: left; font-weight: bold; border-left: 4px solid transparent; transition: 0.2s; }
-        .rule-btn:hover { background: #5a677a; }
-        .rule-btn.active { background: var(--cognis-gold); border-left: 4px solid white; color: white; }
-        .btn-reset { width: 100%; background: #4a5568; color: white; border: 1px solid #718096; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
-        
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+        .btn-reset { 
+            width: 100%; background: transparent; border: 2px solid #4a5568; 
+            color: #a0aec0; padding: 12px; border-radius: 8px; 
+            font-weight: 800; cursor: pointer; text-transform: uppercase; 
+            margin-top: 10px; font-size: 0.65rem; transition: 0.2s;
+        }
+        .btn-reset:hover { border-color: var(--cognis-gold); color: white; }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 4' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(41)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(41));</script>
 </head>
 <body>
-<div class="module-card">
-    <div class="header"><h1>Module 41: Logical Ordering</h1></div>
-    
+
+<div class="module-card" style="margin-top: 40px;">
+    <div class="header">
+        <h1>Module 41: Logical Ordering</h1>
+    </div>
+
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In logical ordering, we use clues to eliminate impossible sequences. By visualizing the items as color-coded tokens, we can systematically cross out any arrangement where the "Stronger" item is to the left of the "Weaker" one. Success comes from identifying the clues that narrow the field without over-relying on memory.</p>
+        <p>Logical ordering is the art of <b>Constraint Satisfaction</b>. Instead of trying to guess the correct order, you must treat every clue as a filter. By visualizing every possible arrangement and crossing out the ones that break the rules, the truth reveals itself through a process of elimination.</p>
+        
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b><p>A is taller than B.</p><b>Goal:</b> Find the only valid arrangement on the line.</div>
-            <div class="tier-card"><b>Average Year 4</b><p>B is taller than A.<br>C is taller than B.</p><b>Goal:</b> Find the sequence.</div>
-            <div class="tier-card"><b>Advanced Year 5</b><p>D is the tallest.<br>B is taller than A.<br>C is taller than B.</p><b>Goal:</b> Determine the 2nd heaviest.</div>
+            <div class="tier-card">
+                <b>Advanced Year 2</b>
+                "A is taller than B. There are only two items. Find the valid sequence."
+            </div>
+            <div class="tier-card">
+                <b>Average Year 4</b>
+                "B is taller than A, and C is taller than B. Arrange them from shortest to tallest."
+            </div>
+            <div class="tier-card">
+                <b>Advanced Year 5</b>
+                "D is the tallest. B is taller than A, but shorter than C. Identify the full 4-item sequence."
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area">
+        <p>The <b>Possibility Matrix</b>. Select the number of items. As you toggle clues in the engine, watch how the impossible sequences are struck from the record.</p>
+        
+        <div class="anatomy-display">
             <div class="tab-group">
                 <button class="tab-btn active" id="tab-2" onclick="startSetup(2)">2 Items</button>
                 <button class="tab-btn" id="tab-3" onclick="startSetup(3)">3 Items</button>
                 <button class="tab-btn" id="tab-4" onclick="startSetup(4)">4 Items</button>
             </div>
-            <div id="perm-container"></div>
+            <div id="perm-container">
+                </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls">
-                <div id="rule-box"></div>
-                <button class="btn-reset" onclick="resetRules()">Reset All Clues</button>
+            <div class="inputs">
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">Toggle Logical Clues</label>
+                <div id="rule-box">
+                    </div>
+                <button class="btn-reset" onclick="resetRules()">Clear Filter Logic</button>
             </div>
-            <div class="trace-log" id="trace-41">Toggle clues to cross out the impossible options.</div>
+            <div class="trace-log" id="trace-41">Toggle a clue to begin filtering the matrix...</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> Fixing an item in "First Place" as soon as a clue mentions it is "stronger," without checking if there is another item stronger still.</p>
-            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin: 15px 0;">
-            <p><strong>The Fix:</strong> Permutation Elimination. Instead of guessing, look at the full "Possibility Space." Cross out every row where the Clue Rule is broken. The rows that aren't crossed out are your only remaining possibilities.</p>
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "First Clue" Trap:</strong> Fixing an item in first place as soon as a clue says it is "taller" or "heavier," without checking if there is another item that is taller still.</p>
+            <p><strong>The Fix:</strong> Use <b>Relational Chains</b>. Don't look for the winner immediately. Link the clues together (e.g., A > B and B > C creates the chain A > B > C). Only once all clues are linked should you commit an item to a position.</p>
         </div>
     </section>
 </div>
+
+<button class="btn-complete" onclick="markComplete(41)">Complete Module & Update Lattice</button>
 
 <script>
     let currentItems = [];
@@ -112,7 +182,6 @@
         const ruleBox = document.getElementById('rule-box');
         ruleBox.innerHTML = '';
         
-        // Custom meaningful clues for each size
         let clues = [];
         if(size === 2) clues = [{t:"A > B", a:"A", b:"B"}];
         if(size === 3) clues = [{t:"B > A", a:"B", b:"A"}, {t:"C > B", a:"C", b:"B"}];
@@ -121,7 +190,7 @@
         clues.forEach(r => {
             const btn = document.createElement('button');
             btn.className = 'rule-btn';
-            btn.innerText = `Clue: ${r.t} (Right is Stronger)`;
+            btn.innerText = `Clue: ${r.t}`; // CONFUSING SUFFIX REMOVED
             btn.onclick = () => toggleRule(r, btn);
             ruleBox.appendChild(btn);
         });
@@ -130,8 +199,13 @@
 
     function toggleRule(rule, btn) {
         const idx = activeRules.findIndex(r => r.t === rule.t);
-        if(idx > -1) { activeRules.splice(idx, 1); btn.classList.remove('active'); }
-        else { activeRules.push(rule); btn.classList.add('active'); }
+        if(idx > -1) { 
+            activeRules.splice(idx, 1); 
+            btn.classList.remove('active'); 
+        } else { 
+            activeRules.push(rule); 
+            btn.classList.add('active'); 
+        }
         updateSim();
     }
 
@@ -158,11 +232,16 @@
         let validCount = 0;
 
         allPerms.forEach(p => {
-            const isValid = activeRules.every(r => p.indexOf(r.a) > p.indexOf(r.b));
+            // Internal Logic: stronger item (r.a) must be to the left of weaker (r.b)
+            // Array Index: 0 is leftmost, higher is rightmost. So index(a) < index(b)
+            const isValid = activeRules.every(r => p.indexOf(r.a) < p.indexOf(r.b));
             if(isValid) validCount++;
+            
             const row = document.createElement('div');
             row.className = 'perm-row' + (isValid ? '' : ' eliminated');
-            p.forEach(letter => { row.innerHTML += `<div class="token ${itemConfig[letter]}">${letter}</div>`; });
+            p.forEach(letter => { 
+                row.innerHTML += `<div class="token ${itemConfig[letter]}">${letter}</div>`; 
+            });
             container.appendChild(row);
         });
 
@@ -172,16 +251,17 @@
         }
 
         document.getElementById('trace-41').innerHTML = `
-            Active Clues: <b>${activeRules.length}</b><br>
-            Surviving Solutions: <b>${validCount}</b><br><br>
-            <i>Note: The red strikes indicate impossible sequences.</i>
+            <div class="trace-step">→ 1. Total Permutations: <b>${allPerms.length}</b></div>
+            <div class="trace-step">→ 2. Clues Applied: <b>${activeRules.length}</b></div>
+            <div class="trace-step">→ 3. Surviving Options: <b>${validCount}</b></div>
+            <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+                → LOGIC STATUS: ${validCount === 1 ? 'SOLVED' : 'FILTERING...'}
+            </div>
         `;
     }
+    
     window.onload = () => startSetup(2);
 </script>
 
-    <button onclick="markComplete(41)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
 </body>
 </html>

@@ -36,12 +36,13 @@
             width: 160px; 
             text-align: center;
             z-index: 1;
-            transition: transform 0.2s ease-out;
+            transition: all 0.3s ease-out;
         }
 
         .bridge-input-wrapper {
             position: relative;
             z-index: 2;
+            transition: transform 0.2s ease-out;
         }
 
         .bridge-input { 
@@ -74,12 +75,27 @@
             color: #94a3b8;
             text-transform: uppercase;
             letter-spacing: 1px;
+            white-space: nowrap;
         }
 
+        /* Fixed Slider Controls - No Overlap */
         .slider-control-box {
-            max-width: 400px;
-            margin: 50px auto 0;
-            text-align: center;
+            max-width: 450px;
+            margin: 60px auto 0;
+        }
+
+        .slider-labels {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            margin-bottom: 12px;
+        }
+
+        .slider-labels span {
+            font-size: 0.6rem;
+            color: #94a3b8;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
@@ -131,18 +147,18 @@
         <div class="anatomy-display">
             <div class="bridge-stage">
                 <div class="word-block" id="block-left">RAIN</div>
-                <div class="bridge-input-wrapper">
+                <div class="bridge-input-wrapper" id="bridge-mover">
                     <div class="connection-indicator" id="conn-label">Testing...</div>
-                    <input type="text" class="bridge-input" id="bridge-in" placeholder="????" maxlength="6" oninput="update34()">
+                    <input type="text" class="bridge-input" id="bridge-in" placeholder="????" maxlength="8" oninput="update34()">
                 </div>
                 <div class="word-block" id="block-right">BALL</div>
             </div>
             
             <div class="slider-control-box">
-                <div style="display:flex; justify-content: space-between; margin-bottom: 10px;">
-                    <span style="font-size:0.6rem; color:#94a3b8; font-weight:800; text-transform:uppercase;">Connect A</span>
-                    <span style="font-size:0.6rem; color:#94a3b8; font-weight:800; text-transform:uppercase;">Neutral</span>
-                    <span style="font-size:0.6rem; color:#94a3b8; font-weight:800; text-transform:uppercase;">Connect B</span>
+                <div class="slider-labels">
+                    <span style="text-align: left;">Connect A</span>
+                    <span style="text-align: center;">Neutral</span>
+                    <span style="text-align: right;">Connect B</span>
                 </div>
                 <input type="range" id="hinge-slider" min="0" max="100" value="50" oninput="update34()">
             </div>
@@ -186,15 +202,15 @@
         
         const blockL = document.getElementById('block-left');
         const blockR = document.getElementById('block-right');
+        const mover = document.getElementById('bridge-mover');
         const connLabel = document.getElementById('conn-label');
         
         blockL.innerText = w1 || "???";
         blockR.innerText = w2 || "???";
         
-        // Calculate Translation
-        // At 0: L and Hinge touch. At 100: R and Hinge touch.
-        const offset = (sliderVal - 50) * 1.2;
-        document.querySelector('.bridge-input-wrapper').style.transform = `translateX(${offset}px)`;
+        // Horizontal travel
+        const offset = (sliderVal - 50) * 1.3;
+        mover.style.transform = `translateX(${offset}px)`;
 
         let status = "Scanning...";
         let resultLine = "...";
@@ -202,24 +218,28 @@
         if(sliderVal < 25) {
             status = "Locked Left";
             resultLine = `Formation: <b>${w1}${bridge || '____'}</b>`;
-            blockL.style.boxShadow = "0 0 20px rgba(197, 160, 89, 0.4)";
+            blockL.style.boxShadow = "0 0 25px rgba(197, 160, 89, 0.4)";
+            blockL.style.transform = "scale(1.05)";
         } else if(sliderVal > 75) {
             status = "Locked Right";
             resultLine = `Formation: <b>${bridge || '____'}${w2}</b>`;
-            blockR.style.boxShadow = "0 0 20px rgba(197, 160, 89, 0.4)";
+            blockR.style.boxShadow = "0 0 25px rgba(197, 160, 89, 0.4)";
+            blockR.style.transform = "scale(1.05)";
         } else {
             status = "Neutral State";
             resultLine = "Align to test connections";
             blockL.style.boxShadow = "none";
             blockR.style.boxShadow = "none";
+            blockL.style.transform = "scale(1)";
+            blockR.style.transform = "scale(1)";
         }
 
         connLabel.innerText = status;
 
         document.getElementById('trace-34').innerHTML = `
-            <div class="trace-step">→ 1. Prefix: <b>${w1}</b></div>
-            <div class="trace-step">→ 2. Suffix: <b>${w2}</b></div>
-            <div class="trace-step">→ 3. Hinge Input: <b style="color:var(--cognis-gold)">${bridge || 'EMPTY'}</b></div>
+            <div class="trace-step">→ 1. Prefix Word: <b>${w1}</b></div>
+            <div class="trace-step">→ 2. Suffix Word: <b>${w2}</b></div>
+            <div class="trace-step">→ 3. Input Bridge: <b style="color:var(--cognis-gold)">${bridge || 'EMPTY'}</b></div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
                 → ${resultLine}
             </div>

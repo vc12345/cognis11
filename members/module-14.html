@@ -15,6 +15,9 @@
             border-radius: 12px;
             border: 2px solid #e2e8f0;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .timeline-container {
@@ -22,7 +25,8 @@
             align-items: center;
             justify-content: center;
             height: 100px;
-            max-width: 650px;
+            width: 100%; /* FIXED: Occupy full width to prevent compression */
+            max-width: 700px;
             margin: 0 auto;
             position: relative;
         }
@@ -35,23 +39,25 @@
             position: relative;
             z-index: 2;
             flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .post::after {
             content: attr(data-label);
             position: absolute;
-            top: -25px;
+            top: -28px;
             left: 50%;
             transform: translateX(-50%);
             font-size: 0.65rem;
             font-weight: 900;
             color: var(--cognis-blue);
+            white-space: nowrap;
         }
 
         .gap {
-            height: 6px;
+            height: 8px;
             background: #38bdf8;
-            flex-grow: 1;
+            flex-grow: 1; /* This pushes the posts apart evenly */
             z-index: 1;
             position: relative;
             display: flex;
@@ -63,7 +69,7 @@
         .gap::after {
             content: 'GAP';
             position: absolute;
-            bottom: -20px;
+            bottom: -22px;
             font-size: 0.6rem;
             font-weight: 900;
             color: #38bdf8;
@@ -75,18 +81,20 @@
             justify-content: center;
             gap: 20px;
             margin-top: 50px;
+            width: 100%;
         }
 
         .stat-pill {
-            padding: 6px 15px;
+            padding: 8px 18px;
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 900;
             text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        .pill-blue { background: #e0e7ff; color: var(--cognis-blue); }
-        .pill-sky { background: #e0f2fe; color: #0369a1; }
+        .pill-blue { background: #e0e7ff; color: var(--cognis-blue); border: 1px solid #c7d2fe; }
+        .pill-sky { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
 
         .engine-container { grid-template-columns: 1fr 1.3fr; }
         
@@ -116,29 +124,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Interval Logic identifies the "Off-by-One" error that is a staple of 11+ competitive exams. When objects are placed in a row, the distance is not held by the objects themselves, but by the <b>gaps</b> between them. To solve these, you must always determine the number of intervals ($N - 1$) before performing any division or multiplication.</p>
+        <p>Interval Logic tackles the "Off-by-One" logic error common in 11+ competitive exams. When calculating the time or distance for a sequence of events, the actual value is contained within the <b>gaps</b>, not the objects. To solve these correctly, you must isolate the number of intervals ($N - 1$) before performing any operations.</p>
         
-        
-
         <div class="question-tiers">
             <div class="tier-card">
                 <b>Advanced Year 2</b>
-                "A clock strikes 4 times with 3 seconds between each strike. How long from start to finish?"
+                "A clock strikes 4 times. If there are 3 seconds between each strike, how much time passes from the first strike to the last?"
             </div>
             <div class="tier-card">
                 <b>Average Year 4</b>
-                "A 30m fence has posts every 6m. How many posts are used to build the straight fence?"
+                "A 30m straight fence has posts placed every 6m. How many posts are needed to support the entire fence?"
             </div>
             <div class="tier-card">
                 <b>Advanced Year 5</b>
-                "A doctor prescribes 6 pills to be taken at exactly 45-minute intervals. How much time passes between the first and last pill?"
+                "A patient takes 6 doses of medicine, one every 45 minutes. How many minutes pass between the first and final dose?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Boundary Map</b>. Observe how the number of "Gaps" is always exactly one less than the number of "Objects." Calculations for total time or distance must always use the Gap count.</p>
+        <p>The <b>Boundary Map</b>. Notice that no matter how many objects you place, the count of intervals (gaps) is always exactly one less. Calculations for total duration or distance must focus on the gaps.</p>
         
         <div class="anatomy-display">
             <div id="timeline" class="timeline-container">
@@ -163,16 +169,16 @@
                     <input type="number" id="t-in" value="12" oninput="run14()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-14">Monitoring boundaries...</div>
+            <div class="trace-log" id="trace-14">Awaiting boundary inputs...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Fence Post" Trap:</strong> Dividing total distance by the interval length and assuming that is the number of posts. (e.g., A 20m fence with posts every 5m equals 4 posts). You have forgotten the starting anchor.</p>
+            <p><strong>The "Fence Post" Trap:</strong> Dividing total distance by the gap size and assuming that number is the total count of posts. (e.g., $20 \text{m} \div 5 \text{m} = 4 \text{ posts}$). This calculation misses the starting anchor.</p>
             
-            <p><strong>The Fix:</strong> Use the <b>Anchor Rule</b>. Division ($20 \div 5$) always gives you the number of <b>Gaps</b>. To find the number of objects, you must add 1 for the "Zero Post" at the very beginning. Remember: $Gaps + 1 = Objects$.</p>
+            <p><strong>The Fix:</strong> Use the <b>Anchor Addition Rule</b>. The division ($20 \div 5$) calculates the number of <b>Gaps</b>. To find the number of physical objects, you must add 1 for the "Zero Position" post. Remember: $Gaps + 1 = Objects$.</p>
         </div>
     </section>
 </div>
@@ -186,7 +192,7 @@
 
         // Logic
         const gaps = n - 1;
-        const intervalSize = total / gaps;
+        const intervalSize = gaps > 0 ? total / gaps : 0;
 
         // Update Labels
         document.getElementById('n-val').innerText = n;
@@ -198,7 +204,7 @@
         for(let i=1; i<=n; i++) {
             const post = document.createElement('div');
             post.className = 'post';
-            post.setAttribute('data-label', '#' + i);
+            post.setAttribute('data-label', 'Object ' + i);
             container.appendChild(post);
             
             if(i < n) {
@@ -210,11 +216,11 @@
 
         // Trace Output
         document.getElementById('trace-14').innerHTML = `
-            <div class="trace-step">→ 1. Input: ${n} objects</div>
-            <div class="trace-step">→ 2. Intervals: ${n} - 1 = <b>${gaps} Gaps</b></div>
-            <div class="trace-step">→ 3. Calc: ${total} total / ${gaps} gaps</div>
+            <div class="trace-step">→ 1. Dataset: ${n} items provided.</div>
+            <div class="trace-step">→ 2. Intervals: ${n} - 1 = <b>${gaps} Gaps</b>.</div>
+            <div class="trace-step">→ 3. Arithmetic: ${total} total / ${gaps} intervals.</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → GAP SIZE: ${intervalSize.toFixed(2)} UNITS
+                → RESULT: ${intervalSize.toFixed(2)} PER GAP
             </div>
         `;
     }

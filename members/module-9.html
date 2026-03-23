@@ -4,61 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Module 9: Sequential Fractions | Cognis 11+</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root {
-            --cognis-blue: #002d5b;
-            --cognis-gold: #c5a059;
-            --cognis-light: #f4f7f9;
-            --trap-red: #d9534f;
-            --slice1: #3182ce;
-            --slice2: #c53030;
-            --final-green: #48bb78;
-        }
-        body { font-family: 'DM Sans', sans-serif; background: #eaeff2; color: #2c3e50; padding: 40px 20px; line-height: 1.6; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        
-        /* Header Template */
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; font-family: 'Playfair Display', serif; }
-
-        /* Section Template */
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; margin-top: 0; letter-spacing: 2px; font-weight: 700; }
-
-        /* X-Ray Template */
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; min-height: 120px; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 1px; }
-
-        /* Anatomy Template: Sequential Bars */
-        .anatomy-display { margin: 30px 0; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; display: flex; flex-direction: column; gap: 30px; align-items: center; }
-        .bar-container { width: 100%; }
+        /* UNIQUE CSS FOR SEQUENTIAL BARS */
+        .bar-container { width: 100%; margin-bottom: 10px; }
         .bar-label { font-size: 0.75rem; font-weight: 800; color: var(--cognis-blue); text-transform: uppercase; margin-bottom: 8px; display: block; }
         .bar-visual { height: 50px; display: flex; border: 2px solid var(--cognis-blue); border-radius: 8px; overflow: hidden; background: #e2e8f0; width: 100%; }
         .segment { height: 100%; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.8rem; overflow: hidden; white-space: nowrap; }
         
-        .seg-spent1 { background: var(--slice1); }
+        .seg-spent1 { background: #3182ce; }
         .seg-rem { background: #cbd5e0; color: var(--cognis-blue); }
-        .seg-spent2 { background: var(--slice2); }
-        .seg-final { background: var(--final-green); }
+        .seg-spent2 { background: #c53030; }
+        .seg-final { background: #48bb78; }
 
-        /* Engine Template */
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group { margin-bottom: 18px; }
-        .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
-        .control-group input { width: 100%; padding: 10px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1rem; }
         .frac-row { display: flex; align-items: center; gap: 10px; }
         .frac-row span { font-size: 1.2rem; font-weight: bold; color: var(--cognis-gold); }
         
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
-        .trace-step { margin-bottom: 8px; color: #e2e8f0; }
-
-        /* Saboteur Template */
-        .trap-box { background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px; margin-top: 10px; }
-        .trap-box h3 { color: var(--trap-red); margin-top: 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
-
-        .btn-complete { width: 100%; background: #10b981; color: white; border: none; padding: 20px; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 40px; font-size: 1rem; transition: background 0.2s; }
+        .arrow-divider { color: var(--cognis-gold); font-size: 1.5rem; font-weight: bold; margin: 10px 0; }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -101,7 +65,7 @@
                     <div id="seg-rem" class="segment seg-rem">Remainder</div>
                 </div>
             </div>
-            <div style="color: var(--cognis-gold); font-size: 1.5rem; font-weight: bold;">↓</div>
+            <div class="arrow-divider">↓</div>
             <div class="bar-container">
                 <span class="bar-label">Stage 2: Cutting the Remainder</span>
                 <div class="bar-visual">
@@ -168,25 +132,31 @@
         const amt2 = (remainder / den2) * num2;
         const final = remainder - amt2;
 
-        // Dynamic Visualization - Stage 1 (Percent of Total)
+        // Update Stage 1 Bar (Values to 2 Decimal Places)
         const p1 = (amt1 / total) * 100;
-        document.getElementById('seg-1').style.width = `${p1}%`;
-        document.getElementById('seg-1').innerText = p1 > 10 ? `£${amt1.toFixed(0)}` : '';
-        document.getElementById('seg-rem').style.width = `${100 - p1}%`;
-        document.getElementById('seg-rem').innerText = `Rem: £${remainder.toFixed(0)}`;
+        const seg1 = document.getElementById('seg-1');
+        const segRem = document.getElementById('seg-rem');
+        
+        seg1.style.width = `${p1}%`;
+        seg1.innerText = p1 > 12 ? `£${amt1.toFixed(2)}` : '';
+        segRem.style.width = `${100 - p1}%`;
+        segRem.innerText = `Rem: £${remainder.toFixed(2)}`;
 
-        // Dynamic Visualization - Stage 2 (Percent of Remainder)
+        // Update Stage 2 Bar (Values to 2 Decimal Places)
         const p2 = (amt2 / remainder) * 100;
-        document.getElementById('seg-2').style.width = `${p2}%`;
-        document.getElementById('seg-2').innerText = p2 > 10 ? `£${amt2.toFixed(0)}` : '';
-        document.getElementById('seg-final').style.width = `${100 - p2}%`;
-        document.getElementById('seg-final').innerText = `Final: £${final.toFixed(0)}`;
+        const seg2 = document.getElementById('seg-2');
+        const segFinal = document.getElementById('seg-final');
+        
+        seg2.style.width = `${p2}%`;
+        seg2.innerText = p2 > 12 ? `£${amt2.toFixed(2)}` : '';
+        segFinal.style.width = `${100 - p2}%`;
+        segFinal.innerText = `Final: £${final.toFixed(2)}`;
 
         // Update Trace
         engineTrace.innerHTML = `
-            <div class="trace-step">→ 1. Start with <b>£${total}</b></div>
+            <div class="trace-step">→ 1. Start with <b>£${total.toFixed(2)}</b></div>
             <div class="trace-step">→ 2. First cut (${num1}/${den1}): £${amt1.toFixed(2)}</div>
-            <div class="trace-step">→ 3. Calculate <b>Remainder</b>: £${total} - £${amt1.toFixed(2)} = <b>£${remainder.toFixed(2)}</b></div>
+            <div class="trace-step">→ 3. Calculate <b>Remainder</b>: £${total.toFixed(2)} - £${amt1.toFixed(2)} = <b>£${remainder.toFixed(2)}</b></div>
             <div class="trace-step">→ 4. Second cut (${num2}/${den2} of remainder): £${amt2.toFixed(2)}</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
                 → Final Left: £${final.toFixed(2)}

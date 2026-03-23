@@ -1,3 +1,4 @@
+// supabase/functions/create-portal-session/index.ts
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import Stripe from 'https://esm.sh/stripe@12.0.0?target=deno'
@@ -11,7 +12,7 @@ serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   try {
-    // These ENV vars are provided AUTOMATICALLY by Supabase
+    // These are built-in to Supabase Cloud
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
@@ -23,8 +24,9 @@ serve(async (req) => {
       httpClient: Stripe.createFetchHttpClient(),
     })
 
+    // This verifies the 'Authorization' header
     const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user) throw new Error("Unauthorized: Invalid User Token")
+    if (authError || !user) throw new Error("Unauthorized: Invalid Token")
 
     const { data: profile } = await supabase
       .from('profiles')
@@ -32,9 +34,7 @@ serve(async (req) => {
       .eq('id', user.id)
       .maybeSingle()
 
-    if (!profile?.stripe_customer_id) {
-        throw new Error("Missing Stripe Customer ID. Please contact hello@cognis11.com")
-    }
+    if (!profile?.stripe_customer_id) throw new Error("No Stripe Customer ID found.")
 
     const session = await stripe.billingPortal.sessions.create({
       customer: profile.stripe_customer_id,

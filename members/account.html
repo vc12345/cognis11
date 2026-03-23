@@ -203,37 +203,41 @@
         btn.disabled = true;
 
         try {
-            // 1. Hardcoded Config (The safest way to avoid 'undefined' errors)
+            // 1. HARDCODED CREDENTIALS (The only way to be 100% sure)
             const PROJECT_ID = 'cyfjoevfxfqkgokriarz';
-            const ANON_KEY = 'PASTE_YOUR_ACTUAL_ANON_PUBLIC_KEY_HERE'; // Get this from Supabase Dashboard
+            const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5ZmpvZXZmeGZxa2dva3JpYXJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4Nzk5NjYsImV4cCI6MjA4OTQ1NTk2Nn0.PLGiu7waa2ac1xw0AhGWEFrwDL8ySKrHj29gvevXH2Q'; // <--- PASTE IT HERE (Starts with eyJ...)
 
-            // 2. Get the session
+            // 2. Get the session token
             const { data: { session }, error: sessionError } = await window.supabaseClient.auth.getSession();
-            
-            if (sessionError || !session) {
-                throw new Error("Your session has expired. Please log in again.");
-            }
+            if (sessionError || !session) throw new Error("Session expired. Please log in again.");
 
-            // 3. The Call
+            console.log("Attempting Portal Redirect for:", session.user.email);
+
+            // 3. The Fetch Call
             const response = await fetch(`https://${PROJECT_ID}.supabase.co/functions/v1/create-portal-session`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${session.access_token}`,
-                    'apikey': ANON_KEY // Directly providing the key bypasses the variable issues
+                    'apikey': ANON_KEY // This is the Gateway ID badge
                 }
             });
+
+            // 4. Debugging the response
+            if (response.status === 401) {
+                throw new Error("Gateway Refusal (401). Check if your ANON_KEY is correct.");
+            }
 
             const result = await response.json();
             
             if (response.ok && result.url) {
                 window.location.href = result.url;
             } else {
-                throw new Error(result.error || "The billing server returned an error.");
+                throw new Error(result.error || "Billing server error.");
             }
 
         } catch (e) {
-            console.error("Portal Redirect Error:", e);
+            console.error("Portal Error:", e);
             alert("Account Error: " + e.message);
             btn.innerText = originalText;
             btn.disabled = false;

@@ -40,21 +40,6 @@
             filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.3));
         }
 
-        /* Nav Correction */
-        .nav-back {
-            display: inline-flex;
-            align-items: center;
-            color: white;
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 800;
-            margin-bottom: 15px;
-            opacity: 0.7;
-            transition: opacity 0.2s;
-        }
-        .nav-back:hover { opacity: 1; }
-        .nav-back span { margin-right: 8px; font-size: 1.1rem; }
-
         .engine-container { grid-template-columns: 1fr 1.2fr; }
         input[type=range] { margin-top: 15px; }
     </style>
@@ -68,7 +53,6 @@
 
 <div class="module-card" style="margin-top: 40px;">
     <div class="header">
-        <a href="../dashboard.html" class="nav-back"><span>&larr;</span> BACK TO LATTICE</a>
         <h1>Module 26: Area/Perimeter Invariance</h1>
     </div>
 
@@ -129,7 +113,7 @@
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
             <p><strong>The "Fixed Area" Trap:</strong> Mistakenly believing that because the perimeter (the length of the string) is 40cm, any rectangle you make with it will have the same amount of space inside.</p>
-            <p><strong>The Fix:</strong> Think of <b>"The Closer to a Square, the Greater the Area."</b> If you have a perimeter of 20, a long thin 9x1 rectangle only has an area of 9. But a balanced 5x5 square has an area of 25. To get the most space, keep the sides as equal as possible.</p>
+            <p><strong>The Fix:</strong> Remember the <b>Balance Principle</b>. If you have a perimeter of 20, a long thin 9x1 rectangle only has an area of 9. But a balanced 5x5 square has an area of 25. To get the most space, keep the sides as equal as possible.</p>
         </div>
     </section>
 </div>
@@ -139,21 +123,19 @@
 <script>
     function run26() {
         const w = parseFloat(document.getElementById('slider-26').value);
-        const h = 20 - w; // (Perimeter 40 / 2) - w
+        const h = 20 - w; 
         const area = w * h;
         
         const rect = document.getElementById('dynamic-rect');
-        const scale = 12; // Scale for visual display
+        const scale = 12; 
         const visualW = w * scale;
         const visualH = h * scale;
 
-        // Update SVG Rectangle
         rect.setAttribute('width', visualW);
         rect.setAttribute('height', visualH);
         rect.setAttribute('x', 250 - visualW/2);
         rect.setAttribute('y', 160 - visualH/2);
 
-        // Update Label Positions
         document.getElementById('dim-w').textContent = `Width: ${w.toFixed(1)}`;
         document.getElementById('dim-w').setAttribute('y', 160 - visualH/2 - 15);
         document.getElementById('dim-h').textContent = `Height: ${h.toFixed(1)}`;
@@ -162,7 +144,6 @@
 
         document.getElementById('area-val').textContent = area.toFixed(1);
 
-        // Engine Trace Result
         document.getElementById('trace-26').innerHTML = `
             <div class="trace-step">→ 1. Total Perimeter: <b>40.0 units</b></div>
             <div class="trace-step">→ 2. Current Dimensions: ${w.toFixed(1)} x ${h.toFixed(1)}</div>

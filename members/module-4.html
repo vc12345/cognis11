@@ -2,92 +2,118 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 4: Inverse Proportion | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 4: Inverse Proportion | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root {
-            --cognis-blue: #002d5b;
-            --cognis-gold: #c5a059;
-            --cognis-light: #f4f7f9;
-            --trap-red: #d9534f;
-            --work-color: rgba(197, 160, 89, 0.2);
+        /* UNIQUE CSS FOR CONSTANT AREA RECTANGLE */
+        .anatomy-display { 
+            background: #f8fafc; 
+            padding: 50px 20px; 
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 2px solid #e2e8f0;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; color: #2c3e50; padding: 40px 20px; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; }
 
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; margin-top: 0; letter-spacing: 2px; }
+        .work-chart {
+            position: relative;
+            width: 400px;
+            height: 250px;
+            border-left: 3px solid var(--cognis-blue);
+            border-bottom: 3px solid var(--cognis-blue);
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+        }
 
-        /* X-Ray Questions */
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
-        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+        .axis-label {
+            position: absolute;
+            font-weight: 900;
+            font-size: 0.65rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .y-label { transform: rotate(-90deg); left: -45px; top: 50%; }
+        .x-label { bottom: -30px; left: 50%; transform: translateX(-50%); }
 
-        /* Anatomy: The Constant Rectangle */
-        .anatomy-display { margin: 30px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 250px; background: #fff; border: 1px dashed #cbd5e0; border-radius: 8px; padding: 20px; }
-        
-        .work-area-container { position: relative; display: flex; align-items: flex-end; justify-content: center; width: 400px; height: 200px; border-left: 2px solid #a0aec0; border-bottom: 2px solid #a0aec0; }
-        
-        /* Axes Labels */
-        .y-axis { position: absolute; left: -40px; top: 50%; transform: translateY(-50%) rotate(-90deg); font-size: 0.7rem; font-weight: bold; color: #718096; text-transform: uppercase; }
-        .x-axis { position: absolute; bottom: -25px; font-size: 0.7rem; font-weight: bold; color: #718096; text-transform: uppercase; }
-        
-        .work-rectangle { background: var(--work-color); border: 2px solid var(--cognis-gold); display: flex; align-items: center; justify-content: center; text-align: center; font-weight: bold; color: var(--cognis-blue); transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: bottom left; position: absolute; left: 0; bottom: 0; }
+        .work-rect {
+            background: rgba(197, 160, 89, 0.15);
+            border: 3px solid var(--cognis-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--cognis-blue);
+            font-weight: 900;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            font-size: 0.8rem;
+        }
 
-        /* Engine */
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group { margin-bottom: 20px; }
-        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
-        .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: none; font-size: 1rem; accent-color: var(--cognis-gold); }
-        .val-out { float: right; color: var(--cognis-gold); font-weight: bold; }
+        .engine-container { grid-template-columns: 1.2fr 1fr; }
         
-        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
-        .trace-step { margin-bottom: 10px; line-height: 1.4; color: #e2e8f0; }
+        .control-group label { 
+            display: flex; 
+            justify-content: space-between; 
+            font-weight: 800 !important; 
+        }
+        .val-display { color: var(--cognis-gold); }
+
+        input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
     </style>
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 4' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(4)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(4));</script>
 </head>
 <body>
 
-<div class="module-card">
-    <div class="header"><h1>Module 4: Inverse Proportion</h1></div>
+<div class="module-card" style="margin-top: 40px;">
+    <div class="header">
+        <h1>Module 4: Inverse Proportion</h1>
+    </div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In Inverse Proportion, the "Total Amount of Work" is a constant brick. If you add more workers, the time squashes down. If you lose workers, the time stretches up.</p>
+        <p>In inverse proportion, the "Total Amount of Work" is a <b>Fixed Constant</b>. Unlike direct proportion, where variables move together, these variables are linked by a product. If you double the number of workers, the time must be cut in half. To solve these, you must find the constant product first:</p>
+        
+        <div style="text-align: center; margin: 20px 0; font-size: 1.2rem; font-weight: bold; color: var(--cognis-blue);">
+            $$\text{Workers} \times \text{Time} = \text{Total Work (Constant)}$$
+        </div>
+
         <div class="question-tiers">
             <div class="tier-card">
-                <span>Adv Year 2 Level</span>
-                "If 2 children take 6 minutes to tidy a room, how long will it take 3 children working just as fast?"
+                <b>Advanced Year 2</b>
+                "If 2 children take 6 minutes to tidy a room, how long will it take 3 children working at the same speed?"
             </div>
             <div class="tier-card">
-                <span>Avg Year 4 Level</span>
-                "4 builders take 10 days to build a wall. How many days would it take 5 builders?"
+                <b>Average Year 4</b>
+                "4 builders take 10 days to build a wall. How many days would it take 5 builders to complete the same task?"
             </div>
             <div class="tier-card">
-                <span>Adv Year 5 Level (11+)</span>
-                "6 pumps can empty a reservoir in 14 hours. If 2 pumps break down before they start, how long will the remaining pumps take?"
+                <b>Advanced Year 5</b>
+                "6 pumps empty a tank in 14 hours. If 2 pumps break down before starting, how long will the remaining pumps take?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p style="text-align: center; font-size: 0.85rem;"></p>
+        <p>The <b>Constant Area</b>. No matter how you change the number of workers, the "Total Work" rectangle maintains the exact same area. As it stretches wide (more workers), it must squash down (less time).</p>
+        
         <div class="anatomy-display">
-            <div class="work-area-container">
-                <div class="y-axis">Time</div>
-                <div class="x-axis">Workers</div>
-                <div class="work-rectangle" id="work-rect">Total Work<br>(Constant Area)</div>
+            <div class="work-chart">
+                <span class="axis-label y-label">Time &rarr;</span>
+                <span class="axis-label x-label">Workers &rarr;</span>
+                <div class="work-rect" id="viz-rect">
+                    TOTAL WORK<br><span id="viz-area">40</span> UNITS
+                </div>
             </div>
         </div>
     </section>
@@ -95,77 +121,73 @@
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls">
+            <div class="inputs">
                 <div class="control-group">
-                    <label>Initial Workers <span class="val-out" id="w1-label">4</span></label>
-                    <input type="range" id="w1-in" min="1" max="10" value="4">
+                    <label>Initial Workers: <span class="val-display" id="w1-val">4</span></label>
+                    <input type="range" id="w1-in" min="1" max="10" value="4" oninput="run4()">
                 </div>
-                <div class="control-group">
-                    <label>Initial Time (Days/Hours) <span class="val-out" id="t1-label">10</span></label>
-                    <input type="range" id="t1-in" min="1" max="20" value="10">
+                <div class="control-group" style="margin-top:15px;">
+                    <label>Initial Time: <span class="val-display" id="t1-val">10</span></label>
+                    <input type="range" id="t1-in" min="1" max="20" value="10" oninput="run4()">
                 </div>
-                <div class="control-group" style="margin-top: 30px; border-top: 1px solid #4a5568; padding-top: 20px;">
-                    <label>NEW Number of Workers <span class="val-out" id="w2-label">8</span></label>
-                    <input type="range" id="w2-in" min="1" max="20" value="8">
+                <div class="control-group" style="margin-top:30px; border-top: 1px solid #e2e8f0; padding-top:20px;">
+                    <label>New Worker Count: <span class="val-display" id="w2-val">5</span></label>
+                    <input type="range" id="w2-in" min="1" max="20" value="5" oninput="run4()">
                 </div>
             </div>
-            <div class="trace-log" id="logic-trace"></div>
+            <div class="trace-log" id="trace-4">Awaiting proportions...</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 20px;">
-            <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Direct Scaling" Trap:</strong> The most common Type 1 error. A student reads "4 builders take 10 days, find 8 builders," and they think: "Double the builders, so <strong>double the time (20 days)</strong>." 
-            <br><br><strong>The Fix:</strong> Always do the common-sense check. <em>"Will more people take MORE time to do the same job? No."</em></p>
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "Direct Scaling" Trap:</strong> Mistakenly applying direct logic to an inverse problem. (e.g., If 4 workers take 10 days, 8 workers must take 20 days.) You are doubling the speed, but doubling the time as well.</p>
+            
+            <p><strong>The Fix:</strong> Use the <b>Common Sense Filter</b>. Always ask: "If I have more help, should the job take more or less time?" If the answer is "less," you must divide the constant by the new worker count, not multiply.</p>
         </div>
     </section>
 </div>
 
-<script src="js/logic-provider.js"></script>
-<script>
-    const w1In = document.getElementById('w1-in');
-    const t1In = document.getElementById('t1-in');
-    const w2In = document.getElementById('w2-in');
-    const rect = document.getElementById('work-rect');
-    const traceBox = document.getElementById('logic-trace');
+<button class="btn-complete" onclick="markComplete(4)">Complete Module & Update Lattice</button>
 
-    function refresh() {
-        const w1 = parseInt(w1In.value);
-        const t1 = parseFloat(t1In.value);
-        const w2 = parseInt(w2In.value);
+<script>
+    function run4() {
+        const w1 = parseInt(document.getElementById('w1-in').value);
+        const t1 = parseInt(document.getElementById('t1-in').value);
+        const w2 = parseInt(document.getElementById('w2-in').value);
 
         // Update Labels
-        document.getElementById('w1-label').innerText = w1;
-        document.getElementById('t1-label').innerText = t1;
-        document.getElementById('w2-label').innerText = w2;
+        document.getElementById('w1-val').innerText = w1;
+        document.getElementById('t1-val').innerText = t1;
+        document.getElementById('w2-val').innerText = w2;
 
-        const res = LogicProvider.modules.inverseProportion.calculate(w1, t1, w2);
+        // Math
+        const constant = w1 * t1;
+        const newTime = constant / w2;
 
-        // Visual Scaling Logic for the Rectangle Anatomy
-        // We use a base scale multiplier to fit it nicely in the 400x200px CSS container
-        const baseMultiplierX = 20; 
-        const baseMultiplierY = 10;
-        
-        // The area (w1 * t1) is our constant. The visual rectangle reflects the NEW state.
-        const newWidth = w2 * baseMultiplierX;
-        const newHeight = parseFloat(res.newTime) * baseMultiplierY;
+        // Viz Scaling (Container is 400x250)
+        // We use a base multiplier but clamp to ensure it stays in bounds
+        const scaleX = 25;
+        const scaleY = 10;
+        const rect = document.getElementById('viz-rect');
+        rect.style.width = (w2 * scaleX) + "px";
+        rect.style.height = (newTime * scaleY) + "px";
+        document.getElementById('viz-area').innerText = constant;
 
-        rect.style.width = `${newWidth}px`;
-        rect.style.height = `${newHeight}px`;
-        rect.innerHTML = `Total Work<br>${res.totalWork} units`;
-
-        // Update Trace
-        traceBox.innerHTML = res.steps.map(s => `<div class="trace-step">→ ${s}</div>`).join('');
+        // Trace Output
+        document.getElementById('trace-4').innerHTML = `
+            <div class="trace-step">→ 1. Initial State: ${w1} workers × ${t1} units</div>
+            <div class="trace-step">→ 2. Constant Work: <b>${constant}</b> Units</div>
+            <div class="trace-step">→ 3. Redistribution: ${constant} / ${w2} workers</div>
+            <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+                → NEW TIME: ${newTime.toFixed(2)} UNITS
+            </div>
+        `;
     }
 
-    [w1In, t1In, w2In].forEach(el => el.addEventListener('input', refresh));
-    window.onload = refresh;
+    window.onload = run4;
 </script>
 
-<button onclick="markComplete(4)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
-</body>
 </body>
 </html>

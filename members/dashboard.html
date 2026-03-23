@@ -8,51 +8,60 @@
     <link rel="stylesheet" href="../css/dashboard.css">
     
     <style>
-        /* NEW CATEGORY LOGIC GUIDE */
+        /* CATEGORY LOGIC GUIDE STYLES */
         .guide-container {
             margin-bottom: 40px;
-            background: #f8fafc;
+            background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            padding: 20px 25px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
         }
 
         .guide-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            cursor: pointer;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .guide-header h2 {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: var(--cognis-gold);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             margin: 0;
+            font-weight: 800;
         }
 
         .category-key {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
         }
 
         .key-item {
             font-size: 0.8rem;
             color: #475569;
             display: flex;
-            gap: 10px;
+            align-items: baseline;
+            gap: 12px;
+            line-height: 1.4;
         }
 
         .key-item b {
             color: var(--cognis-blue);
-            min-width: 25px;
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            min-width: 20px;
+            text-align: center;
         }
 
+        /* CARD ID TAG STYLING */
         .mod-id {
             background: #f1f5f9;
             padding: 2px 8px;
@@ -60,9 +69,16 @@
             font-weight: 800;
             font-size: 0.65rem;
             color: var(--cognis-blue);
+            text-transform: uppercase;
         }
 
-        /* Removed the old legend bar styles */
+        /* WELCOME HEADER TWEAKS */
+        .welcome-section h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: #1B3A5C;
+            margin-bottom: 10px;
+        }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -88,15 +104,20 @@
         <section class="guide-container">
             <div class="guide-header">
                 <h2>Category Logic Guide</h2>
-                <span style="font-size: 0.7rem; color: #94a3b8;">(The X-Ray Classifications)</span>
+                <span style="font-size: 0.7rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Schema v1.0</span>
             </div>
             <div class="category-key">
-                <div class="key-item"><b>A</b> Arithmetic & Number Operations</div>
-                <div class="key-item"><b>F</b> Fractions, Decimals & Percentages</div>
-                <div class="key-item"><b>G</b> Geometry, Measure & Shape</div>
-                <div class="key-item"><b>S</b> Spatial Reasoning & Nets</div>
-                <div class="key-item"><b>V</b> Verbal Logic & Semantics</div>
-                <div class="key-item"><b>L</b> Logical Deduction & Sequences</div>
+                <div class="key-item"><b>A</b> Proportionality & Fractions</div>
+                <div class="key-item"><b>B</b> Motion & Time</div>
+                <div class="key-item"><b>C</b> Operational Logic</div>
+                <div class="key-item"><b>D</b> Data & Geometry</div>
+                <div class="key-item"><b>E</b> Coding & Decoding</div>
+                <div class="key-item"><b>F</b> Word Mechanics</div>
+                <div class="key-item"><b>G</b> Semantic Logic</div>
+                <div class="key-item"><b>H</b> 2D Transformations</div>
+                <div class="key-item"><b>I</b> 3D & Manipulation</div>
+                <div class="key-item"><b>J</b> Comprehension Logic</div>
+                <div class="key-item"><b>K</b> Applied Linguistics</div>
             </div>
         </section>
 
@@ -105,10 +126,15 @@
 
     <script src="../js/registry.js"></script>
     <script>
+        // Maps registry pillar keys to full UI titles
         const expandAcronym = (name) => {
-            if (name === "VR") return "Verbal Reasoning";
-            if (name === "NVR") return "Non-Verbal Reasoning";
-            return name;
+            const map = {
+                "Maths": "Core Maths",
+                "VR": "Verbal Reasoning",
+                "NVR": "Non-Verbal Reasoning",
+                "English": "English Literacy"
+            };
+            return map[name] || name;
         };
 
         async function loadDashboard() {
@@ -193,7 +219,7 @@
                             <div class="card-bottom">
                                 <span class="mod-id">MODULE ${String(modId).padStart(2, '0')}</span>
                                 <span class="status-text">
-                                    ${isLocked ? 'Complete previous module' : (isDone ? 'Revision Ready' : 'Start Module →')}
+                                    ${isLocked ? 'Complete previous module' : (isDone ? 'Revision Mode' : 'Start Module →')}
                                 </span>
                             </div>
                         `;

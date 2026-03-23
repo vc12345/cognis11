@@ -202,20 +202,29 @@
         btn.innerText = "Connecting to Stripe...";
         btn.disabled = true;
 
-        const { data: { session } } = await window.supabaseClient.auth.getSession();
+        // 1. Get the current session
+        const { data: { session }, error: sessionError } = await window.supabaseClient.auth.getSession();
         
+        if (sessionError || !session) {
+            alert("Session expired. Please log in again.");
+            window.location.href = "/login.html";
+            return;
+        }
+
         try {
+            // 2. Call the Edge Function with BOTH headers
             const response = await fetch('https://cyfjoevfxfqkgokriarz.supabase.co/functions/v1/create-portal-session', {
                 method: 'POST',
                 headers: {
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${session.access_token}`,
-                    'Content-Type': 'application/json'
+                    'apikey': window.supabaseConfig.supabaseAnonKey // This is the missing piece
                 }
             });
             
             const result = await response.json();
             
-            if (result.url) {
+            if (response.ok && result.url) {
                 window.location.href = result.url;
             } else {
                 throw new Error(result.error || "Failed to generate portal link");

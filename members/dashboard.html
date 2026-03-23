@@ -42,7 +42,10 @@
             try {
                 // 1. Authenticate
                 const { data: { user }, error: authError } = await window.supabaseClient.auth.getUser();
-                if (authError || !user) return;
+                if (authError || !user) {
+                    window.location.href = "/login.html";
+                    return;
+                }
                 document.getElementById('user-welcome').innerText = user.email;
 
                 // 2. Fetch Profile & Plan
@@ -58,23 +61,23 @@
                 if (profile) {
                     userPlan = profile.subscription_plan || 'none';
                     const status = profile.subscription_status || 'inactive';
-                    statusEl.innerText = `${status.toUpperCase()} (${userPlan.toUpperCase()})`;
+                    statusEl.innerText = `${status.toUpperCase()} PLAN: ${userPlan.toUpperCase()}`;
                     statusEl.className = `status-badge status-${status}`;
                 }
 
-                // 3. Fetch Completion
+                // 3. Fetch Completion Data
                 const { data: completedData } = await window.supabaseClient
                     .from('module_progress')
                     .select('module_id')
                     .eq('user_id', user.id);
 
-                const completedIds = completedData ? completedData.map(item => item.module_id) : [];
+                const completedIds = completedData ? completedData.map(item => Number(item.module_id)) : [];
                 
-                // UNLOCK CALCULATION: For Foundational, they can access max_id + 1
+                // UNLOCK CALCULATION
                 const maxCompleted = completedIds.length > 0 ? Math.max(...completedIds) : 0;
                 const nextUnlockedId = maxCompleted + 1;
 
-                // 4. Render
+                // 4. Render the Lattice
                 const root = document.getElementById('lattice-root');
                 root.innerHTML = ''; 
                 
@@ -95,15 +98,17 @@
                     const groupContainer = document.getElementById(`group-${pillarName}`);
 
                     COGNIS_MODULES.filter(m => m.pillar === pillarName).forEach(mod => {
-                        const isDone = completedIds.includes(mod.id);
+                        const modId = Number(mod.id);
+                        const isDone = completedIds.includes(modId);
                         let isLocked = false;
 
                         // ENFORCE SEQUENTIAL LOCK FOR FOUNDATIONAL
-                        if (userPlan === 'foundational') {
-                            if (mod.id > nextUnlockedId) isLocked = true;
+                        // Module 1 (modId === 1) is NEVER locked.
+                        if (userPlan === 'foundational' && modId > 1) {
+                            if (modId > nextUnlockedId) isLocked = true;
                         }
 
-                        // Render card as <div> if locked, <a> if unlocked
+                        // Create the element
                         const card = document.createElement(isLocked ? 'div' : 'a');
                         card.className = `module-card ${isDone ? 'is-complete' : ''} ${isLocked ? 'is-locked' : ''}`;
                         if (!isLocked) card.href = mod.path;
@@ -116,15 +121,17 @@
                             </div>
                             <h3 class="mod-title">${mod.title}</h3>
                             <div class="card-bottom">
-                                <span class="mod-id">UNIT ${String(mod.id).padStart(2, '0')}</span>
-                                <span class="status-text">${isLocked ? 'Complete Previous Unit' : (isDone ? 'Completed' : 'Start Module →')}</span>
+                                <span class="mod-id">UNIT ${String(modId).padStart(2, '0')}</span>
+                                <span class="status-text">
+                                    ${isLocked ? 'Complete previous unit' : (isDone ? 'Completed' : 'Start Module →')}
+                                </span>
                             </div>
                         `;
                         groupContainer.appendChild(card);
                     });
                 });
             } catch (err) {
-                console.error("Lattice Sync Error:", err);
+                console.error("Dashboard Render Error:", err);
             }
         }
         loadDashboard();

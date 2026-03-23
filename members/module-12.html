@@ -15,6 +15,9 @@
             border-radius: 12px;
             border: 2px solid #e2e8f0;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .track-blueprint {
@@ -22,17 +25,19 @@
             background: #e2e8f0;
             border-radius: 10px;
             position: relative;
-            margin: 40px 0;
+            margin: 50px 0;
             border: 1px solid #cbd5e0;
+            width: 100%; /* FIXED: Prevents collapsing to center */
+            max-width: 700px;
         }
 
         .vehicle {
             position: absolute;
             top: -18px;
-            width: 45px;
-            height: 45px;
+            width: 48px;
+            height: 48px;
             background: white;
-            border: 3px solid var(--cognis-blue);
+            border: 4px solid var(--cognis-blue);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -40,16 +45,18 @@
             font-weight: 900;
             color: var(--cognis-blue);
             z-index: 5;
-            transition: left 2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 2s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
+        /* Distinct styling for A and B */
+        #veh-a { border-color: var(--cognis-blue); color: var(--cognis-blue); }
         #veh-b { border-color: var(--cognis-gold); color: var(--cognis-gold); }
 
         .impact-marker {
             position: absolute;
-            top: -40px;
-            height: 90px;
+            top: -45px;
+            height: 100px;
             width: 4px;
             background: #ef4444;
             transform: translateX(-50%);
@@ -67,6 +74,7 @@
             color: #ef4444;
             text-transform: uppercase;
             letter-spacing: 1px;
+            text-align: center;
         }
 
         .engine-container { grid-template-columns: 1fr 1.2fr; }
@@ -75,25 +83,25 @@
             background: var(--cognis-gold);
             color: white;
             border: none;
-            padding: 15px;
+            padding: 15px 30px;
             border-radius: 8px;
-            width: 100%;
             font-weight: 900;
             cursor: pointer;
             text-transform: uppercase;
-            margin-top: 20px;
+            letter-spacing: 1px;
+            margin-top: 10px;
             box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
             transition: 0.2s;
         }
         .btn-sim:hover { background: #b08d4b; transform: translateY(-2px); }
 
         .gap-display {
-            text-align: center;
             font-weight: 900;
             color: #94a3b8;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 2px;
+            margin-bottom: 10px;
         }
 
         input[type=number] {
@@ -122,35 +130,35 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Relative speed determines how quickly the distance between two moving objects disappears. When objects move <b>toward</b> each other, they share the work of closing the gap. Success in 11+ speed problems depends on calculating the <b>Closing Rate</b>—the sum of both speeds—before trying to find the time of impact.</p>
+        <p>Relative speed describes the rate at which the distance between two objects vanishes. When two objects move <b>toward</b> each other, they are effectively working together to delete the gap. In competitive exams, you must solve these by finding the <b>Closing Rate</b>—the combined sum of both speeds—before calculating the time until impact.</p>
         
+        
+
         <div class="question-tiers">
             <div class="tier-card">
                 <b>Advanced Year 2</b>
-                "Two cars are 10 miles apart. Both drive at 5mph toward each other. How long until they meet?"
+                "Two cyclists are 10 miles apart. Both travel at 5mph toward each other. How many hours until they meet?"
             </div>
             <div class="tier-card">
                 <b>Average Year 4</b>
-                "London and Brighton are 50km apart. A cyclist leaves London at 10km/h; a runner leaves Brighton at 15km/h. When do they pass?"
+                "A runner leaves Point A at 10km/h. A walker leaves Point B (50km away) at 15km/h. When do they pass?"
             </div>
             <div class="tier-card">
                 <b>Advanced Year 5</b>
-                "Train A (60mph) and Train B (90mph) are 300 miles apart. If Train B starts 30 mins late, where do they meet?"
+                "Two trains 300 miles apart head toward each other. Train A is 60mph; Train B is 90mph. Where is the impact point?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Closing Gap</b>. Notice how the faster object covers more ground, but both contribute to the same total distance. The "Impact Point" is anchored by the ratio of their speeds.</p>
+        <p>The <b>Closing Ratio</b>. Notice how the meeting point is not necessarily the middle. The faster object consumes a larger portion of the track, but the total time taken for both is identical.</p>
         
-        
-
         <div class="anatomy-display">
             <div class="gap-display" id="gap-txt">Distance Gap: 100 KM</div>
             <div class="track-blueprint">
-                <div id="veh-a" class="vehicle" style="left: 0%; transform: translateX(0);">A</div>
-                <div id="veh-b" class="vehicle" style="left: 100%; transform: translateX(-100%);">B</div>
+                <div id="veh-a" class="vehicle" style="left: 0; transform: translateX(0);">A</div>
+                <div id="veh-b" class="vehicle" style="right: 0; transform: translateX(0);">B</div>
                 <div id="impact-node" class="impact-marker">
                     <span class="impact-label">Meeting Point</span>
                 </div>
@@ -168,24 +176,24 @@
                     <input type="number" id="dist-in" value="100" oninput="updateLogic()">
                 </div>
                 <div class="control-group" style="margin-top:15px;">
-                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Speed A (KM/H)</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Speed A (KM/H) - Left</label>
                     <input type="number" id="s1-in" value="60" oninput="updateLogic()">
                 </div>
                 <div class="control-group" style="margin-top:15px;">
-                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Speed B (KM/H)</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Speed B (KM/H) - Right</label>
                     <input type="number" id="s2-in" value="40" oninput="updateLogic()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-12">Calculating closing rate...</div>
+            <div class="trace-log" id="trace-12">Calculating combined closing rate...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Middle Meet" Trap:</strong> Assuming two objects will always meet exactly halfway (50%) regardless of their speed. Students often instinctively divide the distance by 2.</p>
+            <p><strong>The "Halfway" Trap:</strong> Assuming objects moving toward each other always meet exactly in the middle (50% distance). This only happens if their speeds are identical.</p>
             
-            <p><strong>The Fix:</strong> Use <b>Proportional Distance</b>. The meeting point will always be closer to the starting line of the <i>slower</i> object. If Object A is twice as fast as Object B, it will cover 2/3 of the distance while Object B only covers 1/3.</p>
+            <p><strong>The Fix:</strong> The impact point is anchored by the <b>Ratio of Speeds</b>. The meeting point will always be closer to the starting point of the <i>slower</i> object. If Speed A is twice as fast as Speed B, Object A will cover 2/3 of the ground.</p>
         </div>
     </section>
 </div>
@@ -193,7 +201,7 @@
 <button class="btn-complete" onclick="markComplete(12)">Complete Module & Update Lattice</button>
 
 <script>
-    let currentCalc = { pct: 50, time: 1 };
+    let currentCalc = { pct: 60, time: 1 };
 
     function updateLogic() {
         const d = parseFloat(document.getElementById('dist-in').value) || 0;
@@ -203,23 +211,23 @@
         document.getElementById('gap-txt').innerText = `Distance Gap: ${d} KM`;
 
         if (s1 + s2 === 0) {
-            document.getElementById('trace-12').innerHTML = "Invalid speeds.";
+            document.getElementById('trace-12').innerHTML = "Awaiting valid speeds...";
             return;
         }
 
-        const closingSpeed = s1 + s2;
-        const timeToMeet = d / closingSpeed;
-        const distA = s1 * timeToMeet;
+        const closingRate = s1 + s2;
+        const timeH = d / closingRate;
+        const distA = s1 * timeH;
         const meetPct = (distA / d) * 100;
 
-        currentCalc = { pct: meetPct, time: timeToMeet };
+        currentCalc = { pct: meetPct, time: timeH };
 
         document.getElementById('trace-12').innerHTML = `
-            <div class="trace-step">→ 1. Closing Speed: ${s1} + ${s2} = <b>${closingSpeed} KM/H</b></div>
-            <div class="trace-step">→ 2. Equation: Time = ${d} / ${closingSpeed}</div>
-            <div class="trace-step">→ 3. Proportion: A covers ${((s1/closingSpeed)*100).toFixed(0)}% of track</div>
+            <div class="trace-step">→ 1. Closing Rate: ${s1} + ${s2} = <b>${closingRate} KM/H</b></div>
+            <div class="trace-step">→ 2. Time: ${d} / ${closingRate} = <b>${timeH.toFixed(2)} Hrs</b></div>
+            <div class="trace-step">→ 3. Path: A covers ${meetPct.toFixed(0)}% of distance</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → RESULT: THEY MEET IN ${timeToMeet.toFixed(2)} HOURS
+                → IMPACT AT: ${distA.toFixed(1)} KM FROM START A
             </div>
         `;
         resetVehicles();
@@ -232,12 +240,18 @@
 
         vA.style.transition = 'none';
         vB.style.transition = 'none';
-        vA.style.left = '0%';
-        vB.style.left = '100%';
-        vB.style.transform = 'translateX(-100%)';
+        
+        vA.style.left = '0';
+        vA.style.right = 'auto';
+        vA.style.transform = 'translateX(0)';
+        
+        vB.style.left = 'auto';
+        vB.style.right = '0';
+        vB.style.transform = 'translateX(0)';
+        
         mark.style.opacity = '0';
         
-        // Trigger reflow
+        // Reflow
         void vA.offsetWidth;
     }
 
@@ -246,17 +260,19 @@
         const vB = document.getElementById('veh-b');
         const mark = document.getElementById('impact-node');
 
-        vA.style.transition = 'left 2s cubic-bezier(0.4, 0, 0.2, 1)';
-        vB.style.transition = 'left 2s cubic-bezier(0.4, 0, 0.2, 1)';
+        vA.style.transition = 'all 2s cubic-bezier(0.4, 0, 0.2, 1)';
+        vB.style.transition = 'all 2s cubic-bezier(0.4, 0, 0.2, 1)';
+
+        // Move both to the meeting percentage
+        vA.style.left = currentCalc.pct + "%";
+        vA.style.transform = 'translateX(-50%)';
+
+        // B moves from right (0) to (100 - pct)
+        vB.style.right = (100 - currentCalc.pct) + "%";
+        vB.style.transform = 'translateX(50%)';
 
         mark.style.left = currentCalc.pct + "%";
         mark.style.opacity = '1';
-
-        vA.style.left = currentCalc.pct + "%";
-        vB.style.left = currentCalc.pct + "%";
-        // Adjust B transform to overlap A
-        vB.style.transform = 'translateX(-50%)';
-        vA.style.transform = 'translateX(-50%)';
     }
 
     window.onload = updateLogic;

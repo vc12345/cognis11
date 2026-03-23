@@ -27,7 +27,7 @@
             display: inline-block; 
             position: relative; 
             white-space: nowrap; 
-            color: rgba(255,255,255,0.2); /* Dimmed background text */
+            color: rgba(255,255,255,0.2); 
             z-index: 1;
         }
 
@@ -46,7 +46,6 @@
             z-index: 2;
         }
 
-        /* Highlighting the letters under the beam */
         .highlight-overlay {
             position: absolute;
             top: 0;
@@ -60,7 +59,7 @@
             font-size: 3.2rem;
             letter-spacing: 12px;
             font-weight: 900;
-            clip-path: inset(0 40% 0 40%); /* Managed by JS */
+            clip-path: inset(0 40% 0 40%); 
             transition: clip-path 0.3s ease;
         }
 
@@ -111,7 +110,7 @@
             </div>
             <div class="tier-card">
                 <b>Advanced Year 5</b>
-                "Find the 4-letter word hidden in the phrase: 'MADE A GOAL'."
+                "Find the 4-letter word hidden in the phrase: 'MADE A FOUL'."
             </div>
         </div>
     </section>
@@ -129,7 +128,7 @@
         <div class="btn-example-row">
             <button class="btn-example" onclick="setPhrase('THE ATOM', 3)">EAT (3-letter)</button>
             <button class="btn-example" onclick="setPhrase('FISH ARE DEEP', 4)">HARE (4-letter)</button>
-            <button class="btn-example" onclick="setPhrase('MADE A GOAL', 4)">DEAF (4-letter)</button>
+            <button class="btn-example" onclick="setPhrase('MADE A FOUL', 4)">DEAF (4-letter)</button>
         </div>
     </section>
 
@@ -170,7 +169,7 @@
         document.getElementById('phrase-in').value = p;
         document.getElementById('scan-width').value = w;
         // Center the beam roughly on a known hit for the example
-        const positions = {"THE ATOM": 35, "FISH ARE DEEP": 38, "MADE A FOUL": 25};
+        const positions = {"THE ATOM": 35, "FISH ARE DEEP": 38, "MADE A FOUL": 33};
         document.getElementById('scan-slider').value = positions[p] || 50;
         update33();
     }
@@ -188,13 +187,6 @@
         displayBg.innerText = collapsed;
         displayFg.innerText = collapsed;
 
-        // Character and Container dimensions
-        const charWidth = 45; // Approx px per char including spacing
-        const beamWidth = widthVal * charWidth;
-        scanner.style.width = beamWidth + "px";
-
-        // Calculate clip path percentage for the highlight overlay
-        // 0% slider = left-most, 100% slider = right-most
         const totalChars = collapsed.length;
         const beamCenterPercent = parseFloat(slider);
         
@@ -203,6 +195,7 @@
 
         displayFg.style.clipPath = `inset(0 ${100 - rightPercent}% 0 ${leftPercent}%)`;
         scanner.style.left = beamCenterPercent + "%";
+        scanner.style.width = (widthVal / totalChars * 100) + "%";
 
         document.getElementById('trace-33').innerHTML = `
             <div class="trace-step">→ 1. Total Stream: <b>${collapsed}</b></div>

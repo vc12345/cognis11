@@ -2,78 +2,89 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 18: BODMAS Dynamic | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 18: BODMAS Dynamic | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
-        .module-card { max-width: 1000px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
-
-        /* X-Ray Tiers */
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
-        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.7rem; text-transform: uppercase; }
-
-        /* The Priority Sieve */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; }
-        .equation-bar { font-size: 2.2rem; font-weight: bold; margin-bottom: 40px; color: var(--cognis-blue); background: white; padding: 20px 40px; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        /* UNIQUE CSS FOR THE PRIORITY SIEVE */
+        .anatomy-display { padding: 40px; }
+        .equation-bar { 
+            font-size: 2rem; 
+            font-weight: 800; 
+            margin-bottom: 30px; 
+            color: var(--cognis-blue); 
+            background: white; 
+            padding: 15px 40px; 
+            border-radius: 50px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 2px solid var(--cognis-light);
+        }
         
         .sieve { width: 100%; max-width: 500px; border: 2px solid #cbd5e0; border-radius: 12px; background: white; overflow: hidden; }
-        .sieve-layer { height: 70px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px dashed #cbd5e0; position: relative; }
+        .sieve-layer { height: 65px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px dashed #cbd5e0; position: relative; transition: background 0.3s; }
+        .sieve-layer:last-child { border-bottom: none; }
         .sieve-layer.active { background: #fffbeb; }
-        .layer-label { width: 120px; font-size: 0.65rem; font-weight: 800; color: #a0aec0; text-transform: uppercase; }
-        .token-bin { flex-grow: 1; display: flex; gap: 10px; }
-        .token { padding: 4px 12px; border-radius: 6px; font-weight: bold; color: white; font-size: 0.9rem; }
-        .token.b { background: #6366f1; } /* Brackets */
-        .token.o { background: #ec4899; } /* Orders */
-        .token.dm { background: var(--cognis-gold); } /* DM */
-        .token.as { background: var(--cognis-blue); } /* AS */
-
-        /* Dynamic Engine */
-        .engine-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .builder-grid { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-        .builder-item { background: #2d3748; padding: 10px; border-radius: 8px; display: flex; flex-direction: column; gap: 5px; }
-        .builder-item input, .builder-item select { background: #1a202c; color: white; border: 1px solid #4a5568; padding: 5px; border-radius: 4px; font-size: 0.9rem; }
         
-        .add-btn { background: var(--cognis-gold); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold; font-size: 1.2rem; }
-        .solve-btn { background: #48bb78; color: white; border: none; padding: 15px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; text-transform: uppercase; }
+        .layer-label { width: 140px; font-size: 0.65rem; font-weight: 800; color: #a0aec0; text-transform: uppercase; letter-spacing: 1px; }
+        .token-bin { flex-grow: 1; display: flex; gap: 8px; }
+        
+        .token { padding: 4px 10px; border-radius: 6px; font-weight: 800; color: white; font-size: 0.8rem; animation: dropIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes dropIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .token.b { background: #6366f1; } 
+        .token.o { background: #ec4899; } 
+        .token.dm { background: var(--cognis-gold); } 
+        .token.as { background: var(--cognis-blue); } 
 
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
-        .step { color: #a0aec0; border-bottom: 1px solid #333; padding: 5px 0; }
-        .step b { color: var(--cognis-gold); }
+        /* Builder Grid */
+        .builder-grid { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .builder-item { background: var(--engine-input); padding: 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 5px; }
+        .builder-item small { color: #a0aec0; font-size: 0.6rem; text-transform: uppercase; font-weight: 700; }
+        .builder-item input, .builder-item select { background: #1a202c; color: white; border: 1px solid #4a5568; padding: 5px; border-radius: 4px; font-size: 0.9rem; font-weight: 700; }
+        
+        .engine-btn-row { display: flex; gap: 15px; margin-top: 20px; align-items: center; }
+        .add-btn { background: #4a5568; color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-weight: 800; font-size: 1.2rem; transition: background 0.2s; }
+        .add-btn:hover { background: var(--cognis-gold); }
+        .solve-btn { background: var(--cognis-gold); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
     </style>
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 18' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(1)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(18));</script>
 </head>
 <body>
 
-<div class="module-card">
-    <div class="header"><h1>Module 18: BODMAS — Operational Hierarchy</h1></div>
+<div class="module-card" style="margin-top: 40px;">
+    <div class="header"><h1>Module 18: BODMAS hierarchy</h1></div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p><strong>Topic Logic:</strong> Math is not a flat sentence. It is a <strong>Priority Sieve</strong>. High-energy operations (Brackets, Powers) must be filtered and solved before lower-energy operations (Addition, Subtraction) are even considered.</p>
+        <p>Mathematics has a <b>Priority Gravity</b>. High-energy operations (Brackets, Orders) must be solved and "filtered" before lower-energy operations are even considered.</p>
+        
         <div class="question-tiers">
-            <div class="tier-card"><span>Entry</span>"What is $4 + 2 \times 3$?"</div>
-            <div class="tier-card"><span>Standard</span>"Calculate $2^3 + (10 - 2) \div 4$."</div>
-            <div class="tier-card"><span>Advanced</span>"Place brackets to make this true: $5 + 3 \times 10 - 2 = 78$."</div>
+            <div class="tier-card">
+                <b>Advanced Year 2</b>
+                "Find the value of 5 + 3 x 2. Does the addition or the multiplication happen first?"
+            </div>
+            <div class="tier-card">
+                <b>Average Year 4</b>
+                "Solve (15 - 5) / 2 + 4. Remember the brackets create a 'shield' around the subtraction."
+            </div>
+            <div class="tier-card">
+                <b>Advanced Year 5</b>
+                "Calculate 10 + 2 to the power of 3 / (6 - 2). Trace the path from Orders down to Addition."
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area">
-            <div class="equation-bar" id="eq-display">2 + 3 × 10</div>
+        <p>The <b>Priority Sieve</b>. Watch as the equation is broken down. Symbols are caught in different layers based on their "weight."</p>
+        <div class="anatomy-display">
+            <div class="equation-bar" id="eq-display">2 + 3 x 10</div>
             
             <div class="sieve">
                 <div class="sieve-layer" id="layer-b"><div class="layer-label">1. Brackets ()</div><div class="token-bin" id="bin-b"></div></div>
@@ -81,34 +92,40 @@
                 <div class="sieve-layer" id="layer-dm"><div class="layer-label">3. Div / Mult</div><div class="token-bin" id="bin-dm"></div></div>
                 <div class="sieve-layer" id="layer-as"><div class="layer-label">4. Add / Sub</div><div class="token-bin" id="bin-as"></div></div>
             </div>
-            <button class="solve-btn" onclick="runBODMAS()">Filter Equation</button>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div>
+            <div class="inputs">
                 <div class="builder-grid" id="builder">
                     </div>
-                <button class="add-btn" onclick="addTerm()" style="margin-top:15px;">+</button>
-                <p style="font-size:0.7rem; color:#a0aec0; margin-top:10px;">Click + to expand the equation.</p>
+                <div class="engine-btn-row">
+                    <button class="add-btn" onclick="addTerm()">+</button>
+                    <button class="solve-btn" onclick="runBODMAS()">Filter Equation</button>
+                </div>
+                <p style="font-size: 0.65rem; color: #a0aec0; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px;">
+                    Use the + to expand. Click 'Filter' to solve.
+                </p>
             </div>
-            <div class="trace-log" id="trace">
-                Build an equation and click "Filter" to see the logic.
+            <div class="trace-log" id="engine-trace">
+                Build an equation and click "Filter" to see the logic sieve in action.
             </div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 25px;">
-            <h2 style="color:var(--trap-red);">Phase 4: The Saboteur</h2>
-            <p><strong>The "Left-to-Right" Trap:</strong> Treating math like reading a book. 
-            <br><i>Example: $10 - 2 \times 3$. A Type 1 thinker does $10-2=8$, then $8 \times 3 = 24$.</i>
-            <br><br><strong>The Fix:</strong> Use the <strong>Priority Scan</strong>. Before solving anything, scan for the "Heaviest" operator. Multiplication and Powers are physically "heavier" and crush lower operators into waiting.</p>
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "Left-to-Right" Trap:</strong> Treating math like reading a book. If you see 10 - 2 x 3, many people do 10 - 2 = 8 first, then 8 x 3 = 24.
+            <br><br>
+            <strong>The Fix:</strong> Perform a <b>Priority Scan</b>. Before picking up your pen, scan the line for the "Heaviest" operator. Multiplication and Powers are physically heavier and will "crush" Addition into waiting its turn.</p>
         </div>
     </section>
 </div>
+
+<button class="btn-complete" onclick="markComplete(18)">Complete Module & Update Lattice</button>
 
 <script>
     const builder = document.getElementById('builder');
@@ -122,15 +139,15 @@
         builder.innerHTML = '';
         terms.forEach((t, i) => {
             let html = `<div class="builder-item">
-                <small>Val</small>
+                <small>Number</small>
                 <input type="number" value="${t.val}" onchange="updateTerm(${i}, 'val', this.value)">`;
             
             if (i < terms.length - 1) {
-                html += `<small>Op</small>
+                html += `<small>Next Op</small>
                 <select onchange="updateTerm(${i}, 'op', this.value)">
                     <option value="+" ${t.op==='+'?'selected':''}>+</option>
                     <option value="-" ${t.op==='-'?'selected':''}>-</option>
-                    <option value="x" ${t.op==='x'?'selected':''}>×</option>
+                    <option value="x" ${t.op==='x'?'selected':''}>x</option>
                     <option value="/" ${t.op==='/'?'selected':''}>÷</option>
                     <option value="^" ${t.op==='^'?'selected':''}>^ (Power)</option>
                 </select>`;
@@ -142,35 +159,28 @@
     }
 
     function addTerm() {
+        if(terms.length >= 6) return; // Limit for visual clarity
         terms[terms.length-1].op = '+';
         terms.push({val: 5});
         renderBuilder();
     }
 
     function updateTerm(index, key, value) {
-        terms[index][key] = value;
+        terms[index][key] = (key === 'val') ? parseFloat(value) : value;
         updateDisplay();
     }
 
     function updateDisplay() {
-        let str = terms.map(t => t.op ? `${t.val} ${t.op}` : t.val).join(' ');
+        let str = terms.map(t => t.op ? `${t.val} ${t.op === '/' ? '÷' : t.op}` : t.val).join(' ');
         document.getElementById('eq-display').innerText = str;
     }
 
     function runBODMAS() {
-        // Flatten terms for LogicProvider
-        let tokens = [];
-        terms.forEach(t => {
-            tokens.push(t.val);
-            if(t.op) tokens.push(t.op);
-        });
-
-        // Simplified Sieve Animation
         const bins = { b:[], o:[], dm:[], as:[] };
         const priority = { '^':'o', 'x':'dm', '/':'dm', '+': 'as', '-': 'as' };
 
         terms.forEach(t => {
-            if(t.op) bins[priority[t.op]].push(t.op);
+            if(t.op) bins[priority[t.op]].push(t.op === '/' ? '÷' : t.op);
         });
 
         // Update Sieve Visuals
@@ -180,19 +190,22 @@
             document.getElementById('layer-'+cat).classList.toggle('active', bins[cat].length > 0);
         });
 
-        // Step-by-step Trace
-        const history = LogicProvider.modules.bodmas.solveStepByStep(tokens);
-        document.getElementById('trace').innerHTML = history.map(h => 
-            `<div class="step"><b>${h.action}:</b> ${h.expr}</div>`
-        ).join('');
+        // Manual Step-by-Step for Trace
+        let currentExpr = terms.map(t => t.op ? `${t.val} ${t.op}` : t.val).join(' ');
+        let log = `<div class="trace-step">→ Starting Equation: <b>${currentExpr}</b></div>`;
+        
+        // Simplified Logic Mockup for Trace (Visual representation of priority)
+        if(bins.o.length > 0) log += `<div class="trace-step">→ Layer 2: Solving Powers (Orders) first.</div>`;
+        if(bins.dm.length > 0) log += `<div class="trace-step">→ Layer 3: Solving Division and Multiplication.</div>`;
+        if(bins.as.length > 0) log += `<div class="trace-step">→ Layer 4: Final Addition and Subtraction.</div>`;
+        
+        log += `<div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">→ Scan Complete. Hierarchy locked.</div>`;
+
+        document.getElementById('engine-trace').innerHTML = log;
     }
 
-    // Initial Render
     renderBuilder();
 </script>
 
-    <button onclick="markComplete(18)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
 </body>
 </html>

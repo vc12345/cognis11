@@ -2,71 +2,143 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 49: The Cube Spinner | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 49: Rotated Cubes | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+        /* UNIQUE CSS FOR 3D CUBE SIMULATION */
+        .anatomy-display { 
+            background: #1a202c; 
+            padding: 80px 40px; 
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #2d3748;
+            perspective: 1000px;
+            min-height: 400px;
+        }
 
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 120px; line-height: 1.5; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        .cube-viewport {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 100px 40px; margin: 30px 0; perspective: 1000px; display: flex; justify-content: center; }
+        .face {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border: 3px solid rgba(255,255,255,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 900;
+            backface-visibility: visible;
+        }
+
+        /* Symbol Mapping */
+        .f-front  { transform: rotateY(0deg) translateZ(60px); background: var(--cognis-gold); color: #1a202c; }
+        .f-back   { transform: rotateY(180deg) translateZ(60px); background: #3182ce; color: white; }
+        .f-right  { transform: rotateY(90deg) translateZ(60px); background: #48bb78; color: white; }
+        .f-left   { transform: rotateY(-90deg) translateZ(60px); background: #e53e3e; color: white; }
+        .f-top    { transform: rotateX(90deg) translateZ(60px); background: #f6ad55; color: white; }
+        .f-bottom { transform: rotateX(-90deg) translateZ(60px); background: #805ad5; color: white; }
+
+        .engine-container { grid-template-columns: 1fr 1.3fr; }
         
-        /* 3D Cube CSS */
-        .cube { width: 100px; height: 100px; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-        .face { position: absolute; width: 100px; height: 100px; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; background: rgba(197, 160, 89, 0.9); color: #1a202c; }
-        
-        .front  { transform: rotateY(0deg) translateZ(50px); }
-        .back   { transform: rotateY(180deg) translateZ(50px); background: #3182ce; color: white; }
-        .right  { transform: rotateY(90deg) translateZ(50px); background: #48bb78; color: white; }
-        .left   { transform: rotateY(-90deg) translateZ(50px); background: #e53e3e; color: white; }
-        .top    { transform: rotateX(90deg) translateZ(50px); background: #f6ad55; color: white; }
-        .bottom { transform: rotateX(-90deg) translateZ(50px); background: #805ad5; color: white; }
+        .spin-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
 
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .btn-spin { background: #4a5568; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 8px; width: 100%; font-weight: bold; }
-        .btn-spin:hover { background: var(--cognis-gold); }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+        .btn-spin {
+            background: #2d3748;
+            border: 1px solid #4a5568;
+            color: #a0aec0;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            transition: 0.2s;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn-spin:hover { color: white; border-color: var(--cognis-gold); }
+        .btn-spin span { color: var(--cognis-gold); }
+
+        .btn-reset {
+            background: transparent;
+            color: #718096;
+            border: 1px solid #4a5568;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            width: 100%;
+        }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 49' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(4)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(49));</script>
 </head>
 <body>
-<div class="module-card">
-    <div class="header"><h1>Module 49: Rotated Cubes</h1></div>
+
+<div class="module-card" style="margin-top: 40px;">
+    <div class="header">
+        <h1>Module 49: Rotated Cubes</h1>
+    </div>
+
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A cube has 6 faces, but you only see 3 at a time. To solve rotation puzzles, pick one symbol and treat it as the "Top." Then, track where the other two symbols "live" relative to it. If the Circle is to the right of the Star on the Target, it MUST be to the right of the Star on the Answer (assuming the Star is oriented the same way).</p>
+        <p>In the 11+ Non-Verbal Reasoning exam, you are often asked to identify a cube after it has been spun or flipped. Success depends on <b>Adjacency Logic</b>. Since you only see three faces at a time, you must pick one "Anchor" face and track its neighbors. If the Star is above the Circle in the original view, it must remain above the Circle in any rotation unless the entire cube has been turned upside down.</p>
+        
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b><p>Identify a cube after one 90° turn to the right.</p></div>
-            <div class="tier-card"><b>Average Year 4</b><p>Spot the "Impossible Neighbor" (a face that should be opposite but is shown touching).</p></div>
-            <div class="tier-card"><b>Advanced Year 5</b><p>Analyze orientation: Does the arrow point toward or away from the adjacent dot?</p></div>
+            <div class="tier-card">
+                <b>Advanced Year 2</b>
+                "Identify which cube represents a single 90° horizontal turn to the right."
+            </div>
+            <div class="tier-card">
+                <b>Average Year 4</b>
+                "Spot the 'Impossible Neighbor'—a face that is known to be opposite but is shown touching."
+            </div>
+            <div class="tier-card">
+                <b>Advanced Year 5</b>
+                "Audit orientation: Does the arrow face toward or away from the adjacent Square?"
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area">
-            <div class="cube" id="cube">
-                <div class="face front">★</div>
-                <div class="face back">●</div>
-                <div class="face right">▲</div>
-                <div class="face left">■</div>
-                <div class="face top">♦</div>
-                <div class="face bottom">♣</div>
+        <p>The <b>Spatial Matrix</b>. Use the spinner engine below to manipulate the cube. Observe the "Fixed Adjacency": as the cube rotates, notice how the relationship between the symbols stays constant even though their positions on your screen change.</p>
+        
+        <div class="anatomy-display">
+            <div class="cube-viewport" id="cube-element">
+                <div class="face f-front">★</div>
+                <div class="face f-back">●</div>
+                <div class="face f-right">▲</div>
+                <div class="face f-left">■</div>
+                <div class="face f-top">♦</div>
+                <div class="face f-bottom">♣</div>
+            </div>
+            <div style="margin-top: 50px; color: #94a3b8; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+                3D Projection: Use controls to rotate
             </div>
         </div>
     </section>
@@ -74,43 +146,70 @@
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls">
-                <button class="btn-spin" onclick="rotateCube('y', 90)">Spin Right (Y-axis)</button>
-                <button class="btn-spin" onclick="rotateCube('x', 90)">Flip Up (X-axis)</button>
-                <button class="btn-spin" onclick="rotateCube('z', 90)">Tilt (Z-axis)</button>
-                <button onclick="resetCube()" style="background:transparent; color:#a0aec0; border:none; margin-top:10px; cursor:pointer; font-size:0.7rem; text-decoration:underline;">Reset Orientation</button>
+            <div class="inputs">
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">Manipulate Axis</label>
+                <div class="spin-grid">
+                    <button class="btn-spin" onclick="rotateCube('y', 90)">Spin Right <span>Y-Axis</span></button>
+                    <button class="btn-spin" onclick="rotateCube('x', 90)">Flip Up <span>X-Axis</span></button>
+                    <button class="btn-spin" onclick="rotateCube('z', 90)">Tilt Clockwise <span>Z-Axis</span></button>
+                </div>
+                <button class="btn-reset" onclick="resetCube()">Reset View</button>
             </div>
-            <div class="trace-log" id="trace-49">Orientation: Front (Star). Top (Diamond). Right (Triangle).</div>
+            <div class="trace-log" id="trace-49">Orientation: Front (★), Top (♦), Right (▲)...</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> The "Impossible Neighbor." Picking an answer where two symbols are touching, even though you know from the net (or a previous view) that they are **Opposites**.</p>
-            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin: 15px 0;">
-            <p><strong>The Fix:</strong> Use the "Elimination of Opposites." If the Star and the Circle are opposites, any option showing both at once is instantly wrong. Cross it out immediately and don't waste time checking its rotation.</p>
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "Impossible Neighbor" Trap:</strong> Choosing an answer where two faces are touching, even though you know they are <b>Opposites</b>. Most distractors will use correct symbols but place them in impossible positions.</p>
+            
+            <p><strong>The Fix:</strong> Use the <b>Law of Opposites</b>. If the Star and the Circle are on opposite sides of the cube, they can <u>never</u> be visible at the same time. If a multiple-choice option shows both, cross it out immediately. Don't waste time checking its rotation.</p>
         </div>
     </section>
 </div>
 
+<button class="btn-complete" onclick="markComplete(49)">Complete Module & Update Lattice</button>
+
 <script>
-    let x = 0, y = 0, z = 0;
+    let rotX = -20, rotY = -30, rotZ = 0;
+
     function rotateCube(axis, deg) {
-        if(axis === 'x') x += deg;
-        if(axis === 'y') y += deg;
-        if(axis === 'z') z += deg;
-        document.getElementById('cube').style.transform = `rotateX(${x}deg) rotateY(${y}deg) rotateZ(${z}deg)`;
+        if(axis === 'x') rotX += deg;
+        if(axis === 'y') rotY += deg;
+        if(axis === 'z') rotZ += deg;
+
+        const cube = document.getElementById('cube-element');
+        cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(${rotZ}deg)`;
         updateTrace();
     }
-    function resetCube() { x=0; y=0; z=0; rotateCube('x', 0); }
-    function updateTrace() {
-        document.getElementById('trace-49').innerHTML = `Current Rotation:<br>X: ${x % 360}° | Y: ${y % 360}° | Z: ${z % 360}°<br><br><i>Check the neighbors!</i>`;
+
+    function resetCube() {
+        rotX = -20; rotY = -30; rotZ = 0;
+        const cube = document.getElementById('cube-element');
+        cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(${rotZ}deg)`;
+        updateTrace();
     }
+
+    function updateTrace() {
+        const log = document.getElementById('trace-49');
+        log.innerHTML = `
+            <div class="trace-step">→ 1. Rotation X: ${rotX % 360}°</div>
+            <div class="trace-step">→ 2. Rotation Y: ${rotY % 360}°</div>
+            <div class="trace-step">→ 3. Rotation Z: ${rotZ % 360}°</div>
+            <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+                → STATUS: ORIENTATION LOGGED
+            </div>
+            <div class="trace-step" style="font-size:0.7rem; opacity:0.7;">Check: Are opposites still invisible?</div>
+        `;
+    }
+
+    // Initial tilted state for depth
+    window.onload = () => {
+        const cube = document.getElementById('cube-element');
+        cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(${rotZ}deg)`;
+    };
 </script>
 
-    <button onclick="markComplete(49)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
 </body>
 </html>

@@ -2,7 +2,6 @@
 
 /**
  * 1. LOGIN LOGIC
- * Used on login.html
  */
 async function handleLogin() {
     const email = document.getElementById('login-email').value;
@@ -18,13 +17,12 @@ async function handleLogin() {
         errorDiv.innerText = error.message;
         errorDiv.style.display = 'block';
     } else {
-        window.location.href = "members/dashboard.html";
+        window.location.href = "/members/dashboard.html";
     }
 }
 
 /**
  * 2. STANDARD SIGNUP (Manual/Free)
- * Used on signup.html
  */
 async function handleSignUp() {
     const email = document.getElementById('signup-email').value;
@@ -41,27 +39,30 @@ async function handleSignUp() {
         errorDiv.style.display = 'block';
     } else {
         alert("Success! Please check your email for a verification link.");
-        window.location.href = "login.html";
+        window.location.href = "/login.html";
     }
 }
 
 /**
- * 3. SUBSCRIPTION SIGNUP (Paid Flow)
- * Used on the Landing Page Modal
+ * 3. SUBSCRIPTION SIGNUP (Foundational vs Supplemental)
  */
 async function handleSubscriptionSignup() {
     const email = document.getElementById('sub-email').value;
     const password = document.getElementById('sub-password').value;
-    const btn = document.getElementById('sub-btn');
+    const plan = document.getElementById('selected-plan').value; // Captured from subscribe.html modal
+    const btn = document.getElementById('modal-btn');
     const errorDiv = document.getElementById('error-msg');
 
-    // UI Feedback: Disable button to prevent double-clicks
     btn.innerText = "Creating Account...";
     btn.disabled = true;
 
+    // Use metadata to tell your Stripe Webhook which plan the user intends to buy
     const { data, error } = await supabaseClient.auth.signUp({
         email: email,
         password: password,
+        options: {
+            data: { intended_plan: plan }
+        }
     });
 
     if (error) {
@@ -70,12 +71,16 @@ async function handleSubscriptionSignup() {
         btn.innerText = "Proceed to Payment";
         btn.disabled = false;
     } else {
-        // SUCCESS: Redirect to Stripe
-        // Note: Make sure YOUR_LINK_ID is replaced with your actual Stripe Payment Link ID
-        const stripeLink = "https://buy.stripe.com/test_3cIfZj0ybgFcejO20agUM00"; 
+        // Stripe Links for each path
+        const STRIPE_LINKS = {
+            'foundational': 'https://buy.stripe.com/test_5kQ14p80D2OmcbG0W6gUM01', 
+            'supplemental': 'https://buy.stripe.com/test_6oU8wRdkX3SqdfKcEOgUM02'
+        };
+
+        const stripeLink = STRIPE_LINKS[plan];
         const userId = data.user.id;
         
-        // Pass the user ID to Stripe so the Webhook can find them later
+        // Pass user ID to Stripe Webhook
         window.location.href = `${stripeLink}?client_reference_id=${userId}&prefilled_email=${encodeURIComponent(email)}`;
     }
 }

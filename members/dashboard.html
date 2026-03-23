@@ -26,12 +26,9 @@
                     <span id="account-status" class="status-badge status-checking">Checking Status</span>
                 </div>
             </div>
-            <div class="header-right">
-                </div>
         </header>
 
-        <main id="lattice-root">
-            </main>
+        <main id="lattice-root"></main>
     </div>
 
     <script src="../js/registry.js"></script>
@@ -43,36 +40,41 @@
             }
 
             try {
-                // 1. Authenticate User
+                // 1. Authenticate
                 const { data: { user }, error: authError } = await window.supabaseClient.auth.getUser();
                 if (authError || !user) return;
-
-                // Update UI with user info
                 document.getElementById('user-welcome').innerText = user.email;
 
-                // 2. Fetch Subscription Status
+                // 2. Fetch Profile & Plan
                 const { data: profile } = await window.supabaseClient
                     .from('profiles')
-                    .select('subscription_status')
+                    .select('subscription_status, subscription_plan')
                     .eq('id', user.id)
                     .maybeSingle();
 
                 const statusEl = document.getElementById('account-status');
+                let userPlan = 'none';
+                
                 if (profile) {
+                    userPlan = profile.subscription_plan || 'none';
                     const status = profile.subscription_status || 'inactive';
-                    statusEl.innerText = status.toUpperCase();
+                    statusEl.innerText = `${status.toUpperCase()} (${userPlan.toUpperCase()})`;
                     statusEl.className = `status-badge status-${status}`;
                 }
 
-                // 3. Fetch Completed Modules
+                // 3. Fetch Completion
                 const { data: completedData } = await window.supabaseClient
                     .from('module_progress')
                     .select('module_id')
                     .eq('user_id', user.id);
 
                 const completedIds = completedData ? completedData.map(item => item.module_id) : [];
+                
+                // UNLOCK CALCULATION: For Foundational, they can access max_id + 1
+                const maxCompleted = completedIds.length > 0 ? Math.max(...completedIds) : 0;
+                const nextUnlockedId = maxCompleted + 1;
 
-                // 4. Render the Lattice
+                // 4. Render
                 const root = document.getElementById('lattice-root');
                 root.innerHTML = ''; 
                 
@@ -81,7 +83,6 @@
                 pillars.forEach(pillarName => {
                     const section = document.createElement('section');
                     section.className = 'pillar-section';
-                    
                     section.innerHTML = `
                         <div class="pillar-header">
                             <span class="pillar-indicator" style="background: var(--pillar-${pillarName.toLowerCase()})"></span>
@@ -95,19 +96,28 @@
 
                     COGNIS_MODULES.filter(m => m.pillar === pillarName).forEach(mod => {
                         const isDone = completedIds.includes(mod.id);
-                        const card = document.createElement('a');
-                        card.className = `module-card ${isDone ? 'is-complete' : ''}`;
-                        card.href = mod.path;
+                        let isLocked = false;
+
+                        // ENFORCE SEQUENTIAL LOCK FOR FOUNDATIONAL
+                        if (userPlan === 'foundational') {
+                            if (mod.id > nextUnlockedId) isLocked = true;
+                        }
+
+                        // Render card as <div> if locked, <a> if unlocked
+                        const card = document.createElement(isLocked ? 'div' : 'a');
+                        card.className = `module-card ${isDone ? 'is-complete' : ''} ${isLocked ? 'is-locked' : ''}`;
+                        if (!isLocked) card.href = mod.path;
                         
                         card.innerHTML = `
                             <div class="card-top">
                                 <span class="cat-tag">Category ${mod.cat}</span>
                                 ${isDone ? '<span class="check-mark">✓</span>' : ''}
+                                ${isLocked ? '<span class="lock-tag">Locked 🔒</span>' : ''}
                             </div>
                             <h3 class="mod-title">${mod.title}</h3>
                             <div class="card-bottom">
                                 <span class="mod-id">UNIT ${String(mod.id).padStart(2, '0')}</span>
-                                <span class="status-text">${isDone ? 'Completed' : 'View Module →'}</span>
+                                <span class="status-text">${isLocked ? 'Complete Previous Unit' : (isDone ? 'Completed' : 'Start Module →')}</span>
                             </div>
                         `;
                         groupContainer.appendChild(card);

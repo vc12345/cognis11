@@ -2,164 +2,283 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 59: Tense Consistency | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 59: Tense Consistency | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root { 
-            --cognis-blue: #002d5b; 
-            --cognis-gold: #c5a059; 
-            --cognis-light: #f4f7f9; 
-            --pass-green: #48bb78; 
-            --fail-red: #d9534f; 
+        /* UNIQUE CSS FOR TIMELINE VISUALS */
+        .anatomy-display { 
+            background: #f8fafc; 
+            padding: 40px; 
+            border-radius: 12px; 
+            text-align: center;
+            border: 2px solid #e2e8f0;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; line-height: 1.6; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; margin-bottom: 20px; }
 
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 140px; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
-
-        .anatomy-container { text-align: center; padding: 20px 0; }
-        .parent-bridge { background: #fffbeb; border-left: 4px solid #f6e05e; padding: 15px; margin-top: 20px; font-size: 0.85rem; color: #744210; border-radius: 0 8px 8px 0; }
-
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 20px 0; color: white; }
-        .passage-well { font-size: 1.2rem; line-height: 2; margin-bottom: 30px; padding: 25px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid #4a5568; }
-        .verb-slip { padding: 2px 5px; cursor: pointer; border-radius: 4px; border-bottom: 2px solid transparent; }
-        .verb-slip:hover { background: rgba(255,255,255,0.1); border-bottom-color: var(--cognis-gold); }
-        .verb-slip.flagged { background: var(--fail-red); color: white; border-bottom-color: var(--fail-red); }
-        .verb-slip.fixed { background: var(--pass-green); color: white; border-bottom-color: var(--pass-green); }
-
-        .engine-interface { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
-        .trace-log { 
-            background: rgba(0,0,0,0.3); 
-            padding: 20px; 
-            border-radius: 8px; 
-            font-family: 'Consolas', monospace; 
-            font-size: 0.85rem; 
-            border-left: 4px solid var(--cognis-gold); 
-            height: 160px; 
-            overflow-y: auto; 
-            color: #48bb78;
+        .timeline-viz {
+            position: relative;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 600px;
+            margin: 0 auto;
         }
-        
-        .btn-action { background: var(--cognis-gold); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 0.7rem; text-transform: uppercase; font-weight: bold; width: 100%; margin-top: 10px; }
 
-        .saboteur-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 10px; }
-        .saboteur-panel { border-radius: 12px; padding: 25px; font-size: 0.9rem; }
-        .trap { background: #fff5f5; border: 2px solid var(--fail-red); }
-        .fix { background: #f0fff4; border: 2px solid var(--pass-green); }
+        .timeline-line {
+            position: absolute;
+            top: 50%; left: 0; width: 100%; height: 4px;
+            background: #cbd5e0;
+            z-index: 1;
+        }
+
+        .time-node {
+            position: relative;
+            z-index: 2;
+            background: white;
+            border: 3px solid var(--cognis-blue);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 900;
+            font-size: 0.7rem;
+            color: var(--cognis-blue);
+            text-transform: uppercase;
+        }
+
+        .time-node.interruption {
+            border-color: var(--cognis-gold);
+            color: var(--cognis-gold);
+            transform: translateY(-20px);
+        }
+
+        /* Engine Terminal Customization */
+        .simulation-area { background: #1a202c; padding: 40px; border-radius: 12px; margin-bottom: 20px; }
+        
+        .passage-well {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid #334155;
+            padding: 30px;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: white;
+            margin-bottom: 30px;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .verb-node {
+            cursor: pointer;
+            padding: 2px 6px;
+            border-bottom: 2px dashed #4a5568;
+            transition: 0.2s;
+            margin: 0 4px;
+        }
+        .verb-node:hover { background: rgba(197, 160, 89, 0.2); }
+        .verb-node.flagged { color: #f87171; border-color: #f87171; border-bottom-style: solid; font-weight: bold; }
+        .verb-node.fixed { color: var(--pass-green); border-color: var(--pass-green); border-bottom-style: solid; font-weight: bold; }
+
+        .engine-container { grid-template-columns: 1fr 1.3fr; }
+        
+        .preset-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 20px; }
+        .btn-load { 
+            background: #2d3748; color: #a0aec0; border: 1px solid #4a5568; 
+            padding: 12px; border-radius: 8px; cursor: pointer; 
+            font-size: 0.7rem; text-transform: uppercase; font-weight: 800; 
+            text-align: left; transition: 0.2s;
+        }
+        .btn-load:hover { background: #4a5568; color: white; }
+        .btn-load.active { background: var(--cognis-blue); color: var(--cognis-gold); border-color: var(--cognis-gold); }
+
+        .btn-fix {
+            background: var(--cognis-gold);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 10px;
+            display: none;
+        }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 59' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(5)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(59));</script>
 </head>
 <body>
 
-<div class="module-card">
-    <div class="header"><h1>Module 59: Tense Consistency</h1></div>
+<div class="module-card" style="margin-top: 40px;">
+    <div class="header">
+        <h1>Module 59: Tense Consistency</h1>
+    </div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A story should stay on one <b>Timeline</b>. If you start in the <b>Past Tense</b> ("The boy walked"), all subsequent actions must stay in the past. Slipping into <b>Present Tense</b> ("The boy walked to the park and sits down") breaks the logic of time.</p>
+        <p>Tense is the <b>Logic of Time</b>. We need different tenses to time-stamp actions: <i>Simple Past</i> for finished acts, <i>Present</i> for habits, and <i>Future</i> for intent. Most errors occur when a writer "slips" between timelines mid-sentence. However, you <u>can</u> use two tenses together if one action interrupts another (e.g., "I <i>was walking</i> [Past Continuous] when it <i>started</i> [Simple Past] to rain").</p>
         
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>She <u>played</u> tag and then <u>eats</u> a snack. <br><br><b>Error:</b> Slip from Past to Present. <br><b>Fix:</b> "ate a snack."</div>
-            <div class="tier-card"><b>Average Year 4</b>They <u>arrived</u> late, so they <u>miss</u> the beginning. <br><br><b>Error:</b> Temporal inconsistency. <br><b>Fix:</b> "missed the beginning."</div>
-            <div class="tier-card"><b>Advanced Year 5</b>The researchers <u>noted</u> the change as the chemical <u>reacts</u> with the air. <br><br><b>Error:</b> Slip in descriptive narrative. <br><b>Fix:</b> "reacted with the air."</div>
+            <div class="tier-card">
+                <b>Advanced Year 2</b>
+                "She <u>played</u> tag and then <u>eats</u> a snack." <br>
+                <b>Error:</b> Slip from Past to Present.
+            </div>
+            <div class="tier-card">
+                <b>Average Year 4</b>
+                "They <u>arrived</u> late, so they <u>miss</u> the start." <br>
+                <b>Error:</b> Timeline mismatch.
+            </div>
+            <div class="tier-card">
+                <b>Advanced Year 5</b>
+                "While the team <u>was winning</u>, the rain <u>stops</u> the match." <br>
+                <b>Error:</b> Broken Interruption logic.
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="anatomy-container">
-            <svg width="600" height="100" viewBox="0 0 600 100">
-                <line x1="50" y1="50" x2="550" y2="50" stroke="#002d5b" stroke-width="4"/>
-                <circle cx="100" cy="50" r="8" fill="var(--cognis-blue)"/>
-                <text x="100" y="80" font-family="Segoe UI" font-size="10" text-anchor="middle" fill="#002d5b">PAST VERB</text>
-                
-                <circle cx="250" cy="50" r="8" fill="var(--cognis-blue)"/>
-                <text x="250" y="80" font-family="Segoe UI" font-size="10" text-anchor="middle" fill="#002d5b">PAST VERB</text>
-                
-                <path d="M 400 50 Q 450 10 500 50" fill="none" stroke="var(--fail-red)" stroke-width="4" stroke-dasharray="5"/>
-                <circle cx="450" cy="20" r="8" fill="var(--fail-red)"/>
-                <text x="450" y="45" font-family="Segoe UI" font-size="10" text-anchor="middle" fill="var(--fail-red)" font-weight="bold">PRESENT SLIP!</text>
-            </svg>
-        </div>
-        <div class="parent-bridge">
-            <strong>Parent Instruction:</strong> Ask your child to circle every verb in the sentence. If most verbs end in <b>-ed</b> but one ends in <b>-s</b> (e.g. walked vs. walks), that is the "Slip." The first verb usually sets the law for the rest of the sentence.
+        <p>The <b>Temporal Interruption</b>. When using two tenses together, they must follow a specific hierarchy. The "Long Action" provides the background, while the "Short Action" breaks the timeline.</p>
+        
+        <div class="anatomy-display">
+            <div class="timeline-viz">
+                <div class="timeline-line"></div>
+                <div class="time-node">Background: "I was eating"</div>
+                <div class="time-node interruption">Trigger: "Phone Rang"</div>
+                <div class="time-node">Result: "I stopped"</div>
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="simulation-area">
-            <div class="passage-well" id="timeline-well">
-                "The explorer <b>climbed</b> the mountain, <b>surveyed</b> the horizon, and 
-                <span class="verb-slip" id="slip-target" onclick="flagSlip()">sits</span> 
-                down to rest."
-            </div>
-
-            <div class="engine-interface">
-                <div style="display:flex; flex-direction:column; gap:10px;">
-                    <label style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase;">Timeline Scanner</label>
-                    <p style="font-size:0.8rem; color:#cbd5e0;">Identify and fix the temporal slip in the sentence above.</p>
-                    <button class="btn-action" id="fix-btn" style="display:none;" onclick="fixSlip()">Repair Timeline</button>
+            <div class="passage-well" id="logic-well">
                 </div>
-                <div class="trace-log" id="log-59">SCANNING VERB SEQUENCE...<br>> Verb 1: [Climbed] (Past)<br>> Verb 2: [Surveyed] (Past)<br>> Verb 3: [Sits] (Present)<br>> DETECTED: Temporal Anomaly.</div>
+
+            <div class="engine-container">
+                <div class="inputs">
+                    <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Load Timeline Scenario</label>
+                    <div class="preset-grid">
+                        <button class="btn-load active" onclick="loadCase(0, this)">Scenario: Narrative Slip</button>
+                        <button class="btn-load" onclick="loadCase(1, this)">Scenario: Scientific Slip</button>
+                        <button class="btn-load" onclick="loadCase(2, this)">Scenario: Interrupted Action</button>
+                    </div>
+                    <button class="btn-fix" id="btn-fix" onclick="fixTimeline()">Repair Timeline</button>
+                </div>
+                <div class="trace-log" id="trace-59">Scan the sentence for temporal anomalies...</div>
             </div>
         </div>
     </section>
 
     <section class="phase">
-        <h2>Phase 4: The Saboteur</h2>
-        <div class="saboteur-grid">
-            <div class="saboteur-panel trap">
-                <h3 style="color:var(--fail-red);">The Trap</h3>
-                <p>The <b>Dialogue Trap</b>. Students often try to fix tense inside a character's speech. For example: <i>He said, "I am happy."</i> The "said" is past, but the "am" is present. This is <b>correct</b>. Only fix tense in the narrative description, not the talking.</p>
-            </div>
-            <div class="saboteur-panel fix">
-                <h3 style="color:var(--pass-green);">The Fix</h3>
-                <p>The <b>Anchor Verb</b>. Identify the very first action in the sentence. This is your Anchor. Every other verb must bow to the Anchor. If the Anchor is past, every verb must be past. If the Anchor is present, every verb must be present.</p>
-            </div>
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "Dialogue" Trap:</strong> Attempting to "fix" the tense inside a character's speech. For example, in the sentence: <i>The boy <u>said</u>, "I <u>am</u> happy."</i> The "said" is past, but the "am" is present. This is 100% correct because talking happens in its own time. </p>
+            
+            <p><strong>The Fix:</strong> Use the <b>Anchor Verb Test</b>. Identify the very first verb in the *narrative* (not the dialogue). This is your Anchor. Every other descriptive action must match the Anchor's time-stamp. If the Anchor is past, every other description must bow to the past.</p>
         </div>
     </section>
 </div>
 
+<button class="btn-complete" onclick="markComplete(59)">Complete Module & Update Lattice</button>
+
 <script>
-    const log59 = document.getElementById('log-59');
-    const target = document.getElementById('slip-target');
-    const fixBtn = document.getElementById('fix-btn');
+    const cases = [
+        {
+            text: "The explorer <span>climbed</span> the peak, <span>surveyed</span> the view, and <span class='verb-node' onclick='flag(this)'>sits</span> down.",
+            error: "sits",
+            correction: "sat",
+            type: "Simple Narrative",
+            logic: "First verbs are Past; third verb must follow."
+        },
+        {
+            text: "The liquid <span>evaporates</span> quickly because the burner <span>is</span> hot and the fan <span class='verb-node' onclick='flag(this)'>blew</span> air.",
+            error: "blew",
+            correction: "blows",
+            type: "Scientific Present",
+            logic: "Scientific facts are always stated in the Present."
+        },
+        {
+            text: "The students <span>were studying</span> quietly when the alarm <span class='verb-node' onclick='flag(this)'>sounds</span> a warning.",
+            error: "sounds",
+            correction: "sounded",
+            type: "Interruption",
+            logic: "Background is Past Continuous; trigger must be Simple Past."
+        }
+    ];
 
-    function flagSlip() {
-        target.classList.add('flagged');
-        fixBtn.style.display = 'block';
-        log59.innerHTML += `<br>> <span style="color:var(--fail-red);"><b>SLIP FLAGGED:</b> "Sits" violates the Past Tense rule.</span>`;
-        log59.scrollTop = log59.scrollHeight;
+    let currentCase = cases[0];
+
+    function loadCase(idx, btn) {
+        document.querySelectorAll('.btn-load').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCase = cases[idx];
+        document.getElementById('btn-fix').style.display = 'none';
+        
+        document.getElementById('logic-well').innerHTML = currentCase.text;
+        updateTrace();
     }
 
-    function fixSlip() {
-        target.classList.remove('flagged');
-        target.classList.add('fixed');
-        target.innerText = "sat";
-        fixBtn.style.display = 'none';
-        log59.innerHTML += `<br>> <span style="color:var(--pass-green);"><b>TIMELINE REPAIRED:</b> "Sat" (Past) now matches Anchor logic.</span>`;
-        log59.scrollTop = log59.scrollHeight;
+    function flag(el) {
+        el.classList.add('flagged');
+        document.getElementById('btn-fix').style.display = 'block';
+        updateTrace(el.innerText, true);
     }
+
+    function fixTimeline() {
+        const node = document.querySelector('.verb-node');
+        node.classList.remove('flagged');
+        node.classList.add('fixed');
+        node.innerText = currentCase.correction;
+        document.getElementById('btn-fix').style.display = 'none';
+        updateTrace(currentCase.correction, false, true);
+    }
+
+    function updateTrace(val, isError, isFixed) {
+        const log = document.getElementById('trace-59');
+        let html = `<div class="trace-step">→ 1. Logic Type: <b>${currentCase.type}</b></div>`;
+        
+        if(!val) {
+            html += `<div class="trace-step">→ 2. Status: Monitoring Timeline...</div>`;
+            log.innerHTML = html;
+            return;
+        }
+
+        if(isError) {
+            html += `<div class="trace-step">→ 2. Detected: "<b>${val}</b>"</div>`;
+            html += `
+                <div class="trace-step" style="color:#f87171; font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+                    → ANOMALY: Temporal Slip Found
+                </div>
+            `;
+        }
+
+        if(isFixed) {
+            html += `<div class="trace-step">→ 2. Corrected to: "<b>${val}</b>"</div>`;
+            html += `
+                <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+                    → RESULT: TIMELINE SYNCHRONIZED
+                </div>
+                <div class="trace-step" style="font-size:0.7rem; opacity:0.8;">${currentCase.logic}</div>
+            `;
+        }
+
+        log.innerHTML = html;
+    }
+
+    window.onload = () => loadCase(0, document.querySelector('.btn-load'));
 </script>
 
-    <button onclick="markComplete(59)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
 </body>
 </html>

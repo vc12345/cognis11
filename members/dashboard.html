@@ -7,9 +7,56 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/dashboard.css">
     
+    <style>
+        /* DASHBOARD SPECIFIC OVERRIDES & GUIDE STYLES */
+        .lattice-header {
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 20px;
+        }
+
+        .category-legend {
+            display: flex;
+            gap: 20px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #edf2f7;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .mod-id {
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 800;
+            font-size: 0.65rem;
+            color: var(--cognis-blue);
+        }
+    </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-    
     <script src="../js/auth-guard.js"></script>
     <script src="../js/nav-injector.js"></script>
 </head>
@@ -19,7 +66,7 @@
     <div class="dashboard-container">
         <header class="welcome-section">
             <div class="header-left">
-                <h1 id="user-greeting">Welcome back.</h1>
+                <h1 id="user-greeting">Learning Lattice.</h1>
                 <div class="status-bar">
                     <span id="user-welcome">Syncing your progress...</span>
                     <span class="dot-separator">•</span>
@@ -28,11 +75,38 @@
             </div>
         </header>
 
+        <div class="lattice-header">
+            <div class="category-legend">
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: var(--pillar-core);"></span>
+                    Core Maths
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: var(--pillar-verbal);"></span>
+                    Verbal Reasoning
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background: var(--pillar-non-verbal);"></span>
+                    Non-Verbal Reasoning
+                </div>
+            </div>
+            <div style="font-size: 0.8rem; color: #94a3b8; font-weight: 500;">
+                Sequential Unlocking Active
+            </div>
+        </div>
+
         <main id="lattice-root"></main>
     </div>
 
     <script src="../js/registry.js"></script>
     <script>
+        // Expansion Helper for QC requirements
+        const expandAcronym = (name) => {
+            if (name === "VR") return "Verbal Reasoning";
+            if (name === "NVR") return "Non-Verbal Reasoning";
+            return name;
+        };
+
         async function loadDashboard() {
             if (!window.supabaseClient) {
                 setTimeout(loadDashboard, 100);
@@ -73,7 +147,7 @@
 
                 const completedIds = completedData ? completedData.map(item => Number(item.module_id)) : [];
                 
-                // UNLOCK CALCULATION
+                // UNLOCK CALCULATION (Sequential for Foundational)
                 const maxCompleted = completedIds.length > 0 ? Math.max(...completedIds) : 0;
                 const nextUnlockedId = maxCompleted + 1;
 
@@ -81,15 +155,17 @@
                 const root = document.getElementById('lattice-root');
                 root.innerHTML = ''; 
                 
+                // Extract unique pillars from registry
                 const pillars = [...new Set(COGNIS_MODULES.map(m => m.pillar))];
 
                 pillars.forEach(pillarName => {
+                    const expandedName = expandAcronym(pillarName);
                     const section = document.createElement('section');
                     section.className = 'pillar-section';
                     section.innerHTML = `
                         <div class="pillar-header">
                             <span class="pillar-indicator" style="background: var(--pillar-${pillarName.toLowerCase()})"></span>
-                            <h2>${pillarName}</h2>
+                            <h2>${expandedName}</h2>
                         </div>
                         <div class="category-grid" id="group-${pillarName}"></div>
                     `;
@@ -103,12 +179,11 @@
                         let isLocked = false;
 
                         // ENFORCE SEQUENTIAL LOCK FOR FOUNDATIONAL
-                        // Module 1 (modId === 1) is NEVER locked.
                         if (userPlan === 'foundational' && modId > 1) {
                             if (modId > nextUnlockedId) isLocked = true;
                         }
 
-                        // Create the element
+                        // Create the element (Div if locked, A if clickable)
                         const card = document.createElement(isLocked ? 'div' : 'a');
                         card.className = `module-card ${isDone ? 'is-complete' : ''} ${isLocked ? 'is-locked' : ''}`;
                         if (!isLocked) card.href = mod.path;
@@ -121,9 +196,9 @@
                             </div>
                             <h3 class="mod-title">${mod.title}</h3>
                             <div class="card-bottom">
-                                <span class="mod-id">UNIT ${String(modId).padStart(2, '0')}</span>
+                                <span class="mod-id">MODULE ${String(modId).padStart(2, '0')}</span>
                                 <span class="status-text">
-                                    ${isLocked ? 'Complete previous unit' : (isDone ? 'Completed' : 'Start Module →')}
+                                    ${isLocked ? 'Complete previous module' : (isDone ? 'Revision Ready' : 'Start Module →')}
                                 </span>
                             </div>
                         `;

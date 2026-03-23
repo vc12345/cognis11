@@ -202,44 +202,39 @@
         btn.innerText = "Connecting to Stripe...";
         btn.disabled = true;
 
-        // 1. Get the current session
-        const { data: { session }, error: sessionError } = await window.supabaseClient.auth.getSession();
-        
-        if (sessionError || !session) {
-            alert("Session expired. Please log in again.");
-            window.location.href = "/login.html";
-            return;
-        }
-
         try {
-            // 2. Call the Edge Function
-            // We grab the key directly from the client's internal properties
-            const supabaseKey = window.supabaseClient.supabaseKey; 
+            // 1. Hardcoded Config (The safest way to avoid 'undefined' errors)
+            const PROJECT_ID = 'cyfjoevfxfqkgokriarz';
+            const ANON_KEY = 'PASTE_YOUR_ACTUAL_ANON_PUBLIC_KEY_HERE'; // Get this from Supabase Dashboard
 
-            const response = await fetch('https://cyfjoevfxfqkgokriarz.supabase.co/functions/v1/create-portal-session', {
+            // 2. Get the session
+            const { data: { session }, error: sessionError } = await window.supabaseClient.auth.getSession();
+            
+            if (sessionError || !session) {
+                throw new Error("Your session has expired. Please log in again.");
+            }
+
+            // 3. The Call
+            const response = await fetch(`https://${PROJECT_ID}.supabase.co/functions/v1/create-portal-session`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${session.access_token}`,
-                    'apikey': supabaseKey 
+                    'apikey': ANON_KEY // Directly providing the key bypasses the variable issues
                 }
             });
-            
+
             const result = await response.json();
             
             if (response.ok && result.url) {
                 window.location.href = result.url;
             } else {
-                throw new Error(result.error || "Failed to generate portal link");
+                throw new Error(result.error || "The billing server returned an error.");
             }
+
         } catch (e) {
-            console.error("Portal Error:", e);
-            // If it's a "Missing Customer ID" error, we give a better hint
-            if (e.message.includes("Stripe Customer ID")) {
-                alert("Billing Sync: We couldn't find your Stripe record. If you just subscribed, please wait 60 seconds and refresh. If the problem persists, contact hello@cognis11.com.");
-            } else {
-                alert("Billing Error: " + e.message);
-            }
+            console.error("Portal Redirect Error:", e);
+            alert("Account Error: " + e.message);
             btn.innerText = originalText;
             btn.disabled = false;
         }

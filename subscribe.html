@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Choose Your Path · Cognis 11+</title>
+    <title>Subscription Options · Cognis 11+</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root { --navy:#1B3A5C; --steel:#2E6DA4; --cream:#FAFAF6; --off:#F4F2ED; --grey:#888; --dgrey:#3A3A3A; --lgrey:#E5E3DD; }
@@ -19,16 +19,13 @@
         .hero h1 { font-family:'Playfair Display', serif; font-size:clamp(2.2rem, 5vw, 3.2rem); color:var(--navy); margin-bottom:20px; line-height:1.1; }
         .hero p { font-size:1.1rem; color:var(--grey); max-width:650px; margin:0 auto; }
 
-        /* TIER GRID */
+        /* TIER GRID - Balanced and Equal */
         .tier-grid { display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin:40px 0 80px; align-items: stretch; }
         @media(max-width:768px) { .tier-grid { grid-template-columns: 1fr; } }
 
-        .tier-card { background:#fff; border:1px solid var(--lgrey); border-radius:12px; padding:40px; display:flex; flex-direction:column; transition: transform 0.3s ease, border-color 0.3s ease; }
-        .tier-card:hover { border-color: var(--steel); transform: translateY(-4px); }
-        .tier-card.featured { border: 2px solid var(--navy); box-shadow: 0 20px 40px rgba(27, 58, 92, 0.08); position: relative; }
+        .tier-card { background:#fff; border:1px solid var(--lgrey); border-radius:12px; padding:40px; display:flex; flex-direction:column; transition: border-color 0.3s ease; }
+        .tier-card:hover { border-color: var(--steel); }
         
-        .tier-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--navy); color: #fff; padding: 4px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
-
         .tier-head h3 { font-family:'Playfair Display', serif; font-size:1.6rem; color:var(--navy); margin-bottom:8px; }
         .tier-age { font-size: 0.8rem; font-weight: 700; color: var(--steel); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px; display: block; }
         
@@ -44,86 +41,82 @@
         .btn-outline { background: transparent; color: var(--navy); border: 2px solid var(--navy); }
         .btn-outline:hover { background: var(--navy); color: #fff; }
         
-        /* FOOTER */
         footer { border-top:1px solid var(--lgrey); padding:60px 0; text-align:center; font-size:.85rem; color:var(--grey); }
         footer a { color: var(--navy); text-decoration: none; font-weight: 500; margin: 0 10px; }
 
-        /* Modal Styles */
+        /* Auth Modal */
         #sub-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; justify-content:center; align-items:center; }
-        .auth-card { background:#1e293b; padding:2.8rem; border-radius:16px; width:90%; max-width:420px; border:1px solid #334155; color:#f8fafc; text-align:center; box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
+        .auth-card { background:#1e293b; padding:2.8rem; border-radius:16px; width:90%; max-width:420px; border:1px solid #334155; color:#f8fafc; text-align:center; }
         .form-group { margin-bottom: 1.4rem; text-align: left; }
-        .form-group label { display: block; font-size: 0.7rem; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
-        .form-group input { width: 100%; padding: 14px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 1rem; outline: none; }
-        .form-group input:focus { border-color: #2563eb; }
-        #modal-btn { width: 100%; padding: 16px; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
-        #modal-btn:hover { background: #1d4ed8; }
+        .form-group label { display: block; font-size: 0.7rem; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; font-weight: 700; }
+        .form-group input { width: 100%; padding: 14px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 1rem; }
+        #modal-btn { width: 100%; padding: 16px; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 10px; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-config.js"></script>
-    <script src="js/auth-system.js"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/js/auth-system.js"></script>
 </head>
 <body>
 
 <nav>
-    <a href="index.html" class="brand">Cognis 11+</a>
-    <a href="login.html" style="font-size:.88rem;color:var(--navy);text-decoration:none;font-weight:600;">Login</a>
+    <a href="/index.html" class="brand">Cognis 11+</a>
+    <a href="/login.html" style="font-size:.88rem;color:var(--navy);text-decoration:none;font-weight:600;">Login</a>
 </nav>
 
 <div class="wrap">
     <div class="hero">
         <div class="hero-tag">The Learning Lattice</div>
         <h1>Preparation with <em>purpose.</em></h1>
-        <p>Whether you are building foundational instincts or breaking a late-stage speed plateau, select the path that matches your child's stage of preparation.</p>
+        <p>Select the access model that best supports your child’s current stage of logic and understanding.</p>
     </div>
 
     <div class="tier-grid">
         <div class="tier-card">
             <div class="tier-head">
                 <span class="tier-age">Years 2–3</span>
-                <h3>The Foundational Path</h3>
+                <h3>Foundational Access</h3>
             </div>
             <div class="price-big">£6<span>/month</span></div>
-            <p style="font-size:0.85rem; color:var(--grey); margin-top: 5px;">A guided build of reasoning instincts.</p>
+            <p style="font-size:0.85rem; color:var(--grey); margin-top: 5px;">Build reasoning instincts from the ground up.</p>
             
             <ul>
-                <li><strong>Sequential Access:</strong> Master one problem structure to unlock the next.</li>
-                <li>Builds the "Mental Schema" required for future 11+ speed.</li>
-                <li>Covers all 59 Maths, VR, and NVR core structures.</li>
-                <li>Personal progress dashboard.</li>
-                <li>Cancel anytime.</li>
+                <li><strong>Sequential Progression:</strong> Master one problem structure to unlock the next.</li>
+                <li>Ideal for building the mental models required for long-term 11+ confidence.</li>
+                <li>Comprehensive coverage of all 59 core problem structures.</li>
+                <li>Track module completion via a personal dashboard.</li>
+                <li>No minimum commitment; cancel anytime.</li>
             </ul>
             
-            <button class="btn-sub btn-outline" onclick="openModal('foundational')">Select Foundation Path</button>
+            <button class="btn-sub btn-outline" onclick="openModal('foundational')">Select Foundational</button>
         </div>
 
-        <div class="tier-card featured">
-            <div class="tier-badge">Most Popular for Year 5</div>
+        <div class="tier-card">
             <div class="tier-head">
                 <span class="tier-age">Years 4–5</span>
                 <h3>Supplemental Access</h3>
             </div>
             <div class="price-big">£9<span>/month</span></div>
-            <p style="font-size:0.85rem; color:var(--grey); margin-top: 5px;">Total access for targeted revision.</p>
+            <p style="font-size:0.85rem; color:var(--grey); margin-top: 5px;">Crystallise understanding across the lattice.</p>
             
             <ul>
-                <li><strong>Immediate Access:</strong> Instant entry to all 59 interactive modules.</li>
-                <li>Identify and fix specific reasoning gaps within minutes.</li>
-                <li>Designed to break speed plateaus in timed papers.</li>
-                <li>Weekly content updates and new problem types.</li>
-                <li>Full progress tracking and analytics.</li>
+                <li><strong>Open Access:</strong> Immediate entry to all 59 logic modules for targeted review.</li>
+                <li>Designed to help students identify and resolve specific logical "short-circuits."</li>
+                <li>Focuses on structural comprehension (speed follows as a byproduct of clarity).</li>
+                <li>Refine instincts across Maths, Verbal, and Non-Verbal reasoning.</li>
+                <li>Full progress tracking across all units.</li>
             </ul>
             
-            <button class="btn-sub" onclick="openModal('supplemental')">Unlock Full Lattice</button>
+            <button class="btn-sub" onclick="openModal('supplemental')">Select Supplemental</button>
         </div>
     </div>
 </div>
 
 <footer>
-    <p>Secure payment processed by Stripe. All plans are cancel-anytime.</p>
+    <p>Secure payment processed by Stripe. Cancel anytime via your account dashboard.</p>
     <div style="margin-top:20px;">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="privacy.html">Privacy Policy</a>
+        <a href="/index.html">Home</a>
+        <a href="/about.html">About</a>
+        <a href="/privacy.html">Privacy Policy</a>
         <a href="mailto:hello@cognis11.com">Contact</a>
     </div>
 </footer>
@@ -154,19 +147,13 @@
     function openModal(plan) { 
         document.getElementById('selected-plan').value = plan;
         document.getElementById('sub-modal').style.display = 'flex'; 
-        // Optional: change modal text based on plan
         const desc = document.getElementById('modal-desc');
-        if(plan === 'foundational') desc.innerText = "You've selected the Foundational Path (£6/mo).";
+        if(plan === 'foundational') desc.innerText = "You've selected Foundational Access (£6/mo).";
         else desc.innerText = "You've selected Supplemental Access (£9/mo).";
     }
     function closeModal() { document.getElementById('sub-modal').style.display = 'none'; }
-
-    // Close modal on background click
     window.onclick = function(event) {
-        let modal = document.getElementById('sub-modal');
-        if (event.target == modal) {
-            closeModal();
-        }
+        if (event.target == document.getElementById('sub-modal')) closeModal();
     }
 </script>
 

@@ -36,16 +36,18 @@
         .badge-active { background: #E2F0E9; color: #276245; }
         .badge-foundational { background: #E4EEF8; color: var(--steel); }
         .badge-supplemental { background: var(--navy); color: #fff; }
+        .badge-inactive { background: #F4F2ED; color: #888; }
 
         /* Buttons */
         .btn-text { background: none; border: none; color: var(--steel); font-weight: 700; font-size: 0.85rem; cursor: pointer; padding: 0; text-decoration: underline; }
         .btn-manage { display: block; width: 100%; margin-top: 32px; padding: 18px; background: var(--navy); color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; }
-        .btn-manage:hover { background: var(--steel); transform: translateY(-1px); }
+        .btn-manage:hover:not(:disabled) { background: var(--steel); transform: translateY(-1px); }
+        .btn-manage:disabled { opacity: 0.7; cursor: not-allowed; }
         
         .footer-actions { text-align: center; margin-top: 40px; border-top: 1px solid var(--lgrey); padding-top: 24px; }
         .btn-logout { color: var(--red); font-size: 0.85rem; text-decoration: none; font-weight: 700; }
         
-        /* Simple Modal for Email Change */
+        /* Email Modal */
         .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(27, 58, 92, 0.8); z-index:1000; justify-content:center; align-items:center; }
         .modal-content { background:#fff; padding:40px; border-radius:12px; width:90%; max-width:400px; }
         .modal-content h3 { font-family: 'Playfair Display', serif; margin-top: 0; }
@@ -82,15 +84,23 @@
             </div>
         </div>
         
-        <div class="section-title">Subscription Path</div>
+        <div class="section-title">Subscription Details</div>
         <div class="setting-row">
             <div class="label-group">
                 <div class="label">Current Plan</div>
-                <div class="desc" id="plan-desc">Determines your learning access.</div>
+                <div class="desc" id="plan-desc">Your active learning tier.</div>
             </div>
             <div id="plan-badge-container">
                 <span class="badge badge-inactive">Checking...</span>
             </div>
+        </div>
+
+        <div class="setting-row">
+            <div class="label-group">
+                <div class="label">Next Renewal</div>
+                <div class="desc">Automatic billing date.</div>
+            </div>
+            <div class="value" id="renewal-date">--</div>
         </div>
 
         <div class="setting-row">
@@ -103,7 +113,7 @@
             </div>
         </div>
 
-        <button class="btn-manage" onclick="redirectToStripePortal()">Manage Billing & Cancellation</button>
+        <button class="btn-manage" id="portal-btn" onclick="redirectToStripePortal()">Manage Billing & Cancellation</button>
     </div>
     
     <div class="footer-actions">
@@ -132,23 +142,33 @@
 
         const { data: profile } = await window.supabaseClient
             .from('profiles')
-            .select('subscription_status, subscription_plan')
+            .select('subscription_status, subscription_plan, current_period_end')
             .eq('id', user.id)
-            .single();
+            .maybeSingle();
 
-        // 1. Render Plan Badge
-        const planContainer = document.getElementById('plan-badge-container');
-        const plan = profile?.subscription_plan || 'none';
-        const planDisplay = plan.charAt(0).toUpperCase() + plan.slice(1);
-        planContainer.innerHTML = `<span class="badge badge-${plan}">${planDisplay} Access</span>`;
+        if (profile) {
+            // 1. Plan Badge
+            const plan = profile.subscription_plan || 'none';
+            const planContainer = document.getElementById('plan-badge-container');
+            const planDisplay = plan.charAt(0).toUpperCase() + plan.slice(1);
+            planContainer.innerHTML = `<span class="badge badge-${plan}">${planDisplay} Access</span>`;
 
-        // 2. Render Status Badge
-        const statusContainer = document.getElementById('status-badge-container');
-        const status = profile?.subscription_status || 'inactive';
-        if (status === 'active') {
-            statusContainer.innerHTML = '<span class="badge badge-active">Active</span>';
-        } else {
-            statusContainer.innerHTML = '<span class="badge badge-inactive">Inactive</span>';
+            // 2. Renewal Date
+            if (profile.current_period_end) {
+                const date = new Date(profile.current_period_end);
+                document.getElementById('renewal-date').textContent = date.toLocaleDateString('en-GB', {
+                    day: 'numeric', month: 'long', year: 'numeric'
+                });
+            }
+
+            // 3. Status Badge
+            const statusContainer = document.getElementById('status-badge-container');
+            const status = profile.subscription_status || 'inactive';
+            if (status === 'active') {
+                statusContainer.innerHTML = '<span class="badge badge-active">Active</span>';
+            } else {
+                statusContainer.innerHTML = '<span class="badge badge-inactive">Inactive</span>';
+            }
         }
     }
 
@@ -177,9 +197,13 @@
     }
 
     async function redirectToStripePortal() {
+        const btn = document.getElementById('portal-btn');
+        const originalText = btn.innerText;
+        btn.innerText = "Connecting to Stripe...";
+        btn.disabled = true;
+
         const { data: { session } } = await window.supabaseClient.auth.getSession();
         
-        // This triggers your Edge Function which creates a Stripe Portal Session
         try {
             const response = await fetch('https://cyfjoevfxfqkgokriarz.supabase.co/functions/v1/create-portal-session', {
                 method: 'POST',
@@ -188,10 +212,19 @@
                     'Content-Type': 'application/json'
                 }
             });
-            const { url } = await response.json();
-            window.location.href = url;
+            
+            const result = await response.json();
+            
+            if (result.url) {
+                window.location.href = result.url;
+            } else {
+                throw new Error(result.error || "Failed to generate portal link");
+            }
         } catch (e) {
-            alert("Billing system is syncing. Please try again in a moment or email hello@cognis11.com.");
+            console.error("Portal Error:", e);
+            alert("Billing Error: " + e.message);
+            btn.innerText = originalText;
+            btn.disabled = false;
         }
     }
 

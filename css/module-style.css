@@ -1,0 +1,188 @@
+/* --- Cognis 11+ Master Module Blueprint --- */
+
+:root {
+    --cognis-blue: #002d5b;
+    --cognis-gold: #c5a059;
+    --cognis-light: #f4f7f9;
+    --trap-red: #d9534f;
+    --engine-bg: #1a202c;
+    --engine-input: #2d3748;
+    --white: #ffffff;
+    --text-main: #2c3e50;
+    --border-light: #edf2f7;
+}
+
+/* Base Styles - Strictly Sans-Serif */
+body { 
+    font-family: 'DM Sans', 'Segoe UI', sans-serif; 
+    background: #eaeff2; 
+    color: var(--text-main); 
+    padding: 40px 20px; 
+    line-height: 1.6; 
+    margin: 0;
+}
+
+.module-card { 
+    max-width: 950px; 
+    margin: 0 auto; 
+    background: var(--white); 
+    border-radius: 16px; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08); 
+    overflow: hidden; 
+}
+
+/* Header */
+.header { 
+    background: var(--cognis-blue); 
+    color: var(--white); 
+    padding: 25px 40px; 
+    border-bottom: 4px solid var(--cognis-gold); 
+}
+
+.header h1 { 
+    margin: 0; 
+    font-size: 1.4rem; 
+    letter-spacing: 1px; 
+    text-transform: uppercase; 
+    font-weight: 700;
+}
+
+/* Phases */
+.phase { 
+    padding: 35px 40px; 
+    border-bottom: 1px solid var(--border-light); 
+}
+
+.phase h2 { 
+    font-size: 0.8rem; 
+    color: var(--cognis-gold); 
+    text-transform: uppercase; 
+    margin-top: 0; 
+    letter-spacing: 2px; 
+    font-weight: 700;
+}
+
+/* X-Ray Tiers (Ref: Module 21) */
+.question-tiers { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 15px; 
+    margin-top: 20px; 
+}
+
+.tier-card { 
+    background: var(--cognis-light); 
+    padding: 18px; 
+    border-radius: 12px; 
+    border-left: 4px solid var(--cognis-blue); 
+    font-size: 0.85rem; 
+    min-height: 100px;
+}
+
+.tier-card b { 
+    color: var(--cognis-blue); 
+    font-size: 0.7rem; 
+    text-transform: uppercase; 
+    display: block; 
+    margin-bottom: 8px; 
+    letter-spacing: 1px; 
+}
+
+/* Anatomy Container (Shared logic) */
+.anatomy-display { 
+    margin: 30px 0; 
+    background: #f8fafc; 
+    border: 2px solid #e2e8f0; 
+    border-radius: 12px; 
+    padding: 40px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+}
+
+/* Engine Template (Ref: Module 11) */
+.engine-container { 
+    display: grid; 
+    grid-template-columns: 1fr 1.2fr; 
+    gap: 30px; 
+    background: var(--engine-bg); 
+    color: var(--white); 
+    padding: 30px; 
+    border-radius: 12px; 
+}
+
+.control-group { margin-bottom: 20px; }
+
+.control-group label { 
+    display: block; 
+    font-size: 0.65rem; 
+    color: #a0aec0; 
+    text-transform: uppercase; 
+    margin-bottom: 8px; 
+}
+
+.control-group input { 
+    width: 100%; 
+    padding: 12px; 
+    border-radius: 8px; 
+    border: none; 
+    background: var(--engine-input); 
+    color: var(--white); 
+    font-weight: bold; 
+    font-size: 1.1rem; 
+}
+
+.val-out { 
+    float: right; 
+    color: var(--cognis-gold); 
+}
+
+.trace-log { 
+    background: rgba(255,255,255,0.05); 
+    padding: 25px; 
+    border-radius: 8px; 
+    font-family: 'Consolas', monospace; 
+    font-size: 0.9rem; 
+    border-left: 4px solid var(--cognis-gold); 
+    line-height: 1.8; 
+}
+
+/* Saboteur Template (Ref: Module 4) */
+.trap-box { 
+    background: #fff5f5; 
+    border: 2px solid var(--trap-red); 
+    border-radius: 12px; 
+    padding: 25px; 
+    margin-top: 10px; 
+}
+
+.trap-box h3 { 
+    color: var(--trap-red); 
+    margin-top: 0; 
+    font-size: 0.9rem; 
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+    font-weight: 800;
+}
+
+/* Action Button */
+.btn-complete { 
+    width: 100%; 
+    background: #10b981; 
+    color: var(--white); 
+    border: none; 
+    padding: 20px; 
+    border-radius: 12px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    text-transform: uppercase; 
+    margin-top: 40px; 
+    font-size: 1rem; 
+    transition: background 0.2s; 
+}
+
+.btn-complete:hover { background: #059669; }
+
+@media (max-width: 768px) {
+    .engine-container, .question-tiers { grid-template-columns: 1fr; }
+}

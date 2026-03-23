@@ -2,114 +2,217 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 10: Constant Speed | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 10: Constant Speed | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; }
+        /* UNIQUE CSS FOR DST TRIANGLE */
+        .anatomy-display { padding: 60px; }
+        .triangle-wrapper { position: relative; width: 260px; height: 220px; }
+        
+        /* The Visual Triangle */
+        .dst-shape {
+            width: 0; height: 0;
+            border-left: 130px solid transparent;
+            border-right: 130px solid transparent;
+            border-bottom: 220px solid var(--cognis-blue);
+            filter: drop-shadow(0 10px 20px rgba(0,45,91,0.2));
+        }
 
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
+        /* Interactive Nodes */
+        .dst-node {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+        }
 
-        /* DST Triangle */
-        .triangle-container { display: flex; justify-content: center; margin: 40px 0; }
-        .dst-triangle { width: 0; height: 0; border-left: 100px solid transparent; border-right: 100px solid transparent; border-bottom: 180px solid var(--cognis-blue); position: relative; }
-        .dst-label { position: absolute; color: white; font-weight: bold; cursor: pointer; transition: opacity 0.3s; }
-        .label-d { top: 110px; left: -10px; font-size: 1.5rem; }
-        .label-s { top: 145px; left: -60px; }
-        .label-t { top: 145px; left: 40px; }
-        .dst-label.hidden { opacity: 0.2; }
+        .dst-node:hover { background: var(--cognis-gold); border-color: white; transform: scale(1.1); }
+        .dst-node.active { background: var(--cognis-gold); border-color: white; box-shadow: 0 0 20px var(--cognis-gold); transform: scale(1.2); }
 
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
+        .node-d { top: 65px; left: 100px; }
+        .node-s { top: 145px; left: 40px; }
+        .node-t { top: 145px; left: 160px; }
+
+        /* Formula Helper overlay */
+        .formula-hint {
+            margin-top: 30px;
+            font-weight: 800;
+            color: var(--cognis-blue);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .solving-badge {
+            background: var(--cognis-gold);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
     </style>
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 10' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(1)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(10));</script>
 </head>
 <body>
+
 <div class="module-card">
     <div class="header"><h1>Module 10: Constant Speed</h1></div>
+
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
+        <p>Speed is a measure of how much <b>Distance</b> is covered in a specific <b>Unit of Time</b>. Every constant speed problem gives you two "legs" of the triangle and asks you to find the third.</p>
+        
         <div class="question-tiers">
-            <div class="tier-card"><span>Adv Year 2</span>"A toy car travels 10m in 2 seconds. How fast is it going?"</div>
-            <div class="tier-card"><span>Avg Year 4</span>"A train travels at 60mph for 3 hours. How far does it go?"</div>
-            <div class="tier-card"><span>Adv Year 5</span>"A cyclist travels 45km at a speed of 15km/h. How long does the journey take?"</div>
+            <div class="tier-card">
+                <b>Advanced Year 2</b>
+                "A remote-control car travels 20 metres in 4 seconds. What is its speed in metres per second?"
+            </div>
+            <div class="tier-card">
+                <b>Average Year 4</b>
+                "A train travels at a constant speed of 75mph. How far will it travel in 3 hours?"
+            </div>
+            <div class="tier-card">
+                <b>Advanced Year 5</b>
+                "An aircraft flies 1,200 miles at a speed of 400mph. How long does the flight take in hours?"
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="triangle-container">
-            <div class="dst-triangle">
-                <div class="dst-label label-d" id="btn-d">D</div>
-                <div class="dst-label label-s" id="btn-s">S</div>
-                <div class="dst-label label-t" id="btn-t">T</div>
+        <p>The <b>DST Triangle</b> is your logical map. Cover the letter you want to find to reveal the calculation required.</p>
+        <div class="anatomy-display">
+            <div class="triangle-wrapper">
+                <div class="dst-shape"></div>
+                <div class="dst-node node-d active" id="node-d" onclick="setTarget('d')">D</div>
+                <div class="dst-node node-s" id="node-s" onclick="setTarget('s')">S</div>
+                <div class="dst-node node-t" id="node-t" onclick="setTarget('t')">T</div>
             </div>
+            <div class="formula-hint" id="formula-display">Solving for Distance...</div>
+            <p style="font-size: 0.8rem; color: #718096; margin-top: 10px;">(Click a letter above to change target)</p>
         </div>
-        <p style="text-align:center;">Click a letter in the triangle to solve for it!</p>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls">
-                <div id="input-fields"></div>
-                <p>Solving for: <strong id="solving-text" style="color:var(--cognis-gold)">Distance</strong></p>
+            <div class="inputs">
+                <div class="solving-badge" id="badge-text">TARGET: DISTANCE</div>
+                <div id="dynamic-inputs">
+                    </div>
             </div>
-            <div class="trace-log" id="logic-trace"></div>
+            <div class="trace-log" id="engine-trace"></div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "Unit Mismatch" Trap:</strong> The most common error is ignoring units. If speed is in <i>km per hour</i> but the time is given in <i>minutes</i>, you cannot simply multiply. You must convert the minutes into hours first.
+            <br><br>
+            <strong>The Fix:</strong> Always write the units next to your numbers. If they don't match (e.g. miles and km), stop and convert to a single "Unit Language" before calculating.</p>
         </div>
     </section>
 </div>
 
+<button class="btn-complete" onclick="markComplete(10)">Complete Module & Update Lattice</button>
+
 <script>
     let currentTarget = 'd';
-    function updateInputs() {
-        const container = document.getElementById('input-fields');
-        const fields = {
-            d: '<label>Distance (km)</label><input type="number" id="val-d" value="120">',
-            s: '<label>Speed (km/h)</label><input type="number" id="val-s" value="60">',
-            t: '<label>Time (h)</label><input type="number" id="val-t" value="2">'
-        };
-        container.innerHTML = Object.keys(fields).filter(k => k !== currentTarget).map(k => fields[k]).join('');
-        document.querySelectorAll('input').forEach(i => i.addEventListener('input', calculate));
-        calculate();
+
+    function setTarget(type) {
+        currentTarget = type;
+        // Update Triangle UI
+        document.querySelectorAll('.dst-node').forEach(n => n.classList.remove('active'));
+        document.getElementById('node-' + type).classList.add('active');
+        
+        // Update Labels
+        const names = {d: 'Distance', s: 'Speed', t: 'Time'};
+        document.getElementById('formula-display').innerText = `Solving for ${names[type]}...`;
+        document.getElementById('badge-text').innerText = `TARGET: ${names[type].toUpperCase()}`;
+        
+        renderInputs();
     }
 
-    function calculate() {
-        const d = document.getElementById('val-d')?.value || 0;
-        const s = document.getElementById('val-s')?.value || 0;
-        const t = document.getElementById('val-t')?.value || 0;
-        // logic call here...
-        const res = LogicProvider.modules.constantSpeed.calculate(d, s, t, currentTarget);
-        document.getElementById('logic-trace').innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
+    function renderInputs() {
+        const container = document.getElementById('dynamic-inputs');
+        let html = '';
+        
+        if (currentTarget !== 'd') {
+            html += `<div class="control-group"><label>Distance (km/m)</label><input type="number" id="in-d" value="100"></div>`;
+        }
+        if (currentTarget !== 's') {
+            html += `<div class="control-group"><label>Speed (km/h or m/s)</label><input type="number" id="in-s" value="50"></div>`;
+        }
+        if (currentTarget !== 't') {
+            html += `<div class="control-group"><label>Time (Hours/Secs)</label><input type="number" id="in-t" value="2"></div>`;
+        }
+        
+        container.innerHTML = html;
+        
+        // Re-attach listeners to new inputs
+        container.querySelectorAll('input').forEach(el => el.addEventListener('input', runLogic));
+        runLogic();
     }
 
-    ['d', 's', 't'].forEach(id => {
-        document.getElementById('btn-' + id).addEventListener('click', () => {
-            currentTarget = id;
-            document.querySelectorAll('.dst-label').forEach(l => l.classList.remove('hidden'));
-            document.getElementById('btn-' + id).classList.add('hidden');
-            document.getElementById('solving-text').innerText = id === 'd' ? 'Distance' : id === 's' ? 'Speed' : 'Time';
-            updateInputs();
-        });
-    });
-    window.onload = updateInputs;
+    function runLogic() {
+        const d = parseFloat(document.getElementById('in-d')?.value) || 0;
+        const s = parseFloat(document.getElementById('in-s')?.value) || 0;
+        const t = parseFloat(document.getElementById('in-t')?.value) || 0;
+        
+        let result = 0;
+        let trace = '';
+
+        if (currentTarget === 'd') {
+            result = s * t;
+            trace = `
+                <div class="trace-step">→ Formula: <b>Distance = Speed × Time</b></div>
+                <div class="trace-step">→ Calculation: ${s} × ${t}</div>
+                <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; margin-top:10px;">→ Result: ${result} units</div>
+            `;
+        } else if (currentTarget === 's') {
+            result = t !== 0 ? d / t : 0;
+            trace = `
+                <div class="trace-step">→ Formula: <b>Speed = Distance ÷ Time</b></div>
+                <div class="trace-step">→ Calculation: ${d} ÷ ${t}</div>
+                <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; margin-top:10px;">→ Result: ${result.toFixed(2)} speed units</div>
+            `;
+        } else {
+            result = s !== 0 ? d / s : 0;
+            trace = `
+                <div class="trace-step">→ Formula: <b>Time = Distance ÷ Speed</b></div>
+                <div class="trace-step">→ Calculation: ${d} ÷ ${s}</div>
+                <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; margin-top:10px;">→ Result: ${result.toFixed(2)} time units</div>
+            `;
+        }
+
+        document.getElementById('engine-trace').innerHTML = trace;
+    }
+
+    window.onload = () => {
+        setTarget('d');
+    };
 </script>
 
-<button onclick="markComplete(10)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
-</body>
 </body>
 </html>

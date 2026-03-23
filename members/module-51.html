@@ -2,83 +2,136 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 51: Block Counting | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 51: Block Counting | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+        /* UNIQUE CSS FOR ISOMETRIC STACKS */
+        .anatomy-display { 
+            background: #1a202c; 
+            padding: 20px; 
+            border-radius: 12px; 
+            margin: 20px 0; 
+            text-align: center;
+            border: none;
+            min-height: 450px; /* Increased height to prevent clipping */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
-        #stack-svg { width: 100%; max-width: 400px; height: 350px; }
+        #stack-svg { 
+            width: 100%; 
+            max-width: 500px; 
+            height: 400px; 
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+        }
         
+        /* Cube Face Styling */
         .cube-top { fill: var(--cognis-gold); stroke: #fff; stroke-width: 1; }
         .cube-left { fill: #b58d4a; stroke: #fff; stroke-width: 1; }
         .cube-right { fill: #8e6c38; stroke: #fff; stroke-width: 1; }
 
-        .xray .cube-top, .xray .cube-left, .xray .cube-right { opacity: 0.1; }
-        .xray .hidden-marker { fill: var(--trap-red) !important; opacity: 1 !important; stroke: #fff; }
+        /* X-Ray Effect */
+        .xray .cube-top, .xray .cube-left, .xray .cube-right { opacity: 0.15; }
+        .xray .hidden-marker { fill: #ef4444 !important; opacity: 1 !important; stroke: #fff; stroke-width: 2; }
 
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .btn-action { background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-weight: 900; cursor: pointer; text-transform: uppercase; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+        .engine-container { grid-template-columns: 1fr 1.2fr; }
+        
+        .btn-action { 
+            background: var(--cognis-gold); color: white; border: none; 
+            padding: 15px; border-radius: 8px; width: 100%; 
+            font-weight: 900; cursor: pointer; text-transform: uppercase; 
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+            transition: 0.2s;
+        }
+        .btn-action:hover { background: #b08d4b; transform: translateY(-2px); }
+
+        .btn-secondary {
+            background: transparent; color: #a0aec0; border: 1px solid #4a5568; 
+            margin-top: 15px; cursor: pointer; font-size: 0.65rem; 
+            padding: 10px; border-radius: 6px; width: 100%;
+            text-transform: uppercase; font-weight: 800; letter-spacing: 1px;
+        }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 51' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(5)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(51));</script>
 </head>
 <body>
-<div class="module-card">
-    <div class="header"><h1>Module 51: Block Counting</h1></div>
-    
+
+<div class="module-card" style="margin-top: 40px;">
+    <div class="header">
+        <h1>Module 51: Block Counting</h1>
+    </div>
+
+    <section class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>Block counting is a test of <b>Volumetric Inference</b>. In a 2D isometric drawing, many blocks are partially or completely hidden from view. To calculate the total volume, you must apply the "Support Logic": if a block is sitting at height $Z$, there must be exactly $Z-1$ blocks stacked beneath it to act as a foundation. Counting only visible faces is the most common path to failure.</p>
+        
+        <div class="question-tiers">
+            <div class="tier-card">
+                <b>Advanced Year 2</b>
+                "Count the blocks in a simple L-shaped stack. How many are in the base layer?"
+            </div>
+            <div class="tier-card">
+                <b>Average Year 4</b>
+                "Identify the 'Hidden Foundations' in a 3x3 grid where one corner is three blocks high."
+            </div>
+            <div class="tier-card">
+                <b>Advanced Year 5</b>
+                "Calculate the total volume of an irregular 'skyline' structure with several occluded columns."
+            </div>
+        </div>
+    </section>
+
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area">
-            <svg id="stack-svg" viewBox="0 0 400 350"></svg>
+        <p>The <b>Volumetric Scanner</b>. Observe the 3D stack. Use the X-Ray engine below to reveal the blocks that are physically required for this structure to stand, but are hidden from the eye.</p>
+        
+        <div class="anatomy-display">
+            <svg id="stack-svg" viewBox="0 0 400 400"></svg>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls">
+            <div class="inputs">
                 <button class="btn-action" onclick="toggleXRay()">Toggle X-Ray Vision</button>
-                <button onclick="render()" style="background:transparent; color:#a0aec0; border:none; margin-top:15px; cursor:pointer; font-size:0.7rem; text-decoration:underline; width:100%;">GENERATE NEW STACK</button>
+                <button class="btn-secondary" onclick="render()">Generate New Structure</button>
             </div>
-            <div class="trace-log" id="trace-51">Audit: Counting heights per coordinate.</div>
+            <div class="trace-log" id="trace-51">Audit: Calculating vertical column heights...</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> Counting visible faces. A single corner block can show 3 faces, making you count it as 3 blocks.</p>
-            <hr style="border:0; border-top:1px solid rgba(217,83,79,0.1); margin: 15px 0;">
-            <p><strong>The Fix:</strong> The Column Tally. Pick the top-most face in a column. Note its height (e.g. 3 blocks). Move to the next. Summing column heights prevents double-counting.</p>
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "Face-Value" Trap:</strong> Counting visible diamond faces instead of whole blocks. A single corner block on the top level can show 3 faces, tricking your brain into counting it three times.</p>
+            <p><strong>The Fix:</strong> Use <b>Column Tallying</b>. Pick one top-facing diamond. Identify its height (e.g., it is on the 3rd floor). That represents a column of 3 blocks. Note the number, move to the next top-facing diamond, and sum the heights. This ensures you count every foundation block exactly once.</p>
         </div>
     </section>
 </div>
 
+<button class="btn-complete" onclick="markComplete(51)">Complete Module & Update Lattice</button>
+
 <script>
     function drawCube(svg, x, y, z, isHidden) {
-        const isoX = 200 + (x - y) * 35;
-        const isoY = 250 + (x + y) * 20 - z * 40;
+        // Isometric Projection Math
+        // Shifted isoY origin and multiplier to move stack "upwards" and center it
+        const isoX = 200 + (x - y) * 40;
+        const isoY = 220 + (x + y) * 22 - z * 45;
         
-        const top = `M${isoX},${isoY-40} l35,20 l-35,20 l-35,-20 z`;
-        const left = `M${isoX-35},${isoY-20} l0,40 l35,20 l0,-40 z`;
-        const right = `M${isoX},${isoY} l0,40 l35,-20 l0,-40 z`;
+        const top = `M${isoX},${isoY-45} l40,22 l-40,22 l-40,-22 z`;
+        const left = `M${isoX-40},${isoY-23} l0,45 l40,22 l0,-45 z`;
+        const right = `M${isoX},${isoY-1} l0,45 l40,-22 l0,-45 z`;
 
         const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        if(isHidden) group.setAttribute("class", "hidden-group");
         
         group.innerHTML = `
             <path d="${top}" class="cube-top ${isHidden ? 'hidden-marker' : ''}" />
@@ -93,19 +146,40 @@
         svg.innerHTML = '';
         let total = 0, hidden = 0;
         
-        // Use back-to-front rendering for correct overlap
+        // Grid constraints (3x3)
+        const grid = [];
+        for(let x=0; x<3; x++) {
+            grid[x] = [];
+            for(let y=0; y<3; y++) {
+                // Random height 1-4
+                grid[x][y] = Math.floor(Math.random() * 4) + 1;
+            }
+        }
+
+        // Back-to-front rendering loop for correct SVG layering (painter's algorithm)
+        // We iterate x then y to draw from the "back" of the isometric view
         for(let x=0; x<3; x++) {
             for(let y=0; y<3; y++) {
-                let h = Math.floor(Math.random() * 4);
+                let h = grid[x][y];
                 total += h;
                 for(let z=0; z<h; z++) {
+                    // A block is hidden if there is a block in front of it OR above it
+                    // For the sake of this anatomy, we mark blocks in levels 0 to h-2 as "foundations"
                     let isUnder = (z < h - 1);
                     if(isUnder) hidden++;
                     drawCube(svg, x, y, z, isUnder);
                 }
             }
         }
-        document.getElementById('trace-51').innerHTML = `Total Blocks: <b>${total}</b><br>Hidden Foundations: <b>${hidden}</b>`;
+
+        document.getElementById('trace-51').innerHTML = `
+            <div class="trace-step">→ 1. Total Volume: <b>${total} Blocks</b></div>
+            <div class="trace-step">→ 2. Visible "Roof" Faces: <b>9</b></div>
+            <div class="trace-step">→ 3. Hidden Supports: <b style="color:#f87171">${hidden}</b></div>
+            <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+                → AUDIT COMPLETE: SUM(Col Heights) = ${total}
+            </div>
+        `;
     }
 
     function toggleXRay() {
@@ -115,8 +189,5 @@
     window.onload = render;
 </script>
 
-    <button onclick="markComplete(51)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
 </body>
 </html>

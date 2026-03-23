@@ -2,190 +2,265 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 12: Relative Speed | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 12: Relative Speed | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+        /* UNIQUE CSS FOR RELATIVE TRACK */
+        .anatomy-display { 
+            background: #f8fafc; 
+            padding: 60px 40px; 
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            position: relative;
+        }
 
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
-        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+        .track-blueprint {
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            position: relative;
+            margin: 40px 0;
+            border: 1px solid #cbd5e0;
+        }
 
-        /* The Proportional Track */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px 20px; margin: 30px 0; position: relative; }
-        .track-line { height: 8px; background: #cbd5e0; border-radius: 4px; position: relative; margin: 20px 0; }
+        .vehicle {
+            position: absolute;
+            top: -18px;
+            width: 45px;
+            height: 45px;
+            background: white;
+            border: 3px solid var(--cognis-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: var(--cognis-blue);
+            z-index: 5;
+            transition: left 2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        #veh-b { border-color: var(--cognis-gold); color: var(--cognis-gold); }
+
+        .impact-marker {
+            position: absolute;
+            top: -40px;
+            height: 90px;
+            width: 4px;
+            background: #ef4444;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 2;
+        }
+
+        .impact-label {
+            position: absolute;
+            top: -25px;
+            white-space: nowrap;
+            font-size: 0.65rem;
+            font-weight: 900;
+            color: #ef4444;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .engine-container { grid-template-columns: 1fr 1.2fr; }
         
-        .vehicle { position: absolute; top: -16px; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; z-index: 2; transition: left 2s ease-in-out; }
-        #veh-a { background: var(--cognis-blue); left: 0%; transform: translateX(-50%); }
-        #veh-b { background: var(--cognis-gold); left: 100%; transform: translateX(-50%); }
-        
-        .meeting-marker { position: absolute; top: -30px; height: 70px; width: 4px; background: #e53e3e; transform: translateX(-50%); opacity: 0; transition: opacity 0.3s; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
-        .meeting-marker span { font-size: 0.7rem; color: #e53e3e; font-weight: bold; position: absolute; top: -20px; white-space: nowrap; }
+        .btn-sim {
+            background: var(--cognis-gold);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+            transition: 0.2s;
+        }
+        .btn-sim:hover { background: #b08d4b; transform: translateY(-2px); }
 
-        .sim-btn { display: block; margin: 20px auto 0; background: var(--cognis-gold); color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
-        .sim-btn:hover { background: #b08d4b; }
+        .gap-display {
+            text-align: center;
+            font-weight: 900;
+            color: #94a3b8;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
 
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group { margin-bottom: 15px; }
-        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 5px; }
-        .control-group input { width: 100%; padding: 8px; border-radius: 4px; border: none; font-size: 1rem; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
+        input[type=number] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #4a5568;
+            background: #2d3748;
+            color: white;
+            font-weight: 800;
+            margin-top: 5px;
+        }
     </style>
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 1' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(12)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(12));</script>
 </head>
 <body>
-<div class="module-card">
-    <div class="header"><h1>Module 12: Relative Speed</h1></div>
+
+<div class="module-card" style="margin-top: 40px;">
+    <div class="header">
+        <h1>Module 12: Relative Speed</h1>
+    </div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>When two objects move towards each other, the distance between them shrinks at a rate equal to the <strong>sum</strong> of their speeds.</p>
+        <p>Relative speed determines how quickly the distance between two moving objects disappears. When objects move <b>toward</b> each other, they share the work of closing the gap. Success in 11+ speed problems depends on calculating the <b>Closing Rate</b>—the sum of both speeds—before trying to find the time of impact.</p>
+        
         <div class="question-tiers">
-            <div class="tier-card"><span>Entry</span>"Two cars are 100 miles apart. Car A travels at 30mph, Car B at 20mph towards A. How long until they meet?"</div>
-            <div class="tier-card"><span>Standard</span>"A cyclist leaves London at 10km/h. A runner leaves Brighton (50km away) at 15km/h heading to London. When do they pass?"</div>
-            <div class="tier-card"><span>Advanced</span>"A train leaves at 4pm at 60mph. Another leaves the destination 300 miles away at 4:30pm at 90mph. At what time do they meet?"</div>
+            <div class="tier-card">
+                <b>Advanced Year 2</b>
+                "Two cars are 10 miles apart. Both drive at 5mph toward each other. How long until they meet?"
+            </div>
+            <div class="tier-card">
+                <b>Average Year 4</b>
+                "London and Brighton are 50km apart. A cyclist leaves London at 10km/h; a runner leaves Brighton at 15km/h. When do they pass?"
+            </div>
+            <div class="tier-card">
+                <b>Advanced Year 5</b>
+                "Train A (60mph) and Train B (90mph) are 300 miles apart. If Train B starts 30 mins late, where do they meet?"
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
+        <p>The <b>Closing Gap</b>. Notice how the faster object covers more ground, but both contribute to the same total distance. The "Impact Point" is anchored by the ratio of their speeds.</p>
         
-        <div class="simulation-area">
-            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; color: #718096;">
-                <span>Start A</span>
-                <span id="gap-label">Total Gap: 100 km</span>
-                <span>Start B</span>
+        
+
+        <div class="anatomy-display">
+            <div class="gap-display" id="gap-txt">Distance Gap: 100 KM</div>
+            <div class="track-blueprint">
+                <div id="veh-a" class="vehicle" style="left: 0%; transform: translateX(0);">A</div>
+                <div id="veh-b" class="vehicle" style="left: 100%; transform: translateX(-100%);">B</div>
+                <div id="impact-node" class="impact-marker">
+                    <span class="impact-label">Meeting Point</span>
+                </div>
             </div>
-            <div class="track-line">
-                <div id="veh-a" class="vehicle">A</div>
-                <div id="veh-b" class="vehicle">B</div>
-                <div id="meet-mark" class="meeting-marker"><span>Impact Point</span></div>
-            </div>
-            <button class="sim-btn" onclick="runSimulation()">Simulate Meeting</button>
+            <button class="btn-sim" onclick="runSim()">Execute Simulation</button>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls">
+            <div class="inputs">
                 <div class="control-group">
-                    <label>Total Gap Distance (km)</label>
-                    <input type="number" id="dist-in" value="100">
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Distance Gap (KM)</label>
+                    <input type="number" id="dist-in" value="100" oninput="updateLogic()">
                 </div>
-                <div class="control-group">
-                    <label>Object A Speed (km/h)</label>
-                    <input type="number" id="s1-in" value="60">
+                <div class="control-group" style="margin-top:15px;">
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Speed A (KM/H)</label>
+                    <input type="number" id="s1-in" value="60" oninput="updateLogic()">
                 </div>
-                <div class="control-group">
-                    <label>Object B Speed (km/h)</label>
-                    <input type="number" id="s2-in" value="40">
+                <div class="control-group" style="margin-top:15px;">
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Speed B (KM/H)</label>
+                    <input type="number" id="s2-in" value="40" oninput="updateLogic()">
                 </div>
             </div>
-            <div class="trace-log" id="logic-trace">
-                </div>
+            <div class="trace-log" id="trace-12">Calculating closing rate...</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 20px;">
-            <h2 style="color:var(--trap-red); margin-bottom:10px;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Middle Meet" Trap:</strong> Unless both objects are travelling at the exact same speed, they will <strong>never</strong> meet in the middle. 
-            <br><br><strong>The Fix:</strong> The impact point will always be closer to the starting point of the <em>slower</em> object. Visualizing this stops students from automatically dividing the total distance by 2.</p>
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "Middle Meet" Trap:</strong> Assuming two objects will always meet exactly halfway (50%) regardless of their speed. Students often instinctively divide the distance by 2.</p>
+            
+            <p><strong>The Fix:</strong> Use <b>Proportional Distance</b>. The meeting point will always be closer to the starting line of the <i>slower</i> object. If Object A is twice as fast as Object B, it will cover 2/3 of the distance while Object B only covers 1/3.</p>
         </div>
     </section>
 </div>
 
+<button class="btn-complete" onclick="markComplete(12)">Complete Module & Update Lattice</button>
+
 <script>
-    // Embedded Logic Provider fallback
-    window.LogicProvider = window.LogicProvider || { modules: {} };
-    LogicProvider.modules.relativeSpeed = {
-        calculate: (s1, s2, dist) => {
-            const speed1 = parseFloat(s1) || 0;
-            const speed2 = parseFloat(s2) || 0;
-            const d = parseFloat(dist) || 0;
-            if (speed1 + speed2 === 0) return { rate: 0, timeH: 0, meetPtPct: 50, steps: ["Speeds cannot be zero."] };
-            const relativeRate = speed1 + speed2;
-            const timeToMeet = d / relativeRate;
-            const distA = speed1 * timeToMeet;
-            return {
-                rate: relativeRate.toFixed(2),
-                timeH: timeToMeet.toFixed(2),
-                timeM: (timeToMeet * 60).toFixed(0),
-                meetPtPct: (distA / d) * 100,
-                steps: [
-                    `Step 1: Calculate Combined Speed (${speed1} + ${speed2} = ${relativeRate} km/h).`,
-                    `Step 2: Time = Distance ÷ Speed (${d} ÷ ${relativeRate}).`,
-                    `Result: They meet in ${timeToMeet.toFixed(2)} hours.`,
-                    `Visual Check: Object A covers ${distA.toFixed(1)}km, meeting at ${(distA/d * 100).toFixed(0)}% of the track.`
-                ]
-            };
+    let currentCalc = { pct: 50, time: 1 };
+
+    function updateLogic() {
+        const d = parseFloat(document.getElementById('dist-in').value) || 0;
+        const s1 = parseFloat(document.getElementById('s1-in').value) || 0;
+        const s2 = parseFloat(document.getElementById('s2-in').value) || 0;
+
+        document.getElementById('gap-txt').innerText = `Distance Gap: ${d} KM`;
+
+        if (s1 + s2 === 0) {
+            document.getElementById('trace-12').innerHTML = "Invalid speeds.";
+            return;
         }
-    };
 
-    const inputs = ['s1-in', 's2-in', 'dist-in'].map(id => document.getElementById(id));
-    const traceBox = document.getElementById('logic-trace');
-    const vehA = document.getElementById('veh-a');
-    const vehB = document.getElementById('veh-b');
-    const meetMark = document.getElementById('meet-mark');
+        const closingSpeed = s1 + s2;
+        const timeToMeet = d / closingSpeed;
+        const distA = s1 * timeToMeet;
+        const meetPct = (distA / d) * 100;
 
-    let currentRes = null;
+        currentCalc = { pct: meetPct, time: timeToMeet };
 
-    function calculateLogic() {
-        const [s1, s2, dist] = inputs.map(i => parseFloat(i.value) || 0);
-        document.getElementById('gap-label').innerText = `Total Gap: ${dist} km`;
-        currentRes = LogicProvider.modules.relativeSpeed.calculate(s1, s2, dist);
-        traceBox.innerHTML = currentRes.steps.map(s => `<div>→ ${s}</div>`).join('');
-        resetSimulation();
+        document.getElementById('trace-12').innerHTML = `
+            <div class="trace-step">→ 1. Closing Speed: ${s1} + ${s2} = <b>${closingSpeed} KM/H</b></div>
+            <div class="trace-step">→ 2. Equation: Time = ${d} / ${closingSpeed}</div>
+            <div class="trace-step">→ 3. Proportion: A covers ${((s1/closingSpeed)*100).toFixed(0)}% of track</div>
+            <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+                → RESULT: THEY MEET IN ${timeToMeet.toFixed(2)} HOURS
+            </div>
+        `;
+        resetVehicles();
     }
 
-    function resetSimulation() {
-        // Turn off transitions to snap back instantly
-        vehA.style.transition = 'none';
-        vehB.style.transition = 'none';
-        vehA.style.left = '0%';
-        vehB.style.left = '100%';
-        meetMark.style.opacity = '0';
+    function resetVehicles() {
+        const vA = document.getElementById('veh-a');
+        const vB = document.getElementById('veh-b');
+        const mark = document.getElementById('impact-node');
+
+        vA.style.transition = 'none';
+        vB.style.transition = 'none';
+        vA.style.left = '0%';
+        vB.style.left = '100%';
+        vB.style.transform = 'translateX(-100%)';
+        mark.style.opacity = '0';
         
-        // Force reflow
-        void vehA.offsetWidth; 
+        // Trigger reflow
+        void vA.offsetWidth;
     }
 
-    function runSimulation() {
-        if (!currentRes) return;
-        
-        // Position the marker
-        meetMark.style.left = `${currentRes.meetPtPct}%`;
-        meetMark.style.opacity = '1';
+    function runSim() {
+        const vA = document.getElementById('veh-a');
+        const vB = document.getElementById('veh-b');
+        const mark = document.getElementById('impact-node');
 
-        // Turn transitions back on
-        vehA.style.transition = 'left 2s ease-in-out';
-        vehB.style.transition = 'left 2s ease-in-out';
+        vA.style.transition = 'left 2s cubic-bezier(0.4, 0, 0.2, 1)';
+        vB.style.transition = 'left 2s cubic-bezier(0.4, 0, 0.2, 1)';
 
-        // Move vehicles to the meeting percentage
-        vehA.style.left = `${currentRes.meetPtPct}%`;
-        vehB.style.left = `${currentRes.meetPtPct}%`;
+        mark.style.left = currentCalc.pct + "%";
+        mark.style.opacity = '1';
+
+        vA.style.left = currentCalc.pct + "%";
+        vB.style.left = currentCalc.pct + "%";
+        // Adjust B transform to overlap A
+        vB.style.transform = 'translateX(-50%)';
+        vA.style.transform = 'translateX(-50%)';
     }
 
-    inputs.forEach(i => i.addEventListener('input', calculateLogic));
-    window.onload = calculateLogic;
+    window.onload = updateLogic;
 </script>
 
-    <button onclick="markComplete(12)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
 </body>
 </html>

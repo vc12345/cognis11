@@ -71,9 +71,9 @@
         .op-row select { flex: 1; }
         .op-row input { flex: 1.5; }
 
-        /* Saboteur Tightening */
-        .trap-box p { margin: 8px 0; }
-        .trap-box h3 { margin-bottom: 12px; }
+        /* Saboteur Spacing Fix */
+        .trap-box p { margin-bottom: 20px; }
+        .trap-box p:last-child { margin-bottom: 0; }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -108,7 +108,7 @@
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Watch the <b>Rewinder</b>. To go back, we don't just move backwards; we <b>invert</b> the math symbols (e.g., + becomes -).</p>
+        <p>Watch the <b>Rewinder</b>. The logic flows from right to left. To go back, we <b>invert</b> the math symbols (e.g., + becomes -).</p>
         
         <div class="anatomy-display">
             <div class="simulation-area" id="machine">
@@ -181,20 +181,28 @@
     const engineTrace = document.getElementById('engine-trace');
 
     function refresh() {
-        const [res, o1t, o1v, o2t, o2v] = inputs.map(i => i.value);
+        const res = document.getElementById('in-res').value || 0;
+        const o1t = document.getElementById('in-o1t').value;
+        const o1v = document.getElementById('in-o1v').value || 0;
+        const o2t = document.getElementById('in-o2t').value;
+        const o2v = document.getElementById('in-o2v').value || 0;
         
-        // Reset Viz Labels to Forward State
+        // Lock the Result value immediately
         document.getElementById('v-res').innerText = res;
+        
+        // Show Forward symbols initially
         document.getElementById('v-op1').innerText = symbols[o1t] + o1v;
         document.getElementById('v-op2').innerText = symbols[o2t] + o2v;
+        
+        // Reset mystery nodes
         document.getElementById('v-mid').innerText = "?";
         document.getElementById('v-start').innerText = "?";
         machine.classList.remove('rewind-active');
 
-        // Logic
-        const rVal = parseFloat(res) || 0;
-        const v1 = parseFloat(o1v) || 0;
-        const v2 = parseFloat(o2v) || 0;
+        // Math Logic
+        const rVal = parseFloat(res);
+        const v1 = parseFloat(o1v);
+        const v2 = parseFloat(o2v);
 
         const solve = (v, type, n) => {
             if(type==='add') return v - n;
@@ -230,14 +238,19 @@
         op1.innerText = inverse[data.o1t] + data.o1v;
         op2.innerText = inverse[data.o2t] + data.o2v;
 
-        // Staggered reveal of values
-        setTimeout(() => { document.getElementById('v-mid').innerText = data.mid.toFixed(1); }, 600);
-        setTimeout(() => { document.getElementById('v-start').innerText = data.start.toFixed(1); }, 1200);
+        // Reveal Middle node
+        setTimeout(() => { 
+            document.getElementById('v-mid').innerText = data.mid.toFixed(1); 
+        }, 600);
+
+        // Reveal Start node
+        setTimeout(() => { 
+            document.getElementById('v-start').innerText = data.start.toFixed(1); 
+        }, 1200);
     }
 
     inputs.forEach(i => i.addEventListener('input', refresh));
-    // INITIAL TRIGGER TO LOAD "RESULT" ON PAGE LOAD
-    window.onload = refresh;
+    window.onload = refresh; // Force Result population on load
 </script>
 
 </body>

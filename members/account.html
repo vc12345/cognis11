@@ -203,24 +203,25 @@
         btn.disabled = true;
 
         try {
-            // We use the 'invoke' method. 
-            // This automatically attaches the apikey and the user's Auth token for you.
+            // This is the 'Native' way. 
+            // It automatically handles the 'apikey' and 'Authorization' headers for you.
             const { data, error } = await window.supabaseClient.functions.invoke('create-portal-session');
 
             if (error) {
-                // Supabase functions return errors in a specific format
-                console.error("Function Invocation Error:", error);
-                throw new Error(error.message || "Failed to reach the billing server.");
+                console.error("Function Error Object:", error);
+                // This pulls the error message directly from the Supabase response
+                throw new Error(error.message || "Gateway Refusal");
             }
 
             if (data && data.url) {
                 window.location.href = data.url;
             } else {
-                throw new Error("The billing server didn't provide a redirect link.");
+                throw new Error("No redirect URL received from billing server.");
             }
 
         } catch (e) {
-            console.error("Portal Error:", e);
+            console.error("Full Portal Error:", e);
+            // If you see this alert, we are finally catching a REAL server error, not a manual one
             alert("Billing Access Error: " + e.message);
             btn.innerText = originalText;
             btn.disabled = false;

@@ -45,6 +45,7 @@
             background: rgba(197, 160, 89, 0.15);
             border: 3px solid var(--cognis-gold);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
@@ -52,8 +53,12 @@
             font-weight: 900;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
-            font-size: 0.8rem;
+            line-height: 1.4;
         }
+
+        .label-main { font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 4px; }
+        .label-val { font-size: 1.1rem; color: var(--cognis-gold); }
+        .label-unit { font-size: 0.6rem; opacity: 0.8; }
 
         .engine-container { grid-template-columns: 1.2fr 1fr; }
         
@@ -81,10 +86,10 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In inverse proportion, the "Total Amount of Work" is a <b>Fixed Constant</b>. Unlike direct proportion, where variables move together, these variables are linked by a product. If you double the number of workers, the time must be cut in half. To solve these, you must find the constant product first:</p>
+        <p>In inverse proportion, the "Total Amount of Work" is a <b>Fixed Constant</b>. Unlike direct proportion, where variables move together, inverse variables are linked by a product. If you double the number of workers, the time must be cut in half. To solve these, find the constant product first:</p>
         
-        <div style="text-align: center; margin: 20px 0; font-size: 1.2rem; font-weight: bold; color: var(--cognis-blue);">
-            $$\text{Workers} \times \text{Time} = \text{Total Work (Constant)}$$
+        <div style="text-align: center; margin: 25px 0; padding: 15px; background: var(--cognis-light); border-radius: 8px; border: 1px dashed var(--cognis-blue);">
+            <b style="color: var(--cognis-blue); font-size: 1.1rem;">Workers × Time = Total Work (Constant)</b>
         </div>
 
         <div class="question-tiers">
@@ -105,14 +110,16 @@
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Constant Area</b>. No matter how you change the number of workers, the "Total Work" rectangle maintains the exact same area. As it stretches wide (more workers), it must squash down (less time).</p>
+        <p>The <b>Constant Area</b>. No matter how you change the worker count, the "Total Work" rectangle maintains the exact same area. As it stretches wide (more workers), it must squash down (less time).</p>
         
         <div class="anatomy-display">
             <div class="work-chart">
                 <span class="axis-label y-label">Time &rarr;</span>
                 <span class="axis-label x-label">Workers &rarr;</span>
                 <div class="work-rect" id="viz-rect">
-                    TOTAL WORK<br><span id="viz-area">40</span> UNITS
+                    <div class="label-main">TOTAL WORK</div>
+                    <div class="label-val"><span id="viz-area">40</span></div>
+                    <div class="label-unit">UNITS</div>
                 </div>
             </div>
         </div>
@@ -157,20 +164,20 @@
         const t1 = parseInt(document.getElementById('t1-in').value);
         const w2 = parseInt(document.getElementById('w2-in').value);
 
-        // Update Labels
+        // Update UI Labels
         document.getElementById('w1-val').innerText = w1;
         document.getElementById('t1-val').innerText = t1;
         document.getElementById('w2-val').innerText = w2;
 
-        // Math
+        // Math Logic
         const constant = w1 * t1;
         const newTime = constant / w2;
 
-        // Viz Scaling (Container is 400x250)
-        // We use a base multiplier but clamp to ensure it stays in bounds
+        // Visual Scaling
         const scaleX = 25;
         const scaleY = 10;
         const rect = document.getElementById('viz-rect');
+        
         rect.style.width = (w2 * scaleX) + "px";
         rect.style.height = (newTime * scaleY) + "px";
         document.getElementById('viz-area').innerText = constant;

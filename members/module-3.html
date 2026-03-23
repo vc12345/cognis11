@@ -2,70 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 3: Shared Ratios (Difference) | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 3: Shared Ratios (Difference) | Cognis 11+</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --cognis-blue: #002d5b;
             --cognis-gold: #c5a059;
             --cognis-light: #f4f7f9;
-            --part-a: #2c3e50;
+            --trap-red: #d9534f;
+            --part-a: #1b3a5c;
             --part-b: #64748b;
-            --diff-color: #d9534f;
         }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; color: #2c3e50; padding: 40px 20px; }
-        .module-card { max-width: 900px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        body { font-family: 'DM Sans', sans-serif; background: #eaeff2; color: #2c3e50; padding: 40px 20px; line-height: 1.6; }
+        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
         
+        /* Header Template */
         .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; }
+        .header h1 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; font-family: 'Playfair Display', serif; }
 
+        /* Section Template */
         .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; margin-top: 0; letter-spacing: 2px; }
+        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; margin-top: 0; letter-spacing: 2px; font-weight: 700; }
 
-        /* Anatomy: The Comparative Bars */
-        .anatomy-display { margin: 30px 0; padding: 20px; background: var(--cognis-light); border-radius: 8px; border: 1px solid #cbd5e0; }
-        .bar-row { display: flex; height: 50px; margin-bottom: 10px; align-items: center; }
-        .bar-label { width: 60px; font-weight: bold; font-size: 0.9rem; color: var(--cognis-blue); }
-        .box-container { display: flex; height: 100%; border-radius: 6px; overflow: hidden; border: 2px solid var(--cognis-blue); }
+        /* X-Ray Template */
+        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; min-height: 120px; }
+        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 1px; }
+
+        /* Anatomy Template: Comparative Visualization */
+        .anatomy-display { margin: 30px 0; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 40px; position: relative; }
+        .bar-row { display: flex; align-items: center; margin-bottom: 15px; }
+        .bar-label { width: 80px; font-weight: 700; font-size: 0.8rem; color: var(--cognis-blue); text-transform: uppercase; }
+        .box-container { display: flex; gap: 4px; }
+        .box { width: 45px; height: 45px; border: 2px solid var(--cognis-blue); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.75rem; transition: all 0.3s ease; }
+        .box.a { background: var(--part-a); color: white; }
+        .box.b { background: var(--part-b); color: white; }
+        .box.diff { background: white; color: var(--trap-red); border: 2px dashed var(--trap-red); transform: scale(1.05); }
         
-        .box { width: 60px; border-right: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; color: white; transition: all 0.3s ease; }
-        .box:last-child { border-right: none; }
-        .box.a { background: var(--part-a); }
-        .box.b { background: var(--part-b); }
-        .box.diff { background: white; color: var(--diff-color); border: 2px dashed var(--diff-color); z-index: 10; transform: scale(1.05); }
+        .overhang-container { margin-top: 10px; position: relative; height: 30px; }
+        .diff-bracket { position: absolute; border-bottom: 2px solid var(--trap-red); border-left: 2px solid var(--trap-red); border-right: 2px solid var(--trap-red); height: 10px; display: flex; align-items: flex-end; justify-content: center; color: var(--trap-red); font-weight: 800; font-size: 0.8rem; padding-bottom: 15px; }
 
-        .overhang-bracket { margin-left: 60px; border-top: 2px solid var(--diff-color); padding-top: 5px; text-align: right; color: var(--diff-color); font-weight: bold; font-size: 0.85rem; transition: width 0.3s ease; }
-
-        /* Engine */
+        /* Engine Template */
         .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
         .control-group { margin-bottom: 20px; }
-        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
-        .control-group input { width: 100%; padding: 10px; border-radius: 4px; border: none; font-size: 1rem; }
+        .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+        .control-group input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1.1rem; accent-color: var(--cognis-gold); }
+        .val-out { float: right; color: var(--cognis-gold); }
         
-        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 3px solid var(--cognis-gold); }
-        .trace-step { margin-bottom: 10px; line-height: 1.4; color: #e2e8f0; }
+        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
+        .trace-step { margin-bottom: 8px; color: #e2e8f0; }
+
+        /* Saboteur Template */
+        .trap-box { background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px; margin-top: 10px; }
+        .trap-box h3 { color: var(--trap-red); margin-top: 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
+
+        .btn-complete { width: 100%; background: #10b981; color: white; border: none; padding: 20px; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 40px; font-size: 1rem; transition: background 0.2s; }
     </style>
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 3' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(3)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(3));</script>
 </head>
 <body>
 
 <div class="module-card">
-    <div class="header"><h1>Module 3: Shared Ratios (Difference)</h1></div>
+    <div class="header"><h1>Module 3: Shared Ratios (The Gap)</h1></div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>When you are told "Person A has £20 more than Person B," you are not being given the total. You are being given the <strong>Gap</strong>. You must find how many "extra parts" make up that gap.</p>
+        <p>In these questions, you aren't given the total. You are given the <b>Difference (The Gap)</b> between two people. You must find how many "extra parts" create that gap.</p>
+        <div class="question-tiers">
+            <div class="tier-card">
+                <b>Advanced Year 2</b>
+                "Money is shared in the ratio 3:1. If Person A has £10 more than Person B, how much does B have?"
+            </div>
+            <div class="tier-card">
+                <b>Average Year 4</b>
+                "The ratio of boys to girls is 5:2. There are 15 more boys than girls. Calculate the number of girls."
+            </div>
+            <div class="tier-card">
+                <b>Advanced Year 5</b>
+                "A recipe uses flour and sugar in the ratio 7:3. If I use 200g more flour than sugar, what is the total mass of the mixture?"
+            </div>
+        </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
+        <p>Compare the bars. The <b>Difference Amount</b> only belongs to the "Extra" boxes that hang over the end.</p>
         <div class="anatomy-display">
             <div class="bar-row">
                 <div class="bar-label">Part A</div>
@@ -75,106 +101,114 @@
                 <div class="bar-label">Part B</div>
                 <div class="box-container" id="bar-b"></div>
             </div>
-            <div id="bracket-container"></div>
+            <div class="overhang-container">
+                <div id="diff-bracket" class="diff-bracket">Gap</div>
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls">
+            <div class="inputs">
                 <div class="control-group">
-                    <label>Difference Amount (£)</label>
-                    <input type="number" id="diff-in" value="20">
+                    <label>Difference Amount (£) <span class="val-out" id="d-val">20</span></label>
+                    <input type="range" id="in-d" min="10" max="200" step="10" value="20">
                 </div>
                 <div class="control-group">
-                    <label>Ratio (Part A)</label>
-                    <input type="number" id="a-in" value="5">
+                    <label>Ratio Part A <span class="val-out" id="a-val">5</span></label>
+                    <input type="range" id="in-a" min="1" max="10" value="5">
                 </div>
                 <div class="control-group">
-                    <label>Ratio (Part B)</label>
-                    <input type="number" id="b-in" value="3">
+                    <label>Ratio Part B <span class="val-out" id="b-val">3</span></label>
+                    <input type="range" id="in-b" min="1" max="10" value="3">
                 </div>
             </div>
-            <div class="trace-log" id="logic-trace"></div>
+            <div class="trace-log" id="engine-trace"></div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--diff-color); border-radius: 8px; padding: 20px;">
-            <h2 style="color:var(--diff-color); margin-bottom:10px;">Phase 4: The Saboteur</h2>
-            <p><strong>The "Blind Total" Trap:</strong> Students see a number and a ratio, and out of pure habit, they add the ratio parts together and divide the number by the total (e.g., dividing the difference by 8). <strong>Always identify the anchor:</strong> Does the number represent the Total, or the Gap?</p>
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "Blind Total" Trap:</strong> Students often see a number and a ratio and immediately add the ratio parts (e.g. 5+3=8) to divide. 
+            <br><br>
+            <strong>The Fix:</strong> Always identify the "Anchor." If the number is a <b>Difference</b>, you must find the <b>Difference in Parts</b> (5 - 3 = 2). Divide the gap value by the gap parts.</p>
         </div>
     </section>
 </div>
 
-<script src="js/logic-provider.js"></script>
+<button class="btn-complete" onclick="markComplete(3)">Complete Module & Update Lattice</button>
+
 <script>
-    const dIn = document.getElementById('diff-in');
-    const aIn = document.getElementById('a-in');
-    const bIn = document.getElementById('b-in');
+    const inD = document.getElementById('in-d');
+    const inA = document.getElementById('in-a');
+    const inB = document.getElementById('in-b');
     const barA = document.getElementById('bar-a');
     const barB = document.getElementById('bar-b');
-    const bracketBox = document.getElementById('bracket-container');
-    const traceBox = document.getElementById('logic-trace');
+    const diffBracket = document.getElementById('diff-bracket');
+    const engineTrace = document.getElementById('engine-trace');
 
     function refresh() {
-        const diffAmount = parseFloat(dIn.value) || 0;
-        const a = parseInt(aIn.value) || 1;
-        const b = parseInt(bIn.value) || 1;
-
-        if (a === b) {
-            traceBox.innerHTML = '<div class="trace-step" style="color:#d9534f;">→ Ratios cannot be equal if there is a difference!</div>';
+        const diffAmt = parseInt(inD.value);
+        const a = parseInt(inA.value);
+        const b = parseInt(inB.value);
+        
+        const partDiff = Math.abs(a - b);
+        
+        if (partDiff === 0) {
+            engineTrace.innerHTML = `<div style="color:var(--trap-red)">Ratio parts must be different to have a 'Gap'.</div>`;
             return;
         }
 
-        const res = LogicProvider.modules.sharedRatiosDiff.calculate(diffAmount, a, b);
+        const unitValue = diffAmt / partDiff;
+        const totalA = unitValue * a;
+        const totalB = unitValue * b;
 
-        // Render Bars
-        barA.innerHTML = '';
-        barB.innerHTML = '';
+        // Update Labels
+        document.getElementById('d-val').innerText = '£' + diffAmt;
+        document.getElementById('a-val').innerText = a;
+        document.getElementById('b-val').innerText = b;
+
+        // Update Anatomy
+        barA.innerHTML = ''; barB.innerHTML = '';
+        const minParts = Math.min(a, b);
         
         for(let i=0; i<a; i++) {
-            const box = document.createElement('div');
-            // If A is larger, highlight the overhang
-            if (a > b && i >= b) {
-                box.className = 'box diff';
-            } else {
-                box.className = 'box a';
-            }
-            box.innerText = `£${res.valuePerPart}`;
-            barA.appendChild(box);
+            const div = document.createElement('div');
+            div.className = `box a ${ (a > b && i >= minParts) ? 'diff' : '' }`;
+            div.innerText = `£${unitValue % 1 === 0 ? unitValue : unitValue.toFixed(1)}`;
+            barA.appendChild(div);
         }
-
         for(let i=0; i<b; i++) {
-            const box = document.createElement('div');
-            // If B is larger, highlight the overhang
-            if (b > a && i >= a) {
-                box.className = 'box diff';
-            } else {
-                box.className = 'box b';
-            }
-            box.innerText = `£${res.valuePerPart}`;
-            barB.appendChild(box);
+            const div = document.createElement('div');
+            div.className = `box b ${ (b > a && i >= minParts) ? 'diff' : '' }`;
+            div.innerText = `£${unitValue % 1 === 0 ? unitValue : unitValue.toFixed(1)}`;
+            barB.appendChild(div);
         }
 
-        // Render Bracket under the overhang
-        const minParts = Math.min(a, b);
-        const diffParts = Math.abs(a - b);
-        // Calculate margin and width based on fixed box width (60px)
-        bracketBox.innerHTML = `<div class="overhang-bracket" style="margin-left: ${60 + (minParts * 60)}px; width: ${diffParts * 60}px;">Gap = £${diffAmount}</div>`;
+        // Bracket Logic: 45px box + 4px gap = 49px pitch. Start after minParts.
+        const startOffset = 80 + (minParts * 49);
+        const bracketWidth = (partDiff * 49) - 4;
+        diffBracket.style.left = `${startOffset}px`;
+        diffBracket.style.width = `${bracketWidth}px`;
+        diffBracket.innerText = `Gap = £${diffAmt}`;
 
         // Update Trace
-        traceBox.innerHTML = res.steps.map(s => `<div class="trace-step">→ ${s}</div>`).join('');
+        engineTrace.innerHTML = `
+            <div class="trace-step">→ 1. Find the Gap in parts: ${Math.max(a,b)} - ${Math.min(a,b)} = <b>${partDiff} parts</b></div>
+            <div class="trace-step">→ 2. Find 1 part: £${diffAmt} ÷ ${partDiff} = <b>£${unitValue.toFixed(2)}</b></div>
+            <div class="trace-step">→ 3. Part A Total: ${a} × £${unitValue.toFixed(2)} = £${totalA.toFixed(2)}</div>
+            <div class="trace-step">→ 4. Part B Total: ${b} × £${unitValue.toFixed(2)} = £${totalB.toFixed(2)}</div>
+            <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+                → Check: £${totalA.toFixed(2)} - £${totalB.toFixed(2)} = £${diffAmt}
+            </div>
+        `;
     }
 
-    [dIn, aIn, bIn].forEach(el => el.addEventListener('input', refresh));
+    [inD, inA, inB].forEach(el => el.addEventListener('input', refresh));
     window.onload = refresh;
 </script>
 
-<button onclick="markComplete(3)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
-</body>
 </body>
 </html>

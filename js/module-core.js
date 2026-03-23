@@ -1,9 +1,10 @@
 // js/module-core.js
 
+// js/module-core.js
+
 async function initModule(moduleId) {
     // 1. GATEKEEPER: Check Auth & Subscription
     if (!window.supabaseClient) {
-        // Wait up to 2 seconds for the config to initialize
         let attempts = 0;
         while (!window.supabaseClient && attempts < 20) {
             await new Promise(res => setTimeout(res, 100));
@@ -20,29 +21,49 @@ async function initModule(moduleId) {
     
     // Redirect if not logged in
     if (authError || !user) {
-        console.warn("Gatekeeper: No user found. Redirecting...");
-        window.location.href = "/login.html"; // Corrected Path
+        window.location.href = "/login.html";
         return;
     }
 
-    // Check Profile
+    // 2. FETCH PROFILE (Now including Plan Type)
     const { data: profile } = await window.supabaseClient
         .from('profiles')
-        .select('subscription_status')
+        .select('subscription_status, subscription_plan')
         .eq('id', user.id)
         .maybeSingle();
 
-    // Redirect if not active
+    // Block if not active
     if (!profile || profile.subscription_status !== 'active') {
         alert("This module requires an active subscription.");
-        window.location.href = "/members/dashboard.html"; // Corrected Path
+        window.location.href = "/members/dashboard.html";
         return;
     }
 
-    // 2. HEADER: Inject the Module Nav
-    injectModuleNav(user.email);
+    // 3. SEQUENTIAL LOCKDOWN (For Foundational Path)
+    const currentModuleId = Number(moduleId);
+    const userPlan = profile.subscription_plan || 'none';
 
-    console.log(`Module ${moduleId} authorized for ${user.email}`);
+    if (userPlan === 'foundational' && currentModuleId > 1) {
+        // Fetch completion data to see if they are allowed here
+        const { data: completedData } = await window.supabaseClient
+            .from('module_progress')
+            .select('module_id')
+            .eq('user_id', user.id);
+
+        const completedIds = completedData ? completedData.map(item => Number(item.module_id)) : [];
+        const maxCompleted = completedIds.length > 0 ? Math.max(...completedIds) : 0;
+        const nextAllowed = maxCompleted + 1;
+
+        if (currentModuleId > nextAllowed) {
+            alert("This unit is currently locked. Please complete the previous modules in order.");
+            window.location.href = "/members/dashboard.html";
+            return;
+        }
+    }
+
+    // 4. HEADER: Inject the Module Nav
+    injectModuleNav(user.email);
+    console.log(`Module ${moduleId} authorized for ${user.email} (${userPlan})`);
 }
 
 function injectModuleNav(email) {

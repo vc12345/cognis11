@@ -2,53 +2,108 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 15: Time Conversions | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 15: Time Conversions | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
+        /* UNIQUE CSS FOR TIME TANKS */
+        .anatomy-display { padding: 40px; background: #f0f4f8; }
         
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .tank-system { 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-end; 
+            gap: 30px; 
+            height: 220px; 
+            margin-bottom: 20px;
+        }
         
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+        .tank { 
+            width: 100px; 
+            height: 180px; 
+            border: 4px solid var(--cognis-blue); 
+            border-top: none; 
+            position: relative; 
+            display: flex; 
+            align-items: flex-end; 
+            background: white; 
+            border-radius: 0 0 12px 12px; 
+            box-shadow: inset 0 -10px 20px rgba(0,0,0,0.05);
+        }
+        
+        .tank-header {
+            position: absolute;
+            top: -35px;
+            width: 100%;
+            text-align: center;
+            font-weight: 800;
+            font-size: 0.7rem;
+            color: var(--cognis-blue);
+            letter-spacing: 1px;
+        }
 
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
-        .tier-card span { display: block; font-weight: bold; color: var(--cognis-blue); margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; }
+        .water { 
+            width: 100%; 
+            background: var(--cognis-gold); 
+            transition: height 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            position: relative; 
+            min-height: 2px;
+        }
+        
+        .water-label { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            color: white; 
+            font-weight: 900; 
+            font-size: 1.4rem; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3); 
+        }
 
-        /* Visual Anchor: The Overflow Tanks */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 60px 20px; margin: 30px 0; }
-        .tank-system { display: flex; justify-content: center; align-items: flex-end; gap: 40px; height: 180px; }
-        
-        .tank { width: 100px; height: 150px; border: 4px solid var(--cognis-blue); border-top: none; position: relative; display: flex; align-items: flex-end; background: white; border-radius: 0 0 10px 10px; }
-        .tank-label { position: absolute; top: -30px; width: 100%; text-align: center; font-weight: 800; font-size: 0.75rem; color: var(--cognis-blue); }
-        
-        .water { width: 100%; background: var(--cognis-gold); transition: height 0.4s ease, background 0.3s; position: relative; }
-        .water-val { position: absolute; top: 10px; width: 100%; text-align: center; color: white; font-weight: 800; font-size: 1.4rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        
-        .tank.overflow { border-color: var(--trap-red); }
-        .tank.overflow .water { background: var(--trap-red); }
-        
-        .carry-arrow { font-size: 2.5rem; color: var(--trap-red); opacity: 0; transition: all 0.4s; font-weight: bold; }
-        .carry-active { opacity: 1; transform: translateX(-10px); }
+        .overflow-pipe {
+            font-size: 2rem;
+            color: var(--trap-red);
+            opacity: 0;
+            transition: all 0.4s;
+            font-weight: 900;
+            margin-bottom: 80px;
+        }
+        .overflow-active { opacity: 1; transform: translateX(-10px); animation: pulse 1s infinite; }
 
-        /* Engine Layout */
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group label { display: block; font-size: 0.7rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
-        .control-group input { width: 100%; padding: 10px; border-radius: 6px; border: none; font-size: 1.1rem; background: #2d3748; color: white; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px; font-family: monospace; border-left: 4px solid var(--cognis-gold); line-height: 1.6; }
+        @keyframes pulse { 50% { transform: translateX(-15px) scale(1.1); } }
+
+        .pump-controls { display: flex; gap: 10px; margin-top: 20px; }
+        .pump-btn {
+            background: var(--cognis-blue);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .pump-btn:hover { background: var(--cognis-gold); }
+
+        .digital-output {
+            margin-top: 30px;
+            font-size: 1.8rem;
+            font-family: monospace;
+            background: #1a202c;
+            color: var(--cognis-gold);
+            padding: 10px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
     </style>
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 15' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(1)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(15));</script>
 </head>
 <body>
 
@@ -57,132 +112,144 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p><strong>Topic Logic:</strong> Time calculations do not follow the standard decimal system (Base-10). Instead, they use <strong>Modular Arithmetic (Base-60)</strong>. The core challenge is managing the "reset" point where 60 minutes transforms into 1 hour.</p>
+        <p>Time does not use the standard decimal system (Base-10). It uses <b>Base-60</b>. The core logic is managing the "Reset Point" where 60 minutes transform into 1 hour.</p>
+        
         <div class="question-tiers">
-            <div class="tier-card"><span>Entry (Year 2)</span>"Convert 140 minutes into hours and minutes."</div>
-            <div class="tier-card"><span>Standard (Year 4)</span>"A film starts at 15:30 and is 115 minutes long. When does it end?"</div>
-            <div class="tier-card"><span>Advanced (Year 5)</span>"A clock loses 4 minutes every hour. If it is set correctly at 9am, what time will it show at 9pm?"</div>
+            <div class="tier-card">
+                <b>Advanced Year 2</b>
+                "A baker leaves a cake in the oven for 85 minutes. Convert this into hours and minutes."
+            </div>
+            <div class="tier-card">
+                <b>Average Year 4</b>
+                "A flight from London to Paris takes 1 hour and 45 minutes. How many minutes is this in total?"
+            </div>
+            <div class="tier-card">
+                <b>Advanced Year 5</b>
+                "A marathon runner finishes in 215 minutes. Express their time in hours and minutes."
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area">
+        <p>Use the pump to add time. Watch the <b>Minute Tank</b>. Once it hits the 60m ceiling, it overflows into the <b>Hour Tank</b>.</p>
+        
+        <div class="anatomy-display">
             <div class="tank-system">
-                <div class="tank" id="tank-h">
-                    <div class="tank-label">HOURS</div>
-                    <div id="fill-h" class="water" style="height: 0%;"><span class="water-val" id="val-h">0</span></div>
+                <div class="tank">
+                    <div class="tank-header">HOURS</div>
+                    <div id="viz-h-fill" class="water" style="height: 10%;"><span class="water-label" id="viz-h-val">0</span></div>
                 </div>
-                <div id="arrow" class="carry-arrow">←</div>
-                <div class="tank" id="tank-m">
-                    <div class="tank-label">MINUTES</div>
-                    <div id="fill-m" class="water" style="height: 0%;"><span class="water-val" id="val-m">0</span></div>
+                
+                <div id="viz-pipe" class="overflow-pipe">←</div>
+                
+                <div class="tank" id="viz-m-tank">
+                    <div class="tank-header">MINUTES (MAX 60)</div>
+                    <div id="viz-m-fill" class="water" style="height: 0%;"><span class="water-label" id="viz-m-val">0</span></div>
                 </div>
             </div>
-            <p style="text-align: center; margin-top: 40px; font-weight: bold; font-size: 1.2rem; color: var(--cognis-blue);">
-                Digital Result: <span id="digital-clock" style="background: #e2e8f0; padding: 5px 15px; border-radius: 6px; font-family: monospace;">00:00</span>
-            </p>
+
+            <div class="pump-controls">
+                <button class="pump-btn" onclick="pumpTime(1)">+1 MIN</button>
+                <button class="pump-btn" onclick="pumpTime(10)">+10 MINS</button>
+                <button class="pump-btn" onclick="resetSim()" style="background: #718096;">RESET</button>
+            </div>
+
+            <div class="digital-output" id="viz-digital">00:00</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls">
+            <div class="inputs">
                 <div class="control-group">
-                    <label>Start Hours</label>
-                    <input type="number" id="in-h" value="10" min="0" max="23">
+                    <label>Starting Minutes</label>
+                    <input type="number" id="in-m" value="145" oninput="runEngine()">
                 </div>
-                <div class="control-group">
-                    <label>Start Minutes</label>
-                    <input type="number" id="in-m" value="45" min="0" max="59">
-                </div>
-                <div class="control-group">
-                    <label>Add Minutes</label>
-                    <input type="number" id="in-add" value="30">
-                </div>
+                <p style="font-size: 0.7rem; color: #a0aec0; margin-top: 10px;">Converting total minutes to Hours:Minutes format.</p>
             </div>
-            <div class="trace-log" id="logic-trace">Initializing...</div>
+            <div class="trace-log" id="engine-trace"></div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 8px; padding: 25px;">
-            <h2 style="color:var(--trap-red);">Phase 4: The Saboteur</h2>
-            <p><strong>The "Decimal" Trap:</strong> Mistakenly thinking that 1.5 hours is 1 hour and 5 minutes. 
-            <br><br><strong>The Fix:</strong> Always remember that in time, <strong>0.5 = 30</strong>. Half of the 60-minute container is 30, not 50. Use the tanks to visualize the 60m boundary!</p>
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "Decimal" Trap:</strong> Mistakenly thinking that 1.5 hours is 1 hour and 50 minutes because 5 is half of 10. 
+            <br><br>
+            <strong>The Fix:</strong> Always remember that in time, <b>0.5 = 30</b>. Because the "container" is 60 minutes wide, half of the container is 30. Never use 100 as your boundary!</p>
         </div>
     </section>
 </div>
 
+<button class="btn-complete" onclick="markComplete(15)">Complete Module & Update Lattice</button>
+
 <script>
-    // Embedded Logic for immediate functionality
-    const Logic = {
-        calculate: (h, m, add) => {
-            const hIn = parseInt(h) || 0;
-            const mIn = parseInt(m) || 0;
-            const addIn = parseInt(add) || 0;
+    // SIMULATION STATE
+    let simH = 0;
+    let simM = 0;
 
-            const totalMins = (hIn * 60) + mIn + addIn;
-            const finalH = Math.floor(totalMins / 60) % 24;
-            const finalM = totalMins % 60;
-            const mTotalRaw = mIn + addIn;
-            const carried = Math.floor(mTotalRaw / 60);
-
-            return {
-                finalH, finalM, carried,
-                overflow: mTotalRaw >= 60,
-                mTotalRaw,
-                steps: [
-                    `Start: ${hIn}:${mIn.toString().padStart(2,'0')}`,
-                    `Adding: ${addIn} minutes`,
-                    mTotalRaw >= 60 ? `Overflow: ${mTotalRaw}m = ${carried}h and ${finalM}m.` : `Stay: ${mTotalRaw}m is under the 60m limit.`,
-                    `Final: ${finalH}:${finalM.toString().padStart(2,'0')}`
-                ]
-            };
+    function pumpTime(amt) {
+        simM += amt;
+        while (simM >= 60) {
+            simM -= 60;
+            simH += 1;
+            triggerOverflow();
         }
-    };
-
-    const inputs = ['in-h', 'in-m', 'in-add'].map(id => document.getElementById(id));
-    const trace = document.getElementById('logic-trace');
-    const fillH = document.getElementById('fill-h');
-    const fillM = document.getElementById('fill-m');
-    const tankM = document.getElementById('tank-m');
-    const arrow = document.getElementById('arrow');
-
-    function update() {
-        const res = Logic.calculate(inputs[0].value, inputs[1].value, inputs[2].value);
-        
-        // Text Updates
-        document.getElementById('val-h').innerText = res.finalH;
-        document.getElementById('val-m').innerText = res.finalM;
-        document.getElementById('digital-clock').innerText = 
-            `${String(res.finalH).padStart(2,'0')}:${String(res.finalM).padStart(2,'0')}`;
-        trace.innerHTML = res.steps.map(s => `<div>→ ${s}</div>`).join('');
-
-        // Visual Updates
-        fillH.style.height = (res.finalH / 24 * 100) + "%";
-        
-        // Minute Tank Logic: Show it approaching/exceeding the 60 limit
-        const visualMPct = Math.min((res.mTotalRaw / 60) * 100, 100);
-        fillM.style.height = visualMPct + "%";
-
-        if (res.overflow) {
-            tankM.classList.add('overflow');
-            arrow.classList.add('carry-active');
-            arrow.innerText = `← +${res.carried}h`;
-        } else {
-            tankM.classList.remove('overflow');
-            arrow.classList.remove('carry-active');
-        }
+        updateViz();
     }
 
-    inputs.forEach(i => i.addEventListener('input', update));
-    window.onload = update;
+    function resetSim() {
+        simH = 0; simM = 0;
+        updateViz();
+    }
+
+    function triggerOverflow() {
+        const pipe = document.getElementById('viz-pipe');
+        const tank = document.getElementById('viz-m-tank');
+        pipe.classList.add('overflow-active');
+        tank.style.borderColor = 'var(--trap-red)';
+        setTimeout(() => {
+            pipe.classList.remove('overflow-active');
+            tank.style.borderColor = 'var(--cognis-blue)';
+        }, 800);
+    }
+
+    function updateViz() {
+        document.getElementById('viz-h-val').innerText = simH;
+        document.getElementById('viz-m-val').innerText = simM;
+        
+        // Visual heights
+        document.getElementById('viz-h-fill').style.height = Math.min((simH / 12) * 100, 100) + "%";
+        document.getElementById('viz-m-fill').style.height = (simM / 60 * 100) + "%";
+        
+        document.getElementById('viz-digital').innerText = 
+            `${String(simH).padStart(2, '0')}:${String(simM).padStart(2, '0')}`;
+    }
+
+    // ENGINE LOGIC
+    function runEngine() {
+        const total = parseInt(document.getElementById('in-m').value) || 0;
+        const h = Math.floor(total / 60);
+        const m = total % 60;
+
+        document.getElementById('engine-trace').innerHTML = `
+            <div class="trace-step">→ 1. Total Minutes: <b>${total}</b></div>
+            <div class="trace-step">→ 2. Divide by 60 for Hours: ${total} ÷ 60</div>
+            <div class="trace-step">→ 3. Whole Hours: <b>${h}</b></div>
+            <div class="trace-step">→ 4. Remaining Minutes: ${total} - (${h} × 60) = <b>${m}</b></div>
+            <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+                → RESULT: ${h}h ${m}m
+            </div>
+        `;
+    }
+
+    window.onload = () => {
+        updateViz();
+        runEngine();
+    };
 </script>
 
-    <button onclick="markComplete(15)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
 </body>
 </html>

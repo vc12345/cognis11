@@ -2,61 +2,107 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 26: Invariance Lab | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 26: Invariance Lab | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+        /* UNIQUE CSS FOR AREA SIMULATION */
+        .anatomy-display { padding: 40px; background: #1a202c; border: none; }
+        
+        #canvas-26 { 
+            background: #000; 
+            border: 2px solid #334155; 
+            border-radius: 12px; 
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
 
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        .boundary { 
+            stroke: var(--cognis-gold); 
+            stroke-width: 4; 
+            fill: rgba(197, 160, 89, 0.15); 
+            transition: all 0.2s ease-out; 
+        }
 
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 40px; margin: 30px 0; text-align: center; }
-        #canvas-26 { background: #000; border: 2px solid #333; border-radius: 8px; }
-        .boundary { stroke: var(--cognis-gold); stroke-width: 4; fill: rgba(197, 160, 89, 0.1); transition: all 0.2s ease; }
-        .label-text { fill: white; font-family: 'Courier New', monospace; font-size: 14px; }
+        .label-text { 
+            fill: #a0aec0; 
+            font-family: 'Consolas', monospace; 
+            font-size: 13px; 
+            font-weight: bold;
+            text-transform: uppercase;
+        }
 
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 12px; }
-        input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.7; }
+        .area-display-text {
+            fill: var(--cognis-gold);
+            font-weight: 900;
+            font-size: 32px;
+            filter: drop-shadow(0 0 10px rgba(197, 160, 89, 0.3));
+        }
+
+        /* Nav Correction */
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .nav-back:hover { opacity: 1; }
+        .nav-back span { margin-right: 8px; font-size: 1.1rem; }
+
+        .engine-container { grid-template-columns: 1fr 1.2fr; }
+        input[type=range] { margin-top: 15px; }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 26' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(2)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(26));</script>
 </head>
 <body>
-<div class="module-card">
-    <div class="header"><h1>Module 26: Area/Perimeter Invariance</h1></div>
+
+<div class="module-card" style="margin-top: 40px;">
+    <div class="header">
+        <a href="../dashboard.html" class="nav-back"><span>&larr;</span> BACK TO LATTICE</a>
+        <h1>Module 26: Area/Perimeter Invariance</h1>
+    </div>
+
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Perimeter is 1-dimensional length; Area is 2-dimensional space. While a boundary may remain a fixed length, the internal capacity fluctuates based on the shape's balance. A square configuration maximizes the internal area for any given perimeter.</p>
+        <p>Perimeter is 1-dimensional length (the "fence"); Area is 2-dimensional space (the "grass"). While a boundary may remain a fixed length, the internal capacity fluctuates. A <b>Square</b> configuration always maximizes the internal area for any given perimeter.</p>
+        
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>A garden has a 12m fence. If it's a square, what is the area?</div>
-            <div class="tier-card"><b>Average Year 4</b>Rectangle A is 8x2. Rectangle B is 5x5. Which has a larger area?</div>
-            <div class="tier-card"><b>Advanced Year 5</b>A wire is 20cm. If bent into a 6x4 rectangle, how does its area compare to a 5x5 square?</div>
+            <div class="tier-card">
+                <b>Advanced Year 2</b>
+                "A garden has a 12m fence. If it is built as a square, what is the internal area in square metres?"
+            </div>
+            <div class="tier-card">
+                <b>Average Year 4</b>
+                "Rectangle A is 8cm x 2cm. Rectangle B is 5cm x 5cm. They both have a 20cm perimeter, but which has the larger area?"
+            </div>
+            <div class="tier-card">
+                <b>Advanced Year 5</b>
+                "A piece of wire is 40cm long. Compare the area created when bent into a 15x5 rectangle versus a 10x10 square."
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area">
-            <svg id="canvas-26" width="500" height="300" viewBox="0 0 500 300">
-                <rect id="dynamic-rect" x="150" y="50" width="200" height="200" class="boundary" />
-                <text id="dim-w" x="250" y="40" class="label-text" text-anchor="middle">Width: 10</text>
-                <text id="dim-h" x="130" y="150" class="label-text" text-anchor="end">Height: 10</text>
-                <text x="250" y="150" fill="var(--cognis-gold)" font-weight="900" font-size="24" text-anchor="middle" id="area-val">100</text>
+        <p>The <b>Invariance Lab</b>. The perimeter is locked at 40 units. Move the slider to see the "Skinny" rectangle collapse the internal space, while the "Balanced" rectangle expands it.</p>
+        
+        <div class="anatomy-display">
+            <svg id="canvas-26" width="100%" height="320" viewBox="0 0 500 320" preserveAspectRatio="xMidYMid meet">
+                <rect id="dynamic-rect" x="150" y="60" width="200" height="200" class="boundary" />
+                <text id="dim-w" x="250" y="50" class="label-text" text-anchor="middle">Width: 10.0</text>
+                <text id="dim-h" x="130" y="160" class="label-text" text-anchor="end">Height: 10.0</text>
+                <text x="250" y="170" class="area-display-text" text-anchor="middle" id="area-val">100.0</text>
+                <text x="250" y="195" fill="#4a5568" font-weight="800" font-size="10" text-anchor="middle">UNITS²</text>
             </svg>
         </div>
     </section>
@@ -64,56 +110,71 @@
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls">
+            <div class="inputs">
                 <div class="control-group">
-                    <label>Manipulate Shape (Fixed Perimeter: 40 units)</label>
-                    <input type="range" id="slider-26" min="2" max="18" value="10" step="0.5" oninput="run26()">
+                    <label>Stretching the boundary (Perimeter: 40)</label>
+                    <input type="range" id="slider-26" min="1" max="19" value="10" step="0.1" oninput="run26()">
+                    <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.6rem; color: #a0aec0; font-weight: bold;">
+                        <span>SKINNY</span>
+                        <span>SQUARE (MAX)</span>
+                        <span>SKINNY</span>
+                    </div>
                 </div>
             </div>
-            <div class="trace-log" id="trace-26">Adjust the slider to see how the area behaves as the rectangle stretches.</div>
+            <div class="trace-log" id="trace-26">Adjust the slider to trigger the area calculation.</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p>For a fixed perimeter, the closer a rectangle is to a square, the greater its area. When the sides are extremely unequal (long and thin), the area collapses toward zero, even though the total boundary length remains unchanged.</p>
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "Fixed Area" Trap:</strong> Mistakenly believing that because the perimeter (the length of the string) is 40cm, any rectangle you make with it will have the same amount of space inside.</p>
+            <p><strong>The Fix:</strong> Think of <b>"The Closer to a Square, the Greater the Area."</b> If you have a perimeter of 20, a long thin 9x1 rectangle only has an area of 9. But a balanced 5x5 square has an area of 25. To get the most space, keep the sides as equal as possible.</p>
         </div>
     </section>
 </div>
 
+<button class="btn-complete" onclick="markComplete(26)">Complete Module & Update Lattice</button>
+
 <script>
     function run26() {
         const w = parseFloat(document.getElementById('slider-26').value);
-        const h = 20 - w; 
+        const h = 20 - w; // (Perimeter 40 / 2) - w
         const area = w * h;
+        
         const rect = document.getElementById('dynamic-rect');
-        const scale = 12; 
+        const scale = 12; // Scale for visual display
         const visualW = w * scale;
         const visualH = h * scale;
 
+        // Update SVG Rectangle
         rect.setAttribute('width', visualW);
         rect.setAttribute('height', visualH);
         rect.setAttribute('x', 250 - visualW/2);
-        rect.setAttribute('y', 150 - visualH/2);
+        rect.setAttribute('y', 160 - visualH/2);
 
-        document.getElementById('dim-w').textContent = `Width: ${w}`;
-        document.getElementById('dim-w').setAttribute('y', 150 - visualH/2 - 10);
-        document.getElementById('dim-h').textContent = `Height: ${h}`;
-        document.getElementById('dim-h').setAttribute('x', 250 - visualW/2 - 10);
+        // Update Label Positions
+        document.getElementById('dim-w').textContent = `Width: ${w.toFixed(1)}`;
+        document.getElementById('dim-w').setAttribute('y', 160 - visualH/2 - 15);
+        document.getElementById('dim-h').textContent = `Height: ${h.toFixed(1)}`;
+        document.getElementById('dim-h').setAttribute('x', 250 - visualW/2 - 15);
+        document.getElementById('dim-h').setAttribute('y', 160);
 
         document.getElementById('area-val').textContent = area.toFixed(1);
+
+        // Engine Trace Result
         document.getElementById('trace-26').innerHTML = `
-            Perimeter = 2(${w} + ${h}) = 40.0 units<br>
-            Area = ${w} × ${h} = <b>${area.toFixed(2)} units²</b><br><br>
-            Note: Maximum area is achieved at Width: 10, Height: 10 (Square).
+            <div class="trace-step">→ 1. Total Perimeter: <b>40.0 units</b></div>
+            <div class="trace-step">→ 2. Current Dimensions: ${w.toFixed(1)} x ${h.toFixed(1)}</div>
+            <div class="trace-step">→ 3. Area Calculation: ${w.toFixed(1)} × ${h.toFixed(1)}</div>
+            <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+                → TOTAL AREA: ${area.toFixed(2)} units²
+            </div>
         `;
     }
+
     window.onload = run26;
 </script>
 
-    <button onclick="markComplete(26)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
 </body>
 </html>

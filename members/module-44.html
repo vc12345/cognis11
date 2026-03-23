@@ -2,64 +2,149 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 44: Layering Logic | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 44: Layering Logic | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
+        /* UNIQUE CSS FOR 3D LAYER EXPLORER */
+        .anatomy-display { 
+            background: #0f172a; 
+            padding: 60px 20px; 
+            perspective: 1000px; /* Crucial for 3D effect */
+            overflow: hidden;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stack-stage {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: rotateX(0deg) rotateY(0deg);
+        }
+
+        /* 3D View Class triggered by slider */
+        .view-3d .stack-stage {
+            transform: rotateX(45deg) rotateZ(-30deg);
+        }
+
+        .shape-layer {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.9);
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Explode distances managed by CSS variables in JS */
+        .view-3d #layer-top { transform: translateZ(100px); }
+        .view-3d #layer-mid { transform: translateZ(0px); }
+        .view-3d #layer-bot { transform: translateZ(-100px); }
+
+        #layer-top { background: #ef4444; top: 40px; left: 40px; border-radius: 50%; }
+        #layer-mid { background: #3b82f6; top: 100px; left: 100px; border-radius: 12px; }
+        #layer-bot { 
+            background: #eab308; top: 70px; left: 130px; 
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%); 
+        }
+
+        .layer-shadow {
+            position: absolute;
+            bottom: -20px;
+            width: 200px;
+            height: 40px;
+            background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%);
+            transform: rotateX(90deg);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .view-3d .layer-shadow { opacity: 1; }
+
+        .depth-control-box {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 50px;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .engine-container { grid-template-columns: 1fr 1.2fr; }
+        input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
         
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
-
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.8rem; min-height: 115px; line-height: 1.4; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.65rem; text-transform: uppercase; display: block; margin-bottom: 8px; }
-
-        .simulation-area { background: #1a202c; border-radius: 12px; padding: 60px; margin: 30px 0; display: flex; align-items: center; justify-content: center; min-height: 300px; }
-        .stack-stage { width: 300px; height: 300px; position: relative; border: 2px dashed #4a5568; }
-        
-        .shape { position: absolute; transition: all 0.3s ease; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
-        .s-circle { width: 120px; height: 120px; border-radius: 50%; background: #e53e3e; top: 30px; left: 30px; }
-        .s-square { width: 120px; height: 120px; background: #3182ce; top: 90px; left: 90px; }
-        .s-triangle { width: 0; height: 0; border-left: 70px solid transparent; border-right: 70px solid transparent; border-bottom: 120px solid #ecc94b; top: 60px; left: 140px; }
-
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
-        .btn-action { background: var(--cognis-gold); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; width: 100%; margin-top: 10px; }
+        .btn-stack {
+            background: #2d3748; color: #a0aec0; border: 1px solid #4a5568; 
+            padding: 10px; border-radius: 8px; cursor: pointer; 
+            font-size: 0.7rem; text-transform: uppercase; font-weight: 800;
+            width: 100%; text-align: left; margin-bottom: 8px; transition: 0.2s;
+        }
+        .btn-stack:hover { background: #4a5568; color: white; }
+        .btn-stack.active { background: var(--cognis-gold); color: white; border-color: white; }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 44' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(4)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(44));</script>
 </head>
 <body>
-<div class="module-card">
-    <div class="header"><h1>Module 44: Layering (Z-Order)</h1></div>
-    
+
+<div class="module-card" style="margin-top: 40px;">
+    <div class="header">
+        <h1>Module 44: Layering (Z-Order)</h1>
+    </div>
+
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Deciphering depth in a flat image requires identifying which shape's border is continuous. If a shape's perimeter is uninterrupted, it is on top. If its border is "cut" by another shape, it is behind.</p>
+        <p>Layering logic requires you to translate a flat 2D image into 3D depth. The core rule is <b>Perimeter Continuity</b>. If a shape's border is unbroken, it is on top. If a shape's border is "interrupted" or cut by another line, it is physically behind. The brain uses these occlusion cues to calculate the sequence of the stack.</p>
+        
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>A red circle is over a blue square. Which outline is complete?</div>
-            <div class="tier-card"><b>Average Year 4</b>Order three shapes from front-to-back based on overlap.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Identify the "hidden" shape that is partially obscured by two others.</div>
+            <div class="tier-card">
+                <b>Advanced Year 2</b>
+                "A red circle overlaps a blue square. If you can see the full circle but the square is cut, which is on top?"
+            </div>
+            <div class="tier-card">
+                <b>Average Year 4</b>
+                "Look at three overlapping shapes. List them in order from the one at the back to the one at the very front."
+            </div>
+            <div class="tier-card">
+                <b>Advanced Year 5</b>
+                "Identify the 'Hidden Center' shape. This is a shape that is partially covered by two others, leaving only a fragment visible."
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area">
-            <div class="stack-stage" id="stage">
-                <div class="shape s-circle" id="circle" onclick="bringToFront('circle')">1</div>
-                <div class="shape s-square" id="square" onclick="bringToFront('square')">2</div>
-                <div class="shape s-triangle" id="triangle" onclick="bringToFront('triangle')"><span style="position:relative; top:50px; color:#1a202c">3</span></div>
+        <p>The <b>3D Depth Scanner</b>. Move the slider to "explode" the diagram. This reveals the true order of the layers by physically separating them in space.</p>
+        
+        <div class="anatomy-display" id="anatomy-stage">
+            <div class="stack-stage" id="stack-container">
+                <div class="shape-layer" id="layer-bot">3</div>
+                <div class="shape-layer" id="layer-mid">2</div>
+                <div class="shape-layer" id="layer-top">1</div>
+                <div class="layer-shadow"></div>
+            </div>
+
+            <div class="depth-control-box">
+                <div style="display:flex; justify-content: space-between; margin-bottom: 12px;">
+                    <span style="font-size:0.6rem; color:#94a3b8; font-weight:800; text-transform:uppercase;">2D (FLAT)</span>
+                    <span style="font-size:0.6rem; color:#94a3b8; font-weight:800; text-transform:uppercase;">3D (EXPLODED)</span>
+                </div>
+                <input type="range" id="depth-slider" min="0" max="1" step="1" value="0" oninput="toggle3D()">
             </div>
         </div>
     </section>
@@ -67,56 +152,90 @@
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
-            <div class="controls">
-                <p style="font-size: 0.8rem; color: #a0aec0;">Click a shape in the diagram above to bring it to the front of the stack.</p>
-                <button class="btn-action" onclick="shuffleStack()">Shuffle Depth</button>
+            <div class="inputs">
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Rearrange Stack</label>
+                <button class="btn-stack" onclick="reorder('circle')">Bring Circle to Front</button>
+                <button class="btn-stack" onclick="reorder('square')">Bring Square to Front</button>
+                <button class="btn-stack" onclick="reorder('triangle')">Bring Triangle to Front</button>
+                <button class="btn-stack" style="margin-top:10px; border-color:var(--cognis-gold); color:var(--cognis-gold);" onclick="randomize()">Randomize Depth</button>
             </div>
-            <div class="trace-log" id="trace-44">Top Shape: Triangle<br>Middle: Square<br>Bottom: Circle</div>
+            <div class="trace-log" id="trace-44">Scanning boundary intersections...</div>
         </div>
     </section>
 
     <section class="phase">
-        <div style="background: #fff5f5; border: 2px solid var(--trap-red); border-radius: 12px; padding: 25px;">
-            <h2 style="color:var(--trap-red); margin-top:0;">Phase 4: The Saboteur</h2>
-            <p><strong>The Trap:</strong> The "Shared Edge" Trap. When two shapes share a border of the same color, the brain loses the ability to distinguish depth, often assuming they are a single, merged shape.</p>
-            <hr style="border:0; border-top:1px solid rgba(229,101,101,0.2); margin:15px 0;">
-            <p><strong>The Fix:</strong> Corner Logic. Look at the vertices where the shapes meet. If a vertex belongs to Shape A but "points into" Shape B, Shape A is likely on top. Follow the perimeter like a detective—the line that never breaks is the leader of the stack.</p>
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "Shared Border" Trap:</strong> When two shapes have the same color or a very thin border, your brain might merge them into a single complex shape. This causes you to miss the fact that one is actually behind the other.</p>
+            <p><strong>The Fix:</strong> Use the <b>Vertex Hunt</b>. Ignore the large areas of color and focus entirely on the "T-junctions" (where lines meet). If Shape A's line stops at Shape B's edge, Shape A is at the back. The "winner" is the shape whose line never stops for anyone.</p>
         </div>
     </section>
 </div>
 
+<button class="btn-complete" onclick="markComplete(44)">Complete Module & Update Lattice</button>
+
 <script>
-    let stackOrder = ['circle', 'square', 'triangle'];
-    
-    function bringToFront(id) {
-        stackOrder = stackOrder.filter(item => item !== id);
-        stackOrder.push(id);
+    let currentOrder = ['triangle', 'square', 'circle']; // Back to Front
+    const shapes = {
+        'circle': { id: 'layer-top', name: 'Red Circle', color: '#ef4444' },
+        'square': { id: 'layer-mid', name: 'Blue Square', color: '#3b82f6' },
+        'triangle': { id: 'layer-bot', name: 'Gold Triangle', color: '#eab308' }
+    };
+
+    function toggle3D() {
+        const is3D = document.getElementById('depth-slider').value === "1";
+        document.getElementById('anatomy-stage').classList.toggle('view-3d', is3D);
+        updateTrace();
+    }
+
+    function reorder(key) {
+        // Move selected key to the end of the array (the front)
+        currentOrder = currentOrder.filter(k => k !== key);
+        currentOrder.push(key);
         renderStack();
     }
 
-    function shuffleStack() {
-        stackOrder.sort(() => Math.random() - 0.5);
+    function randomize() {
+        currentOrder.sort(() => Math.random() - 0.5);
         renderStack();
     }
 
     function renderStack() {
-        stackOrder.forEach((id, index) => {
-            document.getElementById(id).style.zIndex = index + 1;
+        currentOrder.forEach((key, index) => {
+            const el = document.getElementById(shapes[key].id);
+            // Higher index = higher z-index and higher visual label
+            el.style.zIndex = index + 1;
+            el.innerText = 3 - index; // Label 1 for front, 3 for back
+            
+            // Adjust explode positions based on new hierarchy
+            // We dynamically re-map IDs to positions for the CSS variables
+            if (index === 2) el.setAttribute('id', 'layer-top');
+            else if (index === 1) el.setAttribute('id', 'layer-mid');
+            else el.setAttribute('id', 'layer-bot');
         });
+        updateTrace();
+    }
+
+    function updateTrace() {
+        const front = shapes[currentOrder[2]].name;
+        const middle = shapes[currentOrder[1]].name;
+        const back = shapes[currentOrder[0]].name;
+
         document.getElementById('trace-44').innerHTML = `
-            <b>Depth Matrix:</b><br>
-            Front: ${capitalize(stackOrder[2])}<br>
-            Middle: ${capitalize(stackOrder[1])}<br>
-            Back: ${capitalize(stackOrder[0])}
+            <div class="trace-step">→ 1. Front (Complete Outline): <b style="color:var(--cognis-gold)">${front}</b></div>
+            <div class="trace-step">→ 2. Middle (Partial Occlusion): <b>${middle}</b></div>
+            <div class="trace-step">→ 3. Back (Maximum Occlusion): <b>${back}</b></div>
+            <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+                → STACK SEQUENCE VALIDATED
+            </div>
         `;
     }
 
-    function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
-    window.onload = renderStack;
+    window.onload = () => {
+        renderStack();
+        updateTrace();
+    };
 </script>
 
-    <button onclick="markComplete(44)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
 </body>
 </html>

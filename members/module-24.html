@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="../css/module-style.css">
     
     <style>
-        /* UNIQUE CSS FOR THE MEAN BRIDGE */
-        .anatomy-display { padding: 30px; background: #1a202c; border: none; }
+        /* UNIQUE CSS FOR THE MEAN BRIDGE (LIGHT SCHEME) */
+        .anatomy-display { padding: 40px; background: #f0f4f8; border: 2px solid #e2e8f0; }
         
-        svg { background: #1a202c; border-radius: 12px; }
+        #bridge-svg { background: white; border-radius: 12px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
         
-        .stick { fill: #4a5568; stroke: #2d3748; stroke-width: 1; transition: all 0.6s ease; }
-        .target-stick { fill: #4a5568; opacity: 0.3; stroke: white; stroke-dasharray: 3; }
+        /* Bar Colors matched to Module 23 */
+        .stick { fill: var(--cognis-blue); transition: all 0.6s ease; }
+        .target-stick { fill: var(--cognis-blue); opacity: 0.15; stroke: var(--cognis-blue); stroke-dasharray: 4; }
         
         .missing-stick { 
             fill: var(--cognis-gold); 
@@ -25,30 +26,32 @@
         }
         .merged .missing-stick { transform: translateY(0); opacity: 1; }
         
-        .stat-text { fill: #a0aec0; font-size: 10px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
-        .stat-val { fill: white; font-size: 16px; font-weight: 900; }
+        /* Text clarity for light background */
+        .stat-text { fill: #94a3b8; font-size: 10px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
+        .stat-val { fill: var(--cognis-blue); font-size: 18px; font-weight: 900; }
         .stat-val.gold { fill: var(--cognis-gold); }
 
-        /* Nav Correction */
+        /* Nav Correction - Matching Module 23 Standard */
         .nav-back {
             display: inline-flex;
             align-items: center;
-            color: white;
+            color: rgba(255,255,255,0.8);
             text-decoration: none;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 800;
-            margin-bottom: 15px;
-            opacity: 0.7;
-            transition: opacity 0.2s;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            transition: color 0.2s;
         }
-        .nav-back:hover { opacity: 1; }
-        .nav-back span { margin-right: 8px; font-size: 1.1rem; }
+        .nav-back:hover { color: white; }
+        .nav-back span { margin-right: 8px; font-size: 1rem; }
 
-        .btn-action-wrapper { text-align: center; margin-top: 20px; }
+        .btn-action-wrapper { text-align: center; margin-top: 25px; }
         .btn-bridge { 
             background: var(--cognis-gold); color: white; border: none; 
-            padding: 12px 30px; border-radius: 8px; font-weight: 800; 
+            padding: 14px 30px; border-radius: 8px; font-weight: 800; 
             cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
         }
 
         .engine-container { grid-template-columns: 1fr 1.2fr; }
@@ -69,7 +72,7 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>This module solves the "Missing Member" problem. To find a value required to hit a specific average, we compare the <b>Total Height</b> we currently have against the <b>Total Height</b> required by the target mean.</p>
+        <p>A Mean is a "Fair Share" height. To find a missing member of a set, you must compare the <b>Total Height</b> of the current group against the <b>Total Height</b> required to hit the target average.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
@@ -78,7 +81,7 @@
             </div>
             <div class="tier-card">
                 <b>Average Year 4</b>
-                "Sarah scored 12, 15, and 10 in her first three tests. What must she score in her 4th test to have a mean of 13?"
+                "Sarah scored 12, 15, and 10 in her tests. What must she score in her 4th test to have a mean of 13?"
             </div>
             <div class="tier-card">
                 <b>Advanced Year 5</b>
@@ -89,18 +92,18 @@
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The "Bridge" is the gap between the <b>Current Total</b> and the <b>Required Total</b>. Click below to drop the missing data into the set.</p>
+        <p>The "Bridge" is the difference between the totals. Dropping the <b>Missing Data</b> into the left group levels it up to match the target.</p>
         
         <div class="anatomy-display" id="stage">
             <svg id="bridge-svg" width="100%" height="320" viewBox="0 0 700 320" preserveAspectRatio="xMidYMid meet">
                 <g id="left-group"></g>
                 <g id="right-group"></g>
 
-                <text x="150" y="270" class="stat-text" text-anchor="middle">Current Sum:</text>
-                <text id="l-sum" x="150" y="295" class="stat-val" text-anchor="middle">0</text>
+                <text x="150" y="275" class="stat-text" text-anchor="middle">Current Sum</text>
+                <text id="l-sum" x="150" y="300" class="stat-val" text-anchor="middle">0</text>
                 
-                <text x="550" y="270" class="stat-text" text-anchor="middle">Target Sum:</text>
-                <text id="r-sum" x="550" y="295" class="stat-val gold" text-anchor="middle">0</text>
+                <text x="550" y="275" class="stat-text" text-anchor="middle">Target Sum</text>
+                <text id="r-sum" x="550" y="300" class="stat-val gold" text-anchor="middle">0</text>
             </svg>
             
             <div class="btn-action-wrapper">
@@ -114,23 +117,23 @@
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Current Scores (Comma Separated)</label>
+                    <label>Current Scores (Separated by commas)</label>
                     <input type="text" id="in-vals" value="12, 15, 10" oninput="updateLogic()">
                 </div>
                 <div class="control-group" style="margin-top: 20px;">
-                    <label>Required New Mean</label>
+                    <label>Target Mean Required</label>
                     <input type="number" id="in-mean" value="13" oninput="updateLogic()">
                 </div>
             </div>
-            <div class="trace-log" id="engine-trace">Analyzing the heights...</div>
+            <div class="trace-log" id="engine-trace">Calculating the bridge...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Average of Averages" Trap:</strong> Trying to solve the problem by averaging the current average with the new target (e.g., if current mean is 10 and target is 13, guessing the missing score is 16 because 13 is midway).</p>
-            <p><strong>The Fix:</strong> Mean problems are hidden <b>Total</b> problems. Always calculate: (New Count × New Mean) - (Old Count × Old Mean). The difference between these two totals is always your missing value.</p>
+            <p><strong>The "Average of Averages" Trap:</strong> Trying to find the missing score by averaging the current mean and the target mean. If your current mean is 10 and you want to reach 13, it is tempting to think the next score is 16. This logic breaks as soon as the group size changes.</p>
+            <p><strong>The Fix:</strong> Mean problems are <b>Total Volume</b> problems in disguise. Always find the new total (New Count × New Mean) and the old total (Old Count × Old Mean). The difference is always your answer.</p>
         </div>
     </section>
 </div>
@@ -152,42 +155,43 @@
         const targetSum = targetMean * targetCount;
         const missing = targetSum - knownSum;
 
-        // Render Viz
+        // Render SVG elements
         const lGroup = document.getElementById('left-group');
         const rGroup = document.getElementById('right-group');
         lGroup.innerHTML = ''; rGroup.innerHTML = '';
 
-        const scale = 180 / Math.max(targetMean, ...knowns, 1);
+        const maxVal = Math.max(targetMean, ...knowns, 1);
+        const scale = 180 / maxVal;
 
-        // Current Group
+        // Current Bars (Navy)
         knowns.forEach((v, i) => {
             const h = v * scale;
             lGroup.innerHTML += `<rect x="${40 + i*35}" y="${230-h}" width="25" height="${h}" class="stick" />`;
         });
 
-        // The Missing Piece
-        const missH = missing * scale;
+        // The Missing Member (Gold)
+        const missH = Math.max(0, missing * scale);
         lGroup.innerHTML += `
             <g class="missing-stick">
                 <rect x="${40 + knowns.length*35}" y="${230-missH}" width="25" height="${missH}" />
-                <text x="${40 + knowns.length*35 + 12}" y="${230-missH-10}" fill="#C5A059" font-weight="900" font-size="12" text-anchor="middle">${missing.toFixed(1)}</text>
+                <text x="${40 + knowns.length*35 + 12}" y="${230-missH-12}" fill="#C5A059" font-weight="900" font-size="13" text-anchor="middle">${missing.toFixed(1)}</text>
             </g>`;
 
-        // Target Group (Equality)
+        // Target bars (Phantom/Hollow)
         for(let i=0; i < targetCount; i++) {
             const h = targetMean * scale;
             rGroup.innerHTML += `<rect x="${420 + i*35}" y="${230-h}" width="25" height="${h}" class="stick target-stick" />`;
         }
 
-        // Stats
+        // Stats Updates
         document.getElementById('l-sum').textContent = isApplied ? (knownSum + missing).toFixed(1) : knownSum.toFixed(1);
         document.getElementById('r-sum').textContent = targetSum.toFixed(1);
 
-        // Trace
+        // Engine Trace
         document.getElementById('engine-trace').innerHTML = `
-            <div class="trace-step">→ 1. Current Total: ${knowns.join(' + ')} = <b>${knownSum.toFixed(1)}</b></div>
-            <div class="trace-step">→ 2. New Count: ${knowns.length} members + 1 = <b>${targetCount}</b></div>
-            <div class="trace-step">→ 3. Required Total: ${targetCount} members × ${targetMean} = <b>${targetSum.toFixed(1)}</b></div>
+            <div class="trace-step">→ 1. Current Sum: ${knowns.join(' + ')} = <b>${knownSum.toFixed(1)}</b></div>
+            <div class="trace-step">→ 2. Target Set Size: <b>${targetCount} members</b></div>
+            <div class="trace-step">→ 3. Target Total: ${targetCount} × ${targetMean} = <b>${targetSum.toFixed(1)}</b></div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
                 → MISSING VALUE: ${targetSum.toFixed(1)} - ${knownSum.toFixed(1)} = ${missing.toFixed(2)}
             </div>

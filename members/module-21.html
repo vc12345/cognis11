@@ -2,73 +2,131 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 21: Venn Diagrams (2 Circles) | Cognis11</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 21: Venn Diagrams (2 Circles) | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    
     <style>
-        :root { --cognis-blue: #002d5b; --cognis-gold: #c5a059; --cognis-light: #f4f7f9; --trap-red: #d9534f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #eaeff2; padding: 40px 20px; color: #2c3e50; }
-        .module-card { max-width: 950px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: hidden; }
-        .header { background: var(--cognis-blue); color: white; padding: 25px 40px; border-bottom: 4px solid var(--cognis-gold); }
-        .header h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; }
-        .phase { padding: 35px 40px; border-bottom: 1px solid #edf2f7; }
-        .phase h2 { font-size: 0.8rem; color: var(--cognis-gold); text-transform: uppercase; letter-spacing: 2px; margin-top: 0; }
+        /* UNIQUE CSS FOR VENN INTERACTION */
+        .anatomy-display { 
+            background: #f8fafc; 
+            padding: 40px; 
+            border-radius: 12px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            border: 2px solid #e2e8f0;
+        }
 
-        /* X-Ray Tiers */
-        .question-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
-        .tier-card { background: var(--cognis-light); padding: 18px; border-radius: 12px; border-left: 4px solid var(--cognis-blue); font-size: 0.85rem; }
-        .tier-card b { color: var(--cognis-blue); font-size: 0.7rem; text-transform: uppercase; display: block; margin-bottom: 8px; letter-spacing: 1px; }
+        svg { 
+            background: white; 
+            border-radius: 12px; 
+            box-shadow: inset 0 2px 15px rgba(0,0,0,0.05); 
+            max-width: 100%;
+        }
 
-        /* SVG Simulation Area */
-        .simulation-area { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 30px 0; display: flex; flex-direction: column; align-items: center; }
-        svg { background: white; border-radius: 8px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
-        circle { fill: rgba(0, 45, 91, 0.04); stroke: var(--cognis-blue); stroke-width: 3; transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        text { font-family: 'Segoe UI', sans-serif; font-weight: 800; pointer-events: none; transition: all 0.8s ease; text-anchor: middle; dominant-baseline: middle; }
-        .label-val { fill: var(--cognis-blue); font-size: 20px; }
-        .label-intersect { fill: var(--cognis-gold); font-size: 24px; opacity: 0; }
+        circle { 
+            fill: rgba(0, 45, 91, 0.04); 
+            stroke: var(--cognis-blue); 
+            stroke-width: 4; 
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+
+        circle.target-b { stroke: var(--cognis-gold); fill: rgba(197, 160, 89, 0.04); }
+
+        text { 
+            font-family: 'DM Sans', sans-serif; 
+            font-weight: 900; 
+            pointer-events: none; 
+            transition: all 0.8s ease; 
+            text-anchor: middle; 
+            dominant-baseline: middle; 
+        }
+
+        .label-val { fill: var(--cognis-blue); font-size: 22px; }
+        .label-target-b { fill: var(--cognis-gold); }
+        .label-intersect { fill: #e53e3e; font-size: 26px; opacity: 0; }
+        
         .merged .label-intersect { opacity: 1; }
 
-        /* Engine */
-        .engine-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; background: #1a202c; color: white; padding: 30px; border-radius: 12px; }
-        .control-group { margin-bottom: 20px; }
-        .control-group label { display: block; font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
-        .control-group input { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2d3748; color: white; font-weight: bold; font-size: 1.1rem; }
-        .trace-log { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9rem; border-left: 4px solid var(--cognis-gold); line-height: 1.8; }
-        .btn-action { width: 250px; background: var(--cognis-gold); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 20px; }
+        .engine-container { grid-template-columns: 1fr 1.3fr; }
+        
+        .btn-action {
+            margin-top: 25px;
+            background: var(--cognis-gold);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+        }
+        .btn-action:hover { background: #b08d4b; transform: translateY(-2px); }
+
+        input[type=number] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #4a5568;
+            background: #2d3748;
+            color: white;
+            font-weight: 800;
+            margin-top: 5px;
+        }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-
     <script src="../js/module-core.js"></script>
-
-    <script>
-        // This connects this file to the 'id: 21' in your registry
-        document.addEventListener('DOMContentLoaded', () => initModule(21)); 
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', () => initModule(21));</script>
 </head>
 <body>
-<div class="module-card">
-    <div class="header"><h1>Module 21: Venn Diagrams (2 Circles)</h1></div>
+
+<div class="module-card" style="margin-top: 40px;">
+    <div class="header">
+        <h1>Module 21: Venn Diagrams (2 Circles)</h1>
+    </div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Topic Logic: A Venn diagram is a map of shared properties. The critical point of failure in most questions is "Double Counting." We must identify the Intersection first to determine the unique "Only" values for each group.</p>
+        <p>A Venn Diagram is a visual map of <b>Mutual Properties</b>. The point where circles overlap is the <b>Intersection</b> ($A \cap B$). This area contains items that satisfy both sets simultaneously. The "Logical Trap" in 11+ exams is counting these items twice. To solve any Venn puzzle, you must subtract the Intersection from the Group Totals to find the "Only" remainders.</p>
+        
         <div class="question-tiers">
-            <div class="tier-card"><b>Advanced Year 2</b>In a class, 12 play Football and 3 play BOTH. How many play Football ONLY?</div>
-            <div class="tier-card"><b>Average Year 4</b>Group A has 20 people. Group B has 15. The intersection is 5. Find the total Union.</div>
-            <div class="tier-card"><b>Advanced Year 5</b>Out of 40 students, n(A)=25 and n(B)=20. Calculate the size of the Intersection.</div>
+            <div class="tier-card">
+                <b>Advanced Year 2</b>
+                "In a class of 12 footballers, 3 also play rugby. How many play football <b>ONLY</b>?"
+            </div>
+            <div class="tier-card">
+                <b>Average Year 4</b>
+                "Group A = 20, Group B = 15. The intersection is 5. Find the total <b>Union</b> (everyone in both circles)."
+            </div>
+            <div class="tier-card">
+                <b>Advanced Year 5</b>
+                "Out of 40 students, 25 like Art and 20 like Music. Calculate the minimum <b>Intersection</b> size."
+            </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <div class="simulation-area">
+        <p>The <b>Overlap Shift</b>. Watch what happens to the values when the groups interact. Notice how the "Total" remains the same, but the "Unique" counts must decrease to account for the shared items.</p>
+        
+        
+
+        <div class="anatomy-display">
             <svg id="venn2-svg" width="500" height="300" viewBox="0 0 500 300">
                 <circle id="v2-c-a" cx="130" cy="150" r="110" />
-                <circle id="v2-c-b" cx="370" cy="150" r="110" />
+                <circle id="v2-c-b" cx="370" cy="150" r="110" class="target-b" />
                 <text id="v2-t-oa" x="130" y="150" class="label-val">15</text>
-                <text id="v2-t-ob" x="370" y="150" class="label-val">10</text>
+                <text id="v2-t-ob" x="370" y="150" class="label-val label-target-b">10</text>
                 <text id="v2-t-int" x="250" y="150" class="label-intersect">5</text>
             </svg>
-            <button class="btn-action" onclick="toggleVenn2()" id="btn-v2">Calculate Intersection</button>
+            <button class="btn-action" onclick="toggleVenn2()" id="btn-v2">Activate Intersection</button>
         </div>
     </section>
 
@@ -76,38 +134,66 @@
         <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="inputs">
-                <div class="control-group"><label>Total n(A)</label><input type="number" id="v2-in-ta" value="15" oninput="updateV2()"></div>
-                <div class="control-group"><label>Total n(B)</label><input type="number" id="v2-in-tb" value="10" oninput="updateV2()"></div>
-                <div class="control-group"><label>Intersection (A ∩ B)</label><input type="number" id="v2-in-int" value="5" oninput="updateV2()"></div>
+                <div class="control-group">
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Total n(A)</label>
+                    <input type="number" id="v2-in-ta" value="15" oninput="updateV2()">
+                </div>
+                <div class="control-group" style="margin-top:15px;">
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Total n(B)</label>
+                    <input type="number" id="v2-in-tb" value="10" oninput="updateV2()">
+                </div>
+                <div class="control-group" style="margin-top:15px;">
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Intersection (A ∩ B)</label>
+                    <input type="number" id="v2-in-int" value="5" oninput="updateV2()">
+                </div>
             </div>
-            <div class="trace-log" id="v2-trace">Adjust totals to see the "Only" remainder...</div>
+            <div class="trace-log" id="v2-trace">Awaiting set analysis...</div>
+        </div>
+    </section>
+
+    <section class="phase">
+        <div class="trap-box">
+            <h3>Phase 4: The Saboteur</h3>
+            <p><strong>The "Blind Addition" Trap:</strong> Adding the two totals together to find the total population without considering the overlap. (e.g. 15 Footballers + 10 Swimmers = 25 people). If 5 people do both, your total is wrong by exactly 5.</p>
+            
+            <p><strong>The Fix:</strong> Use the <b>Set Subtraction Rule</b>. Before calculating the total (Union), you must subtract the overlap from the totals. The formula is: $Total = (A - Intersection) + (B - Intersection) + Intersection$. This ensures every individual is counted exactly once.</p>
         </div>
     </section>
 </div>
 
+<button class="btn-complete" onclick="markComplete(21)">Complete Module & Update Lattice</button>
+
 <script>
     let v2Merged = false;
+
     function updateV2() {
         const ta = parseFloat(document.getElementById('v2-in-ta').value) || 0;
         const tb = parseFloat(document.getElementById('v2-in-tb').value) || 0;
         const inter = parseFloat(document.getElementById('v2-in-int').value) || 0;
-        const oa = ta - inter; const ob = tb - inter;
+        
+        const oa = ta - inter; 
+        const ob = tb - inter;
+        const union = oa + ob + inter;
 
         document.getElementById('v2-t-oa').textContent = v2Merged ? oa : ta;
         document.getElementById('v2-t-ob').textContent = v2Merged ? ob : tb;
         document.getElementById('v2-t-int').textContent = inter;
 
         document.getElementById('v2-trace').innerHTML = `
-            <b>Disjoint Analysis:</b><br>
-            → Only A = ${ta} - ${inter} = ${oa}<br>
-            → Only B = ${tb} - ${inter} = ${ob}<br>
-            → Total Union (A ∪ B) = ${oa + ob + inter}
+            <div class="trace-step">→ 1. Set A (Only): ${ta} - ${inter} = <b>${oa}</b></div>
+            <div class="trace-step">→ 2. Set B (Only): ${tb} - ${inter} = <b>${ob}</b></div>
+            <div class="trace-step">→ 3. Intersection: <b>${inter}</b> (Belongs to both)</div>
+            <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
+                → TOTAL UNION (A ∪ B): ${union}
+            </div>
         `;
     }
+
     function toggleVenn2() {
         v2Merged = !v2Merged;
         const svg = document.getElementById('venn2-svg');
         const btn = document.getElementById('btn-v2');
+        
         if (v2Merged) {
             document.getElementById('v2-c-a').setAttribute('cx', '200');
             document.getElementById('v2-c-b').setAttribute('cx', '300');
@@ -121,15 +207,13 @@
             document.getElementById('v2-t-oa').setAttribute('x', '130');
             document.getElementById('v2-t-ob').setAttribute('x', '370');
             svg.classList.remove('merged');
-            btn.innerText = "Calculate Intersection";
+            btn.innerText = "Activate Intersection";
         }
         updateV2();
     }
+
     window.onload = updateV2;
 </script>
 
-    <button onclick="markComplete(21)" style="margin-top: 50px; padding: 15px 30px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">
-        Complete Module & Save Progress
-    </button>
 </body>
 </html>

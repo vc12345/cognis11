@@ -1,10 +1,27 @@
 // js/module-core.js
 
+/**
+ * GOOGLE ANALYTICS 4 INTEGRATION
+ * Automatically initializes tracking for every module
+ */
+(function initializeAnalytics() {
+    const GA_ID = 'G-YK13FYQ1CJ';
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+    document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+    window.gtag = gtag; // Make gtag globally accessible
+})();
+
 const SAMPLE_IDS = [11, 47, 53]; // Modules enabled for the /sample.html trial
 
 /**
  * SMART LOADER: Automatically fetches the registry if missing.
- * Path-aware to work from both /members/ and the root /sample.html.
  */
 async function ensureRegistry() {
     if (typeof COGNIS_MODULES !== 'undefined') return true;
@@ -12,7 +29,6 @@ async function ensureRegistry() {
     return new Promise((resolve) => {
         const script = document.createElement('script');
         const isInMembers = window.location.pathname.includes('/members/');
-        // If we are in /members/, go up one level. If in root, go into js/
         script.src = isInMembers ? '../js/registry.js' : 'js/registry.js'; 
         
         script.onload = () => resolve(true);
@@ -30,6 +46,15 @@ async function ensureRegistry() {
 async function initModule(moduleId) {
     const isSample = SAMPLE_IDS.includes(Number(moduleId));
     
+    // Track Module View in Analytics
+    if (window.gtag) {
+        window.gtag('event', 'module_view', {
+            'module_id': moduleId,
+            'view_mode': isSample ? 'sample' : 'member',
+            'page_path': window.location.pathname
+        });
+    }
+
     // 1. Ensure Registry is available
     await ensureRegistry();
 
@@ -269,6 +294,13 @@ async function markComplete(moduleId) {
 
     const { data: { user } } = await window.supabaseClient.auth.getUser();
     if (!user) return;
+
+    // Track Module Completion Event
+    if (window.gtag) {
+        window.gtag('event', 'module_complete', {
+            'module_id': moduleId
+        });
+    }
 
     const { error } = await window.supabaseClient
         .from('module_progress')

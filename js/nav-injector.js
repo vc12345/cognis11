@@ -1,5 +1,24 @@
 // js/nav-injector.js
 
+(function injectGA() {
+    const GA_ID = 'G-YK13FYQ1CJ'; // REPLACE WITH YOUR ACTUAL ID
+    
+    // Inject the Google tag script
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+    document.head.appendChild(script);
+
+    // Initialize gtag
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+    
+    // Make gtag globally available
+    window.gtag = gtag;
+})();
+
 function injectNav() {
     const navHTML = `
         <style>

@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cognis11 · Reasoning-First Preparation</title>
 <meta name="description" content="11+ preparation for deep understanders. Building the reasoning foundation for Years 2-3 and breaking speed plateaus for Years 4-5.">
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YK13FYQ1CJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-YK13FYQ1CJ');
+</script>
+
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root { --navy:#1B3A5C; --steel:#2E6DA4; --gold:#c5a059; --cream:#FAFAF6; --off:#F4F2ED; --grey:#64748b; --dgrey:#334155; --lgrey:#E2E8F0; }
@@ -56,7 +65,7 @@
   <div class="nav-right">
     <a href="login.html" class="nav-link">Login</a>
     <a href="subscribe.html" class="nav-link">Subscribe</a>
-    <a href="diagnostic.html" class="nav-cta">Free diagnostic →</a>
+    <a href="diagnostic.html" class="nav-cta" onclick="gtag('event', 'click_toDiagnostic');">Free diagnostic →</a>
   </div>
 </nav>
 
@@ -66,8 +75,8 @@
   <p class="hero-sub">Standard 11+ prep focuses on pattern recognition. We build the logical structures required for genuine speed, accuracy, and confidence under pressure.</p>
   
   <div class="btn-row">
-    <a href="diagnostic.html" class="btn">Find Your Child's Profile →</a>
-    <a href="sample.html" class="btn btn-outline">Explore Sample Modules →</a>
+    <a href="diagnostic.html" class="btn" onclick="gtag('event', 'click_toDiagnostic');">Find Your Child's Profile →</a>
+    <a href="sample.html" class="btn btn-outline" onclick="gtag('event', 'click_toSamples');">Explore Sample Modules →</a>
   </div>
 </div>
 
@@ -104,8 +113,8 @@
     <p style="color: rgba(255,255,255,0.7); margin-bottom: 35px; max-width: 500px; margin-left: auto; margin-right: auto;">Explore 59 interactive modules designed to turn logical confusion into conceptual clarity.</p>
     
     <div class="btn-row">
-        <a href="subscribe.html" class="btn" style="background: white; color: var(--navy); box-shadow: none;">View Subscription Plans</a>
-        <a href="sample.html" class="btn btn-outline" style="border-color: rgba(255,255,255,0.3); color: white;">Try Sample Modules</a>
+        <a href="subscribe.html" class="btn" style="background: white; color: var(--navy); box-shadow: none;" onclick="gtag('event', 'click_toSubscribe');">View Subscription Plans</a>
+        <a href="sample.html" class="btn btn-outline" style="border-color: rgba(255,255,255,0.3); color: white;" onclick="gtag('event', 'click_toSamples');">Try Sample Modules</a>
     </div>
   </section>
 </div>

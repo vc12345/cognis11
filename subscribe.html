@@ -4,53 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subscription Options · Cognis 11+</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --navy:#1B3A5C; --steel:#2E6DA4; --cream:#FAFAF6; --off:#F4F2ED; --grey:#888; --dgrey:#3A3A3A; --lgrey:#E5E3DD; }
+        :root { 
+            --navy:#1B3A5C; 
+            --steel:#2E6DA4; 
+            --gold: #c5a059;
+            --cream:#FAFAF6; 
+            --off:#F4F2ED; 
+            --grey:#64748b; 
+            --dgrey:#334155; 
+            --lgrey:#E2E8F0; 
+        }
         * { box-sizing:border-box; margin:0; padding:0; }
         body { font-family:'DM Sans', sans-serif; background:var(--cream); color:var(--dgrey); line-height:1.6; }
-        .wrap { max-width:1000px; margin:0 auto; padding:0 32px; }
+        .wrap { max-width:1050px; margin:0 auto; padding:0 32px; }
         
-        nav { border-bottom:1px solid var(--lgrey); padding:18px 32px; display:flex; align-items:center; justify-content:space-between; background:#fff; position:sticky; top:0; z-index:10; }
+        nav { border-bottom:1px solid var(--lgrey); padding:18px 32px; display:flex; align-items:center; justify-content:space-between; background:#fff; position:sticky; top:0; z-index:100; }
         .brand { font-family:'Playfair Display', serif; font-size:1.1rem; color:var(--navy); font-weight:700; text-decoration:none; }
         
-        .hero { padding:80px 0 40px; text-align:center; }
+        .hero { padding:80px 0 60px; text-align:center; }
         .hero-tag { font-size:.75rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--steel); margin-bottom:15px; }
-        .hero h1 { font-family:'Playfair Display', serif; font-size:clamp(2.2rem, 5vw, 3.2rem); color:var(--navy); margin-bottom:20px; line-height:1.1; }
-        .hero p { font-size:1.1rem; color:var(--grey); max-width:650px; margin:0 auto; }
+        .hero h1 { font-family:'Playfair Display', serif; font-size:clamp(2.2rem, 5vw, 3.5rem); color:var(--navy); margin-bottom:20px; line-height:1.1; }
+        .hero p { font-size:1.15rem; color:var(--grey); max-width:700px; margin:0 auto; }
 
-        /* TIER GRID - Balanced and Equal */
-        .tier-grid { display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin:40px 0 80px; align-items: stretch; }
+        /* THE METHODOLOGY SECTION */
+        .pitch-section {
+            background: #fff;
+            border: 1px solid var(--lgrey);
+            border-radius: 16px;
+            padding: 50px;
+            margin-bottom: 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        @media(max-width:850px) { .pitch-section { grid-template-columns: 1fr; padding: 30px; } }
+
+        .pitch-text h2 { font-family:'Playfair Display', serif; color: var(--navy); margin-bottom: 20px; font-size: 1.8rem; }
+        .pitch-text p { margin-bottom: 20px; color: var(--dgrey); }
+        .pitch-highlight { color: var(--steel); font-weight: 700; }
+
+        /* CATEGORY GUIDE GRID */
+        .category-guide {
+            background: var(--off);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--lgrey);
+        }
+        .category-guide h3 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--grey); margin-bottom: 20px; }
+        .category-key {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .key-item { font-size: 0.75rem; font-weight: 500; color: var(--navy); display: flex; align-items: center; gap: 8px; }
+        .key-item b { background: var(--navy); color: #fff; width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 0.65rem; }
+
+        /* TIER GRID */
+        .tier-grid { display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom: 80px; align-items: stretch; }
         @media(max-width:768px) { .tier-grid { grid-template-columns: 1fr; } }
 
-        .tier-card { background:#fff; border:1px solid var(--lgrey); border-radius:12px; padding:40px; display:flex; flex-direction:column; transition: border-color 0.3s ease; }
-        .tier-card:hover { border-color: var(--steel); }
+        .tier-card { background:#fff; border:1px solid var(--lgrey); border-radius:12px; padding:40px; display:flex; flex-direction:column; transition: transform 0.3s ease, border-color 0.3s ease; }
+        .tier-card:hover { border-color: var(--gold); transform: translateY(-5px); }
         
-        .tier-head h3 { font-family:'Playfair Display', serif; font-size:1.6rem; color:var(--navy); margin-bottom:8px; }
-        .tier-age { font-size: 0.8rem; font-weight: 700; color: var(--steel); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px; display: block; }
+        .tier-head h3 { font-family:'Playfair Display', serif; font-size:1.8rem; color:var(--navy); margin-bottom:8px; }
+        .tier-age { font-size: 0.8rem; font-weight: 800; color: var(--gold); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; display: block; }
         
-        .price-big { font-family:'Playfair Display', serif; font-size:3.2rem; color:var(--navy); margin-bottom:10px; line-height: 1; }
+        .price-big { font-family:'Playfair Display', serif; font-size:3.5rem; color:var(--navy); margin-bottom:10px; line-height: 1; }
         .price-big span { font-size:1rem; font-family:'DM Sans', sans-serif; color:var(--grey); font-weight: 400; }
         
         .tier-card ul { list-style:none; margin:25px 0; border-top:1px solid var(--lgrey); padding-top:25px; flex-grow: 1; }
-        .tier-card li { margin-bottom:14px; font-size:0.95rem; display:flex; align-items:flex-start; gap:12px; line-height: 1.4; }
-        .tier-card li::before { content:'✓'; color:var(--steel); font-weight:bold; flex-shrink: 0; }
+        .tier-card li { margin-bottom:14px; font-size:0.95rem; display:flex; align-items:flex-start; gap:12px; line-height: 1.4; color: var(--dgrey); }
+        .tier-card li::before { content:'→'; color:var(--gold); font-weight:bold; flex-shrink: 0; }
 
-        .btn-sub { display:block; width:100%; background:var(--navy); color:#fff; padding:18px; border-radius:8px; text-decoration:none; text-align:center; font-weight:700; font-size:1rem; transition:0.2s; border:none; cursor:pointer; }
+        .btn-sub { display:block; width:100%; background:var(--navy); color:#fff; padding:20px; border-radius:8px; text-decoration:none; text-align:center; font-weight:700; font-size:1rem; transition:0.2s; border:none; cursor:pointer; box-shadow: 0 4px 14px rgba(27, 58, 92, 0.2); }
         .btn-sub:hover { background:var(--steel); }
-        .btn-outline { background: transparent; color: var(--navy); border: 2px solid var(--navy); }
-        .btn-outline:hover { background: var(--navy); color: #fff; }
+        .btn-outline { background: transparent; color: var(--navy); border: 2px solid var(--navy); box-shadow: none; }
+        .btn-outline:hover { background: var(--off); }
         
         footer { border-top:1px solid var(--lgrey); padding:60px 0; text-align:center; font-size:.85rem; color:var(--grey); }
         footer a { color: var(--navy); text-decoration: none; font-weight: 500; margin: 0 10px; }
 
-        /* Auth Modal */
-        #sub-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:1000; justify-content:center; align-items:center; }
-        .auth-card { background:#1e293b; padding:2.8rem; border-radius:16px; width:90%; max-width:420px; border:1px solid #334155; color:#f8fafc; text-align:center; }
-        .form-group { margin-bottom: 1.4rem; text-align: left; }
-        .form-group label { display: block; font-size: 0.7rem; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; font-weight: 700; }
-        .form-group input { width: 100%; padding: 14px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 1rem; }
-        #modal-btn { width: 100%; padding: 16px; background: #2563eb; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        /* Auth Modal (Dark) */
+        #sub-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.9); z-index:1000; justify-content:center; align-items:center; backdrop-filter: blur(4px); }
+        .auth-card { background:#1e293b; padding:3rem; border-radius:20px; width:90%; max-width:440px; border:1px solid #334155; color:#f8fafc; text-align:center; }
+        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        .form-group label { display: block; font-size: 0.7rem; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+        .form-group input { width: 100%; padding: 16px; background: #0f172a; border: 1px solid #334155; border-radius: 10px; color: #fff; font-size: 1rem; }
+        #modal-btn { width: 100%; padding: 18px; background: #3b82f6; color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; font-size: 1rem; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/js/supabase-config.js"></script>
@@ -60,15 +103,41 @@
 
 <nav>
     <a href="/index.html" class="brand">Cognis 11+</a>
-    <a href="/login.html" style="font-size:.88rem;color:var(--navy);text-decoration:none;font-weight:600;">Login</a>
+    <a href="/login.html" style="font-size:.88rem;color:var(--navy);text-decoration:none;font-weight:600; text-transform: uppercase; letter-spacing: 1px;">Login</a>
 </nav>
 
 <div class="wrap">
     <div class="hero">
-        <div class="hero-tag">The Learning Lattice</div>
-        <h1>Preparation with <em>purpose.</em></h1>
-        <p>Select the access model that best supports your child’s current stage of logic and understanding.</p>
+        <div class="hero-tag">Preparation Redefined</div>
+        <h1>Less drilling. More <em>understanding.</em></h1>
+        <p>The Learning Lattice is designed for parents and children to tackle the 11+ curriculum in manageable, concept-led sessions.</p>
     </div>
+
+    <section class="pitch-section">
+        <div class="pitch-text">
+            <h2>The 10-Minute Collaborative Model</h2>
+            <p>Traditional 11+ prep often feels like an endless cycle of workbooks and repetitive drills. It’s exhausting for the child and frustrating for the parent.</p>
+            <p>Our modules solve this by focusing on <span class="pitch-highlight">Conceptual X-Rays</span>. Each session is designed to be completed together in just 10 minutes. As an adult, you can master the concept in 60 seconds, then guide your child through the interactive logic engine.</p>
+            <p>By focusing on <i>why</i> a problem works, speed and accuracy follow naturally as a byproduct of clarity.</p>
+        </div>
+        
+        <div class="category-guide">
+            <h3>The 11 Branches of Logic</h3>
+            <div class="category-key">
+                <div class="key-item"><b>A</b> Proportionality & Fractions</div>
+                <div class="key-item"><b>B</b> Motion & Time</div>
+                <div class="key-item"><b>C</b> Operational Logic</div>
+                <div class="key-item"><b>D</b> Data & Geometry</div>
+                <div class="key-item"><b>E</b> Coding & Decoding</div>
+                <div class="key-item"><b>F</b> Word Mechanics</div>
+                <div class="key-item"><b>G</b> Semantic Logic</div>
+                <div class="key-item"><b>H</b> 2D Transformations</div>
+                <div class="key-item"><b>I</b> 3D & Manipulation</div>
+                <div class="key-item"><b>J</b> Comprehension Logic</div>
+                <div class="key-item"><b>K</b> Applied Linguistics</div>
+            </div>
+        </div>
+    </section>
 
     <div class="tier-grid">
         <div class="tier-card">
@@ -77,14 +146,14 @@
                 <h3>Foundational Access</h3>
             </div>
             <div class="price-big">£6<span>/month</span></div>
-            <p style="font-size:0.85rem; color:var(--grey); margin-top: 5px;">Build reasoning instincts from the ground up.</p>
+            <p style="font-size:0.9rem; color:var(--grey); margin-top: 10px;">Build reasoning instincts early, without the pressure.</p>
             
             <ul>
-                <li><strong>Sequential Progression:</strong> Master one problem structure to unlock the next.</li>
-                <li>Ideal for building the mental models required for long-term 11+ confidence.</li>
-                <li>Comprehensive coverage of all 59 core problem structures.</li>
-                <li>Track module completion via a personal dashboard.</li>
-                <li>No minimum commitment; cancel anytime.</li>
+                <li><strong>Sequential Progression:</strong> One module unlocks the next, ensuring a solid foundation before moving to complex logic.</li>
+                <li>Uses interactive visualisers to build mental models.</li>
+                <li>Covers the entire 59-module logic schema.</li>
+                <li>Personal progress tracking via the Dashboard.</li>
+                <li>Cancel anytime; no minimum contract.</li>
             </ul>
             
             <button class="btn-sub btn-outline" onclick="openModal('foundational')">Select Foundational</button>
@@ -96,14 +165,14 @@
                 <h3>Supplemental Access</h3>
             </div>
             <div class="price-big">£9<span>/month</span></div>
-            <p style="font-size:0.85rem; color:var(--grey); margin-top: 5px;">Crystallise understanding across the lattice.</p>
+            <p style="font-size:0.9rem; color:var(--grey); margin-top: 10px;">The ultimate toolkit for tackling specific logic gaps.</p>
             
             <ul>
-                <li><strong>Open Access:</strong> Immediate entry to all 59 logic modules for targeted review.</li>
-                <li>Designed to help students identify and resolve specific logical "short-circuits."</li>
-                <li>Focuses on structural comprehension (speed follows as a byproduct of clarity).</li>
-                <li>Refine instincts across Maths, Verbal, and Non-Verbal reasoning.</li>
-                <li>Full progress tracking across all units.</li>
+                <li><strong>Open Access:</strong> Jump immediately to any of the 59 modules for targeted revision and problem-solving.</li>
+                <li>Ideal for resolving specific "logical short-circuits" identified in mock exams or homework.</li>
+                <li>High-level logic covering Maths, VR, and NVR.</li>
+                <li>Full tracking for revision and mastery.</li>
+                <li>Secure payment; simple dashboard cancellation.</li>
             </ul>
             
             <button class="btn-sub" onclick="openModal('supplemental')">Select Supplemental</button>
@@ -112,34 +181,34 @@
 </div>
 
 <footer>
-    <p>Secure payment processed by Stripe. Cancel anytime via your account dashboard.</p>
+    <p>Securely processed by Stripe. All plans are rolling monthly subscriptions.</p>
     <div style="margin-top:20px;">
         <a href="/index.html">Home</a>
         <a href="/about.html">About</a>
-        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/privacy.html">Privacy</a>
         <a href="mailto:hello@cognis11.com">Contact</a>
     </div>
 </footer>
 
 <div id="sub-modal">
     <div class="auth-card" style="position:relative;">
-        <button onclick="closeModal()" style="position:absolute; top:20px; right:20px; background:none; border:none; color:#94a3b8; cursor:pointer; font-size: 1.2rem;">✕</button>
-        <h2 style="font-family:'Playfair Display'; font-size: 1.8rem; margin-bottom:10px;">Create Your Account</h2>
-        <p id="modal-desc" style="font-size:0.9rem; color:#94a3b8; margin-bottom:24px;">Enter your details to proceed to secure payment.</p>
+        <button onclick="closeModal()" style="position:absolute; top:25px; right:25px; background:none; border:none; color:#94a3b8; cursor:pointer; font-size: 1.2rem;">✕</button>
+        <h2 style="font-family:'Playfair Display'; font-size: 2rem; margin-bottom:10px;">Join Cognis 11+</h2>
+        <p id="modal-desc" style="font-size:0.95rem; color:#94a3b8; margin-bottom:30px;">Let's get your account set up.</p>
         
         <div class="form-group">
             <label>Email Address</label>
-            <input type="email" id="sub-email" placeholder="parent@example.com">
+            <input type="email" id="sub-email" placeholder="parent@email.com">
         </div>
         <div class="form-group">
             <label>Create Password</label>
-            <input type="password" id="sub-password" placeholder="Min. 6 characters">
+            <input type="password" id="sub-password" placeholder="••••••••">
         </div>
         
         <input type="hidden" id="selected-plan" value="">
 
-        <button id="modal-btn" onclick="handleSubscriptionSignup()">Proceed to Payment</button>
-        <div id="error-msg" style="color:#ef4444; font-size:0.8rem; margin-top:15px; display:none;"></div>
+        <button id="modal-btn" onclick="handleSubscriptionSignup()">Create Account & Pay</button>
+        <div id="error-msg" style="color:#f87171; font-size:0.85rem; margin-top:20px; display:none; background: rgba(248, 113, 113, 0.1); padding: 10px; border-radius: 6px;"></div>
     </div>
 </div>
 
@@ -148,8 +217,8 @@
         document.getElementById('selected-plan').value = plan;
         document.getElementById('sub-modal').style.display = 'flex'; 
         const desc = document.getElementById('modal-desc');
-        if(plan === 'foundational') desc.innerText = "You've selected Foundational Access (£6/mo).";
-        else desc.innerText = "You've selected Supplemental Access (£9/mo).";
+        if(plan === 'foundational') desc.innerText = "Setting up Foundational Access (£6/mo).";
+        else desc.innerText = "Setting up Supplemental Access (£9/mo).";
     }
     function closeModal() { document.getElementById('sub-modal').style.display = 'none'; }
     window.onclick = function(event) {

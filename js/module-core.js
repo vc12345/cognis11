@@ -1,33 +1,45 @@
 // js/module-core.js
 
+const SAMPLE_IDS = [11, 47, 53]; // Modules enabled for the /sample.html trial
+
 /**
- * SMART LOADER: Automatically fetches the registry if missing from the HTML
+ * SMART LOADER: Automatically fetches the registry if missing.
+ * Path-aware to work from both /members/ and the root /sample.html.
  */
 async function ensureRegistry() {
     if (typeof COGNIS_MODULES !== 'undefined') return true;
 
     return new Promise((resolve) => {
-        console.log("Core: Registry missing. Injecting dynamically...");
         const script = document.createElement('script');
-        // This path assumes your modules are in /members/modules/ and registry is in /js/
-        script.src = '../js/registry.js'; 
-        script.onload = () => {
-            console.log("Core: Registry loaded successfully.");
-            resolve(true);
-        };
+        const isInMembers = window.location.pathname.includes('/members/');
+        // If we are in /members/, go up one level. If in root, go into js/
+        script.src = isInMembers ? '../js/registry.js' : 'js/registry.js'; 
+        
+        script.onload = () => resolve(true);
         script.onerror = () => {
-            console.error("Core: Critical Error - Could not find registry.js at " + script.src);
+            console.error("Core: Registry.js not found at " + script.src);
             resolve(false);
         };
         document.head.appendChild(script);
     });
 }
 
+/**
+ * MAIN INITIALIZATION
+ */
 async function initModule(moduleId) {
-    // 1. Ensure Registry is available before proceeding
+    const isSample = SAMPLE_IDS.includes(Number(moduleId));
+    
+    // 1. Ensure Registry is available
     await ensureRegistry();
 
-    // 2. GATEKEEPER: Check Supabase Initialization
+    // 2. IF SAMPLE: Bypass all security and inject Guest UI
+    if (isSample) {
+        injectModuleUI("Guest Explorer", moduleId, true);
+        return; 
+    }
+
+    // 3. GATEKEEPER: Ensure Supabase is loaded
     if (!window.supabaseClient) {
         let attempts = 0;
         while (!window.supabaseClient && attempts < 20) {
@@ -36,19 +48,14 @@ async function initModule(moduleId) {
         }
     }
 
-    if (!window.supabaseClient) {
-        console.error("Module Core: supabaseClient failed to load.");
-        return;
-    }
-
-    // 3. AUTH CHECK
+    // 4. AUTH CHECK
     const { data: { user }, error: authError } = await window.supabaseClient.auth.getUser();
     if (authError || !user) {
         window.location.href = "/login.html";
         return;
     }
 
-    // 4. SUBSCRIPTION & SEQUENTIAL LOGIC
+    // 5. SUBSCRIPTION CHECK
     const { data: profile } = await window.supabaseClient
         .from('profiles')
         .select('subscription_status, subscription_plan')
@@ -61,6 +68,7 @@ async function initModule(moduleId) {
         return;
     }
 
+    // 6. SEQUENTIAL LOCKDOWN (For Foundational Plan)
     const currentModuleId = Number(moduleId);
     const userPlan = profile.subscription_plan || 'none';
 
@@ -81,15 +89,17 @@ async function initModule(moduleId) {
         }
     }
 
-    // 5. UI INJECTION (Header & Footer Nav)
-    injectModuleUI(user.email, currentModuleId);
+    // 7. INJECT FULL UI
+    injectModuleUI(user.email, currentModuleId, false);
 }
 
-function injectModuleUI(email, currentId) {
+/**
+ * UI INJECTION: Handles CSS Overrides, Nav, and Footer
+ */
+function injectModuleUI(email, currentId, isSample) {
     let prevMod = null;
     let nextMod = null;
 
-    // Resolve Adjacent Modules
     if (typeof COGNIS_MODULES !== 'undefined') {
         const currentIndex = COGNIS_MODULES.findIndex(m => Number(m.id) === Number(currentId));
         if (currentIndex !== -1) {
@@ -100,23 +110,23 @@ function injectModuleUI(email, currentId) {
 
     const uiHTML = `
         <style>
-            /* MASTER BRANDING & LAYOUT OVERRIDES */
+            /* 1. MASTER BRANDING OVERRIDES */
             body { 
                 background-color: #FAFAF6 !important; 
                 color: #1B3A5C !important;
                 font-family: 'DM Sans', sans-serif !important;
                 margin: 0;
-                padding-bottom: 60px; 
+                padding-bottom: 80px; 
             }
             .module-card { 
                 max-width: 920px !important; 
                 border: 1px solid #E5E3DD !important; 
                 box-shadow: 0 10px 40px rgba(0,0,0,0.03) !important;
                 background: white !important;
-                margin-bottom: 20px !important;
+                margin: 20px auto !important;
             }
 
-            /* TOP NAVIGATION */
+            /* 2. TOP NAVIGATION BAR */
             .cognis-m-nav {
                 background: #ffffff !important;
                 border-bottom: 1px solid #E5E3DD;
@@ -137,21 +147,57 @@ function injectModuleUI(email, currentId) {
                 align-items: center;
                 gap: 8px;
             }
-            .cognis-m-nav .user-tag { font-size: 0.75rem; color: #888; font-weight: 500; }
+            .cognis-m-nav .user-tag { font-size: 0.75rem; color: ${isSample ? 'var(--gold)' : '#888'}; font-weight: 700; }
 
-            /* ENGINE TRACE LOGS */
+            /* 3. THE ENGINE (Dark Logic Center) */
+            .simulation-area, .engine-container { 
+                background: #1B3A5C !important; 
+                color: white !important;
+                border-radius: 12px !important;
+                padding: 30px !important;
+            }
             .trace-log, [id*="trace"], [id*="logic"] { 
                 background: rgba(0,0,0,0.25) !important; 
                 border-left: 4px solid #c5a059 !important;
                 color: #48bb78 !important;
                 font-family: 'Consolas', monospace !important;
+                font-size: 0.85rem !important;
+                line-height: 1.6 !important;
+                padding: 15px !important;
             }
 
-            /* FOOTER NAVIGATION BUTTONS */
+            /* 4. THE SABOTEUR (Phase 4 Face-Off) */
+            .saboteur-grid { 
+                display: grid !important; 
+                grid-template-columns: 1fr 1fr !important; 
+                gap: 20px !important; 
+                margin-top: 20px !important; 
+            }
+            .saboteur-panel.trap, .trap-box { 
+                background: #FFF5F5 !important; 
+                border: 2px solid #d9534f !important; 
+                border-radius: 12px !important;
+                padding: 25px !important;
+            }
+            .saboteur-panel.fix { 
+                background: #F0FFF4 !important; 
+                border: 2px solid #48bb78 !important; 
+                border-radius: 12px !important;
+                padding: 25px !important;
+            }
+            .saboteur-panel h3 {
+                margin: 0 0 10px 0 !important;
+                font-size: 0.75rem !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.1em !important;
+                font-weight: 800 !important;
+            }
+
+            /* 5. FOOTER NAVIGATION */
             .module-footer-nav {
                 max-width: 920px;
                 margin: 40px auto 80px;
-                display: ${(!prevMod && !nextMod) ? 'none' : 'flex'};
+                display: ${(!prevMod && !nextMod || isSample) ? 'none !important' : 'flex'};
                 justify-content: space-between;
                 gap: 20px;
                 padding: 0 20px;
@@ -166,87 +212,61 @@ function injectModuleUI(email, currentId) {
                 transition: all 0.3s ease;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             }
-            .nav-cta .cta-label {
-                font-size: 0.65rem;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                font-weight: 800;
-                margin-bottom: 6px;
-                opacity: 0.7;
-            }
+            .nav-cta .cta-label { font-size: 0.65rem; text-transform: uppercase; font-weight: 800; margin-bottom: 6px; opacity: 0.7; }
             .nav-cta .cta-title { font-size: 0.95rem; font-weight: 700; }
-            
-            .nav-prev {
-                background: white;
-                color: #1B3A5C;
-                border: 2px solid #E5E3DD;
-                text-align: left;
-            }
+            .nav-prev { background: white; color: #1B3A5C; border: 2px solid #E5E3DD; text-align: left; }
             .nav-prev:hover { border-color: #1B3A5C; transform: translateX(-5px); }
-            
-            .nav-next {
-                background: #1B3A5C;
-                color: white;
-                border: 2px solid #1B3A5C;
-                text-align: right;
-            }
+            .nav-next { background: #1B3A5C; color: white; border: 2px solid #1B3A5C; text-align: right; }
             .nav-next:hover { background: #c5a059; border-color: #c5a059; transform: translateX(5px); }
-            
-            .nav-placeholder { flex: 1; visibility: hidden; }
 
-            /* COMPLETE BUTTON STYLING */
+            /* 6. COMPLETE BUTTON */
             button[onclick*="markComplete"] {
+                display: ${isSample ? 'none !important' : 'block'};
                 background: #1B3A5C !important;
-                border: none !important;
                 border-radius: 6px !important;
                 color: white !important;
                 padding: 18px 40px !important;
                 font-weight: 700 !important;
                 cursor: pointer;
-                transition: all 0.2s;
+                margin: 40px auto;
+                border: none;
             }
-            button[onclick*="markComplete"]:hover { background: #2E6DA4 !important; transform: translateY(-2px); }
 
             @media (max-width: 600px) {
+                .saboteur-grid { grid-template-columns: 1fr !important; }
                 .module-footer-nav { flex-direction: column; }
             }
         </style>
 
         <nav class="cognis-m-nav">
-            <a href="/members/dashboard.html">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                Dashboard
-            </a>
+            ${isSample ? 
+                `<a href="../subscribe.html" style="color:var(--gold) !important; font-weight:800;">Unlock All 59 Modules →</a>` : 
+                `<a href="/members/dashboard.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Dashboard</a>`
+            }
             <div class="user-tag">${email}</div> 
         </nav>
     `;
 
     document.body.insertAdjacentHTML('afterbegin', uiHTML);
 
-    // Render Bottom Nav only if modules are found in registry
-    if (prevMod || nextMod) {
+    if (!isSample && (prevMod || nextMod)) {
         const footerHTML = `
             <div class="module-footer-nav">
-                ${prevMod ? `
-                    <a href="${prevMod.path}" class="nav-cta nav-prev">
-                        <span class="cta-label">← Previous Module</span>
-                        <span class="cta-title">${prevMod.title}</span>
-                    </a>
-                ` : '<div class="nav-placeholder"></div>'}
-
-                ${nextMod ? `
-                    <a href="${nextMod.path}" class="nav-cta nav-next">
-                        <span class="cta-label">Next Module →</span>
-                        <span class="cta-title">${nextMod.title}</span>
-                    </a>
-                ` : '<div class="nav-placeholder"></div>'}
+                ${prevMod ? `<a href="${prevMod.path}" class="nav-cta nav-prev"><span class="cta-label">← Previous</span><span class="cta-title">${prevMod.title}</span></a>` : '<div style="flex:1"></div>'}
+                ${nextMod ? `<a href="${nextMod.path}" class="nav-cta nav-next"><span class="cta-label">Next →</span><span class="cta-title">${nextMod.title}</span></a>` : '<div style="flex:1"></div>'}
             </div>
         `;
         document.body.insertAdjacentHTML('beforeend', footerHTML);
     }
 }
 
+/**
+ * COMPLETION LOGIC
+ */
 async function markComplete(moduleId) {
+    const isSample = SAMPLE_IDS.includes(Number(moduleId));
+    if (isSample) return;
+
     const { data: { user } } = await window.supabaseClient.auth.getUser();
     if (!user) return;
 
@@ -257,7 +277,7 @@ async function markComplete(moduleId) {
     if (error) {
         alert("Error saving progress.");
     } else {
-        alert("Module Completed! ✅");
+        alert("Progress Saved! ✅");
         window.location.href = "/members/dashboard.html";
     }
 }

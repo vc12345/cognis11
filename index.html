@@ -5,32 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cognis 11+ · Reasoning-First Preparation</title>
 <meta name="description" content="11+ preparation for deep understanders. Building the reasoning foundation for Years 2-3 and breaking speed plateaus for Years 4-5.">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root { --navy:#1B3A5C; --steel:#2E6DA4; --cream:#FAFAF6; --off:#F4F2ED; --grey:#888; --dgrey:#3A3A3A; --lgrey:#E5E3DD; }
+  :root { --navy:#1B3A5C; --steel:#2E6DA4; --gold:#c5a059; --cream:#FAFAF6; --off:#F4F2ED; --grey:#64748b; --dgrey:#334155; --lgrey:#E2E8F0; }
   * { box-sizing:border-box; margin:0; padding:0; }
   body { font-family:'DM Sans', sans-serif; background:var(--cream); color:var(--dgrey); font-size:16px; line-height:1.6; }
   .wrap { max-width:850px; margin:0 auto; padding:0 32px; }
   
-  /* NAV UPDATED */
-  nav { border-bottom:1px solid var(--lgrey); padding:18px 32px; display:flex; align-items:center; justify-content:space-between; background:rgba(250,250,246,.97); position:sticky; top:0; z-index:10; }
+  nav { border-bottom:1px solid var(--lgrey); padding:18px 32px; display:flex; align-items:center; justify-content:space-between; background:#fff; position:sticky; top:0; z-index:100; }
   .brand { font-family:'Playfair Display', serif; font-size:1.1rem; color:var(--navy); font-weight:700; text-decoration:none; }
   .nav-right { display:flex; align-items:center; gap:20px; }
-  .nav-link { font-size:.88rem; color:var(--navy); text-decoration:none; font-weight:600; }
-  .nav-cta { background:var(--navy); color:#fff; padding:10px 22px; border-radius:5px; text-decoration:none; font-size:.88rem; font-weight:600; transition: background 0.2s; }
-  .nav-cta:hover { background:var(--steel); }
+  .nav-link { font-size:.85rem; color:var(--navy); text-decoration:none; font-weight:600; text-transform: uppercase; letter-spacing: 1px; }
+  .nav-cta { background:var(--navy); color:#fff; padding:10px 22px; border-radius:5px; text-decoration:none; font-size:.85rem; font-weight:600; transition: background 0.2s; }
 
   /* HERO */
   .hero { padding:100px 32px 80px; max-width:800px; margin:0 auto; text-align:center; }
-  .hero-tag { font-size:.7rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--steel); margin-bottom:20px; }
-  .hero h1 { font-family:'Playfair Display', serif; font-size:clamp(2.4rem,6vw,3.8rem); line-height:1.1; color:var(--navy); margin-bottom:24px; }
-  .hero h1 em { font-style:italic; color:var(--steel); }
-  .hero-sub { font-size:1.15rem; color:var(--dgrey); font-weight:400; max-width:640px; margin:0 auto 40px; line-height:1.6; }
+  .hero-tag { font-size:.75rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; }
+  .hero h1 { font-family:'Playfair Display', serif; font-size:clamp(2.5rem,6vw,4rem); line-height:1.1; color:var(--navy); margin-bottom:24px; }
+  .hero h1 em { font-style:italic; font-weight: 400; color:var(--steel); }
+  .hero-sub { font-size:1.2rem; color:var(--grey); max-width:640px; margin:0 auto 40px; line-height:1.6; }
   
   .btn-row { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; }
-  .btn { display:inline-flex; align-items:center; gap:9px; background:var(--navy); color:#fff; padding:18px 36px; border-radius:6px; text-decoration:none; font-size:1rem; font-weight:600; }
-  .btn-outline { background:transparent; color:var(--navy); border: 2px solid var(--navy); }
-  .btn:hover { opacity: 0.9; }
+  .btn { display:inline-flex; align-items:center; gap:9px; background:var(--navy); color:#fff; padding:18px 36px; border-radius:8px; text-decoration:none; font-size:1rem; font-weight:700; transition: 0.2s; box-shadow: 0 4px 14px rgba(27, 58, 92, 0.15); }
+  .btn-outline { background:transparent; color:var(--navy); border: 2px solid var(--navy); box-shadow: none; }
+  .btn:hover { transform: translateY(-2px); opacity: 0.9; }
 
   /* PROPOSITIONS */
   section { padding:80px 0; border-top:1px solid var(--lgrey); }
@@ -39,16 +37,16 @@
   .two-col { display:grid; grid-template-columns:1fr 1fr; gap:32px; margin:40px 0; }
   @media(max-width:650px){ .two-col { grid-template-columns:1fr; } }
   
-  .col-card { background:#fff; border:1px solid var(--lgrey); border-radius:12px; padding:32px; transition: transform 0.2s; }
-  .col-card:hover { transform: translateY(-4px); }
-  .col-card h3 { font-family:'Playfair Display', serif; font-size:1.3rem; color:var(--navy); margin-bottom:14px; }
-  .col-card p { font-size:.95rem; color:var(--dgrey); margin-bottom:16px; }
-  .age-tag { font-size:0.65rem; font-weight:800; text-transform:uppercase; color:var(--steel); letter-spacing:1px; display:block; margin-bottom:8px; }
+  .col-card { background:#fff; border:1px solid var(--lgrey); border-radius:12px; padding:32px; transition: border-color 0.3s; }
+  .col-card:hover { border-color: var(--gold); }
+  .col-card h3 { font-family:'Playfair Display', serif; font-size:1.4rem; color:var(--navy); margin-bottom:14px; }
+  .col-card p { font-size:.95rem; color:var(--grey); margin-bottom:16px; }
+  .age-tag { font-size:0.7rem; font-weight:800; text-transform:uppercase; color:var(--gold); letter-spacing:1px; display:block; margin-bottom:12px; }
 
-  .pullquote { border-left:3px solid var(--steel); padding:20px 30px; margin:48px 0; font-style:italic; font-size:1.2rem; color:var(--navy); line-height:1.6; background:#fff; border-radius:0 8px 8px 0; }
+  .pullquote { border-left:4px solid var(--gold); padding:25px 35px; margin:60px 0; font-style:italic; font-size:1.3rem; color:var(--navy); line-height:1.6; background:#fff; border-radius:0 12px 12px 0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
 
-  footer { border-top:1px solid var(--lgrey); padding:48px 32px; text-align:center; font-size:.85rem; color:var(--grey); }
-  footer a { color: var(--navy); text-decoration: none; font-weight: 500; }
+  footer { border-top:1px solid var(--lgrey); padding:60px 32px; text-align:center; font-size:.85rem; color:var(--grey); }
+  footer a { color: var(--navy); text-decoration: none; font-weight: 500; margin: 0 10px; }
 </style>
 </head>
 <body>
@@ -63,9 +61,9 @@
 </nav>
 
 <div class="hero">
-  <div class="hero-tag">The Reasoning-First Learning Lattice</div>
+  <div class="hero-tag">The Reasoning-First Prep</div>
   <h1>For children who want to understand <em>why.</em></h1>
-  <p class="hero-sub">Standard 11+ prep focuses on pattern recognition. We build the underlying logical structures required for speed, accuracy, and confidence under pressure.</p>
+  <p class="hero-sub">Standard 11+ prep focuses on pattern recognition. We build the logical structures required for genuine speed, accuracy, and confidence under pressure.</p>
   
   <div class="btn-row">
     <a href="diagnostic.html" class="btn">Find your child's profile →</a>
@@ -76,13 +74,13 @@
 <div class="wrap">
   <section>
     <h2>Two paths to the same goal.</h2>
-    <p>Whether you are starting early or hitting a plateau in Year 5, the solution is the same: move from memorising patterns to mastering structures.</p>
+    <p style="color:var(--grey); font-size: 1.1rem; max-width: 700px;">Whether starting early or hitting a plateau in Year 5, the solution is the same: move from memorising patterns to mastering structures.</p>
     
     <div class="two-col">
       <div class="col-card">
         <span class="age-tag">Years 2–3 · Foundations</span>
         <h3>Build the Right Instincts</h3>
-        <p>Before the pressure of drilling begins, ensure your child learns to deconstruct problems logically. We build the "Mental Schema" that makes later preparation feel effortless.</p>
+        <p>Before the pressure of drilling begins, ensure your child learns to deconstruct problems logically. We build the mental schema that makes later preparation feel effortless.</p>
       </div>
       <div class="col-card">
         <span class="age-tag">Years 4–5 · Supplemental</span>
@@ -92,29 +90,29 @@
     </div>
   </section>
 
-  <section style="text-align: center;">
+  <section style="text-align: center; border-bottom: none;">
     <h2>Pattern Recognisers vs. Deep Understanders</h2>
-    <p style="max-width: 600px; margin: 0 auto 30px;">Most preparation is built for one type of student. If your child is a "Deep Understander," high-volume drilling often leads to boredom and diminishing returns.</p>
+    <p style="max-width: 650px; margin: 0 auto 30px; color: var(--grey); font-size: 1.1rem;">Most preparation is built for one type of student. If your child is a "Deep Understander," high-volume drilling often leads to boredom and diminishing returns.</p>
     
     <div class="pullquote">
       "The goal is not to turn your child into a pattern recogniser. The goal is to give them a pattern recogniser's entry point—while keeping their reasoning ability intact for execution."
     </div>
   </section>
 
-  <section style="background: var(--navy); color: white; border-radius: 12px; padding: 60px; text-align: center; margin-bottom: 80px;">
-    <h2 style="color: white;">Master the Lattice.</h2>
-    <p style="color: rgba(255,255,255,0.8); margin-bottom: 32px;">Access all 59 interactive modules covering Maths, Verbal, and Non-Verbal reasoning structures.</p>
-    <a href="subscribe.html" class="btn" style="background: white; color: var(--navy);">View Subscription Plans</a>
+  <section style="background: var(--navy); color: white; border-radius: 16px; padding: 60px; text-align: center; margin-bottom: 80px; border-top: none;">
+    <h2 style="color: white; font-family: 'Playfair Display';">Master the Lattice.</h2>
+    <p style="color: rgba(255,255,255,0.7); margin-bottom: 35px; max-width: 500px; margin-left: auto; margin-right: auto;">Explore 59 interactive modules designed to turn logical confusion into conceptual clarity.</p>
+    <a href="subscribe.html" class="btn" style="background: white; color: var(--navy); box-shadow: none;">View Subscription Plans</a>
   </section>
 </div>
 
 <footer>
-  <p>Questions? Email <a href="mailto:hello@cognis11.com">hello@cognis11.com</a></p>
-  <p style="margin-top:12px">
-    <a href="about.html">About</a> &nbsp;•&nbsp; 
-    <a href="privacy.html">Privacy Policy</a> &nbsp;•&nbsp; 
-    <a href="diagnostic.html">Free Diagnostic</a>
-  </p>
+  <p>Reasoning-First Preparation. <a href="mailto:hello@cognis11.com">hello@cognis11.com</a></p>
+  <div style="margin-top:20px;">
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="diagnostic.html">Diagnostic</a>
+  </div>
 </footer>
 
 </body>

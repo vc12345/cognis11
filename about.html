@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About · Cognis 11+</title>
-<meta name="description" content="Cognis 11+ brings Schema-Based Instruction out of the lab and into 11+ preparation, designed specifically for children who value understanding over memorisation.">
+<title>About · Cognis11</title>
+<meta name="description" content="Cognis11 applies Schema-Based Instruction to 11+ preparation, focusing on conceptual X-Rays for the Deep Understander.">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -43,7 +43,7 @@
     margin:50px 0; 
     font-family:'Playfair Display', serif; 
     font-style:italic; 
-    font-size:1.4rem; 
+    font-size:1.45rem; 
     color:var(--navy); 
     line-height:1.5; 
     background:var(--white); 
@@ -51,29 +51,50 @@
     box-shadow: 0 4px 20px rgba(0,0,0,0.02);
   }
 
-  /* EXPERTISE GRID */
+  /* UNIFIED FOUNDERS SECTION */
   .expertise { background:var(--off); border-top:1px solid var(--lgrey); border-bottom:1px solid var(--lgrey); }
-  .expertise-grid { display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-top:40px; }
-  @media(max-width:768px) { .expertise-grid { grid-template-columns:1fr; } }
+  .founding-story {
+    background: var(--white);
+    border: 1px solid var(--lgrey);
+    border-radius: 16px;
+    padding: 50px;
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  @media(max-width:768px) { .founding-story { grid-template-columns: 1fr; padding: 30px; } }
+  
+  .expertise-pillar h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); margin-bottom: 15px; font-weight: 800; }
+  .expertise-pillar p { font-size: 0.95rem; color: var(--grey); line-height: 1.7; }
 
-  .card { background:var(--white); border:1px solid var(--lgrey); border-radius:12px; padding:40px; }
-  .card-label { font-size:.7rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:15px; display: block; }
-  .card h3 { font-family:'Playfair Display', serif; font-size:1.5rem; color:var(--navy); margin-bottom:15px; }
-  .card p { font-size:.95rem; color:var(--grey); margin-bottom:0; }
-
-  /* RESEARCH BOX */
-  .research-note { 
+  /* NOVEL SBI PIVOT SECTION */
+  .sbi-pivot { 
     background: var(--navy); 
     color: white; 
-    border-radius: 16px; 
-    padding: 60px; 
-    margin: 40px 0;
+    border-radius: 20px; 
+    padding: 70px 60px; 
+    margin: 60px 0;
+    position: relative;
+    overflow: hidden;
   }
-  .research-note h2 { color: white; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
-  .research-note p { color: rgba(255,255,255,0.8); }
+  .sbi-pivot::before {
+    content: "SBI";
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    font-size: 10rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    font-family: 'DM Sans';
+  }
+  .sbi-pivot h2 { color: white; font-size: 2.2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 25px; }
+  .sbi-pivot p { color: rgba(255,255,255,0.8); font-size: 1.1rem; }
+  .pivot-highlight { color: var(--gold); font-weight: 700; }
 
   /* CTA */
-  .cta { padding:100px 32px; text-align:center; background: var(--cream); }
+  .cta { padding:100px 32px; text-align:center; }
   .btn-navy { background:var(--navy); color:var(--white); padding:18px 40px; border-radius:8px; text-decoration:none; font-size:1rem; font-weight:700; display:inline-block; transition: 0.2s; box-shadow: 0 4px 14px rgba(27, 58, 92, 0.2); }
   .btn-navy:hover { transform: translateY(-2px); }
 
@@ -84,7 +105,7 @@
 <body>
 
 <nav>
-  <a href="/" class="brand">Cognis 11+</a>
+  <a href="/" class="brand">Cognis11</a>
   <div class="nav-links">
     <a href="/">Home</a>
     <a href="subscribe.html">Subscribe</a>
@@ -93,50 +114,46 @@
 </nav>
 
 <div class="hero">
-  <div class="hero-tag">The Cognis Origin</div>
-  <h1>Preparation for the <em>Deep Understander.</em></h1>
-  <p>We exist because high-achieving children are often the most poorly served by standard 11+ preparation.</p>
+  <div class="hero-tag">The Origin of Cognis11</div>
+  <h1>Prepared for the <em>Deep Understander.</em></h1>
+  <p>Standard 11+ preparation serves the pattern-matcher. We built Cognis11 for the child who refuses to move until they truly understand.</p>
 </div>
 
 <div class="container">
   <section style="border-top:none; padding-top:0;">
-    <p>The 11+ industry is built around a single assumption: that more practice produces better results. For many children, that is true. But for a specific type of child—one who needs to construct a logical model before they can act—repetitive drilling often leads to frustration and plateauing scores.</p>
-    <p>These "Deep Understanders" consistently get questions right in relaxed conditions, but struggle when the clock starts. Tutors usually prescribe more papers, but the gap doesn't close because the preparation was designed for a different type of mind.</p>
+    <p>The 11+ industry is built around a single, flawed assumption: that more volume produces better results. For many children, this holds true. But for a specific type of mind—the "Deep Understander"—high-volume drilling is a recipe for frustration and performance plateaus.</p>
+    <p>These children don't lack ability. They lack an entry point. They are the students who get everything right at home but "freeze" or run out of time in a mock. They are reasoners being asked to behave like calculators.</p>
     
     <div class="pullquote">
-      "The preparation isn't failing because the child isn't working hard enough. It's failing because it's asking a reasoner to behave like a pattern-matcher."
+      "At Cognis11, we don't believe the preparation is failing because the child isn't working hard enough. It's failing because it's pointed at the wrong cognitive process."
     </div>
-
-    <p>Cognis 11+ was founded to bridge this gap by applying **Schema-Based Instruction (SBI)** to high-performance preparation. We focus on training the brain to classify the "structure" of a problem before attempting the math. When a child understands the category, speed follows naturally.</p>
   </section>
 </div>
 
 <section class="expertise">
   <div class="container">
-    <div class="hero-tag" style="text-align: left; margin-bottom: 10px;">The Founding Expertise</div>
-    <h2 style="margin-bottom: 40px;">Two perspectives, one mission.</h2>
+    <h2 style="margin-bottom: 10px;">The Founding Intersection</h2>
+    <p style="color: var(--grey); margin-bottom: 40px;">Cognis11 was born from the collision of two distinct professional worlds.</p>
     
-    <div class="expertise-grid">
-      <div class="card">
-        <span class="card-label">Product & Strategy</span>
-        <h3>The Data Analyst</h3>
-        <p>With over a decade leading data strategy for large-scale digital platforms, our product lead focuses on how people make decisions under pressure. By applying quantitative analysis to 11+ problem structures, they designed the diagnostic framework that identifies a child's specific logical "short-circuits."</p>
-      </div>
-
-      <div class="card">
-        <span class="card-label">Neuroscience & Research</span>
-        <h3>The Cognitive Scientist</h3>
-        <p>A research fellow in cognitive neuroscience, our research lead investigates how the brain processes information. Their work at institutions like Cambridge and NYU provides the academic foundation for our methodology, ensuring that every interactive module is grounded in how the brain actually learns to classify patterns.</p>
-      </div>
+    <div class="founding-story">
+        <div class="expertise-pillar">
+            <h3>Product Strategy & Data</h3>
+            <p>Our methodology was shaped by a decade of leading data strategy for multi-million user digital platforms. This background in quantitative analysis and decision-making under pressure allowed us to deconstruct the 11+ curriculum into a finite set of logical "short-circuits." We treated the exam not as a test of knowledge, but as a system of structures to be audited.</p>
+        </div>
+        <div class="expertise-pillar">
+            <h3>Cognitive Neuroscience</h3>
+            <p>The research integrity of Cognis11 is anchored by academic experience at institutions like Cambridge and NYU. By investigating how the brain processes conscious and unconscious information, our research lead identified the specific mechanism needed to bridge the gap between deep understanding and competitive speed.</p>
+        </div>
     </div>
   </div>
 </section>
 
 <div class="container">
-  <section class="research-note">
-    <h2>The science of Schema</h2>
-    <p>Schema-Based Instruction is not a new theory; it is an established pillar of cognitive psychology studied for over three decades. It is specifically designed to help students identify the underlying "schema" of a problem—the logical skeleton—independent of the numbers involved.</p>
-    <p>At Cognis, we’ve taken this validated academic mechanism and pointed it at the 11+. We don't just give children questions; we give them the "X-Ray" vision required to see the logic behind the questions.</p>
+  <section class="sbi-pivot">
+    <h2>The SBI Pivot</h2>
+    <p>For over thirty years, <span class="pivot-highlight">Schema-Based Instruction (SBI)</span> has been a cornerstone of cognitive psychology. Historically, it has been used as a remedial safety net to help children who struggle with basic math by giving them a way to classify problems.</p>
+    <p style="margin-top: 25px;"><strong>At Cognis11, we’ve done something different.</strong></p>
+    <p style="margin-top: 15px;">We have taken this established, evidence-based mechanism and pointed it in a <span class="pivot-highlight">novel direction</span>: Performance Optimization. We aren't using SBI to catch up; we are using it to unlock the ceiling for high-achieving reasoners. By giving "Deep Understanders" the X-Ray vision to classify a problem structure in seconds, we eliminate the cognitive load that causes them to slow down.</p>
   </section>
 </div>
 
@@ -149,7 +166,7 @@
 </div>
 
 <footer>
-  <p>Reasoning-First Preparation. <a href="mailto:hello@cognis11.com">hello@cognis11.com</a></p>
+  <p>© 2026 Cognis11 · Reasoning-First Preparation. <a href="mailto:hello@cognis11.com">hello@cognis11.com</a></p>
   <div style="margin-top:20px;">
     <a href="/">Home</a>
     <a href="about.html">About</a>

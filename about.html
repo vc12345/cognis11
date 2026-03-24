@@ -4,86 +4,81 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About · Cognis 11+</title>
-<meta name="description" content="Cognis 11+ was founded by a product analyst and a cognitive neuroscientist who met through a shared frustration with how 11+ preparation ignores cognitive differences.">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<meta name="description" content="Cognis 11+ brings Schema-Based Instruction out of the lab and into 11+ preparation, designed specifically for children who value understanding over memorisation.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy:#1B3A5C; --steel:#2E6DA4; --lblue:#E4EEF8;
-    --cream:#FAFAF6; --off:#F4F2ED; --lgrey:#E5E3DD;
-    --xgrey:#CCC9C2; --dgrey:#3A3A3A; --mgrey:#888;
-    --white:#fff;
-    --font-display:'Playfair Display',Georgia,serif;
-    --font-body:'DM Sans',system-ui,sans-serif;
+    --navy:#1B3A5C; --steel:#2E6DA4; --gold:#c5a059;
+    --cream:#FAFAF6; --off:#F4F2ED; --lgrey:#E2E8F0;
+    --dgrey:#334155; --grey:#64748b; --white:#fff;
   }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{font-family:var(--font-body);background:var(--cream);color:var(--dgrey);font-size:16px;line-height:1.6}
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'DM Sans', sans-serif; background:var(--cream); color:var(--dgrey); line-height:1.6; }
 
   /* NAV */
-  nav{border-bottom:1px solid var(--lgrey);padding:18px 44px;display:flex;align-items:center;justify-content:space-between;background:rgba(250,250,246,.97);position:sticky;top:0;z-index:10}
-  .brand{font-family:var(--font-display);font-size:1rem;color:var(--navy);font-weight:700;text-decoration:none}
-  .nav-links{display:flex;align-items:center;gap:28px}
-  .nav-links a{font-size:.88rem;color:var(--mgrey);text-decoration:none;font-weight:500}
-  .nav-links a:hover{color:var(--navy)}
-  .nav-cta{background:var(--navy);color:var(--white)!important;padding:10px 22px;border-radius:5px;font-weight:600!important}
+  nav { border-bottom:1px solid var(--lgrey); padding:18px 32px; display:flex; align-items:center; justify-content:space-between; background:#fff; position:sticky; top:0; z-index:100; }
+  .brand { font-family:'Playfair Display', serif; font-size:1.1rem; color:var(--navy); font-weight:700; text-decoration:none; }
+  .nav-links { display:flex; align-items:center; gap:24px; }
+  .nav-links a { font-size:.85rem; color:var(--navy); text-decoration:none; font-weight:600; text-transform: uppercase; letter-spacing: 1px; }
+  .nav-cta { background:var(--navy); color:var(--white)!important; padding:10px 22px; border-radius:5px; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--steel); }
 
   /* HERO */
-  .page-hero{max-width:780px;margin:0 auto;padding:96px 44px 72px}
-  .page-tag{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin-bottom:18px}
-  .page-hero h1{font-family:var(--font-display);font-size:clamp(2rem,4.5vw,3rem);line-height:1.12;color:var(--navy);margin-bottom:18px}
-  .page-hero h1 em{font-style:italic;color:var(--steel)}
-  .page-hero-sub{font-size:1.05rem;color:var(--mgrey);font-weight:300;max-width:580px;line-height:1.75}
+  .hero { max-width:900px; margin:0 auto; padding:100px 32px 60px; text-align: center; }
+  .hero-tag { font-size:.75rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; }
+  .hero h1 { font-family:'Playfair Display', serif; font-size:clamp(2.2rem, 5vw, 3.5rem); line-height:1.1; color:var(--navy); margin-bottom:24px; }
+  .hero h1 em { font-style:italic; font-weight: 400; color:var(--steel); }
+  .hero p { font-size:1.2rem; color:var(--grey); max-width:700px; margin:0 auto; }
 
-  /* ORIGIN */
-  .origin{max-width:780px;margin:0 auto;padding:0 44px 72px}
-  .origin-inner{border-top:1px solid var(--lgrey);padding-top:56px}
-  .origin p{font-size:1rem;line-height:1.85;color:var(--dgrey);margin-bottom:18px;max-width:640px}
-  .origin p:last-child{margin-bottom:0}
-  .pullquote{border-left:3px solid var(--steel);padding:16px 24px;margin:36px 0;font-family:var(--font-display);font-style:italic;font-size:1.1rem;color:var(--navy);line-height:1.65;background:var(--white);border-radius:0 6px 6px 0}
+  /* CONTENT SECTIONS */
+  section { padding:80px 0; border-top:1px solid var(--lgrey); }
+  .container { max-width:850px; margin:0 auto; padding:0 32px; }
+  
+  h2 { font-family:'Playfair Display', serif; font-size:2rem; color:var(--navy); margin-bottom:24px; }
+  p { margin-bottom:20px; font-size:1.05rem; color:var(--dgrey); }
 
-  /* FOUNDERS */
-  .founders{background:var(--off);border-top:1px solid var(--lgrey);border-bottom:1px solid var(--lgrey);padding:72px 44px}
-  .founders-inner{max-width:780px;margin:0 auto}
-  .founders-label{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);margin-bottom:40px}
-  .founder-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}
-  @media(max-width:640px){.founder-grid{grid-template-columns:1fr}}
+  .pullquote { 
+    border-left:4px solid var(--gold); 
+    padding:30px 40px; 
+    margin:50px 0; 
+    font-family:'Playfair Display', serif; 
+    font-style:italic; 
+    font-size:1.4rem; 
+    color:var(--navy); 
+    line-height:1.5; 
+    background:var(--white); 
+    border-radius:0 12px 12px 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  }
 
-  .founder-card{background:var(--white);border:1px solid var(--lgrey);border-radius:8px;padding:36px 32px}
-  .founder-role{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--steel);margin-bottom:14px}
-  .founder-name{font-family:var(--font-display);font-size:1.45rem;font-weight:700;color:var(--navy);margin-bottom:4px}
-  .founder-title{font-size:.85rem;color:var(--mgrey);margin-bottom:22px;font-weight:400}
-  .founder-divider{height:1px;background:var(--lgrey);margin-bottom:22px}
-  .founder-bio{font-size:.91rem;line-height:1.75;color:var(--dgrey)}
-  .founder-bio p{margin-bottom:12px}
-  .founder-bio p:last-child{margin-bottom:0}
-  .founder-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:22px}
-  .ftag{padding:4px 12px;border:1px solid var(--lgrey);border-radius:14px;font-size:.75rem;color:var(--mgrey);background:var(--off)}
+  /* EXPERTISE GRID */
+  .expertise { background:var(--off); border-top:1px solid var(--lgrey); border-bottom:1px solid var(--lgrey); }
+  .expertise-grid { display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-top:40px; }
+  @media(max-width:768px) { .expertise-grid { grid-template-columns:1fr; } }
 
-  /* RESEARCH NOTE */
-  .research{max-width:780px;margin:0 auto;padding:72px 44px}
-  .research-inner{border-top:1px solid var(--lgrey);padding-top:56px}
-  .research h2{font-family:var(--font-display);font-size:1.5rem;color:var(--navy);margin-bottom:16px}
-  .research p{font-size:.95rem;line-height:1.8;color:var(--dgrey);margin-bottom:14px;max-width:640px}
-  .research p:last-child{margin-bottom:0}
+  .card { background:var(--white); border:1px solid var(--lgrey); border-radius:12px; padding:40px; }
+  .card-label { font-size:.7rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:15px; display: block; }
+  .card h3 { font-family:'Playfair Display', serif; font-size:1.5rem; color:var(--navy); margin-bottom:15px; }
+  .card p { font-size:.95rem; color:var(--grey); margin-bottom:0; }
+
+  /* RESEARCH BOX */
+  .research-note { 
+    background: var(--navy); 
+    color: white; 
+    border-radius: 16px; 
+    padding: 60px; 
+    margin: 40px 0;
+  }
+  .research-note h2 { color: white; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
+  .research-note p { color: rgba(255,255,255,0.8); }
 
   /* CTA */
-  .cta-band{background:var(--navy);padding:72px 44px;text-align:center}
-  .cta-band-inner{max-width:560px;margin:0 auto}
-  .cta-band h2{font-family:var(--font-display);font-size:1.8rem;color:var(--white);margin-bottom:14px}
-  .cta-band p{font-size:.97rem;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:32px}
-  .btn-white{background:var(--white);color:var(--navy);padding:16px 36px;border-radius:6px;text-decoration:none;font-size:.95rem;font-weight:700;display:inline-block}
-  .cta-note{margin-top:14px;font-size:.8rem;color:rgba(255,255,255,.35)}
+  .cta { padding:100px 32px; text-align:center; background: var(--cream); }
+  .btn-navy { background:var(--navy); color:var(--white); padding:18px 40px; border-radius:8px; text-decoration:none; font-size:1rem; font-weight:700; display:inline-block; transition: 0.2s; box-shadow: 0 4px 14px rgba(27, 58, 92, 0.2); }
+  .btn-navy:hover { transform: translateY(-2px); }
 
-  /* FOOTER */
-  footer{border-top:1px solid var(--lgrey);padding:32px 44px;display:flex;justify-content:space-between;align-items:center;font-size:.82rem;color:var(--mgrey);flex-wrap:wrap;gap:12px}
-  footer a{color:inherit;text-decoration:none}
-  footer a:hover{color:var(--navy)}
-
-  @media(max-width:620px){
-    nav,footer{padding:14px 20px}
-    .page-hero,.origin,.founders,.research{padding-left:20px;padding-right:20px}
-    .cta-band{padding:56px 20px}
-  }
+  footer { border-top:1px solid var(--lgrey); padding:60px 32px; text-align:center; font-size:.85rem; color:var(--grey); }
+  footer a { color: var(--navy); text-decoration: none; font-weight: 500; margin: 0 10px; }
 </style>
 </head>
 <body>
@@ -92,100 +87,74 @@
   <a href="/" class="brand">Cognis 11+</a>
   <div class="nav-links">
     <a href="/">Home</a>
-    <a href="about.html">About</a>
-    <a href="diagnostic.html" class="nav-cta">Take the diagnostic →</a>
+    <a href="subscribe.html">Subscribe</a>
+    <a href="diagnostic.html" class="nav-cta">Free diagnostic →</a>
   </div>
 </nav>
 
-<!-- HERO -->
-<div class="page-hero">
-  <div class="page-tag">About Cognis 11+</div>
-  <h1>Built on research.<br><em>Designed for the child drilling isn't working for.</em></h1>
-  <p class="page-hero-sub">Cognis 11+ exists because the most capable children are often the most poorly served by standard 11+ preparation — and the reason is identifiable, measurable, and fixable.</p>
+<div class="hero">
+  <div class="hero-tag">The Cognis Origin</div>
+  <h1>Preparation for the <em>Deep Understander.</em></h1>
+  <p>We exist because high-achieving children are often the most poorly served by standard 11+ preparation.</p>
 </div>
 
-<!-- ORIGIN -->
-<div class="origin">
-  <div class="origin-inner">
-    <p>The 11+ preparation industry is built around a single assumption: that more practice produces better results. For many children, that's true. For a specific type of child — one who constructs understanding before acting rather than pattern-matching automatically — it isn't.</p>
-    <p>These children understand the material. They can explain their reasoning in detail. They consistently get questions right in relaxed conditions. But in timed papers, something goes wrong. They run out of time. Scores plateau. Tutors prescribe more practice. The gap doesn't close.</p>
-    <div class="pullquote">"The preparation isn't failing because the child isn't working hard enough. It's failing because it was designed for a different type of mind."</div>
-    <p>The mechanism behind this has been studied in cognitive psychology for over three decades under the name Schema-Based Instruction — the deliberate training of problem classification as a skill independent of problem solving. The research is unambiguous. The application to high-achieving children preparing for selective entry is new.</p>
-    <p>Cognis 11+ was founded to close that gap: bringing a validated cognitive mechanism out of academic research and into the hands of parents who need it now.</p>
-  </div>
+<div class="container">
+  <section style="border-top:none; padding-top:0;">
+    <p>The 11+ industry is built around a single assumption: that more practice produces better results. For many children, that is true. But for a specific type of child—one who needs to construct a logical model before they can act—repetitive drilling often leads to frustration and plateauing scores.</p>
+    <p>These "Deep Understanders" consistently get questions right in relaxed conditions, but struggle when the clock starts. Tutors usually prescribe more papers, but the gap doesn't close because the preparation was designed for a different type of mind.</p>
+    
+    <div class="pullquote">
+      "The preparation isn't failing because the child isn't working hard enough. It's failing because it's asking a reasoner to behave like a pattern-matcher."
+    </div>
+
+    <p>Cognis 11+ was founded to bridge this gap by applying **Schema-Based Instruction (SBI)** to high-performance preparation. We focus on training the brain to classify the "structure" of a problem before attempting the math. When a child understands the category, speed follows naturally.</p>
+  </section>
 </div>
 
-<!-- FOUNDERS -->
-<div class="founders">
-  <div class="founders-inner">
-    <div class="founders-label">The founders</div>
-    <div class="founder-grid">
-
-      <div class="founder-card">
-        <div class="founder-role">Co-founder · Product</div>
-        <div class="founder-name">Victor Chung</div>
-        <div class="founder-title">Analytics Lead · London</div>
-        <div class="founder-divider"></div>
-        <div class="founder-bio">
-          <p>Victor spent over a decade in senior analytics roles at large-scale digital platforms, leading experimentation frameworks, conversion analysis, and data strategy for products with tens of millions of users.</p>
-          <p>His background spans quantitative analysis, product design, and behavioural economics — with a particular focus on how people make decisions under pressure and time constraints. He holds a BCom (Actuarial), LLB, and CFA.</p>
-          <p>At Cognis 11+, Victor leads product development, the diagnostic framework, and the design of the Classification Speed Programme.</p>
-        </div>
-        <div class="founder-tags">
-          <span class="ftag">Product strategy</span>
-          <span class="ftag">Behavioural analysis</span>
-          <span class="ftag">Experimentation</span>
-        </div>
+<section class="expertise">
+  <div class="container">
+    <div class="hero-tag" style="text-align: left; margin-bottom: 10px;">The Founding Expertise</div>
+    <h2 style="margin-bottom: 40px;">Two perspectives, one mission.</h2>
+    
+    <div class="expertise-grid">
+      <div class="card">
+        <span class="card-label">Product & Strategy</span>
+        <h3>The Data Analyst</h3>
+        <p>With over a decade leading data strategy for large-scale digital platforms, our product lead focuses on how people make decisions under pressure. By applying quantitative analysis to 11+ problem structures, they designed the diagnostic framework that identifies a child's specific logical "short-circuits."</p>
       </div>
 
-      <div class="founder-card">
-        <div class="founder-role">Co-founder · Research</div>
-        <div class="founder-name">Martijn Wokke</div>
-        <div class="founder-title">Cognitive Neuroscientist · University of Girona</div>
-        <div class="founder-divider"></div>
-        <div class="founder-bio">
-          <p>Martijn is a Ramón y Cajal research fellow at the University of Girona, where he investigates how the brain processes information — consciously and unconsciously — and how automatic versus deliberate cognitive processes interact.</p>
-          <p>His research career spans institutions including Cambridge, NYU, Sony Computer Science Laboratories Tokyo, and the Free University of Brussels. He uses psychophysics, neuroimaging, and brain stimulation to study how perception and internally generated information emerge.</p>
-          <p>At Cognis 11+, Martijn provides the academic foundation for the cognitive profiling methodology and oversees the research integrity of the assessment framework.</p>
-        </div>
-        <div class="founder-tags">
-          <span class="ftag">Cognitive neuroscience</span>
-          <span class="ftag">Metacognition</span>
-          <span class="ftag">Psychophysics</span>
-        </div>
+      <div class="card">
+        <span class="card-label">Neuroscience & Research</span>
+        <h3>The Cognitive Scientist</h3>
+        <p>A research fellow in cognitive neuroscience, our research lead investigates how the brain processes information. Their work at institutions like Cambridge and NYU provides the academic foundation for our methodology, ensuring that every interactive module is grounded in how the brain actually learns to classify patterns.</p>
       </div>
-
     </div>
   </div>
+</section>
+
+<div class="container">
+  <section class="research-note">
+    <h2>The science of Schema</h2>
+    <p>Schema-Based Instruction is not a new theory; it is an established pillar of cognitive psychology studied for over three decades. It is specifically designed to help students identify the underlying "schema" of a problem—the logical skeleton—independent of the numbers involved.</p>
+    <p>At Cognis, we’ve taken this validated academic mechanism and pointed it at the 11+. We don't just give children questions; we give them the "X-Ray" vision required to see the logic behind the questions.</p>
+  </section>
 </div>
 
-<!-- RESEARCH NOTE -->
-<div class="research">
-  <div class="research-inner">
-    <h2>The research behind the method</h2>
-    <p>Schema-Based Instruction (SBI) was developed over several decades as a tool for children who struggle with mathematics — specifically to help them identify problem types before attempting to solve them. The evidence base is extensive and the effect sizes are large.</p>
-    <p>Cognis 11+ applies this mechanism in a different direction: not as a catch-up tool for children who are behind, but as a performance optimisation for children who are ahead — children whose reasoning ability is genuine and whose preparation simply needs a different entry point.</p>
-    <p>The diagnostic, the classification training, and the session structure are all grounded in this research. We are not selling a new theory. We are applying an established one to a problem it was never pointed at.</p>
-  </div>
-</div>
-
-<!-- CTA -->
-<div class="cta-band">
-  <div class="cta-band-inner">
-    <h2>Find out if your child is a Deep Understander.</h2>
-    <p>The diagnostic takes 20 minutes at home. Instant personalised report. No login required.</p>
-    <a href="diagnostic.html" class="btn-white">Start the free diagnostic →</a>
-    <p class="cta-note">Free. Report stored and emailed to you.</p>
+<div class="cta">
+  <div class="container">
+    <h2>Identify your child's logical profile.</h2>
+    <p style="margin-bottom: 40px;">Our free 20-minute diagnostic determines if your child is a Deep Understander and identifies exactly where their reasoning is being short-circuited.</p>
+    <a href="diagnostic.html" class="btn-navy">Start the free diagnostic →</a>
   </div>
 </div>
 
 <footer>
-  <span>© 2025 Cognis 11+</span>
-  <div style="display:flex;gap:24px">
+  <p>Reasoning-First Preparation. <a href="mailto:hello@cognis11.com">hello@cognis11.com</a></p>
+  <div style="margin-top:20px;">
     <a href="/">Home</a>
     <a href="about.html">About</a>
     <a href="privacy.html">Privacy</a>
-    <a href="mailto:hello@cognis11.com">hello@cognis11.com</a>
+    <a href="subscribe.html">Subscribe</a>
   </div>
 </footer>
 

@@ -11,54 +11,61 @@
     body { font-family:'DM Sans', sans-serif; background:var(--cream); color:#334155; line-height:1.6; }
     nav { border-bottom:1px solid var(--lgrey); padding:18px 32px; display:flex; align-items:center; justify-content:space-between; background:#fff; position:sticky; top:0; z-index:100; }
     .hero { text-align: center; padding: 80px 32px; }
-    .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 900px; margin: 40px auto; }
-    .how-step { background: #fff; padding: 30px; border-radius: 12px; text-align: center; border: 1px solid var(--lgrey); }
-    .step-num { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); margin-bottom: 10px; }
-    .mandate-box { background: var(--navy); color: #fff; padding: 40px; border-radius: 16px; margin: 40px auto; max-width: 900px; }
-    .tier-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 900px; margin: 60px auto; }
+    .tier-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 900px; margin: 0 auto 60px; }
     .tier-card { background: #fff; padding: 40px; border-radius: 16px; border: 1px solid var(--lgrey); display: flex; flex-direction: column; }
-    .btn-sub { background: var(--navy); color: white; padding: 18px; border-radius: 8px; text-align: center; font-weight: 700; text-decoration: none; margin-top: auto; }
-    @media(max-width:768px){ .how-grid, .tier-grid { grid-template-columns: 1fr; } }
+    .btn-sub { background: var(--navy); color: white; padding: 18px; border-radius: 8px; text-align: center; font-weight: 700; text-decoration: none; cursor:pointer; margin-top: auto; border:none; }
+    
+    #sub-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.9); z-index:1000; justify-content:center; align-items:center; backdrop-filter: blur(4px); }
+    .auth-card { background:#1e293b; padding:3rem; border-radius:20px; width:90%; max-width:440px; border:1px solid #334155; color:#f8fafc; text-align:center; }
 </style>
 </head>
 <body>
 <nav><a href="index.html" style="font-family:'Playfair Display'; font-size:1.15rem; color:var(--navy); text-decoration:none; font-weight:700;">Cognis11</a></nav>
 
 <div class="hero">
-    <h1 style="font-family:'Playfair Display'; font-size:3.5rem;">Less drilling. More <em>understanding.</em></h1>
-    <p style="font-size:1.2rem; color:#64748b; margin-top:20px;">Built for the parent-led session—ten minutes of shared discovery that fits your schedule.</p>
+    <h1 style="font-family:'Playfair Display'; font-size:3rem;">Choose your <em>starting point.</em></h1>
+    <p style="font-size:1.15rem; color:#64748b; margin-top:20px;">Access the full 59-module Learning Lattice across all plans.</p>
 </div>
 
-<div style="max-width:1000px; margin:0 auto; padding:0 32px;">
-    <h2 style="text-align:center; font-family:'Playfair Display'; font-size:2.2rem;">Ten minutes. <em>In the same room.</em></h2>
-    <div class="how-grid">
-        <div class="how-step"><div class="step-num">1</div><h3>You Read</h3><p>Master the structural fix in 60 seconds.</p></div>
-        <div class="how-step"><div class="step-num">2</div><h3>You Guide</h3><p>Lead your child through the logic engine together.</p></div>
-        <div class="how-step"><div class="step-num">3</div><h3>Lattice Tracks</h3><p>Progress updates across 11 branches automatically.</p></div>
+<div class="tier-grid">
+    <div class="tier-card">
+        <span style="color:var(--gold); font-weight:800; font-size:0.7rem; text-transform:uppercase;">Years 2–3</span>
+        <h3 style="font-family:'Playfair Display'; font-size:1.8rem;">Foundational</h3>
+        <div style="font-size:2.5rem; margin:15px 0;">£6<span style="font-size:1rem; color:#64748b;">/mo</span></div>
+        <p style="margin-bottom:20px;">Master one structure to unlock the next. Perfect for building reasoning instincts before the pressure of drills begins.</p>
+        <button class="btn-sub" style="background:none; color:var(--navy); border:2px solid var(--navy);" onclick="openModal('foundational')">Select Foundational</button>
     </div>
-
-    <div class="mandate-box">
-      <h3 style="font-family:'Playfair Display'; color:var(--gold); margin-bottom:15px;">Why parent-led?</h3>
-      <p>Children under 11 build new mental models through guided dialogue with a trusted adult—not from passive screen time. Cognis11 is built specifically for parent-led sessions. We prepare you first, then give you the tools to guide your child. No technical background required.</p>
-    </div>
-
-    <div class="tier-grid">
-        <div class="tier-card">
-            <span style="color:var(--gold); font-weight:800; font-size:0.7rem; text-transform:uppercase;">Years 2–3</span>
-            <h3 style="font-family:'Playfair Display'; font-size:1.8rem;">Foundational</h3>
-            <div style="font-size:2.5rem; margin:15px 0;">£6<span style="font-size:1rem; color:#64748b;">/mo</span></div>
-            <p>Sequential progression: Master one structure to unlock the next. Perfect for starting early.</p>
-            <a href="#" class="btn-sub" style="background:none; color:var(--navy); border:2px solid var(--navy);">Select Foundational</a>
-        </div>
-        <div class="tier-card" style="border-color:var(--navy); box-shadow:0 10px 30px rgba(0,0,0,0.05);">
-            <span style="color:var(--gold); font-weight:800; font-size:0.7rem; text-transform:uppercase;">Years 4–5</span>
-            <h3 style="font-family:'Playfair Display'; font-size:1.8rem;">Supplemental</h3>
-            <div style="font-size:2.5rem; margin:15px 0;">£9<span style="font-size:1rem; color:#64748b;">/mo</span></div>
-            <p>Open Access: Targeted revision for identifying and resolving specific logic gaps.</p>
-            <a href="#" class="btn-sub">Select Supplemental</a>
-        </div>
+    <div class="tier-card" style="border-color:var(--navy); box-shadow:0 10px 30px rgba(0,0,0,0.05);">
+        <span style="color:var(--gold); font-weight:800; font-size:0.7rem; text-transform:uppercase;">Years 4–5</span>
+        <h3 style="font-family:'Playfair Display'; font-size:1.8rem;">Supplemental</h3>
+        <div style="font-size:2.5rem; margin:15px 0;">£9<span style="font-size:1rem; color:#64748b;">/mo</span></div>
+        <p style="margin-bottom:20px;">Open access to all 59 modules. Ideal for targeted revision, mock exam analysis, and resolving specific logic gaps.</p>
+        <button class="btn-sub" onclick="openModal('supplemental')">Select Supplemental</button>
     </div>
 </div>
-<footer style="text-align:center; padding:60px; color:#64748b; font-size:0.85rem;">© 2026 Cognis11 · Reasoning-First Preparation</footer>
+
+<div style="text-align:center; padding-bottom:100px;">
+    <p style="color:#64748b; margin-bottom:15px;">Still exploring the methodology?</p>
+    <a href="sample.html" style="color:var(--navy); font-weight:700; text-decoration:underline;">Try three free sample modules →</a>
+</div>
+
+<div id="sub-modal">
+    <div class="auth-card" style="position:relative;">
+        <button onclick="closeModal()" style="position:absolute; top:25px; right:25px; background:none; border:none; color:#94a3b8; cursor:pointer;">✕</button>
+        <h2>Join Cognis11</h2>
+        <div style="text-align:left; margin-top:20px;">
+            <label style="font-size:0.7rem; text-transform:uppercase; font-weight:800; color:#94a3b8;">Email</label>
+            <input type="email" id="sub-email" style="width:100%; padding:15px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; margin:8px 0 20px;">
+            <label style="font-size:0.7rem; text-transform:uppercase; font-weight:800; color:#94a3b8;">Password</label>
+            <input type="password" id="sub-password" style="width:100%; padding:15px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:8px; margin:8px 0 20px;">
+        </div>
+        <button id="modal-btn" onclick="handleSubscriptionSignup()" style="width:100%; padding:18px; background:#3b82f6; border:none; border-radius:8px; color:#fff; font-weight:700;">Create Account & Pay</button>
+    </div>
+</div>
+
+<script>
+    function openModal(plan) { document.getElementById('sub-modal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('sub-modal').style.display = 'none'; }
+</script>
 </body>
 </html>

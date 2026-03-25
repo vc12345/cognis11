@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diagnostic Profile · Cognis11</title>
+<title>Cognitive Diagnostic · Cognis11</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-config.js"></script>
+<script src="/js/auth-system.js"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YK13FYQ1CJ"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -20,28 +23,45 @@ body{font-family:'DM Sans', sans-serif;background:var(--cream);color:#334155;min
 #progressFill{height:100%;background:var(--gold);transition:width .6s ease;width:0%}
 nav{position:fixed;top:4px;left:0;right:0;background:#fff;border-bottom:1px solid var(--lgrey);padding:15px 44px;display:flex;justify-content:space-between;z-index:199}
 .nav-brand{font-family:'Playfair Display', serif;font-size:1.1rem;font-weight:700;color:var(--navy);text-decoration:none}
+
 #gate, #checklist, #result { display:none; padding:120px 44px; max-width:1100px; margin:0 auto; }
 #gate.active { display:flex; flex-direction:column; justify-content:center; min-height:80vh; }
 #checklist.active, #result.active { display:block; }
+
 .lists-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:40px; }
 .list-col { border:1px solid var(--lgrey); border-radius:12px; overflow:hidden; background:#fff; box-shadow:0 4px 20px rgba(0,0,0,0.03); }
 .list-head { padding:24px; border-bottom:1px solid var(--lgrey); }
+
 .trait-item { display:flex; align-items:flex-start; gap:13px; padding:18px 20px; cursor:pointer; border-bottom:1px solid var(--lgrey); transition: background 0.1s; }
 .trait-item:hover { background: var(--offwhite); }
 .trait-item.checked .trait-box { background:var(--navy); border-color:var(--navy); color:white; }
 .trait-box { flex-shrink:0; width:20px; height:20px; border:1.5px solid var(--lgrey); border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:.7rem; color:transparent; margin-top:2px; }
 .trait-main { font-size:.9rem; font-weight:700; color:var(--navy); margin-bottom:4px; }
 .trait-desc { font-size:.82rem; color:var(--mgrey); line-height:1.4; }
+
 .report-hero { background:var(--navy); border-radius:16px; padding:60px 44px; margin-bottom:40px; color:white; text-align:center; }
 .rh-type { font-family:'Playfair Display', serif; font-size:2.8rem; }
 .rh-type em { font-style: italic; color: var(--gold); }
+
 .sample-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:15px; margin:30px 0; }
 .sample-card { background:#fff; border:1px solid var(--lgrey); padding:20px; border-radius:8px; text-decoration:none; display:block; transition:0.2s; }
-.sample-card:hover { transform:translateY(-3px); border-color:var(--gold); }
-.sample-card h4 { color:var(--navy); font-size:0.9rem; margin-bottom:5px; }
-.tier-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:50px; }
-.tier-card { background:#fff; border:1px solid var(--lgrey); padding:30px; border-radius:12px; }
-.btn-primary { background:var(--navy); color:white; border:none; padding:20px 40px; border-radius:8px; font-weight:700; cursor:pointer; text-decoration:none; display:inline-block; }
+.sample-card:hover { border-color:var(--gold); transform:translateY(-3px); }
+
+.tier-grid { display:grid; grid-template-columns:1fr 1fr; gap:30px; margin-top:60px; }
+.tier-card { background:#fff; border:1px solid var(--lgrey); border-radius:16px; padding:40px; display:flex; flex-direction:column; position:relative; }
+.tier-card:hover { border-color: var(--gold); }
+.tier-card h3 { font-family:'Playfair Display', serif; font-size:1.6rem; margin-bottom:10px; }
+.tier-price { font-size:2rem; font-weight:700; color:var(--navy); margin-bottom:20px; }
+.tier-price span { font-size:0.9rem; color:var(--mgrey); font-weight:400; }
+.btn-tier { background:var(--navy); color:white; text-decoration:none; padding:16px; border-radius:8px; text-align:center; font-weight:700; cursor:pointer; }
+
+#sub-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.9); z-index:1000; justify-content:center; align-items:center; backdrop-filter: blur(4px); }
+.auth-card { background:#1e293b; padding:3rem; border-radius:20px; width:90%; max-width:440px; border:1px solid #334155; color:#f8fafc; text-align:center; }
+.form-group { margin-bottom: 1.5rem; text-align: left; }
+.form-group label { display: block; font-size: 0.7rem; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; font-weight: 700; }
+.form-group input { width: 100%; padding: 16px; background: #0f172a; border: 1px solid #334155; border-radius: 10px; color: #fff; font-size: 1rem; }
+#modal-btn { width: 100%; padding: 18px; background: #3b82f6; color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
+
 @media(max-width:800px){ .lists-grid, .sample-grid, .tier-grid { grid-template-columns:1fr; } }
 </style>
 </head>
@@ -52,54 +72,67 @@ nav{position:fixed;top:4px;left:0;right:0;background:#fff;border-bottom:1px soli
 <div id="gate" class="active">
   <div style="max-width:520px;">
     <h1 style="font-family:'Playfair Display'; font-size:3rem; line-height:1; margin-bottom:20px;">Is your child a <em>Deep Understander?</em></h1>
-    <p style="margin-bottom:32px; color:var(--mgrey);">This diagnostic evaluates cognitive defaults to identify how to replace drilling with dialogue.</p>
+    <p style="margin-bottom:32px; color:var(--mgrey);">Understanding your child's learning profile is the first step to becoming an effective guide.</p>
     <input type="text" id="gateName" placeholder="Child's first name" style="padding:18px; border:1.5px solid var(--lgrey); border-radius:8px; font-size:1rem; width:100%; margin-bottom:15px;">
     <input type="email" id="gateEmail" placeholder="Parent email address" style="padding:18px; border:1.5px solid var(--lgrey); border-radius:8px; font-size:1rem; width:100%; margin-bottom:25px;">
-    <button class="btn-primary" onclick="validateAndSubmitGate()">Begin Observations →</button>
+    <button onclick="validateAndSubmitGate()" style="background:var(--navy); color:white; padding:18px 40px; border-radius:8px; border:none; font-weight:700; cursor:pointer;">Begin Observations →</button>
   </div>
 </div>
 
 <div id="checklist">
   <div style="text-align:center; margin-bottom:48px;">
     <h1 style="font-family:'Playfair Display'; color:var(--navy); font-size:2.2rem;">Observing <span id="nameHeading"></span></h1>
+    <p style="color:var(--mgrey); margin-top:10px;">Select the traits that best describe their current learning defaults.</p>
   </div>
   <div class="lists-grid">
     <div class="list-col">
       <div class="list-head" style="background:#edf4fc;"><h2 style="font-family:'Playfair Display';">The Deep Understander</h2></div>
-      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Prioritises Logic Over Rules</div><div class="trait-desc">Wants to understand why a method works rather than just following steps.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Prioritises Logic Over Rules</div><div class="trait-desc">Wants to understand <em>why</em> a method works rather than just following the steps.</div></div></div>
       <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Pauses Before Execution</div><div class="trait-desc">Deliberately waits to fully comprehend the problem before taking action.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Time-Pressure Sensitive</div><div class="trait-desc">Accuracy drops noticeably when a clock is running.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Resilient on Novel Problems</div><div class="trait-desc">Outperforms peers on unusual questions that cannot be pattern-matched.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Time-Pressure Sensitive</div><div class="trait-desc">Accuracy drops noticeably when a clock is running, despite knowing the material.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Resilient on Novel Problems</div><div class="trait-desc">Often outperforms peers on unusual questions that cannot be pattern-matched.</div></div></div>
       <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Explicit Reasoning Profile</div><div class="trait-desc">Can explain their thought process step-by-step with high clarity.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Repetition Fatigue</div><div class="trait-desc">Visibly loses focus after 8 or 9 of the same question type.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Knowledge Gap Persistence</div><div class="trait-desc">Will dwell on a single unknown detail until logically resolved.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Rejection of Shortcuts</div><div class="trait-desc">Reluctant to use tricks that haven't been logically explained.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Holistic Perspective</div><div class="trait-desc">Needs to see how a concept fits into the "whole picture."</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Repetition Fatigue</div><div class="trait-desc">Visibly loses focus or becomes bored after 8 or 9 of the same question type.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Knowledge Gap Persistence</div><div class="trait-desc">Will dwell on a single unknown word or detail until it is logically resolved.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Rejection of Shortcuts</div><div class="trait-desc">Reluctant to use "tips" or "tricks" that haven't been logically explained.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Holistic Perspective</div><div class="trait-desc">Needs to see how a concept fits into the "whole picture" before starting.</div></div></div>
       <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Forensic Self-Correction</div><div class="trait-desc">Only satisfied when they find the underlying reason for a mistake.</div></div></div>
       <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Anti-Guessing Bias</div><div class="trait-desc">Unwilling to guess an answer, even when time is running out.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Reconstruction Instinct</div><div class="trait-desc">Tends to re-derive the logic of a solution every time.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'a')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Reconstruction Instinct</div><div class="trait-desc">Tends to re-derive the logic of a solution every time they see it.</div></div></div>
     </div>
     <div class="list-col">
       <div class="list-head" style="background:var(--offwhite);"><h2 style="font-family:'Playfair Display';">The Pattern Recogniser</h2></div>
-      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Action-First Default</div><div class="trait-desc">Jumps into problems immediately, often before finishing reading.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Intuitive Pattern Matching</div><div class="trait-desc">Confidently spots connections but struggles to explain "how."</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Natural Timed Pace</div><div class="trait-desc">Speed comes naturally; rarely feels stressed by a clock.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">High Drill Efficiency</div><div class="trait-desc">Scores improve steadily with high-volume practice.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">High Correction Tolerance</div><div class="trait-desc">Accepts a corrected answer and moves on immediately.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Impatience with Planning</div><div class="trait-desc">Restless when asked to plan or reflect.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Friction on Novelty</div><div class="trait-desc">Struggles with questions phrased in unfamiliar ways.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Trial-and-Error Learning</div><div class="trait-desc">Comfortable learning mechanics through action.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Context Filtering</div><div class="trait-desc">Ignores small, irrelevant details to get to the answer faster.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Answer-First Mindset</div><div class="trait-desc">Often "just knows" the result without naming the rule.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Action-First Default</div><div class="trait-desc">Jumps into problems immediately, often before finishing the reading.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Intuitive Pattern Matching</div><div class="trait-desc">Confidently spots connections but struggles to explain the "how".</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Natural Timed Pace</div><div class="trait-desc">Speed comes naturally; rarely feels stressed by a running clock.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">High Drill Efficiency</div><div class="trait-desc">Scores improve steadily and reliably with high-volume repetitive practice.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">High Correction Tolerance</div><div class="trait-desc">Accepts a corrected answer and moves on without needing a deep explanation.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Impatience with Planning</div><div class="trait-desc">Restless when asked to plan or reflect; prefers to start doing.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Friction on Novelty</div><div class="trait-desc">Struggles with questions phrased in unfamiliar ways, despite the difficulty level.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Trial-and-Error Learning</div><div class="trait-desc">Comfortable learning the mechanics of a task through action rather than theory.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Context Filtering</div><div class="trait-desc">Efficiently ignores small, irrelevant details to get to the answer faster.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Answer-First Mindset</div><div class="trait-desc">Often says they "just knew" the result without being able to name the rule.</div></div></div>
       <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Competitive Speed</div><div class="trait-desc">Thrives in fast-paced environments; motivated by finishing first.</div></div></div>
-      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Structural Dependency</div><div class="trait-desc">Works best when question types are familiar.</div></div></div>
+      <div class="trait-item" onclick="toggle(this,'b')"><div class="trait-box">✓</div><div class="trait-content"><div class="trait-main">Structural Dependency</div><div class="trait-desc">Works best when question types are clearly categorized and familiar.</div></div></div>
     </div>
   </div>
-  <div style="text-align:center; padding:40px;"><button class="btn-primary" onclick="showResult()">Finalise Analysis →</button></div>
+  <div style="text-align:center; padding:40px;"><button onclick="showResult()" style="background:var(--navy); color:white; padding:18px 40px; border-radius:8px; border:none; font-weight:700; cursor:pointer;">Finalise Analysis →</button></div>
 </div>
 
 <div id="result">
   <div id="reportContent"></div>
+</div>
+
+<div id="sub-modal">
+    <div class="auth-card" style="position:relative;">
+        <button onclick="closeModal()" style="position:absolute; top:25px; right:25px; background:none; border:none; color:#94a3b8; cursor:pointer; font-size: 1.2rem;">✕</button>
+        <h2 style="font-family:'Playfair Display'; font-size: 2rem; margin-bottom:10px;">Join Cognis11</h2>
+        <p id="modal-desc" style="font-size:0.95rem; color:#94a3b8; margin-bottom:30px;">Let's get your account set up.</p>
+        <div class="form-group"><label>Email Address</label><input type="email" id="sub-email"></div>
+        <div class="form-group"><label>Create Password</label><input type="password" id="sub-password"></div>
+        <input type="hidden" id="selected-plan" value="">
+        <button id="modal-btn" onclick="handleSubscriptionSignup()">Create Account & Pay</button>
+    </div>
 </div>
 
 <script>
@@ -109,38 +142,48 @@ function validateAndSubmitGate() {
     childName = document.getElementById('gateName').value.trim();
     if (childName) { document.getElementById('nameHeading').innerText = childName; document.getElementById('gate').classList.remove('active'); document.getElementById('checklist').classList.add('active'); document.getElementById('progressFill').style.width = '50%'; window.scrollTo(0,0); }
 }
+function openModal(plan) { 
+    document.getElementById('selected-plan').value = plan;
+    document.getElementById('sub-modal').style.display = 'flex'; 
+    document.getElementById('modal-desc').innerText = `Setting up ${plan.charAt(0).toUpperCase() + plan.slice(1)} Access.`;
+}
+function closeModal() { document.getElementById('sub-modal').style.display = 'none'; }
+
 function showResult() {
   document.getElementById('checklist').classList.remove('active'); document.getElementById('result').classList.add('active'); document.getElementById('progressFill').style.width = '100%'; window.scrollTo(0,0);
-  const isA = countA >= countB;
-  const type = isA ? "Deep Understander" : "Pattern Recogniser";
-  const desc = isA ? "prioritises comprehension over speed. While this leads to profound reasoning ability, it creates a 'Speed Plateau' in the 11+ where papers reward the instant recognition of patterns." : "has a natural affinity for speed but may hit a 'Complexity Ceiling' where unusual or 'trap' questions cause significant drops in accuracy.";
+  const type = countA >= countB ? "Deep Understander" : "Pattern Recogniser";
+  const desc = countA >= countB ? "prioritises comprehension over speed. While this leads to profound reasoning ability, it creates a 'Speed Plateau' in the 11+ where papers reward the instant recognition of patterns." : "has a natural affinity for the speed required in the 11+. However, high-speed learners often hit a 'Complexity Ceiling' where unusual or 'trap' questions cause significant drops in accuracy.";
+  
   document.getElementById('reportContent').innerHTML = `
     <div class="report-hero"><h1 class="rh-type">${childName} is a <em>${type}.</em></h1></div>
     <div style="max-width:800px; margin:0 auto;">
       <h2>The Strategic Shift</h2>
       <p>Your observations suggest ${childName} ${desc}</p>
-      <p style="margin-top:20px;">The solution is a transition from <strong>re-deriving</strong> logic to <strong>classifying</strong> structures. By identifying the problem type instantly, ${childName} can maintain their reasoning depth but execute with elite efficiency.</p>
+      <p style="margin-top:20px;">The fix isn't more drilling—it is a transition to <strong>structural classification</strong>. Cognis11 provides the logical "X-Rays" needed to identify problem types instantly, allowing ${childName} to execute with elite efficiency.</p>
       
-      <h3 style="margin-top:50px; font-family:'Playfair Display'; font-size:1.6rem;">Review Sample Modules</h3>
-      <div class="sample-grid">
-        <a href="sample.html?mod=11" class="sample-card"><h4>Branch B: Average Speed</h4><p>Master the Harmonic Mean trap.</p></a>
-        <a href="sample.html?mod=47" class="sample-card"><h4>Branch I: Cube Nets</h4><p>The Leapfrog Rule for 3D logic.</p></a>
-        <a href="sample.html?mod=53" class="sample-card"><h4>Branch J: Inference</h4><p>Applying structural comprehension.</p></a>
+      <div style="background:#fff; border:1px solid var(--lgrey); padding:40px; border-radius:16px; margin-top:50px; text-align:center;">
+        <h3 style="font-family:'Playfair Display'; margin-bottom:15px;">Experience a 10-Minute Session</h3>
+        <p style="color:var(--mgrey); margin-bottom:25px;">Imagine a Tuesday evening where prep isn't a chore. We've unlocked three key branches for you to try together right now.</p>
+        <div class="sample-grid">
+          <a href="sample.html?mod=11" class="sample-card"><h4>Branch B: Speed</h4><p>Master the Harmonic Mean trap.</p></a>
+          <a href="sample.html?mod=47" class="sample-card"><h4>Branch I: Cube Nets</h4><p>The Leapfrog Rule for 3D logic.</p></a>
+          <a href="sample.html?mod=53" class="sample-card"><h4>Branch J: Inference</h4><p>Applying structural comprehension.</p></a>
+        </div>
       </div>
 
       <h2 style="margin-top:80px; text-align:center;">Select a Prep Purpose for ${childName}</h2>
       <div class="tier-grid">
         <div class="tier-card">
           <span style="font-size:0.7rem; font-weight:800; color:var(--gold); text-transform:uppercase;">Years 2–3</span>
-          <h3>Foundational</h3>
-          <p style="font-size:0.85rem; margin:10px 0;">Build long-term instincts through a guided, sequential journey.</p>
-          <a href="subscribe.html" class="btn-primary" style="width:100%; text-align:center; padding:15px; background:none; color:var(--navy); border:2px solid var(--navy);">£6/mo · Start Journey</a>
+          <h3>Foundational Access</h3>
+          <p style="font-size:0.85rem; margin:15px 0;">Build reasoning instincts through a guided journey. One structure unlocks the next, ensuring total mastery before complexity increases.</p>
+          <button class="btn-tier" onclick="openModal('foundational')" style="background:none; color:var(--navy); border:2px solid var(--navy);">£6/mo · Start Journey</button>
         </div>
-        <div class="tier-card">
+        <div class="tier-card" style="box-shadow:0 10px 40px rgba(27,58,92,0.06); border-color:var(--navy);">
           <span style="font-size:0.7rem; font-weight:800; color:var(--gold); text-transform:uppercase;">Years 4–5</span>
-          <h3>Supplemental</h3>
-          <p style="font-size:0.85rem; margin:10px 0;">Break speed plateaus with total immediate access to 59 modules.</p>
-          <a href="subscribe.html" class="btn-primary" style="width:100%; text-align:center; padding:15px;">£9/mo · Full Access</a>
+          <h3>Supplemental Access</h3>
+          <p style="font-size:0.85rem; margin:15px 0;">Break plateaus with total immediate entry to all 59 modules. Ideal for identifying specific logic gaps and targeted revision.</p>
+          <button class="btn-tier" onclick="openModal('supplemental')">£9/mo · Full Access</button>
         </div>
       </div>
     </div>

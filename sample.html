@@ -104,6 +104,23 @@
 <footer>© 2026 Cognis11</footer>
 
 <script>
+
+    // Add this to your existing sample.html script
+    window.onload = function() {
+        const params = new URLSearchParams(window.location.search);
+        const modId = params.get('mod');
+        if (modId) {
+            // Find the button that corresponds to this module ID path
+            const targetPath = 'members/module-' + modId + '.html';
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                if (btn.getAttribute('onclick').includes(targetPath)) {
+                    loadSample(btn, targetPath);
+                }
+            });
+        }
+    };
+
     function loadSample(btn, path) {
         const frame = document.getElementById('sample-frame');
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));

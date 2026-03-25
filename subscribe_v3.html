@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subscribe · Cognis11</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #1a1a1a; --ink-mid: #4a4a4a; --ink-light: #909090;
+      --rule: #e4e4e0; --paper: #faf9f7; --accent: #2d6a4f;
+      --accent-lt: #ebf4ef;
+      --serif: 'DM Serif Display', Georgia, serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+    }
+    html { font-size: 16px; }
+    body { background: var(--paper); color: var(--ink); font-family: var(--sans); font-weight: 300; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 2.5rem; border-bottom: 1px solid var(--rule);
+      position: sticky; top: 0; background: var(--paper); z-index: 100;
+    }
+    .nav-logo { font-family: var(--serif); font-size: 1.15rem; color: var(--ink); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.75rem; align-items: center; }
+    .nav-links a { font-size: 0.85rem; color: var(--ink-mid); text-decoration: none; font-weight: 400; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links .active { color: var(--ink); font-weight: 500; }
+
+    /* HERO */
+    .hero { max-width: 660px; margin: 0 auto; padding: 5.5rem 2rem 4rem; text-align: center; }
+    .eyebrow { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 1.25rem; }
+    .hero h1 { font-family: var(--serif); font-size: clamp(2rem, 4vw, 2.8rem); line-height: 1.13; letter-spacing: -0.02em; margin-bottom: 0.85rem; }
+    .hero h1 em { font-style: italic; color: var(--accent); }
+    .hero p { font-size: 0.97rem; color: var(--ink-mid); max-width: 480px; margin: 0 auto; }
+
+    /* HOW IT WORKS */
+    .how { max-width: 760px; margin: 0 auto; padding: 4rem 2rem; border-top: 1px solid var(--rule); }
+    .how .eyebrow { margin-bottom: 1.5rem; }
+    .how h2 { font-family: var(--serif); font-size: clamp(1.3rem, 2.5vw, 1.75rem); line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .how h2 em { font-style: italic; color: var(--accent); }
+    .how > p { font-size: 0.93rem; color: var(--ink-mid); max-width: 540px; margin-bottom: 2rem; }
+
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: var(--rule); border: 1.5px solid var(--rule); margin-bottom: 1.5rem; }
+    .step { background: var(--paper); padding: 1.75rem; }
+    .step-n { font-family: var(--serif); font-size: 2rem; color: var(--rule); margin-bottom: 0.6rem; line-height: 1; }
+    .step h3 { font-size: 0.86rem; font-weight: 500; margin-bottom: 0.35rem; }
+    .step p { font-size: 0.8rem; color: var(--ink-mid); line-height: 1.6; }
+
+    .mandate-note {
+      background: var(--accent-lt); border-left: 3px solid var(--accent);
+      padding: 1.1rem 1.5rem;
+    }
+    .mandate-note p { font-size: 0.88rem; color: var(--ink-mid); line-height: 1.65; }
+    .mandate-note strong { color: var(--ink); font-weight: 500; }
+
+    /* PLANS */
+    .plans { max-width: 760px; margin: 0 auto; padding: 4rem 2rem 5rem; border-top: 1px solid var(--rule); }
+    .plans .eyebrow { margin-bottom: 1.5rem; }
+    .plans h2 { font-family: var(--serif); font-size: clamp(1.4rem, 2.8vw, 1.9rem); letter-spacing: -0.02em; margin-bottom: 2.5rem; }
+    .plans h2 em { font-style: italic; color: var(--accent); }
+
+    .plans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5px; background: var(--rule); border: 1.5px solid var(--rule); }
+    .plan { background: var(--paper); padding: 2.5rem; }
+    .plan-tag { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 0.6rem; }
+    .plan h3 { font-family: var(--serif); font-size: 1.35rem; margin-bottom: 0.3rem; }
+    .plan-price { font-size: 2.2rem; font-family: var(--serif); color: var(--accent); margin-bottom: 1.25rem; line-height: 1; }
+    .plan-price span { font-size: 0.82rem; font-family: var(--sans); color: var(--ink-light); font-weight: 300; }
+    .plan-desc { font-size: 0.88rem; color: var(--ink-mid); margin-bottom: 1.5rem; line-height: 1.65; }
+    .plan-features { list-style: none; margin-bottom: 2rem; }
+    .plan-features li { font-size: 0.83rem; color: var(--ink-mid); padding: 0.45rem 0; border-bottom: 1px solid var(--rule); display: flex; gap: 0.5rem; align-items: flex-start; }
+    .plan-features li:last-child { border-bottom: none; }
+    .plan-features li::before { content: '·'; color: var(--accent); font-weight: 700; flex-shrink: 0; margin-top: 0.05rem; }
+    .plan-features strong { color: var(--ink); font-weight: 500; }
+
+    .btn-plan { display: block; width: 100%; text-align: center; background: var(--ink); color: var(--paper); padding: 0.82rem 1.5rem; border-radius: 2rem; font-size: 0.87rem; font-weight: 500; text-decoration: none; border: none; cursor: pointer; font-family: var(--sans); transition: background 0.15s; }
+    .btn-plan:hover { background: var(--accent); }
+
+    .stripe-note { text-align: center; font-size: 0.73rem; color: var(--ink-light); margin-top: 1.5rem; }
+
+    .sample-nudge { text-align: center; margin-top: 2.5rem; font-size: 0.87rem; color: var(--ink-light); }
+    .sample-nudge a { color: var(--accent); text-decoration: none; font-weight: 400; }
+    .sample-nudge a:hover { text-decoration: underline; }
+
+    /* MODAL */
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.48); z-index: 200; align-items: center; justify-content: center; }
+    .modal-bg.open { display: flex; }
+    .modal { background: var(--paper); max-width: 420px; width: 90%; padding: 2.5rem; position: relative; }
+    .modal-close { position: absolute; top: 1rem; right: 1.25rem; background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--ink-light); }
+    .modal h2 { font-family: var(--serif); font-size: 1.4rem; margin-bottom: 1.5rem; }
+    .field { margin-bottom: 1rem; }
+    .field label { display: block; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 0.35rem; }
+    .field input { width: 100%; padding: 0.72rem 1rem; border: 1.5px solid var(--rule); background: #fff; font-family: var(--sans); font-size: 0.9rem; color: var(--ink); border-radius: 3px; outline: none; transition: border-color 0.15s; }
+    .field input:focus { border-color: var(--accent); }
+    .modal-plan { font-size: 0.73rem; color: var(--ink-light); text-align: center; margin-top: 0.75rem; }
+
+    footer { border-top: 1px solid var(--rule); padding: 2rem 2.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    footer span { font-size: 0.78rem; color: var(--ink-light); }
+    .foot-links { display: flex; gap: 1.5rem; }
+    .foot-links a { font-size: 0.78rem; color: var(--ink-light); text-decoration: none; }
+    .foot-links a:hover { color: var(--ink); }
+
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; }
+      .hero { padding: 3.5rem 1.25rem 3rem; }
+      .how, .plans { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .steps, .plans-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/index.html">Cognis11</a>
+  <div class="nav-links">
+    <a href="/index.html">Home</a>
+    <a href="/about.html">About</a>
+    <a href="/sample.html">Sample</a>
+    <a href="/login.html">Login</a>
+    <a href="/subscribe.html" class="active">Subscribe</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="eyebrow">Subscription Plans</p>
+  <h1>Choose your <em>starting point.</em></h1>
+  <p>Access the full 59-module Learning Lattice. Built for parent-led sessions — ten minutes together, across all 11 branches of 11+ logic.</p>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how">
+  <p class="eyebrow">The Model</p>
+  <h2>Ten minutes. <em>In the same room.</em></h2>
+  <p>Cognis11 is built to be led by you. Each module prepares you first, then gives you the tools to guide your child. Here is how a session works.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-n">1</div>
+      <h3>You read the X-Ray</h3>
+      <p>Master the concept, the most common error, and the structural fix — in 60 seconds.</p>
+    </div>
+    <div class="step">
+      <div class="step-n">2</div>
+      <h3>You guide the session</h3>
+      <p>Walk your child through the interactive logic engine together, using your understanding to answer their questions.</p>
+    </div>
+    <div class="step">
+      <div class="step-n">3</div>
+      <h3>The Lattice tracks progress</h3>
+      <p>Each completed module updates the dashboard so you always know where to go next.</p>
+    </div>
+  </div>
+
+  <div class="mandate-note">
+    <p><strong>Why parent-led?</strong> Children under 11 build new mental models through guided dialogue with a trusted adult — not from passive screen time. The parent's presence is the mechanism by which the learning transfers. Cognis11 is designed around this.</p>
+  </div>
+</div>
+
+<!-- PLANS -->
+<div class="plans">
+  <p class="eyebrow">Access Plans</p>
+  <h2>Two plans. <em>One curriculum.</em></h2>
+
+  <div class="plans-grid">
+    <div class="plan">
+      <p class="plan-tag">Years 2–3</p>
+      <h3>Foundational</h3>
+      <div class="plan-price">£6 <span>/ month</span></div>
+      <p class="plan-desc">Build reasoning instincts before the pressure of drilling begins. Master one structure to unlock the next.</p>
+      <ul class="plan-features">
+        <li><strong>Sequential progression</strong> — one module unlocks the next, ensuring a solid foundation before moving to complex logic.</li>
+        <li>Interactive visualisers to build mental models alongside your child.</li>
+        <li>Covers the full 59-module logic schema across all 11 branches.</li>
+        <li>Personal progress tracking via the parent dashboard.</li>
+        <li>Cancel anytime. No minimum contract.</li>
+      </ul>
+      <button class="btn-plan" onclick="openModal('Foundational · £6/month')">Select Foundational</button>
+    </div>
+
+    <div class="plan">
+      <p class="plan-tag">Years 4–5</p>
+      <h3>Supplemental</h3>
+      <div class="plan-price">£9 <span>/ month</span></div>
+      <p class="plan-desc">Open access to all 59 modules. Ideal for targeted revision, mock exam analysis, and resolving specific logic gaps.</p>
+      <ul class="plan-features">
+        <li><strong>Open access</strong> — jump immediately to any module for targeted revision and problem-solving.</li>
+        <li>Ideal for resolving specific gaps identified in mock exams or homework sessions.</li>
+        <li>High-level logic covering Maths, Verbal Reasoning, and Non-Verbal Reasoning.</li>
+        <li>Full tracking for revision and mastery across all branches.</li>
+        <li>Secure payment. Simple dashboard cancellation.</li>
+      </ul>
+      <button class="btn-plan" onclick="openModal('Supplemental · £9/month')">Select Supplemental</button>
+    </div>
+  </div>
+
+  <p class="stripe-note">Securely processed by Stripe. All plans are rolling monthly subscriptions.</p>
+
+  <p class="sample-nudge">Still exploring the methodology? <a href="/sample.html">Try three free sample modules →</a></p>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2>Join Cognis11</h2>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" placeholder="your@email.com" />
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" placeholder="At least 8 characters" />
+    </div>
+    <button class="btn-plan" style="margin-top:0.35rem;">Create Account & Pay</button>
+    <p class="modal-plan" id="modalPlan"></p>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 Cognis11 · Reasoning-First Preparation</span>
+  <div class="foot-links">
+    <a href="/index.html">Home</a>
+    <a href="/about.html">About</a>
+    <a href="/privacy.html">Privacy</a>
+    <a href="mailto:hello@cognis11.com">Contact</a>
+  </div>
+</footer>
+
+<script>
+  function openModal(plan) {
+    document.getElementById('modalBg').classList.add('open');
+    document.getElementById('modalPlan').textContent = plan;
+  }
+  function closeModal() {
+    document.getElementById('modalBg').classList.remove('open');
+  }
+  document.getElementById('modalBg').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+</script>
+
+</body>
+</html>

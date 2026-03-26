@@ -86,40 +86,40 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In inverse proportion, the "Total Amount of Work" is a <b>Fixed Constant</b>. Unlike direct proportion, where variables move together, inverse variables are linked by a product. If you double the number of workers, the time must be cut in half. To solve these, find the constant product first:</p>
+        <p>In most math, when one number goes up, the other follows. Inverse proportion is different—it's a <b>See-Saw</b>. If you double the workers, the time is cut in half. The secret is that the <b>Total Work</b> never changes. To solve these, your child must find that "Magic Total" first by multiplying the starting numbers together:</p>
         
         <div style="text-align: center; margin: 25px 0; padding: 15px; background: var(--cognis-light); border-radius: 8px; border: 1px dashed var(--cognis-blue);">
-            <b style="color: var(--cognis-blue); font-size: 1.1rem;">Workers × Time = Total Work (Constant)</b>
+            <b style="color: var(--cognis-blue); font-size: 1.1rem;">Workers × Time = The Magic Total (Constant)</b>
         </div>
 
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "If 2 children take 6 minutes to tidy a room, how long will it take 3 children working at the same speed?"
+                <b>The Tidy-Up</b>
+                "2 kids take 6 mins to tidy a room. How long for 3 kids?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "4 builders take 10 days to build a wall. How many days would it take 5 builders to complete the same task?"
+                <b>The Building Site</b>
+                "4 builders take 10 days to build a wall. How many days for 5 builders?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "6 pumps empty a tank in 14 hours. If 2 pumps break down before starting, how long will the remaining pumps take?"
+                <b>The Water Pump</b>
+                "6 pumps empty a tank in 14 hours. 2 break down. How long for the rest?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Constant Area</b>. No matter how you change the worker count, the "Total Work" rectangle maintains the exact same area. As it stretches wide (more workers), it must squash down (less time).</p>
+        <p>This is the <b>Work Rectangle</b>. Think of the area inside as the "Job" (like painting a fence). If the rectangle gets wider (more workers), it <i>must</i> get shorter (less time) to keep the area the same. Point to the rectangle—watch how the shape changes while the "Total Work" number stays frozen.</p>
         
         <div class="anatomy-display">
             <div class="work-chart">
                 <span class="axis-label y-label">Time &rarr;</span>
                 <span class="axis-label x-label">Workers &rarr;</span>
                 <div class="work-rect" id="viz-rect">
-                    <div class="label-main">TOTAL WORK</div>
+                    <div class="label-main">MAGIC TOTAL</div>
                     <div class="label-val"><span id="viz-area">40</span></div>
-                    <div class="label-unit">UNITS</div>
+                    <div class="label-unit">UNITS OF WORK</div>
                 </div>
             </div>
         </div>
@@ -127,6 +127,7 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the sliders to add or remove workers. Show your child how multiplying the top two numbers always gives you the <b>Magic Total</b>, which we then divide to find the new time.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
@@ -149,9 +150,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Direct Scaling" Trap:</strong> Mistakenly applying direct logic to an inverse problem. (e.g., If 4 workers take 10 days, 8 workers must take 20 days.) You are doubling the speed, but doubling the time as well.</p>
+            <p><strong>The "More is More" Trap:</strong> This is the most common 11+ error. A child might think: "If 4 workers take 10 days, then 8 workers must take 20 days." They've doubled the help but <i>increased</i> the time!</p>
             
-            <p><strong>The Fix:</strong> Use the <b>Common Sense Filter</b>. Always ask: "If I have more help, should the job take more or less time?" If the answer is "less," you must divide the constant by the new worker count, not multiply.</p>
+            <p><strong>The Fix: The "Helper Test."</strong> Ask your child: "If more friends come to help you tidy your Lego, does it take you longer or shorter?" If the answer is shorter, remind them they must <b>Divide</b> the Magic Total by the new number of helpers.</p>
         </div>
     </section>
 </div>
@@ -184,11 +185,11 @@
 
         // Trace Output
         document.getElementById('trace-4').innerHTML = `
-            <div class="trace-step">→ 1. Initial State: ${w1} workers × ${t1} units</div>
-            <div class="trace-step">→ 2. Constant Work: <b>${constant}</b> Units</div>
-            <div class="trace-step">→ 3. Redistribution: ${constant} / ${w2} workers</div>
+            <div class="trace-step">→ 1. Find the Job Size: ${w1} workers × ${t1} days = <b>${constant}</b></div>
+            <div class="trace-step">→ 2. The Magic Total: <b>${constant}</b> units of work</div>
+            <div class="trace-step">→ 3. New Split: Divide ${constant} by ${w2} workers</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → NEW TIME: ${newTime.toFixed(2)} UNITS
+                → NEW TIME: ${newTime.toFixed(2)} DAYS
             </div>
         `;
     }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module 3: Shared Ratios (Difference) | Cognis 11+</title>
+    <title>Module 3: Shared Ratios (The Gap) | Cognis 11+</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="../css/module-style.css">
@@ -110,27 +110,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In 11+ ratio questions, the value you are given isn't always the total. Often, you are given the <b>Difference</b> (the gap) between two shares. Success depends on identifying how many "extra parts" create that specific gap. To solve these, you must find the value of one part by dividing the gap amount by the <b>Difference in Parts</b>.</p>
+        <p>In many 11+ questions, the examiner won't tell you the "Total." Instead, they'll tell you the <b>Difference</b> (the gap) between two people. The secret weapon here is finding out how many <b>Extra Boxes</b> create that gap. If your child can see that "£20 more" is caused by "2 extra boxes," they've already won the points.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "Money is shared in the ratio 3:1. If Person A has £10 more than Person B, how much does B have?"
+                <b>The Pocket Money</b>
+                "Money shared 3:1. Person A has £10 more than B. How much does B have?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "The ratio of boys to girls is 5:2. There are 15 more boys than girls. Calculate the number of girls."
+                <b>The Classroom</b>
+                "Ratio of boys to girls is 5:2. There are 15 more boys. How many girls?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "A recipe uses flour and sugar in the ratio 7:3. If there is 200g more flour than sugar, find the total mass."
+                <b>The Recipe Mass</b>
+                "Flour and sugar are 7:3. If there's 200g more flour, find the total weight."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Comparative Bar</b>. When comparing two shares, the "Difference" only applies to the extra segments. By isolating the gap, we can see exactly how many parts are responsible for that extra value.</p>
+        <p>This is the <b>Comparative Bar</b>. Notice how the bars aren't equal. The "Gap" represents the <b>Difference</b> in value. Point to the dashed boxes—these are the "Extra Parts" that hold the gap value. We divide the gap amount only by these extra pieces.</p>
         
         <div class="anatomy-display">
             <div class="bar-row">
@@ -149,6 +149,7 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Move the sliders and watch the red **GAP** section. Notice how it only cares about the difference between the two rows, not the total number of boxes.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
@@ -171,9 +172,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Blind Total" Trap:</strong> Mistakenly adding the ratio parts (e.g. 5 + 3 = 8) and dividing the number by that sum. This only works if the number is the <i>Total</i>. If the number is a <i>Difference</i>, your answer will be way too small.</p>
+            <p><strong>The "Total Sum" Trap:</strong> Children often go on autopilot and add the ratio parts together (e.g., 5 + 3 = 8) to divide the number. This is a disaster if the number is actually a <b>Difference</b>. It makes every box look too small.</p>
             
-            <p><strong>The Fix:</strong> Always identify the <b>Anchor</b>. If the question says "more than," "less than," or "the difference is," you must find the <b>Difference in Parts</b> first (e.g. 5 - 3 = 2). Divide the gap value only by the gap parts.</p>
+            <p><strong>The Fix: The "Minus First" Rule.</strong> Remind your child: "If you see words like 'more than,' 'less than,' or 'difference,' you must subtract the ratio parts first." (5 - 3 = 2). The "Gap Value" only lives in the "Gap Parts."</p>
         </div>
     </section>
 </div>
@@ -195,7 +196,7 @@
         document.getElementById('b-disp').innerText = b;
 
         if (partDiff === 0) {
-            trace.innerHTML = `<div class="trace-step" style="color:#ef4444">→ Ratio parts must be different to create a "Gap".</div>`;
+            trace.innerHTML = `<div class="trace-step" style="color:#ef4444">→ To see a "Gap," the numbers in the ratio must be different!</div>`;
             return;
         }
 
@@ -229,16 +230,16 @@
         const bracket = document.getElementById('diff-bracket');
         bracket.style.left = `${startOffset}px`;
         bracket.style.width = `${bracketWidth}px`;
-        bracket.innerText = `Gap = £${diffAmt}`;
+        bracket.innerText = `Difference = £${diffAmt}`;
 
         // Trace Output
         trace.innerHTML = `
-            <div class="trace-step">→ 1. Part Difference: ${Math.max(a,b)} - ${Math.min(a,b)} = <b>${partDiff} parts</b></div>
-            <div class="trace-step">→ 2. Unit Value: £${diffAmt} / ${partDiff} = <b>£${unitValue.toFixed(2)}</b></div>
-            <div class="trace-step">→ 3. Share A: ${a} × £${unitValue.toFixed(2)} = £${totalA.toFixed(2)}</div>
-            <div class="trace-step">→ 4. Share B: ${b} × £${unitValue.toFixed(2)} = £${totalB.toFixed(2)}</div>
+            <div class="trace-step">→ 1. The Extra Pieces: ${Math.max(a,b)} - ${Math.min(a,b)} = <b>${partDiff} extra boxes</b></div>
+            <div class="trace-step">→ 2. Value of One Box: £${diffAmt} ÷ ${partDiff} = <b>£${unitValue.toFixed(2)}</b></div>
+            <div class="trace-step">→ 3. Person A Total: ${a} boxes × £${unitValue.toFixed(2)} = £${totalA.toFixed(2)}</div>
+            <div class="trace-step">→ 4. Person B Total: ${b} boxes × £${unitValue.toFixed(2)} = £${totalB.toFixed(2)}</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → TOTAL SUM: £${(totalA + totalB).toFixed(2)}
+                → COMBINED TOTAL: £${(totalA + totalB).toFixed(2)}
             </div>
         `;
     }

@@ -56,6 +56,7 @@
             text-transform: uppercase;
             font-size: 0.75rem;
             letter-spacing: 1px;
+            font-size: 1.1rem;
         }
 
         .engine-container { grid-template-columns: 1fr 1.3fr; }
@@ -84,27 +85,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Ratio sharing is the art of <b>Proportional Splitting</b>. When a total is shared in a ratio, we aren't just looking at two numbers; we are looking at a collection of equal "parts." The most important step is finding the <b>Sum of Parts</b>. Once you know what "one part" is worth, you can find any share.</p>
+        <p>Think of a ratio as a <b>Chocolate Bar</b>. To share it fairly, you don't just look at the two numbers; you look at the total number of "chunks." The secret to every ratio problem is finding the value of <b>One Single Chunk</b>. Once your child knows what one chunk is worth, they can calculate any share in seconds.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
+                <b>The Sweet Shop</b>
                 "Share 15 sweets between Ben and Sam in the ratio 2:1. How many does Ben get?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "A £60 prize is split in the ratio 5:7. Calculate the value of the larger share."
+                <b>The Cash Prize</b>
+                "A £60 prize is split in the ratio 5:7. What is the value of the larger share?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "A 1.5m line is divided in the ratio 3:2. Find the difference in length between the two parts."
+                <b>The Ruler Challenge</b>
+                "A 1.5m line is divided 3:2. What is the difference between the two lengths?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Partition Bar</b>. Every segment in this bar represents a single "part" and holds exactly the same value. To find that value, we must divide the <b>Total Amount</b> by the <b>Total Number of Segments</b>.</p>
+        <p>This is the <b>Partition Bar</b>. Every box inside this bar is identical. To find the "Value of One Box," you must divide the <b>Total Amount</b> by the <b>Total Number of Boxes</b>. Point to the bar below—count the boxes together to find the "Total Parts" before you do any math.</p>
         
         <div class="anatomy-display">
             <div class="ratio-bar" id="ratio-bar">
@@ -118,6 +119,7 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Adjust the ratio sliders with your child. Watch how the <b>Total Parts</b> change, and see how the "Total Value" is spread across every single box.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
@@ -140,9 +142,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Single-Side" Trap:</strong> Dividing the total by only one side of the ratio (e.g., trying to find one part by doing $£100 \div 3$). This assumes that the £100 only belongs to Part A.</p>
+            <p><strong>The "One-Sided" Mistake:</strong> Children often try to divide the total by just one number in the ratio (e.g., trying to do $£100 \div 3$). They forget that the £100 has to be shared across <i>all</i> the boxes, not just Part A's.</p>
             
-            <p><strong>The Fix:</strong> Use the <b>Unity Check</b>. Because the Total Value covers the <i>entire</i> bar, you must divide by the <b>Total Number of Parts</b> $(A + B)$ to find the value of one segment. Only then can you multiply to find the individual shares.</p>
+            <p><strong>The Fix: The "Add First" Rule.</strong> Remind your child: "Before you divide, you must find the <b>Whole Bar</b>." Add the ratio numbers together (A + B) first to see the total number of parts. Only then can you find the value of one chunk.</p>
         </div>
     </section>
 </div>
@@ -185,10 +187,10 @@
 
         // Trace Output
         document.getElementById('trace-2').innerHTML = `
-            <div class="trace-step">→ 1. Total Parts: ${a} + ${b} = <b>${sumParts}</b></div>
-            <div class="trace-step">→ 2. Unit Value: £${total} ÷ ${sumParts} = <b>£${unitValue.toFixed(2)}</b></div>
-            <div class="trace-step">→ 3. Share A: ${a} parts × £${unitValue.toFixed(2)} = £${shareA.toFixed(2)}</div>
-            <div class="trace-step">→ 4. Share B: ${b} parts × £${unitValue.toFixed(2)} = £${shareB.toFixed(2)}</div>
+            <div class="trace-step">→ 1. Add Boxes: ${a} + ${b} = <b>${sumParts}</b> total parts</div>
+            <div class="trace-step">→ 2. One Chunk: £${total} ÷ ${sumParts} = <b>£${unitValue.toFixed(2)}</b> per part</div>
+            <div class="trace-step">→ 3. Part A Share: ${a} parts × £${unitValue.toFixed(2)} = £${shareA.toFixed(2)}</div>
+            <div class="trace-step">→ 4. Part B Share: ${b} parts × £${unitValue.toFixed(2)} = £${shareB.toFixed(2)}</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
                 → FINAL SPLIT: £${shareA.toFixed(2)} : £${shareB.toFixed(2)}
             </div>

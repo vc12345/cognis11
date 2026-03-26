@@ -13,7 +13,7 @@
             background: #f8fafc; 
             padding: 40px; 
             border-radius: 12px;
-            display: flex;
+            display: flex; 
             flex-direction: column;
             align-items: center;
             border: 2px solid #e2e8f0;
@@ -86,27 +86,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>The Unitary Method is the foundation of all mathematical scaling. Instead of guessing the relationship between two groups, we use a two-step process: **Shrink** the known total to find the value of exactly one unit, then **Grow** that unit to find your target. This "Unit Bridge" ensures accuracy regardless of how complex the numbers appear.</p>
+        <p>This is the "GPS" for scaling problems. Instead of guessing how two groups of numbers relate, we always travel through a single point: <b>The Value of One.</b> Help your child master the two-step journey: <b>Shrink</b> the known total to find exactly one unit, then <b>Grow</b> that unit to hit your target. This "Unit Bridge" makes even the messiest numbers feel manageable.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
+                <b>The Shopping Trip</b>
                 "If 4 apples cost 80p, how much do 6 apples cost?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "A car travels 150 miles on 5 gallons of fuel. How far can it travel on 8 gallons?"
+                <b>The Road Trip</b>
+                "A car travels 150 miles on 5 gallons. How far on 8 gallons?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "9 identical crates have a total mass of 108kg. Calculate the mass of 13 crates."
+                <b>The Heavy Lifting</b>
+                "9 identical crates weigh 108kg. What is the mass of 13 crates?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Unit Bridge</b>. Observe how the "Known Group" is partitioned into individual units. By isolating the value of the <b>Golden Unit</b>, we create a constant that can be multiplied by any new quantity.</p>
+        <p>Look at the <b>Unit Bridge</b> below. We take the "Known Group" and slice it into equal pieces. By finding the <b>Golden Unit</b> (the value of just one), we find the "key" that unlocks any other quantity. Point to the gold square—this is the only number that matters.</p>
         
         <div class="anatomy-display">
             <div class="bridge-viz" id="bridge-viz">
@@ -117,6 +117,7 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the sliders with your child to see the logic in action. Watch how the <b>Golden Unit</b> stays the same, even as we "stretch" or "shrink" the pile.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
@@ -139,9 +140,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Inverse Slip":</strong> The most common error in unitary math is dividing the wrong way. If 5 items cost £20, students often mistakenly try 5 ÷ 20.</p>
+            <p><strong>The "Backwards Divide":</strong> Bright children often try to divide the smaller number by the bigger one (e.g., $5 \div 20$) simply because it feels "easier" to fit them together. This leads to a messy decimal that makes no sense.</p>
             
-            <p><strong>The Fix:</strong> Use the <b>Purpose Filter</b>. Always ask: "Am I looking for the price of one item, or how many items I get for one pound?" In 99% of 11+ problems, you need the price of the item. This means you must divide the <b>Value</b> by the <b>Quantity</b> ($£ \div Q$).</p>
+            <p><strong>The Fix:</strong> Use the <b>"Money is Boss"</b> rule. Tell your child: "In 99% of these problems, the total value (like money or weight) goes into the calculation first." Always divide the <b>Total Value</b> by the <b>Quantity</b> to find your unit cost.</p>
         </div>
     </section>
 </div>
@@ -176,12 +177,12 @@
 
         // Trace Output
         document.getElementById('trace-1').innerHTML = `
-            <div class="trace-step">→ 1. Start: ${q} items cost £${v}</div>
-            <div class="trace-step">→ 2. Shrink: Divide £${v} by ${q} items</div>
-            <div class="trace-step">→ 3. Unit Found: <b>£${unitValue.toFixed(2)}</b> per item</div>
-            <div class="trace-step">→ 4. Grow: Multiply £${unitValue.toFixed(2)} by ${t} items</div>
+            <div class="trace-step">→ 1. The Start: We have ${q} items worth £${v}</div>
+            <div class="trace-step">→ 2. The Shrink: Divide £${v} by ${q} pieces</div>
+            <div class="trace-step">→ 3. The Key Found: <b>£${unitValue.toFixed(2)}</b> for one item</div>
+            <div class="trace-step">→ 4. The Grow: Multiply £${unitValue.toFixed(2)} by ${t} items</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → FINAL TOTAL: £${finalResult.toFixed(2)}
+                → NEW TOTAL: £${finalResult.toFixed(2)}
             </div>
         `;
     }

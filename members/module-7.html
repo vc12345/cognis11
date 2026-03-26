@@ -56,8 +56,8 @@
             font-weight: 900; 
             white-space: nowrap;
         }
-        .op-bubble.top { top: 0; background: #718096; }
-        .op-bubble.bottom { bottom: 0; background: var(--cognis-gold); border: 2px solid white; }
+        .op-bubble.top { top: 0; background: #718096; opacity: 0.6; }
+        .op-bubble.bottom { bottom: 0; background: var(--cognis-gold); border: 2px solid white; box-shadow: 0 4px 10px rgba(197, 160, 89, 0.3); }
 
         /* Engine Customization */
         .engine-container { grid-template-columns: 1.1fr 1fr; }
@@ -95,27 +95,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Reverse Percentages ask you to find the <b>Original Starting Point</b>. You are standing at the "Destination" (the final price) and must drive back to the start. Success depends on recognizing that a sale price is the result of multiplication; to undo it and find the original, you must use <b>Division</b>.</p>
+        <p>Reverse Percentages are about <b>Time Travel</b>. You are given the "Destination" (the final price after a sale or tax) and you must travel back to the "Start" (the original price). The golden rule: To go forward, we multiply; to go backward, we <b>Divide</b>.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
+                <b>The Toy Sale</b>
                 "A half-price toy costs £5. What was the full price before the sale?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
+                <b>The Trainer Shop</b>
                 "After a 10% discount, trainers cost £45. What was the original price?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "A house worth £240,000 has increased in value by 20%. What was it worth before?"
+                <b>The House Market</b>
+                "A house worth £240,000 increased by 20%. What was it worth before?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Reverse Bridge</b>. Normal percentages move forward via multiplication. Reverse percentages move backward by applying the <b>Inverse Operation</b>: Division by the Multiplier.</p>
+        <p>This is the <b>Reverse Bridge</b>. Normal percentages move forward via multiplication. To undo that and find the original, we use the <b>Inverse Operation</b>. We divide the final value by the same multiplier that created it. Watch the "Gold Bridge" below—it's the only way back!</p>
         
         <div class="anatomy-display">
             <div class="node">
@@ -128,7 +128,7 @@
                 <div class="op-bubble bottom" id="bot-op">÷ 1.20</div>
             </div>
             <div class="node result">
-                <span>Final Value</span>
+                <span>Sale Price</span>
                 <div id="disp-new">£240.00</div>
             </div>
         </div>
@@ -136,14 +136,15 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Input the price you see in the shop. Choose whether it was an increase (like tax) or a decrease (like a sale). The Engine will show you how to "reverse" the math.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Final (New) Value (£):</label>
+                    <label>Final Value (£):</label>
                     <input type="number" id="v-in" value="240" oninput="run7()">
                 </div>
                 <div class="control-group" style="margin-top:15px;">
-                    <label>Final Status:</label>
+                    <label>How did it get here?</label>
                     <select id="type-in" onchange="run7()">
                         <option value="inc">After an INCREASE (+)</option>
                         <option value="dec" selected>After a DECREASE (-)</option>
@@ -161,9 +162,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Forward Percent" Trap:</strong> If a price is £90 after a 10% discount, many students find 10% of £90 (£9) and add it back to get £99. This is wrong because the 10% was originally taken off the larger starting number, not the sale price.</p>
+            <p><strong>The "Forward Percent" Trap:</strong> If a price is £90 after a 10% discount, many students find 10% of £90 (£9) and add it back to get £99. <b>This is a mistake.</b> The 10% was originally taken off a bigger number, so £9 isn't the right amount to add back!</p>
             
-            <p><strong>The Fix:</strong> Never calculate a percentage of the sale price. Always identify the <b>Decimal Multiplier</b> first (e.g., 0.90 for a 10% discount) and then <b>DIVIDE</b> the sale price by that multiplier. Division naturally "stretches" the number back to its original size.</p>
+            <p><strong>The Fix: The "Division Stretch."</strong> Never calculate a percentage of the sale price. Always find the <b>Multiplier</b> (e.g., 0.90 for a 10% discount) and then <b>DIVIDE</b>. Division "stretches" the sale price back to the original size perfectly.</p>
         </div>
     </section>
 </div>
@@ -178,7 +179,7 @@
 
         // Logic
         const multiplier = isInc ? (1 + (per/100)) : (1 - (per/100));
-        const original = val / multiplier;
+        const original = multiplier !== 0 ? (val / multiplier) : 0;
 
         // Update Anatomy
         document.getElementById('disp-orig').innerText = "£" + original.toFixed(2);
@@ -188,11 +189,11 @@
 
         // Trace Output
         document.getElementById('trace-7').innerHTML = `
-            <div class="trace-step">→ 1. Status: ${isInc ? 'Increased' : 'Decreased'} by ${per}%</div>
-            <div class="trace-step">→ 2. Multiplier: <b>${multiplier.toFixed(2)}</b></div>
-            <div class="trace-step">→ 3. Inverse: ${val} / ${multiplier.toFixed(2)}</div>
+            <div class="trace-step">→ 1. Identify the Multiplier: ${isInc ? '100% + ' + per + '%' : '100% - ' + per + '%'} = <b>${multiplier.toFixed(2)}</b></div>
+            <div class="trace-step">→ 2. Reverse the Journey: We need to <b>Divide</b></div>
+            <div class="trace-step">→ 3. Calculation: £${val} / ${multiplier.toFixed(2)}</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → ORIGINAL VALUE: £${original.toFixed(2)}
+                → ORIGINAL PRICE: £${original.toFixed(2)}
             </div>
         `;
     }

@@ -104,34 +104,31 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A fraction is not a static number; it is a <b>Mechanical Instruction</b>. The <b>Denominator</b> (bottom) tells you how many equal groups to cut the total into. The <b>Numerator</b> (top) tells you how many of those groups to collect. To solve any "Fraction of an Amount" problem, always find the value of exactly one part first.</p>
+        <p>A fraction is a <b>Mechanical Instruction</b>. The <b>Denominator</b> (bottom) tells you how many equal groups to cut the total into. The <b>Numerator</b> (top) tells you how many of those groups to collect. Always find the value of <b>one part</b> first.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
+                <b>The Sweet Shop</b>
                 "Find 1/2 of 12 sweets. How many are in one group?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
+                <b>The Cake Weight</b>
                 "A cake weighs 500g and is cut into 5 slices. If 3 slices are eaten, what is the weight consumed?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "A 40km race is 5/8 complete. How many kilometers are left to run? (Hint: Find 3/8)."
+                <b>The Race Track</b>
+                "A 40km race is 5/8 complete. How many kilometers are left to run?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Partition Bar</b>. Visualizing the denominator as the physical "cutter" that creates equal units. Notice how each unit carries an identical portion of the total value.</p>
+        <p>The <b>Partition Bar</b> helps you visualize the Denominator as a physical "cutter." </p>
         
-        
-
         <div class="anatomy-display">
             <div class="fraction-bar-container">
-                <div class="bar-frame" id="viz-bar">
-                    </div>
+                <div class="bar-frame" id="viz-bar"></div>
                 <div class="label-row">
                     <span>Unit (1 Part): <span id="unit-label">£25</span></span>
                     <span style="color:var(--cognis-gold)">Total Selected: <span id="total-label">£75</span></span>
@@ -149,11 +146,11 @@
                     <input type="number" id="amt-in" value="100" oninput="run8()">
                 </div>
                 <div class="control-group" style="margin-top:15px;">
-                    <label>Denominator (Divide): <span class="val-display" id="d-disp">4</span></label>
+                    <label>Denominator (Cutter): <span class="val-display" id="d-disp">4</span></label>
                     <input type="range" id="d-in" min="2" max="12" value="4" oninput="run8()">
                 </div>
                 <div class="control-group" style="margin-top:15px;">
-                    <label>Numerator (Take): <span class="val-display" id="n-disp">3</span></label>
+                    <label>Numerator (Collector): <span class="val-display" id="n-disp">3</span></label>
                     <input type="range" id="n-in" min="1" max="12" value="3" oninput="run8()">
                 </div>
             </div>
@@ -164,9 +161,7 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Upside Down" Trap:</strong> Getting confused about which number performs which job. Students often try to divide the total by the numerator (the top) because it is the first number they see.</p>
-            
-            <p><strong>The Fix:</strong> Use the <b>Cutter-Collector Rule</b>. The number on the <b>Bottom</b> is the "Cutter"—it divides the total into equal groups. The number on the <b>Top</b> is the "Collector"—it gathers those groups. Always "Divide by the Bottom, Multiply by the Top."</p>
+            <p><strong>The "Upside Down" Trap:</strong> Dividing by the top number because it's the first one you see. <b>The Fix:</b> Remember the "Cutter-Collector" rule. The <b>Bottom</b> cuts (divides), the <b>Top</b> collects (multiplies).</p>
         </div>
     </section>
 </div>
@@ -179,21 +174,17 @@
         const den = parseInt(document.getElementById('d-in').value);
         let num = parseInt(document.getElementById('n-in').value);
 
-        // Cap numerator to denominator for visual sanity
         if (num > den) {
             num = den;
             document.getElementById('n-in').value = num;
         }
 
-        // Update Labels
         document.getElementById('d-disp').innerText = den;
         document.getElementById('n-disp').innerText = num;
 
-        // Logic
         const unitVal = total / den;
         const finalVal = unitVal * num;
 
-        // Update Anatomy
         const bar = document.getElementById('viz-bar');
         bar.innerHTML = '';
         for(let i=0; i < den; i++) {
@@ -206,17 +197,15 @@
         document.getElementById('unit-label').innerText = "£" + unitVal.toFixed(2);
         document.getElementById('total-label').innerText = "£" + finalVal.toFixed(2);
 
-        // Trace Output
         document.getElementById('trace-8').innerHTML = `
-            <div class="trace-step">→ 1. Action: Divide Total by Denominator</div>
+            <div class="trace-step">→ 1. Action: Divide Total by Denominator (${den})</div>
             <div class="trace-step">→ 2. Unit Value: ${total} / ${den} = <b>£${unitVal.toFixed(2)}</b></div>
-            <div class="trace-step">→ 3. Action: Multiply Unit by Numerator</div>
+            <div class="trace-step">→ 3. Action: Multiply Unit by Numerator (${num})</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
                 → RESULT: £${finalVal.toFixed(2)}
             </div>
         `;
     }
-
     window.onload = run8;
 </script>
 

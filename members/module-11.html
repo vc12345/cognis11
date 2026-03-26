@@ -81,27 +81,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Average speed is not the average of two speeds. It is the <b>Total Story</b> of a journey. You must collapse every segment into one single distance and one single time.</p>
+        <p>Average speed is your <b>Big Picture Journey</b>. In the 11+, examiners love to show you two different speeds to tempt your child into a quick guess. The secret weapon is to ignore those middle speeds and zoom out. Success isn't about averaging numbers; it's about squashing the whole trip into one "Total Distance" and one "Total Time." If your child can collapse the journey into these two grand totals, the points are theirs.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
+                <b>The Road Trip</b>
                 "A car travels 15 miles in the morning and 25 miles in the afternoon. The trip took 2 hours. What was the average speed?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
+                <b>The Morning Cycle</b>
                 "A cyclist travels 20km at 10km/h, then another 20km at 20km/h. What is the average speed for the whole trip?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "A plane flies 600 miles at 300mph, then 400 miles at 200mph. Calculate the average speed for the 1000-mile flight."
+                <b>The Flight Path</b>
+                "A plane flies 600 miles at 300mph, then 400 miles at 200mph. Calculate the speed for the 1000-mile flight."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Visualise the segments. The <b>Meeting Point</b> shifts based on how much distance is covered in each leg.</p>
+        <p>Look at the <b>Journey Line</b> below. Point to the blue leg and the gold leg. We aren't interested in them as separate trips; we are watching them merge into one long road. Notice how the <b>Meeting Point</b> shifts. No matter where that point sits, the rule is the same: add the distances to get the "Road" and add the hours to get the "Time."</p>
         <div class="anatomy-display">
             <div class="journey-line">
                 <div class="marker marker-start"></div>
@@ -130,6 +130,7 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Adjust the sliders for each leg of the journey. Ask your child: <i>"If we travel for longer, what happens to our average speed?"</i> Watch the <b>Trace Log</b>—it shows you the logic of 'collapsing' the journey into one final calculation. Point out that the "Final Speed" only appears once we have both grand totals ready.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
@@ -156,9 +157,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Mean Speed" Trap:</strong> If a car travels at 40mph then 60mph, many students assume the average is 50mph. 
+            <p><strong>The "Speed Splitter" Trap:</strong> If a car travels at 40mph then 60mph, bright children will often confidently shout "50mph!" It feels logical because 50 is right in the middle. This is a classic 11+ trap. 
             <br><br>
-            <strong>The Fix:</strong> This only works if the <i>times</i> spent at each speed are exactly the same. Since journey times usually vary, you must <b>always</b> find Total Distance and Total Time first.</p>
+            <strong>The Insider Fix:</strong> Tell your child: <i>"Speeds don't matter until the very last step."</i> You only find the average by dividing the <b>Grand Totals</b>. Unless the time spent at each speed is exactly the same (which it almost never is in exams), adding the speeds together will lead to a confident wrong answer.</p>
         </div>
     </section>
 </div>
@@ -174,19 +175,16 @@
     function refresh() {
         const [d1, t1, d2, t2] = inputs.map(i => parseFloat(i.value) || 0);
         
-        // Logic Sync (Mocked if LogicProvider is missing, but structure maintained)
         const totalDist = d1 + d2;
         const totalTime = t1 + t2;
         const avgSpeed = totalTime > 0 ? (totalDist / totalTime) : 0;
 
-        // Dynamic Journey Map Proportion
         const p1 = totalDist > 0 ? (d1 / totalDist) * 100 : 50;
         const p2 = 100 - p1;
 
         document.getElementById('visual-leg-1').style.width = `${p1}%`;
         document.getElementById('visual-leg-2').style.width = `${p2}%`;
 
-        // Update Labels (2 Decimal Places)
         document.getElementById('label-d1').innerText = `${d1.toFixed(2)} km`;
         document.getElementById('label-t1').innerText = `${t1.toFixed(2)} hrs`;
         document.getElementById('label-d2').innerText = `${d2.toFixed(2)} km`;
@@ -194,13 +192,12 @@
 
         summary.innerText = `TOTAL: ${totalDist.toFixed(2)} km in ${totalTime.toFixed(2)} hours`;
 
-        // Logic Trace
         traceBox.innerHTML = `
-            <div class="trace-step">→ 1. Total Distance: ${d1} + ${d2} = <b>${totalDist.toFixed(2)} km</b></div>
-            <div class="trace-step">→ 2. Total Time: ${t1} + ${t2} = <b>${totalTime.toFixed(2)} hrs</b></div>
-            <div class="trace-step">→ 3. Average Speed: Total Dist ÷ Total Time</div>
+            <div class="trace-step">→ 1. Grand Distance: ${d1} + ${d2} = <b>${totalDist.toFixed(2)} km</b></div>
+            <div class="trace-step">→ 2. Grand Time: ${t1} + ${t2} = <b>${totalTime.toFixed(2)} hrs</b></div>
+            <div class="trace-step">→ 3. The Big Calculation: Total Distance ÷ Total Time</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → FINAL SPEED: ${avgSpeed.toFixed(2)} km/h
+                → AVERAGE SPEED: ${avgSpeed.toFixed(2)} km/h
             </div>
         `;
     }
@@ -210,4 +207,6 @@
 </script>
 
 </body>
-</html>
+</html>```
+
+**Next Step:** Would you like me to tackle **Module 12: Ratio and Scaling** next, or is there another proportionality concept we should refine?

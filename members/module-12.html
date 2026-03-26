@@ -27,7 +27,7 @@
             position: relative;
             margin: 50px 0;
             border: 1px solid #cbd5e0;
-            width: 100%; /* FIXED: Prevents collapsing to center */
+            width: 100%; 
             max-width: 700px;
         }
 
@@ -49,7 +49,6 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        /* Distinct styling for A and B */
         #veh-a { border-color: var(--cognis-blue); color: var(--cognis-blue); }
         #veh-b { border-color: var(--cognis-gold); color: var(--cognis-gold); }
 
@@ -130,29 +129,29 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Relative speed describes the rate at which the distance between two objects vanishes. When two objects move <b>toward</b> each other, they are effectively working together to delete the gap. In competitive exams, you must solve these by finding the <b>Closing Rate</b>—the combined sum of both speeds—before calculating the time until impact.</p>
+        <p>Think of relative speed as <b>"Teamwork Speed."</b> When two objects move toward each other, they are working together to delete the gap between them. To solve these in the 11+, don't look at them as two separate journeys. Instead, add their speeds together to find the <b>Closing Rate</b>. If Object A moves at 10mph and Object B moves at 15mph, the gap is actually shrinking at 25mph.</p>
         
         
 
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "Two cyclists are 10 miles apart. Both travel at 5mph toward each other. How many hours until they meet?"
+                <b>The Cyclists</b>
+                "Two cyclists are 10 miles apart. Both travel at 5mph toward each other. When do they meet?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
+                <b>The Meeting Point</b>
                 "A runner leaves Point A at 10km/h. A walker leaves Point B (50km away) at 15km/h. When do they pass?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Two trains 300 miles apart head toward each other. Train A is 60mph; Train B is 90mph. Where is the impact point?"
+                <b>The Rail Impact</b>
+                "Two trains 300 miles apart head toward each other. Train A is 60mph; Train B is 90mph. How long until they pass?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Closing Ratio</b>. Notice how the meeting point is not necessarily the middle. The faster object consumes a larger portion of the track, but the total time taken for both is identical.</p>
+        <p>Look at the <b>Track Blueprint</b> below. Notice that the meeting point isn't always the middle! Point to the track: the faster object (the one with the higher number) will always cover more ground before they collide. Even though they travel for the same amount of time, the <b>Speed Ratio</b> decides who "wins" more of the track.</p>
         
         <div class="anatomy-display">
             <div class="gap-display" id="gap-txt">Distance Gap: 100 KM</div>
@@ -169,6 +168,7 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the inputs to set the distance and speeds. Click <b>"Execute Simulation"</b> to watch them move. Help your child notice how the <b>Teamwork Speed</b> (A + B) is what actually determines how quickly the timer runs out. Watch the <b>Trace Log</b> to see the gap vanish in real-time.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
@@ -184,16 +184,16 @@
                     <input type="number" id="s2-in" value="40" oninput="updateLogic()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-12">Calculating combined closing rate...</div>
+            <div class="trace-log" id="trace-12">Calculating teamwork speed...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Halfway" Trap:</strong> Assuming objects moving toward each other always meet exactly in the middle (50% distance). This only happens if their speeds are identical.</p>
-            
-            <p><strong>The Fix:</strong> The impact point is anchored by the <b>Ratio of Speeds</b>. The meeting point will always be closer to the starting point of the <i>slower</i> object. If Speed A is twice as fast as Speed B, Object A will cover 2/3 of the ground.</p>
+            <p><strong>The "Halfway" Trap:</strong> Bright children often assume objects always meet exactly in the middle (50/50). They forget that if one train is faster, it will have covered more miles by the time they meet. 
+            <br><br>
+            <strong>The Fix: "Speed is Greedy."</strong> Tell your child: <i>"The faster object eats more of the track."</i> The meeting point will always be closer to the <b>slower</b> object’s starting line. If Train A is twice as fast as Train B, it will gobble up 2/3 of the track, leaving only 1/3 for Train B.</p>
         </div>
     </section>
 </div>
@@ -223,11 +223,11 @@
         currentCalc = { pct: meetPct, time: timeH };
 
         document.getElementById('trace-12').innerHTML = `
-            <div class="trace-step">→ 1. Closing Rate: ${s1} + ${s2} = <b>${closingRate} KM/H</b></div>
-            <div class="trace-step">→ 2. Time: ${d} / ${closingRate} = <b>${timeH.toFixed(2)} Hrs</b></div>
-            <div class="trace-step">→ 3. Path: A covers ${meetPct.toFixed(0)}% of distance</div>
+            <div class="trace-step">→ 1. Teamwork Speed: ${s1} + ${s2} = <b>${closingRate} KM/H</b></div>
+            <div class="trace-step">→ 2. Time to Meet: ${d} ÷ ${closingRate} = <b>${timeH.toFixed(2)} Hrs</b></div>
+            <div class="trace-step">→ 3. The Greedy Path: A takes ${meetPct.toFixed(0)}% of the road</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → IMPACT AT: ${distA.toFixed(1)} KM FROM START A
+                → COLLISION AT: ${distA.toFixed(1)} KM FROM START A
             </div>
         `;
         resetVehicles();
@@ -251,7 +251,6 @@
         
         mark.style.opacity = '0';
         
-        // Reflow
         void vA.offsetWidth;
     }
 
@@ -263,11 +262,9 @@
         vA.style.transition = 'all 2s cubic-bezier(0.4, 0, 0.2, 1)';
         vB.style.transition = 'all 2s cubic-bezier(0.4, 0, 0.2, 1)';
 
-        // Move both to the meeting percentage
         vA.style.left = currentCalc.pct + "%";
         vA.style.transform = 'translateX(-50%)';
 
-        // B moves from right (0) to (100 - pct)
         vB.style.right = (100 - currentCalc.pct) + "%";
         vB.style.transform = 'translateX(50%)';
 

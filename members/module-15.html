@@ -9,7 +9,7 @@
     
     <style>
         /* UNIQUE CSS FOR TIME TANKS */
-        .anatomy-display { padding: 40px; background: #f0f4f8; }
+        .anatomy-display { padding: 40px; background: #f0f4f8; border-radius: 12px; border: 2px solid #e2e8f0; }
         
         .tank-system { 
             display: flex; 
@@ -75,21 +75,22 @@
 
         @keyframes pulse { 50% { transform: translateX(-15px) scale(1.1); } }
 
-        .pump-controls { display: flex; gap: 10px; margin-top: 20px; }
+        .pump-controls { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
         .pump-btn {
             background: var(--cognis-blue);
             color: white;
             border: none;
-            padding: 8px 15px;
+            padding: 10px 20px;
             border-radius: 20px;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-weight: 800;
             cursor: pointer;
+            transition: 0.2s;
         }
-        .pump-btn:hover { background: var(--cognis-gold); }
+        .pump-btn:hover { background: var(--cognis-gold); transform: translateY(-2px); }
 
         .digital-output {
-            margin-top: 30px;
+            margin: 30px auto 0;
             font-size: 1.8rem;
             font-family: monospace;
             background: #1a202c;
@@ -97,6 +98,19 @@
             padding: 10px 25px;
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            width: fit-content;
+        }
+
+        .engine-container { grid-template-columns: 1fr 1.3fr; }
+        input[type=number] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #4a5568;
+            background: #2d3748;
+            color: white;
+            font-weight: 800;
+            margin-top: 5px;
         }
     </style>
 
@@ -112,27 +126,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Time does not use the standard decimal system (Base-10). It uses <b>Base-60</b>. The core logic is managing the "Reset Point" where 60 minutes transform into 1 hour.</p>
+        <p>In the 11+, time is the only place where the decimal system fails. We don't live in Base-10 here; we live in <b>Base-60</b>. The examiner is banking on your child assuming that 100 minutes equals an hour. The secret is managing the <b>"Overflow Point."</b> Once a group of minutes hits 60, it ceases to be minutes and must be packaged into a single hour unit.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "A baker leaves a cake in the oven for 85 minutes. Convert this into hours and minutes."
+                <b>The Baker</b>
+                "A cake stays in the oven for 85 minutes. How many hours and minutes is that?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "A flight from London to Paris takes 1 hour and 45 minutes. How many minutes is this in total?"
+                <b>The Traveler</b>
+                "A flight takes 1 hour and 45 minutes. How many total minutes is the journey?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "A marathon runner finishes in 215 minutes. Express their time in hours and minutes."
+                <b>The Marathon</b>
+                "A runner finishes in 215 minutes. Express this time in Hours and Minutes."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Use the pump to add time. Watch the <b>Minute Tank</b>. Once it hits the 60m ceiling, it overflows into the <b>Hour Tank</b>.</p>
+        <p>Think of time as a <b>Leaking Tank</b>. The Minute Tank has a hard ceiling at 60. As soon as you pump in more than 60 minutes, the pressure forces the excess through the pipe and into the Hour Tank. Watch the overflow in action below.</p>
         
         <div class="anatomy-display">
             <div class="tank-system">
@@ -152,7 +166,7 @@
             <div class="pump-controls">
                 <button class="pump-btn" onclick="pumpTime(1)">+1 MIN</button>
                 <button class="pump-btn" onclick="pumpTime(10)">+10 MINS</button>
-                <button class="pump-btn" onclick="resetSim()" style="background: #718096;">RESET</button>
+                <button class="pump-btn" onclick="resetSim()" style="background: #718096;">RESET TANKS</button>
             </div>
 
             <div class="digital-output" id="viz-digital">00:00</div>
@@ -161,13 +175,13 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Input any number of minutes to see the "Base-60" logic at work. Notice how we use division to find the whole hours and the remainder to find the leftover minutes.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Starting Minutes</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Total Minutes to Convert</label>
                     <input type="number" id="in-m" value="145" oninput="runEngine()">
                 </div>
-                <p style="font-size: 0.7rem; color: #a0aec0; margin-top: 10px;">Converting total minutes to Hours:Minutes format.</p>
             </div>
             <div class="trace-log" id="engine-trace"></div>
         </div>
@@ -176,9 +190,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Decimal" Trap:</strong> Mistakenly thinking that 1.5 hours is 1 hour and 50 minutes because 5 is half of 10. 
+            <p><strong>The "Decimal Mirage" Trap:</strong> Most children see 1.5 hours and think it means 1 hour and 50 minutes. They are trying to use the metric system on a clock! 
             <br><br>
-            <strong>The Fix:</strong> Always remember that in time, <b>0.5 = 30</b>. Because the "container" is 60 minutes wide, half of the container is 30. Never use 100 as your boundary!</p>
+            <strong>The Fix: The "Half-Tank" Rule.</strong> Remind your child: <i>"Time doesn't speak metric."</i> Since the container is 60 minutes wide, 0.5 (half) of the tank is <b>30 minutes</b>. Always check if their answer is based on 100 or 60. If they use 100, the Saboteur wins.</p>
         </div>
     </section>
 </div>
@@ -186,7 +200,6 @@
 <button class="btn-complete" onclick="markComplete(15)">Complete Module & Update Lattice</button>
 
 <script>
-    // SIMULATION STATE
     let simH = 0;
     let simM = 0;
 
@@ -219,16 +232,12 @@
     function updateViz() {
         document.getElementById('viz-h-val').innerText = simH;
         document.getElementById('viz-m-val').innerText = simM;
-        
-        // Visual heights
         document.getElementById('viz-h-fill').style.height = Math.min((simH / 12) * 100, 100) + "%";
         document.getElementById('viz-m-fill').style.height = (simM / 60 * 100) + "%";
-        
         document.getElementById('viz-digital').innerText = 
             `${String(simH).padStart(2, '0')}:${String(simM).padStart(2, '0')}`;
     }
 
-    // ENGINE LOGIC
     function runEngine() {
         const total = parseInt(document.getElementById('in-m').value) || 0;
         const h = Math.floor(total / 60);
@@ -236,11 +245,11 @@
 
         document.getElementById('engine-trace').innerHTML = `
             <div class="trace-step">→ 1. Total Minutes: <b>${total}</b></div>
-            <div class="trace-step">→ 2. Divide by 60 for Hours: ${total} ÷ 60</div>
-            <div class="trace-step">→ 3. Whole Hours: <b>${h}</b></div>
-            <div class="trace-step">→ 4. Remaining Minutes: ${total} - (${h} × 60) = <b>${m}</b></div>
+            <div class="trace-step">→ 2. The 60-Minute Squeeze: ${total} ÷ 60</div>
+            <div class="trace-step">→ 3. Full Hours Found: <b>${h}</b></div>
+            <div class="trace-step">→ 4. Remaining Remainder: ${total} - (${h} × 60) = <b>${m}</b></div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → RESULT: ${h}h ${m}m
+                → FINAL TIME: ${h}h ${m}m
             </div>
         `;
     }

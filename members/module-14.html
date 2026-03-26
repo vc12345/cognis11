@@ -25,7 +25,7 @@
             align-items: center;
             justify-content: center;
             height: 100px;
-            width: 100%; /* FIXED: Occupy full width to prevent compression */
+            width: 100%; 
             max-width: 700px;
             margin: 0 auto;
             position: relative;
@@ -57,7 +57,7 @@
         .gap {
             height: 8px;
             background: #38bdf8;
-            flex-grow: 1; /* This pushes the posts apart evenly */
+            flex-grow: 1; 
             z-index: 1;
             position: relative;
             display: flex;
@@ -124,40 +124,41 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Interval Logic tackles the "Off-by-One" logic error common in 11+ competitive exams. When calculating the time or distance for a sequence of events, the actual value is contained within the <b>gaps</b>, not the objects. To solve these correctly, you must isolate the number of intervals ($N - 1$) before performing any operations.</p>
+        <p>This is the <b>"Hidden Space"</b> secret. In the 11+, examiners love to trick children with sequences like clock strikes or fence posts. Bright children usually count the physical objects, but the real math always happens in the <b>gaps</b> between them. If your child can learn to ignore the objects and count the spaces, they’ll dodge the "Off-by-One" trap that catches most students out.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
+                <b>The Striking Clock</b>
                 "A clock strikes 4 times. If there are 3 seconds between each strike, how much time passes from the first strike to the last?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "A 30m straight fence has posts placed every 6m. How many posts are needed to support the entire fence?"
+                <b>The Garden Fence</b>
+                "A 30m straight fence has posts every 6m. How many posts are needed in total?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "A patient takes 6 doses of medicine, one every 45 minutes. How many minutes pass between the first and final dose?"
+                <b>The Doctor's Orders</b>
+                "A patient takes 6 doses of medicine, one every 45 minutes. How many minutes pass between the very first and the very last dose?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Boundary Map</b>. Notice that no matter how many objects you place, the count of intervals (gaps) is always exactly one less. Calculations for total duration or distance must focus on the gaps.</p>
+        <p>Look at the <b>Boundary Map</b> below. Point to the dark blue posts and the light blue gaps with your child. Notice that no matter how many posts you place, the number of gaps is always <b>exactly one less</b>. If you have 4 posts, you only have 3 gaps. This is the "Skeleton" of the problem—the gaps are where the distance and time actually live.</p>
         
         <div class="anatomy-display">
             <div id="timeline" class="timeline-container">
                 </div>
             <div class="stats-row">
-                <div class="stat-pill pill-blue">Objects (N): <span id="n-val">4</span></div>
-                <div class="stat-pill pill-sky">Intervals (N-1): <span id="g-val">3</span></div>
+                <div class="stat-pill pill-blue">Physical Objects: <span id="n-val">4</span></div>
+                <div class="stat-pill pill-sky">Hidden Gaps: <span id="g-val">3</span></div>
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the 'Number of Objects' box to add or remove posts. Watch the <b>Hidden Gaps</b> count change in the sky-blue pill. Help your child notice that the total distance is shared across the **gaps**, not the posts themselves. This is why we always subtract one before we do the math.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
@@ -165,7 +166,7 @@
                     <input type="number" id="n-in" value="4" min="2" max="10" oninput="run14()">
                 </div>
                 <div class="control-group" style="margin-top:15px;">
-                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Total Distance/Time</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Total Distance or Time</label>
                     <input type="number" id="t-in" value="12" oninput="run14()">
                 </div>
             </div>
@@ -176,9 +177,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Fence Post" Trap:</strong> Dividing total distance by the gap size and assuming that number is the total count of posts. (e.g., $20 \text{m} \div 5 \text{m} = 4 \text{ posts}$). This calculation misses the starting anchor.</p>
+            <p><strong>The "Fence Post" Trap:</strong> Most kids see "20m distance, 5m gaps" and say "4 posts." They are dividing the distance by the gap size and forgetting that a fence needs a post at the very start (the "Zero" mark) to hold it up!</p>
             
-            <p><strong>The Fix:</strong> Use the <b>Anchor Addition Rule</b>. The division ($20 \div 5$) calculates the number of <b>Gaps</b>. To find the number of physical objects, you must add 1 for the "Zero Position" post. Remember: $Gaps + 1 = Objects$.</p>
+            <p><strong>The Insider Fix: The "Starting Anchor" Rule.</strong> Remind your child: "Your division answer tells you the number of <b>Gaps</b>. To find the number of <b>Posts</b>, you must always add the first anchor." Just remember the secret code: <b>Gaps + 1 = Objects</b>.</p>
         </div>
     </section>
 </div>
@@ -204,7 +205,7 @@
         for(let i=1; i<=n; i++) {
             const post = document.createElement('div');
             post.className = 'post';
-            post.setAttribute('data-label', 'Object ' + i);
+            post.setAttribute('data-label', 'Item ' + i);
             container.appendChild(post);
             
             if(i < n) {
@@ -216,9 +217,9 @@
 
         // Trace Output
         document.getElementById('trace-14').innerHTML = `
-            <div class="trace-step">→ 1. Dataset: ${n} items provided.</div>
-            <div class="trace-step">→ 2. Intervals: ${n} - 1 = <b>${gaps} Gaps</b>.</div>
-            <div class="trace-step">→ 3. Arithmetic: ${total} total / ${gaps} intervals.</div>
+            <div class="trace-step">→ 1. Count the items: We have ${n} objects.</div>
+            <div class="trace-step">→ 2. Find the gaps: ${n} - 1 = <b>${gaps} Hidden Gaps</b>.</div>
+            <div class="trace-step">→ 3. The Math: Divide ${total} by the ${gaps} gaps.</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
                 → RESULT: ${intervalSize.toFixed(2)} PER GAP
             </div>

@@ -79,27 +79,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A train is a "moving object with length." To pass an object completely, the train's nose must travel the length of the object <b>plus</b> the length of the train itself.</p>
+        <p>In the 11+, a train isn't just a point moving on a line—it’s a long object that takes time to fully "arrive" and fully "leave." Most children forget that for a train to pass through a tunnel, the nose has to enter, but the <b>tail</b> has to clear the exit. This means the total distance traveled is actually the length of the tunnel <b>plus</b> the length of the train itself.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "A train 50m long passes a signal post. How far must the nose travel from touching the post to the tail clearing it?"
+                <b>The Signal Post</b>
+                "A 50m train passes a signal post. How far does the front travel before the back clears the post?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "A 100m train travels through a 300m tunnel. What is the total distance covered to clear the tunnel?"
+                <b>The Mountain Tunnel</b>
+                "A 100m train goes through a 300m tunnel. What is the total distance covered to be completely out?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "A 200m train passes a 400m platform in 30 seconds. Calculate the speed of the train in m/s."
+                <b>The Speed Calculation</b>
+                "A 200m train passes a 400m platform in 30 seconds. What is the train's speed in m/s?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Watch the <b>Total Distance</b>. The clock doesn't stop when the nose hits the exit; it stops when the tail clears the tunnel.</p>
+        <p>Look at the <b>Total Journey</b> below. Notice that the distance isn't just the dark tunnel box. It’s the entire path from the moment the "nose" touches the entrance to the moment the "tail" disappears from the exit. Point this out to your child: the train has to travel its own length just to get its "bottom" out of the door.</p>
         
         <div class="simulation-area" id="sim-container">
             <div id="status" class="status-msg">Ready to Simulate</div>
@@ -109,12 +109,13 @@
         </div>
         
         <div class="sim-btn-wrapper">
-            <button id="sim-btn" class="sim-btn" onclick="runSimulation()">Run Precision Simulation</button>
+            <button id="sim-btn" class="sim-btn" onclick="runSimulation()">Watch the "Clearance" Moment</button>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Adjust the lengths with your child. Watch how the <b>Total Distance</b> in the log below is always the sum of both. When you run the simulation, wait for the status to say "TAIL CLEARED"—that is the only moment the math is actually finished.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
@@ -126,16 +127,16 @@
                     <input type="number" id="tunnel-len" value="400" oninput="initVisuals()">
                 </div>
             </div>
-            <div id="logic-trace" class="trace-log">Adjust values to see logic...</div>
+            <div id="logic-trace" class="trace-log">Adjust values to see the "Hidden Distance"...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Tail-End" Trap:</strong> Most students only use the tunnel length as the distance (e.g. 400m). If you do this, the train is still halfway inside the tunnel when your calculation "ends."
+            <p><strong>The "Front-Door" Trap:</strong> Most children only use the tunnel length (e.g., 400m) for their calculation. If they do this, their speed or time will be wrong because, at 400m, the train's nose has exited, but its body is still stuck inside the tunnel!
             <br><br>
-            <strong>The Fix:</strong> Imagine the train is a piece of string. To pull a 2m string through a 4m tube, you have to pull the string a total of 6m before it is completely out. <b>Always add: Train Length + Object Length.</b></p>
+            <strong>The Fix: The "String and Tube" Rule.</strong> Tell your child: "Imagine pulling a 2m piece of string through a 4m toilet roll tube. To get the whole string out, you have to pull it 6m in total." <b>The secret is simple: Always add the Train + the Tunnel.</b></p>
         </div>
     </section>
 </div>
@@ -153,7 +154,6 @@
         const tLen = parseInt(document.getElementById('train-len').value) || 100;
         const tunLen = parseInt(document.getElementById('tunnel-len').value) || 100;
         
-        // Scale down for visual display
         train.style.width = (tLen / 2) + 'px';
         tunnel.style.width = (tunLen / 2) + 'px';
         
@@ -162,10 +162,10 @@
         status.innerText = "Ready to Simulate";
         
         document.getElementById('logic-trace').innerHTML = `
-            <div class="trace-step">→ 1. Train Length: ${tLen}m</div>
-            <div class="trace-step">→ 2. Tunnel Length: ${tunLen}m</div>
+            <div class="trace-step">→ 1. Train Body: ${tLen}m</div>
+            <div class="trace-step">→ 2. Tunnel Gap: ${tunLen}m</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → Total Distance: ${tLen + tunLen}m
+                → TRUE DISTANCE: ${tLen + tunLen}m
             </div>
         `;
     }
@@ -179,25 +179,21 @@
         const tunnelExitX = tRect.right - cRect.left;
         const trainW = train.offsetWidth;
 
-        // Reset
         train.style.transition = 'none';
         train.style.left = '-250px';
         await new Promise(r => setTimeout(r, 100));
 
-        // 1. Entry
-        status.innerText = "NOSE HITTING ENTRY...";
+        status.innerText = "NOSE ENTERING...";
         train.style.transition = 'left 1.2s ease-out';
         train.style.left = (tunnelEntryX - trainW) + 'px';
         await new Promise(r => setTimeout(r, 1500));
 
-        // 2. Through
-        status.innerText = "PASSING THROUGH...";
+        status.innerText = "BODY INSIDE...";
         train.style.transition = 'left 2s linear';
         train.style.left = tunnelExitX + 'px';
         await new Promise(r => setTimeout(r, 2200));
 
-        // 3. Clear
-        status.innerText = "TAIL CLEARED EXIT!";
+        status.innerText = "TAIL FINALLY CLEAR!";
         await new Promise(r => setTimeout(r, 1000));
 
         status.innerText = "Simulation Complete";

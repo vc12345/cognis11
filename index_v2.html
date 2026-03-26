@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cognis11 · The Foundation for Effective 11+ Prep</title>
+<meta name="description" content="11+ preparation for deep understanders. Building the reasoning foundation for Years 2-3 and breaking speed plateaus for Years 4-5.">
+
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YK13FYQ1CJ"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -11,36 +13,50 @@
   gtag('js', new Date());
   gtag('config', 'G-YK13FYQ1CJ');
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root { --navy:#1B3A5C; --steel:#2E6DA4; --gold:#c5a059; --cream:#FAFAF6; --off:#F4F2ED; --grey:#64748b; --dgrey:#334155; --lgrey:#E2E8F0; }
   * { box-sizing:border-box; margin:0; padding:0; }
   body { font-family:'DM Sans', sans-serif; background:var(--cream); color:var(--dgrey); font-size:16px; line-height:1.6; -webkit-font-smoothing: antialiased; }
-  .wrap { max-width:950px; margin:0 auto; padding:0 32px; }
+  .wrap { max-width:850px; margin:0 auto; padding:0 32px; }
+  
   nav { border-bottom:1px solid var(--lgrey); padding:18px 32px; display:flex; align-items:center; justify-content:space-between; background:#fff; position:sticky; top:0; z-index:100; }
   .brand { font-family:'Playfair Display', serif; font-size:1.15rem; color:var(--navy); font-weight:700; text-decoration:none; }
+  .nav-right { display:flex; align-items:center; gap:20px; }
   .nav-link { font-size:.85rem; color:var(--navy); text-decoration:none; font-weight:600; text-transform: uppercase; letter-spacing: 1px; margin-left: 20px; }
 
+  /* HERO */
   .hero { padding:100px 32px 80px; max-width:850px; margin:0 auto; text-align:center; }
   .hero-tag { font-size:.75rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; }
-  .hero h1 { font-family:'Playfair Display', serif; font-size:clamp(2.4rem,5vw,3.8rem); line-height:1.1; color:var(--navy); margin-bottom:24px; }
+  .hero h1 { font-family:'Playfair Display', serif; font-size:clamp(2.4rem,6vw,3.8rem); line-height:1.1; color:var(--navy); margin-bottom:24px; }
   .hero h1 em { font-style:italic; font-weight: 400; color:var(--steel); }
-  .hero-sub { font-size:1.2rem; color:var(--grey); max-width:680px; margin:0 auto 40px; }
+  .hero-sub { font-size:1.15rem; color:var(--grey); max-width:700px; margin:0 auto 40px; }
   
   .btn-row { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; }
   .btn { display:inline-flex; align-items:center; gap:9px; background:var(--navy); color:#fff; padding:18px 36px; border-radius:8px; text-decoration:none; font-size:1rem; font-weight:700; transition: 0.2s; box-shadow: 0 4px 14px rgba(27, 58, 92, 0.15); }
-  .btn-outline { background:transparent; color:var(--navy); border: 2px solid var(--navy); box-shadow: none; }
+  .btn:hover { transform: translateY(-2px); opacity: 0.9; }
 
+  /* THESIS BAND */
   .thesis-band { background: var(--navy); color: white; padding: 100px 32px; margin: 40px 0; }
-  .thesis-inner { max-width: 760px; margin: 0 auto; }
+  .thesis-inner { max-width: 760px; margin: 0 auto; text-align: center; }
   .thesis-band h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 25px; line-height: 1.2; }
   .thesis-band p { font-size: 1.1rem; color: rgba(255,255,255,0.75); line-height: 1.8; margin-bottom: 20px; }
 
+  /* SECTIONS */
   section { padding:80px 0; border-top:1px solid var(--lgrey); }
   .col-card { background:#fff; border:1px solid var(--lgrey); border-radius:12px; padding:40px; }
-  .pullquote { border-left:4px solid var(--gold); padding:25px 35px; margin:60px 0; font-style:italic; font-size:1.4rem; color:var(--navy); line-height:1.6; background:#fff; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+  
+  /* GUIDANCE STRATEGY STYLING */
+  .strategy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 40px 0; text-align: left; }
+  .strategy-card { background: #fff; border-left: 4px solid var(--gold); padding: 30px; border-radius: 0 12px 12px 0; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+  .strategy-card h4 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--navy); margin-bottom: 10px; }
+  .strategy-card p { font-size: 0.95rem; color: var(--grey); line-height: 1.5; }
+  .strategy-card strong { color: var(--navy); font-weight: 700; }
 
   footer { border-top:1px solid var(--lgrey); padding:60px 32px; text-align:center; font-size:.85rem; color:var(--grey); }
+  
+  @media(max-width:768px){ .strategy-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -57,10 +73,9 @@
 <div class="hero">
   <div class="hero-tag">The Foundation for Effective Prep</div>
   <h1>11+ preparation that feels like <em>quality time.</em></h1>
-  <p class="hero-sub">We don't replace drilling; we make it effective. Build the logical frameworks your child needs to move from pattern-matching to genuine understanding.</p>
+  <p class="hero-sub">We don't replace drilling — we make it work more effectively. Build the logical frameworks and genuine understanding your child needs to elevate their pattern matching.</p>
   <div class="btn-row">
-    <a href="diagnostic.html" class="btn" onclick="gtag('event', 'click_toDiagnostic');">Find Your Child's Profile →</a>
-    <a href="sample.html" class="btn btn-outline" onclick="gtag('event', 'click_toSamples');">Experience the Method</a>
+    <a href="sample.html" class="btn" onclick="gtag('event', 'click_toSamples');">See How It Works</a>
   </div>
 </div>
 
@@ -74,26 +89,32 @@
 
 <div class="wrap">
   <section style="border-top:none;">
-    <h2 style="font-family:'Playfair Display'; font-size:2.4rem; color:var(--navy);">Clarity for them. <em>Efficiency for you.</em></h2>
-    <p style="color:var(--grey); font-size: 1.15rem; margin-top:15px;">Preparation shouldn't be a chore of repetitive workbooks. It should be a moment of shared discovery.</p>
+    <h2 style="font-family:'Playfair Display'; font-size:2.4rem; color:var(--navy); text-align: center;">From Cognitive Labels to <em>Guidance Strategies.</em></h2>
+    <p style="color:var(--grey); font-size: 1.15rem; margin-top:15px; text-align: center;">Personalise your 10-minute partnership by identifying your child's specific logical hurdle.</p>
     
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:40px;">
-        <div class="col-card">
-            <h3>Build the Foundation</h3>
-            <p>For Years 2–3, we build the mental schema that prevents the Year 5 plateau. Learn to deconstruct problems before the pressure of drilling begins.</p>
+    <div class="strategy-grid">
+        <div class="strategy-card">
+            <h4>High Insight, Low Speed</h4>
+            <p>If your child refuses to move forward until they understand <em>why</em>, they often lose time re-deriving logic. <strong>The Strategy:</strong> Use Cognis11 to stop the re-derivation and start identifying structures instantly.</p>
         </div>
-        <div class="col-card">
-            <h3>Break the Plateau</h3>
-            <p>For Years 4–5, we provide the "X-Ray" vision needed to identify problem structures in seconds, unlocking the speed required for selective entry.</p>
+        <div class="strategy-card">
+            <h4>High Speed, Low Depth</h4>
+            <p>If your child is a natural pattern-matcher, they are often vulnerable to unfamiliar question formats. <strong>The Strategy:</strong> Use Cognis11 to "bulletproof" their speed against subtle logical Saboteurs.</p>
         </div>
     </div>
 
-    <div class="pullquote">
-      "The goal is not to turn your child into a pattern recogniser. The goal is to give them a pattern recogniser's entry point—while keeping their reasoning ability intact for execution."
-    </div>
-    
     <div style="text-align:center; margin-top:40px;">
-        <a href="diagnostic.html" class="btn" style="background:var(--steel);">Start the Diagnostic Profile →</a>
+        <a href="diagnostic.html" class="btn" style="background:var(--steel);" onclick="gtag('event', 'click_toDiagnostic');">Find Your Guidance Strategy →</a>
+    </div>
+  </section>
+
+  <section style="border-top: 1px solid var(--lgrey); margin-top: 40px;">
+    <h2 style="font-family:'Playfair Display'; font-size:2rem; color:var(--navy); text-align: center;">Master the Lattice.</h2>
+    <p style="color:var(--grey); text-align: center; margin-bottom: 35px; max-width: 500px; margin-left: auto; margin-right: auto;">Explore 59 interactive modules designed to turn logical confusion into conceptual clarity.</p>
+    
+    <div class="btn-row">
+        <a href="subscribe.html" class="btn" onclick="gtag('event', 'click_toSubscribe');">View Subscription Plans</a>
+        <a href="sample.html" class="btn btn-outline" style="border: 2px solid var(--navy); color: var(--navy); background: transparent;" onclick="gtag('event', 'click_toSamples');">Try Sample Modules</a>
     </div>
   </section>
 </div>

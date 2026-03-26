@@ -80,27 +80,33 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Speed is a measure of how much <b>Distance</b> is covered in a specific <b>Unit of Time</b>. Every constant speed problem gives you two "legs" of the triangle and asks you to find the third.</p>
+        <p>Think of Speed, Distance, and Time as the <b>"Travel Trio."</b> They are three sides of the same story. In the 11+, the examiner will give you two parts of the story and hide the third. The secret weapon is recognizing that <b>Distance is the Boss</b>—it sits at the top of everything. If you know how the trio connects, you can calculate how far, how fast, or how long in seconds.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "A remote-control car travels 20 metres in 4 seconds. What is its speed in metres per second?"
+                <b>The Toy Car</b>
+                "A remote-control car travels 20 metres in 4 seconds. What is its speed?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "A train travels at a constant speed of 75mph. How far will it travel in 3 hours?"
+                <b>The Fast Train</b>
+                "A train travels at 75mph. How far will it go in 3 hours?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "An aircraft flies 1,200 miles at a speed of 400mph. How long does the flight take in hours?"
+                <b>The Flight Path</b>
+                "A plane flies 1,200 miles at 400mph. How long does the journey take?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>DST Triangle</b> is your logical map. Cover the letter you want to find to reveal the calculation required.</p>
+        <p>The <b>Magic Triangle</b>. This is the logical map for your child. Tell them: <i>"Cover the letter we are looking for with your thumb."</i> What's left tells you the math. Distance (D) is on top because it is the total; Speed (S) and Time (T) are the partners at the bottom.</p>
+        
+        
+
+[Image of Speed Distance Time formula triangle]
+
+
         <div class="anatomy-display">
             <div class="triangle-wrapper">
                 <div class="dst-shape"></div>
@@ -109,12 +115,13 @@
                 <div class="dst-node node-t" id="node-t" onclick="setTarget('t')">T</div>
             </div>
             <div class="formula-hint" id="formula-display">Solving for Distance...</div>
-            <p style="font-size: 0.8rem; color: #718096; margin-top: 10px;">(Click a letter above to change target)</p>
+            <p style="font-size: 0.8rem; color: #718096; margin-top: 10px;">(Click a letter above to show your child the shortcut)</p>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the inputs to change the story. Help your child notice the <b>logic shift</b>: When we look for Distance, we multiply the bottom two. When we look for Speed or Time, we divide the top by the bottom.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="solving-badge" id="badge-text">TARGET: DISTANCE</div>
@@ -128,9 +135,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Unit Mismatch" Trap:</strong> The most common error is ignoring units. If speed is in <i>km per hour</i> but the time is given in <i>minutes</i>, you cannot simply multiply. You must convert the minutes into hours first.
+            <p><strong>The "Clock Confuser":</strong> Bright children often forget that clocks and math don't speak the same language. If a car travels for 1 hour and 30 minutes, they will often plug <b>1.3</b> into the formula. This is a trap!
             <br><br>
-            <strong>The Fix:</strong> Always write the units next to your numbers. If they don't match (e.g. miles and km), stop and convert to a single "Unit Language" before calculating.</p>
+            <strong>The "Divide by 60" Fix:</strong> Tell your child: <i>"Minutes are just fractions of 60."</i> 30 minutes is <b>0.5</b> of an hour (30/60). 15 minutes is <b>0.25</b>. Always convert minutes into decimals before they touch the triangle, or the result will be a "Saboteur" answer.</p>
         </div>
     </section>
 </div>
@@ -186,23 +193,23 @@
         if (currentTarget === 'd') {
             result = s * t;
             trace = `
-                <div class="trace-step">→ Formula: <b>Distance = Speed × Time</b></div>
-                <div class="trace-step">→ Calculation: ${s} × ${t}</div>
-                <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; margin-top:10px;">→ Result: ${result} units</div>
+                <div class="trace-step">→ The Logic: <b>Distance = Speed × Time</b></div>
+                <div class="trace-step">→ The Calculation: ${s} × ${t}</div>
+                <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; margin-top:10px;">→ Final Distance: ${result} units</div>
             `;
         } else if (currentTarget === 's') {
             result = t !== 0 ? d / t : 0;
             trace = `
-                <div class="trace-step">→ Formula: <b>Speed = Distance ÷ Time</b></div>
-                <div class="trace-step">→ Calculation: ${d} ÷ ${t}</div>
-                <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; margin-top:10px;">→ Result: ${result.toFixed(2)} speed units</div>
+                <div class="trace-step">→ The Logic: <b>Speed = Distance ÷ Time</b></div>
+                <div class="trace-step">→ The Calculation: ${d} ÷ ${t}</div>
+                <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; margin-top:10px;">→ Final Speed: ${result.toFixed(2)} units</div>
             `;
         } else {
             result = s !== 0 ? d / s : 0;
             trace = `
-                <div class="trace-step">→ Formula: <b>Time = Distance ÷ Speed</b></div>
-                <div class="trace-step">→ Calculation: ${d} ÷ ${s}</div>
-                <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; margin-top:10px;">→ Result: ${result.toFixed(2)} time units</div>
+                <div class="trace-step">→ The Logic: <b>Time = Distance ÷ Speed</b></div>
+                <div class="trace-step">→ The Calculation: ${d} ÷ ${s}</div>
+                <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; margin-top:10px;">→ Final Time: ${result.toFixed(2)} units</div>
             `;
         }
 

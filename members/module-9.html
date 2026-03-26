@@ -37,29 +37,33 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In these problems, the "Whole" changes halfway through. You must isolate the <b>Remainder</b> before applying the second fraction.</p>
+        <p>This is the <b>"Remainder Trap."</b> In these problems, the "Total" changes halfway through the story. Once the first slice of the pie is gone, the next fraction only cares about what is left on the plate. If your child can learn to ignore the original total and focus on the <b>Remainder</b>, they’ll dodge the most common mistake in the 11+.</p>
+        
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "Sam has 20 sweets. He eats 4. He gives 1/2 of what is left to Sue. How many does he keep?"
+                <b>The Sweet Jar</b>
+                "Sam has 20 sweets. He eats 4. He gives 1/2 of <b>what is left</b> to Sue. How many does he keep?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "A book has 120 pages. I read 1/3 on Monday, then 1/4 of the remainder on Tuesday. How many pages are left?"
+                <b>The Library Book</b>
+                "A book has 120 pages. I read 1/3 on Monday, then 1/4 <b>of the remainder</b> on Tuesday. Pages left?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "A runner has £400. They spend 2/5 on a hotel and 1/3 of the remainder on travel. Calculate the final balance."
+                <b>The Travel Budget</b>
+                "A runner has £400. They spend 2/5 on a hotel and 1/3 <b>of the remainder</b> on travel. Final balance?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Watch the whole shrink. Stage 1 creates the <b>Remainder</b>, which then becomes the 100% starting point for Stage 2.</p>
+        <p>Watch the whole "pie" shrink. Point to the <b>First Cut</b>—this is where we find the first amount. Then, point to the <b>Remainder</b>. This grey bar becomes the "new 100%" for Stage 2. We aren't cutting the whole bar anymore; we are only cutting the piece that survived Stage 1.</p>
+        
+        
+
         <div class="anatomy-display">
             <div class="bar-container">
-                <span class="bar-label">Stage 1: The First Cut</span>
+                <span class="bar-label">Stage 1: The First Slice</span>
                 <div class="bar-visual">
                     <div id="seg-1" class="segment seg-spent1">Spent</div>
                     <div id="seg-rem" class="segment seg-rem">Remainder</div>
@@ -67,7 +71,7 @@
             </div>
             <div class="arrow-divider">↓</div>
             <div class="bar-container">
-                <span class="bar-label">Stage 2: Cutting the Remainder</span>
+                <span class="bar-label">Stage 2: Slicing the Remainder</span>
                 <div class="bar-visual">
                     <div id="seg-2" class="segment seg-spent2">Spent</div>
                     <div id="seg-final" class="segment seg-final">Final Left</div>
@@ -78,10 +82,11 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Move the "First Cut" numbers with your child. Notice how the **Stage 2 bar** immediately changes its size. Point out that the "Spent" amount in Stage 2 is a fraction of that new, smaller pile, not the original £600.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Starting Amount (£)</label>
+                    <label>Starting Bank (£)</label>
                     <input type="number" id="in-total" value="600">
                 </div>
                 <div class="control-group">
@@ -91,7 +96,7 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label>Second Cut (Fraction of Remainder)</label>
+                    <label>Second Cut (Of Remainder)</label>
                     <div class="frac-row">
                         <input type="number" id="n2" value="2"> <span>/</span> <input type="number" id="d2" value="5">
                     </div>
@@ -104,9 +109,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Totalist" Trap:</strong> Students often calculate both fractions using the original starting total (e.g. 1/4 of 600 AND 2/5 of 600). 
+            <p><strong>The "Original Total" Trap:</strong> Most children try to calculate the second fraction using the original starting total (e.g., finding 2/5 of £600 instead of 2/5 of the leftover £450). 
             <br><br>
-            <strong>The Fix:</strong> Always circle the word <b>"Remainder"</b>. It tells you that the first amount has been removed from the box. You must subtract the first result before you even touch the second fraction.</p>
+            <strong>The Fix: Circle the Keyword.</strong> Tell your child to look for the word <b>"Remainder"</b> or <b>"Left"</b> in the question. If they see it, they must draw a "Stop Sign" after Stage 1. They have to do a subtraction to find the new pile before they are allowed to touch the second fraction.</p>
         </div>
     </section>
 </div>
@@ -132,34 +137,34 @@
         const amt2 = (remainder / den2) * num2;
         const final = remainder - amt2;
 
-        // Update Stage 1 Bar (Values to 2 Decimal Places)
+        // Update Stage 1 Bar
         const p1 = (amt1 / total) * 100;
         const seg1 = document.getElementById('seg-1');
         const segRem = document.getElementById('seg-rem');
         
         seg1.style.width = `${p1}%`;
-        seg1.innerText = p1 > 12 ? `£${amt1.toFixed(2)}` : '';
+        seg1.innerText = p1 > 12 ? `£${amt1.toFixed(0)}` : '';
         segRem.style.width = `${100 - p1}%`;
-        segRem.innerText = `Rem: £${remainder.toFixed(2)}`;
+        segRem.innerText = `Left: £${remainder.toFixed(0)}`;
 
-        // Update Stage 2 Bar (Values to 2 Decimal Places)
+        // Update Stage 2 Bar
         const p2 = (amt2 / remainder) * 100;
         const seg2 = document.getElementById('seg-2');
         const segFinal = document.getElementById('seg-final');
         
         seg2.style.width = `${p2}%`;
-        seg2.innerText = p2 > 12 ? `£${amt2.toFixed(2)}` : '';
+        seg2.innerText = p2 > 12 ? `£${amt2.toFixed(0)}` : '';
         segFinal.style.width = `${100 - p2}%`;
-        segFinal.innerText = `Final: £${final.toFixed(2)}`;
+        segFinal.innerText = `Final: £${final.toFixed(0)}`;
 
         // Update Trace
         engineTrace.innerHTML = `
-            <div class="trace-step">→ 1. Start with <b>£${total.toFixed(2)}</b></div>
-            <div class="trace-step">→ 2. First cut (${num1}/${den1}): £${amt1.toFixed(2)}</div>
-            <div class="trace-step">→ 3. Calculate <b>Remainder</b>: £${total.toFixed(2)} - £${amt1.toFixed(2)} = <b>£${remainder.toFixed(2)}</b></div>
-            <div class="trace-step">→ 4. Second cut (${num2}/${den2} of remainder): £${amt2.toFixed(2)}</div>
+            <div class="trace-step">→ 1. Start: <b>£${total.toFixed(2)}</b></div>
+            <div class="trace-step">→ 2. First Slice (${num1}/${den1}): £${amt1.toFixed(2)}</div>
+            <div class="trace-step">→ 3. Find <b>Remainder</b>: £${total.toFixed(2)} - £${amt1.toFixed(2)} = <b>£${remainder.toFixed(2)}</b></div>
+            <div class="trace-step">→ 4. Second Slice (${num2}/${den2} of what's left): £${amt2.toFixed(2)}</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → Final Left: £${final.toFixed(2)}
+                → TOTAL FINAL LEFT: £${final.toFixed(2)}
             </div>
         `;
     }

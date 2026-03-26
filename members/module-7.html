@@ -56,8 +56,8 @@
             font-weight: 900; 
             white-space: nowrap;
         }
-        .op-bubble.top { top: 0; background: #718096; opacity: 0.6; }
-        .op-bubble.bottom { bottom: 0; background: var(--cognis-gold); border: 2px solid white; box-shadow: 0 4px 10px rgba(197, 160, 89, 0.3); }
+        .op-bubble.top { top: 0; background: #718096; }
+        .op-bubble.bottom { bottom: 0; background: var(--cognis-gold); border: 2px solid white; }
 
         /* Engine Customization */
         .engine-container { grid-template-columns: 1.1fr 1fr; }
@@ -95,27 +95,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Reverse Percentages are about <b>Time Travel</b>. You are given the "Destination" (the final price after a sale or tax) and you must travel back to the "Start" (the original price). The golden rule: To go forward, we multiply; to go backward, we <b>Divide</b>.</p>
+        <p>Reverse Percentages are about <b>Time Travel</b>. Usually, we start at the beginning and work forward to find a sale price. Here, we are standing at the "Destination" (the final price) and need to <b>Rewind</b> back to the original cost. Since multiplication moved us forward, we must use <b>Division</b> to drive the car back to the start.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
                 <b>The Toy Sale</b>
-                "A half-price toy costs £5. What was the full price before the sale?"
+                "A toy costs £5 in a half-price sale. What was it worth originally?"
             </div>
             <div class="tier-card">
-                <b>The Trainer Shop</b>
-                "After a 10% discount, trainers cost £45. What was the original price?"
+                <b>The Sneaker Discount</b>
+                "After a 10% discount, trainers cost £45. Find the price before the sale."
             </div>
             <div class="tier-card">
-                <b>The House Market</b>
-                "A house worth £240,000 increased by 20%. What was it worth before?"
+                <b>The House Hike</b>
+                "A house worth £240,000 increased by 20%. What was the starting value?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>This is the <b>Reverse Bridge</b>. Normal percentages move forward via multiplication. To undo that and find the original, we use the <b>Inverse Operation</b>. We divide the final value by the same multiplier that created it. Watch the "Gold Bridge" below—it's the only way back!</p>
+        <p>This is the <b>Reverse Bridge</b>. Look at the path below. To get to the "Final Value," we multiplied by a number. To get back to the "Original," we apply the <b>Inverse Secret</b>: we divide by that exact same multiplier. Point to the gold bubble—that's our shortcut home.</p>
         
         <div class="anatomy-display">
             <div class="node">
@@ -128,7 +128,7 @@
                 <div class="op-bubble bottom" id="bot-op">÷ 1.20</div>
             </div>
             <div class="node result">
-                <span>Sale Price</span>
+                <span>Final Value</span>
                 <div id="disp-new">£240.00</div>
             </div>
         </div>
@@ -136,15 +136,15 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <p style="margin-bottom: 20px;">Input the price you see in the shop. Choose whether it was an increase (like tax) or a decrease (like a sale). The Engine will show you how to "reverse" the math.</p>
+        <p style="margin-bottom: 20px;">Use the inputs to simulate a sale or a price hike. Help your child notice that the "Original" value always changes instantly when you <b>Divide</b> the final price. Watch how the numbers "stretch" back to their larger starting size.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Final Value (£):</label>
+                    <label>The Sale Price (£):</label>
                     <input type="number" id="v-in" value="240" oninput="run7()">
                 </div>
                 <div class="control-group" style="margin-top:15px;">
-                    <label>How did it get here?</label>
+                    <label>The History:</label>
                     <select id="type-in" onchange="run7()">
                         <option value="inc">After an INCREASE (+)</option>
                         <option value="dec" selected>After a DECREASE (-)</option>
@@ -155,16 +155,16 @@
                     <input type="number" id="p-in" value="10" oninput="run7()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-7">Awaiting inverse calculation...</div>
+            <div class="trace-log" id="trace-7">Awaiting the rewind...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Forward Percent" Trap:</strong> If a price is £90 after a 10% discount, many students find 10% of £90 (£9) and add it back to get £99. <b>This is a mistake.</b> The 10% was originally taken off a bigger number, so £9 isn't the right amount to add back!</p>
+            <p><strong>The "Forward Percent" Trap:</strong> If a shirt is £90 after a 10% discount, your child will be tempted to find 10% of £90 (£9) and add it back to get £99. <b>Stop!</b> This is a trap. That 10% was originally stolen from a <i>bigger</i> number, not the £90.</p>
             
-            <p><strong>The Fix: The "Division Stretch."</strong> Never calculate a percentage of the sale price. Always find the <b>Multiplier</b> (e.g., 0.90 for a 10% discount) and then <b>DIVIDE</b>. Division "stretches" the sale price back to the original size perfectly.</p>
+            <p><strong>The Fix: The "Division Stretch."</strong> Never calculate a percentage of the sale price. Always find the <b>Multiplier</b> first (like 0.90 for a 10% off sale) and then <b>DIVIDE</b>. Division is the only tool that can correctly "stretch" the price back to its true original size.</p>
         </div>
     </section>
 </div>
@@ -179,7 +179,7 @@
 
         // Logic
         const multiplier = isInc ? (1 + (per/100)) : (1 - (per/100));
-        const original = multiplier !== 0 ? (val / multiplier) : 0;
+        const original = val / multiplier;
 
         // Update Anatomy
         document.getElementById('disp-orig').innerText = "£" + original.toFixed(2);
@@ -189,9 +189,9 @@
 
         // Trace Output
         document.getElementById('trace-7').innerHTML = `
-            <div class="trace-step">→ 1. Identify the Multiplier: ${isInc ? '100% + ' + per + '%' : '100% - ' + per + '%'} = <b>${multiplier.toFixed(2)}</b></div>
-            <div class="trace-step">→ 2. Reverse the Journey: We need to <b>Divide</b></div>
-            <div class="trace-step">→ 3. Calculation: £${val} / ${multiplier.toFixed(2)}</div>
+            <div class="trace-step">→ 1. The Fact: The price is ${isInc ? '100% + ' + per + '%' : '100% - ' + per + '%'} of the start.</div>
+            <div class="trace-step">→ 2. The Multiplier: <b>${multiplier.toFixed(2)}</b></div>
+            <div class="trace-step">→ 3. The Rewind: £${val} ÷ ${multiplier.toFixed(2)}</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
                 → ORIGINAL PRICE: £${original.toFixed(2)}
             </div>

@@ -110,7 +110,7 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In many 11+ questions, the examiner won't tell you the "Total." Instead, they'll tell you the <b>Difference</b> (the gap) between two people. The secret weapon here is finding out how many <b>Extra Boxes</b> create that gap. If your child can see that "£20 more" is caused by "2 extra boxes," they've already won the points.</p>
+        <p>In the 11+, the examiner often hides the "Total" and only tells you the <b>Gap</b> (e.g., "Person A has £10 more than B"). The secret weapon is realizing that this money only lives in the <b>Extra Boxes</b>. If your child can see that the "Extra £10" belongs to the "2 Extra Boxes," they can find the value of one box and solve the whole puzzle instantly.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
@@ -119,18 +119,18 @@
             </div>
             <div class="tier-card">
                 <b>The Classroom</b>
-                "Ratio of boys to girls is 5:2. There are 15 more boys. How many girls?"
+                "The ratio of boys to girls is 5:2. There are 15 more boys than girls. Find the girls."
             </div>
             <div class="tier-card">
-                <b>The Recipe Mass</b>
-                "Flour and sugar are 7:3. If there's 200g more flour, find the total weight."
+                <b>The Baker's Mix</b>
+                "Flour and sugar are in ratio 7:3. There is 200g more flour than sugar. Find the total mass."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>This is the <b>Comparative Bar</b>. Notice how the bars aren't equal. The "Gap" represents the <b>Difference</b> in value. Point to the dashed boxes—these are the "Extra Parts" that hold the gap value. We divide the gap amount only by these extra pieces.</p>
+        <p>Look at the <b>Comparative Bar</b>. Point to the "Share A" and "Share B" rows. The <b>Gap</b> isn't the whole bar—it’s just the overhang. We divide the gap value <i>only</i> by these extra segments to find our "Golden Unit."</p>
         
         <div class="anatomy-display">
             <div class="bar-row">
@@ -142,26 +142,26 @@
                 <div class="box-container" id="bar-b"></div>
             </div>
             <div class="overhang-container">
-                <div id="diff-bracket" class="diff-bracket">GAP</div>
+                <div id="diff-bracket" class="diff-bracket">THE GAP</div>
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <p style="margin-bottom: 20px;">Move the sliders and watch the red **GAP** section. Notice how it only cares about the difference between the two rows, not the total number of boxes.</p>
+        <p style="margin-bottom: 20px;">Use the sliders with your child to shift the ratio. Watch the <b>Red Bracket</b>—it only cares about the difference between the two people. Help them notice that the value of one box is found by dividing the "Difference Amount" by the "Difference in Boxes."</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Difference Amount (£): <span class="val-display" id="d-disp">£20</span></label>
+                    <label>The Gap Amount (£): <span class="val-display" id="d-disp">£20</span></label>
                     <input type="range" id="in-d" min="10" max="200" step="10" value="20" oninput="run3()">
                 </div>
                 <div class="control-group" style="margin-top:15px;">
-                    <label>Ratio Part A: <span class="val-display" id="a-disp">5</span></label>
+                    <label>Ratio - Person A: <span class="val-display" id="a-disp">5</span></label>
                     <input type="range" id="in-a" min="1" max="10" value="5" oninput="run3()">
                 </div>
                 <div class="control-group" style="margin-top:15px;">
-                    <label>Ratio Part B: <span class="val-display" id="b-disp">3</span></label>
+                    <label>Ratio - Person B: <span class="val-display" id="b-disp">3</span></label>
                     <input type="range" id="in-b" min="1" max="10" value="3" oninput="run3()">
                 </div>
             </div>
@@ -172,9 +172,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Total Sum" Trap:</strong> Children often go on autopilot and add the ratio parts together (e.g., 5 + 3 = 8) to divide the number. This is a disaster if the number is actually a <b>Difference</b>. It makes every box look too small.</p>
+            <p><strong>The "Total Blindness" Trap:</strong> Most children see a number and immediately add the ratio parts together (e.g., 5 + 3 = 8) to divide. This is a disaster if the number is actually a <b>Gap</b>. It makes every box way too small.</p>
             
-            <p><strong>The Fix: The "Minus First" Rule.</strong> Remind your child: "If you see words like 'more than,' 'less than,' or 'difference,' you must subtract the ratio parts first." (5 - 3 = 2). The "Gap Value" only lives in the "Gap Parts."</p>
+            <p><strong>The Fix: The "Minus First" Rule.</strong> Remind your child: "If you see the words 'more than' or 'difference,' you must subtract the ratio numbers first." (5 - 3 = 2). The "Gap Money" only fits into the "Gap Boxes."</p>
         </div>
     </section>
 </div>
@@ -196,7 +196,7 @@
         document.getElementById('b-disp').innerText = b;
 
         if (partDiff === 0) {
-            trace.innerHTML = `<div class="trace-step" style="color:#ef4444">→ To see a "Gap," the numbers in the ratio must be different!</div>`;
+            trace.innerHTML = `<div class="trace-step" style="color:#ef4444">→ To see a "Gap," the two ratio numbers must be different!</div>`;
             return;
         }
 
@@ -234,10 +234,10 @@
 
         // Trace Output
         trace.innerHTML = `
-            <div class="trace-step">→ 1. The Extra Pieces: ${Math.max(a,b)} - ${Math.min(a,b)} = <b>${partDiff} extra boxes</b></div>
-            <div class="trace-step">→ 2. Value of One Box: £${diffAmt} ÷ ${partDiff} = <b>£${unitValue.toFixed(2)}</b></div>
-            <div class="trace-step">→ 3. Person A Total: ${a} boxes × £${unitValue.toFixed(2)} = £${totalA.toFixed(2)}</div>
-            <div class="trace-step">→ 4. Person B Total: ${b} boxes × £${unitValue.toFixed(2)} = £${totalB.toFixed(2)}</div>
+            <div class="trace-step">→ 1. The Overhang: ${Math.max(a,b)} - ${Math.min(a,b)} = <b>${partDiff} extra boxes</b></div>
+            <div class="trace-step">→ 2. One Box: £${diffAmt} ÷ ${partDiff} = <b>£${unitValue.toFixed(2)}</b></div>
+            <div class="trace-step">→ 3. Person A Share: ${a} boxes × £${unitValue.toFixed(2)} = £${totalA.toFixed(2)}</div>
+            <div class="trace-step">→ 4. Person B Share: ${b} boxes × £${unitValue.toFixed(2)} = £${totalB.toFixed(2)}</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
                 → COMBINED TOTAL: £${(totalA + totalB).toFixed(2)}
             </div>

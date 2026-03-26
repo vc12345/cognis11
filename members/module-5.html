@@ -88,7 +88,7 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Direct Proportion is about things moving in <b>Perfect Lockstep</b>. If you buy twice as many stickers, you pay twice as much money. The most bulletproof strategy for the 11+ is the <b>Power of One</b> (the Unitary Method): always find the cost or weight of exactly <u>one</u> item first, then multiply to get your final answer.</p>
+        <p>Direct Proportion is just fancy talk for <b>"Perfect Lockstep."</b> If you buy twice as many stickers, you pay twice as much money. The easiest way to teach this is to find the <b>Value of One</b> first. If your child can find the "unit price," they can scale up to any number—whether it's 10 people or 10,000—without the math getting messy.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
@@ -96,28 +96,28 @@
                 "If 2 stickers cost 10p, how much do 6 stickers cost?"
             </div>
             <div class="tier-card">
-                <b>The Baker's Kitchen</b>
-                "A recipe for 4 people uses 300g of sugar. How much for 10 people?"
+                <b>The Kitchen Scale</b>
+                "A recipe for 4 people uses 300g of sugar. How much sugar for 10 people?"
             </div>
             <div class="tier-card">
-                <b>The Map Reader</b>
-                "On a 1:25,000 scale map, a road is 8cm long. What is the real length in km?"
+                <b>The Map Master</b>
+                "On a 1:25,000 scale map, an 8cm road represents a massive real-world distance. How many km is it?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>This is the <b>Scaling Factor</b>. Think of it like a photocopier setting. If you increase the "Input" (the number of people eating), the "Output" (the amount of food) must grow by the exact same multiplier to keep the "taste" the same. Watch the boxes below expand and shrink together.</p>
+        <p>Think of this as a <b>Photocopier</b>. The "Multiplier" is like the zoom setting. Point to the <b>Input</b>—that’s your starting point. Now, point to the <b>Multiplier</b>—that’s the growth engine. Watch how the <b>Output</b> grows in perfect lockstep. It doesn't just get bigger; it grows by the exact same "times table" rule every single time.</p>
         
         <div class="anatomy-display">
             <div class="scale-container">
-                <span class="label-sm">Input (People)</span>
+                <span class="label-sm">The Input</span>
                 <div class="shape-box" id="box-in" style="width: 50px; height: 50px;">4</div>
             </div>
 
             <div class="multiplier-node">
-                <span class="label-sm">Multiplier</span>
+                <span class="label-sm">The Multiplier</span>
                 <div class="multiplier-val" id="factor-val">x2.5</div>
                 <svg class="arrow-svg" viewBox="0 0 60 20">
                     <path d="M0 10 L55 10 M50 5 L55 10 L50 15" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
@@ -125,7 +125,7 @@
             </div>
 
             <div class="scale-container">
-                <span class="label-sm" style="color:var(--cognis-gold)">Output (Sugar)</span>
+                <span class="label-sm" style="color:var(--cognis-gold)">The Output</span>
                 <div class="shape-box" id="box-out" style="width: 125px; height: 125px; border-color: var(--cognis-gold); color:var(--cognis-gold);">10</div>
             </div>
         </div>
@@ -133,7 +133,7 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <p style="margin-bottom: 20px;">Adjust the quantities and watch the <b>Trace Log</b>. It shows you the two-step secret: 1. Find the value of one. 2. Scale it up.</p>
+        <p style="margin-bottom: 20px;">Slide the <b>Quantity</b> and watch the <b>Trace Log</b>. Help your child notice that we aren't adding numbers; we are multiplying. Notice how the <b>Value of One</b> (the weight per person) stays exactly the same no matter how large the group gets.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
@@ -141,7 +141,7 @@
                     <input type="range" id="q1-in" min="1" max="20" value="4" oninput="run5()">
                 </div>
                 <div class="control-group" style="margin-top:15px;">
-                    <label>Original Amount (Grams): <span class="val-display" id="v1-val">300</span></label>
+                    <label>Original Weight (Grams): <span class="val-display" id="v1-val">300</span></label>
                     <input type="range" id="v1-in" min="10" max="1000" step="10" value="300" oninput="run5()">
                 </div>
                 <div class="control-group" style="margin-top:30px; border-top: 1px solid #e2e8f0; padding-top:20px;">
@@ -156,9 +156,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Just Add Some" Trap:</strong> If a recipe for 4 people needs 10g of salt, and we need to feed 6 people, a child might think: "That's 2 more people, so I'll just add 2g of salt." (Total 12g).</p>
+            <p><strong>The "Just Add a Bit" Trap:</strong> If a recipe for 4 people needs 10g of salt, and we scale it to 6 people, bright children often think: "That's 2 more people, so I'll just add 2g more salt." They are treating the recipe like a pile of blocks rather than a balanced mix.</p>
             
-            <p><strong>The Fix: The "Taste Test."</strong> Ask your child: "If we just add 2g, will it still taste the same, or will it be too weak?" Remind them that proportion is a <b>Times Table Game</b>, never an addition game. You must multiply the salt by the same "growth factor" as the people.</p>
+            <p><strong>The Fix: The "Taste Test."</strong> Ask them: "If we just add a tiny bit, will it still taste the same, or will it be too weak?" Remind them that proportion is a <b>Multiplication Game</b>, never an addition game. If the quantity doubles, the ingredient MUST double to keep the taste perfect.</p>
         </div>
     </section>
 </div>
@@ -198,11 +198,11 @@
 
         // Trace Output
         document.getElementById('trace-5').innerHTML = `
-            <div class="trace-step">→ 1. Find the Value of One: ${v1} ÷ ${q1} = <b>${unitValue.toFixed(2)}</b> per person</div>
-            <div class="trace-step">→ 2. See the Growth: New group is <b>x${multiplier.toFixed(2)}</b> bigger</div>
-            <div class="trace-step">→ 3. Final Step: ${q2} people × ${unitValue.toFixed(2)}g</div>
+            <div class="trace-step">→ 1. Find the Value of One: ${v1}g ÷ ${q1} people = <b>${unitValue.toFixed(2)}g</b></div>
+            <div class="trace-step">→ 2. Identify the Growth: New group is <b>x${multiplier.toFixed(2)}</b> bigger</div>
+            <div class="trace-step">→ 3. The Final Step: Multiply that "Value of One" by ${q2}</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → FINAL AMOUNT: ${result.toFixed(1)} GRAMS
+                → FINAL WEIGHT: ${result.toFixed(1)} GRAMS
             </div>
         `;
     }

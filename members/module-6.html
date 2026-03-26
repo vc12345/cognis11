@@ -48,7 +48,7 @@
         /* The 100% Reference Bar */
         .bar-base {
             height: 100%;
-            width: 250px; /* Represents "100%" unit in px */
+            width: 250px; /* This represents our "100%" unit in px */
             background: var(--cognis-blue);
             border-radius: 6px;
             display: flex;
@@ -136,31 +136,31 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In the 11+ exam, calculating percentages in multiple slow steps (finding 10%, then doubling, then adding) is a trap. We use <b>Decimal Multipliers</b> to jump straight to the answer. By starting at 1.00 (100%), we simply add or subtract the change. This turns a complex word problem into a single, fast multiplication.</p>
+        <p>In the 11+, doing percentage problems in two steps (finding 10%, then doubling it, then adding it) is a "Speed Trap." We use the <b>One-Step Shortcut</b>. By treating the original price as 1.00, we simply multiply once to get straight to the final answer. This turns a messy word problem into a 5-second calculation.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>The Discount</b>
-                "A £20 teddy is 10% off. How much do you pay?"
+                <b>The Toy Sale</b>
+                "A £20 teddy is 10% off. How much is the new price?"
             </div>
             <div class="tier-card">
-                <b>The Bonus</b>
-                "40 marbles plus 20% extra free. What is the new total?"
+                <b>The Marble Bonus</b>
+                "40 marbles get a 20% 'extra free' bonus. What is the new total?"
             </div>
             <div class="tier-card">
                 <b>The Price Hike</b>
-                "A £40 item increases by 15%. Calculate the new price in one step."
+                "A £40 item increases by 15%. What is the new cost?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>This is <b>Growth vs. Decay</b>. The "Original" bar is always 100% (1.00). An increase stretches past the finish line, while a decrease shrinks back from it. Watch the "Multiplier Bubble" change as the bars move.</p>
+        <p>Think of the <b>Starting Block</b>. The blue bar is always your 100% (the number 1.00). An increase stretches that bar forward, while a decrease cuts it back. Notice how the "Shortcut Number" in the gold bubble tells you exactly how much bar you have left.</p>
         
         <div class="anatomy-display">
             <div class="viz-row">
-                <div class="viz-label"><span>Starting Point</span><span>100% (1.00)</span></div>
+                <div class="viz-label"><span>Starting Block</span><span>100% (1.00)</span></div>
                 <div class="bar-container" style="background:transparent;">
                     <div class="bar-base">ORIGINAL VALUE</div>
                 </div>
@@ -180,11 +180,11 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <p style="margin-bottom: 20px;">Toggle between increase and decrease. Show your child how a 20% increase is just multiplying by <b>1.2</b>, and a 20% decrease is just multiplying by <b>0.8</b>.</p>
+        <p style="margin-bottom: 20px;">Toggle between increase and decrease with your child. Watch the <b>Shortcut Number</b> in the gold bubble. Help them notice that a 20% increase is just multiplying by 1.2, while a 20% decrease is just multiplying by 0.8.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Original Price (£): <span class="val-display" id="v-disp">100</span></label>
+                    <label>Original Value (£): <span class="val-display" id="v-disp">100</span></label>
                     <input type="range" id="v-in" min="10" max="500" value="100" oninput="run6()">
                 </div>
                 <div class="control-group" style="margin-top:15px;">
@@ -206,9 +206,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Literal Addition" Trap:</strong> If a price is £50 and goes up by 10%, students often just add the number 10 (e.g., £50 + 10 = £60). They are treating "%" as a currency, not a ratio!</p>
+            <p><strong>The "Simple Addition" Trap:</strong> If a price is £50 and goes up 10%, many kids just add the number 10 (making it £60). They are treating the percentage like a £10 note instead of a part of the original price.</p>
             
-            <p><strong>The Fix: The "Decimal Shortcut."</strong> Always turn the percentage into a multiplier <u>first</u>. A 10% increase is 1.10. A 10% decrease is 0.90. This ensures the change is based on the actual starting value.</p>
+            <p><strong>The Fix: The "Shortcut Multiplier."</strong> Remind your child: "Percentages are for multiplying, not adding." Turn the 10% into its shortcut (1.1) and multiply: 50 × 1.1 = £55. This keeps the "extra" proportionate to the starting value.</p>
         </div>
     </section>
 </div>
@@ -259,11 +259,11 @@
 
         // Trace Output
         document.getElementById('trace-6').innerHTML = `
-            <div class="trace-step">→ 1. The Ratio: 100% ${mode === 'inc' ? '+' : '-'} ${perc}% = ${(mode === 'inc' ? 100+perc : 100-perc)}%</div>
-            <div class="trace-step">→ 2. Decimal Multiplier: <b>${multiplier.toFixed(2)}</b></div>
-            <div class="trace-step">→ 3. The Calculation: ${val} × ${multiplier.toFixed(2)}</div>
+            <div class="trace-step">→ 1. The Shortcut: 1.00 ${mode === 'inc' ? '+' : '-'} ${perc / 100}</div>
+            <div class="trace-step">→ 2. Multiplier: <b>${multiplier.toFixed(2)}</b></div>
+            <div class="trace-step">→ 3. The Jump: £${val} × ${multiplier.toFixed(2)}</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → NEW PRICE: £${finalVal.toFixed(2)}
+                → FINAL TOTAL: £${finalVal.toFixed(2)}
             </div>
         `;
     }

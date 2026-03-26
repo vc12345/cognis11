@@ -104,34 +104,35 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A fraction is a <b>Mechanical Instruction</b>. The <b>Denominator</b> (bottom) tells you how many equal groups to cut the total into. The <b>Numerator</b> (top) tells you how many of those groups to collect. Always find the value of <b>one part</b> first.</p>
+        <p>Think of a fraction as two simple instructions: <b>Slice and Collect</b>. The bottom number tells you how many equal slices to cut your total into. The top number tells you how many of those slices to put on your plate. To solve any 11+ fraction problem, we always find the "weight" of <b>just one slice</b> first.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
                 <b>The Sweet Shop</b>
-                "Find 1/2 of 12 sweets. How many are in one group?"
+                "Find 1/2 of 12 sweets. How many go into each of the two groups?"
             </div>
             <div class="tier-card">
-                <b>The Cake Weight</b>
-                "A cake weighs 500g and is cut into 5 slices. If 3 slices are eaten, what is the weight consumed?"
+                <b>The Birthday Cake</b>
+                "A cake weighs 500g and is cut into 5 slices. If 3 are eaten, how much did they weigh?"
             </div>
             <div class="tier-card">
-                <b>The Race Track</b>
-                "A 40km race is 5/8 complete. How many kilometers are left to run?"
+                <b>The Long Run</b>
+                "A 40km race is 5/8 complete. How many km are left? (Hint: Find the 3/8 left over)."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Partition Bar</b> helps you visualize the Denominator as a physical "cutter." </p>
+        <p>The <b>Cutter and the Plate</b>. Point to the bar below. The lines show where the "Cutter" (the bottom number) has sliced the total into equal boxes. Each box—our <b>Golden Unit</b>—holds the same value. To find that value, we divide the grand total by the number of boxes.</p>
         
         <div class="anatomy-display">
             <div class="fraction-bar-container">
-                <div class="bar-frame" id="viz-bar"></div>
+                <div class="bar-frame" id="viz-bar">
+                    </div>
                 <div class="label-row">
-                    <span>Unit (1 Part): <span id="unit-label">£25</span></span>
-                    <span style="color:var(--cognis-gold)">Total Selected: <span id="total-label">£75</span></span>
+                    <span>Value of 1 Box: <span id="unit-label">£25</span></span>
+                    <span style="color:var(--cognis-gold)">Total Collected: <span id="total-label">£75</span></span>
                 </div>
             </div>
         </div>
@@ -139,29 +140,32 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Move the sliders with your child and watch the "Cutter" (Denominator) change the size of the boxes. Then, use the "Collector" (Numerator) to grab the boxes you want. Notice we always <b>divide</b> to find one box before we <b>multiply</b> to get the total.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Total Amount (£):</label>
+                    <label>Grand Total (£):</label>
                     <input type="number" id="amt-in" value="100" oninput="run8()">
                 </div>
                 <div class="control-group" style="margin-top:15px;">
-                    <label>Denominator (Cutter): <span class="val-display" id="d-disp">4</span></label>
+                    <label>The Cutter (Bottom): <span class="val-display" id="d-disp">4</span></label>
                     <input type="range" id="d-in" min="2" max="12" value="4" oninput="run8()">
                 </div>
                 <div class="control-group" style="margin-top:15px;">
-                    <label>Numerator (Collector): <span class="val-display" id="n-disp">3</span></label>
+                    <label>The Collector (Top): <span class="val-display" id="n-disp">3</span></label>
                     <input type="range" id="n-in" min="1" max="12" value="3" oninput="run8()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-8">Awaiting partitioning...</div>
+            <div class="trace-log" id="trace-8">Awaiting instructions...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Upside Down" Trap:</strong> Dividing by the top number because it's the first one you see. <b>The Fix:</b> Remember the "Cutter-Collector" rule. The <b>Bottom</b> cuts (divides), the <b>Top</b> collects (multiplies).</p>
+            <p><strong>The "Upside-Down" Mistake:</strong> Children often try to divide the total by the top number because it's usually the first one they see in the sentence. This leads to massive, confusing numbers.</p>
+            
+            <p><strong>The Fix: The "Knife and Hand" Rule.</strong> Remind your child: "The bottom number is the <b>Knife</b>; it cuts the total into pieces. The top number is the <b>Hand</b>; it picks them up." We always <b>Divide by the Bottom</b> and <b>Multiply by the Top</b>. If the answer looks bigger than the starting total, the fraction has gone upside down!</p>
         </div>
     </section>
 </div>
@@ -174,17 +178,21 @@
         const den = parseInt(document.getElementById('d-in').value);
         let num = parseInt(document.getElementById('n-in').value);
 
+        // Cap numerator to denominator for visual sanity
         if (num > den) {
             num = den;
             document.getElementById('n-in').value = num;
         }
 
+        // Update Labels
         document.getElementById('d-disp').innerText = den;
         document.getElementById('n-disp').innerText = num;
 
+        // Logic
         const unitVal = total / den;
         const finalVal = unitVal * num;
 
+        // Update Anatomy
         const bar = document.getElementById('viz-bar');
         bar.innerHTML = '';
         for(let i=0; i < den; i++) {
@@ -197,15 +205,17 @@
         document.getElementById('unit-label').innerText = "£" + unitVal.toFixed(2);
         document.getElementById('total-label').innerText = "£" + finalVal.toFixed(2);
 
+        // Trace Output
         document.getElementById('trace-8').innerHTML = `
-            <div class="trace-step">→ 1. Action: Divide Total by Denominator (${den})</div>
-            <div class="trace-step">→ 2. Unit Value: ${total} / ${den} = <b>£${unitVal.toFixed(2)}</b></div>
-            <div class="trace-step">→ 3. Action: Multiply Unit by Numerator (${num})</div>
+            <div class="trace-step">→ 1. The Cut: Divide £${total} by the bottom number (${den})</div>
+            <div class="trace-step">→ 2. One Box Found: <b>£${unitVal.toFixed(2)}</b></div>
+            <div class="trace-step">→ 3. The Collection: Multiply by the top number (${num})</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → RESULT: £${finalVal.toFixed(2)}
+                → FINAL RESULT: £${finalVal.toFixed(2)}
             </div>
         `;
     }
+
     window.onload = run8;
 </script>
 

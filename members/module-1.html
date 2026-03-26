@@ -13,7 +13,7 @@
             background: #f8fafc; 
             padding: 40px; 
             border-radius: 12px;
-            display: flex; 
+            display: flex;
             flex-direction: column;
             align-items: center;
             border: 2px solid #e2e8f0;
@@ -86,27 +86,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>This is the "GPS" for scaling problems. Instead of guessing how two groups of numbers relate, we always travel through a single point: <b>The Value of One.</b> Help your child master the two-step journey: <b>Shrink</b> the known total to find exactly one unit, then <b>Grow</b> that unit to hit your target. This "Unit Bridge" makes even the messiest numbers feel manageable.</p>
+        <p>This is the <b>"Value of One"</b> shortcut. In the 11+, children often panic when they see messy groups of numbers. Instead of guessing how they fit together, we always stop at a "bridge" halfway: finding the cost (or weight) of just <b>one single item</b>. Once they find "The One," they can scale up to any number the examiner throws at them with total confidence.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>The Shopping Trip</b>
+                <b>The Sweet Shop</b>
                 "If 4 apples cost 80p, how much do 6 apples cost?"
             </div>
             <div class="tier-card">
                 <b>The Road Trip</b>
-                "A car travels 150 miles on 5 gallons. How far on 8 gallons?"
+                "A car travels 150 miles on 5 gallons. How far can it go on 8 gallons?"
             </div>
             <div class="tier-card">
-                <b>The Heavy Lifting</b>
-                "9 identical crates weigh 108kg. What is the mass of 13 crates?"
+                <b>The Heavy Crate</b>
+                "9 crates weigh 108kg. What is the mass of 13 crates?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Look at the <b>Unit Bridge</b> below. We take the "Known Group" and slice it into equal pieces. By finding the <b>Golden Unit</b> (the value of just one), we find the "key" that unlocks any other quantity. Point to the gold square—this is the only number that matters.</p>
+        <p>Point to the <b>Unit Bridge</b> below. We take the "Known Group" and slice it into equal pieces. By finding the <b>Golden Unit</b> (the gold square), we find the master key. This number never changes, no matter how many items we add later. Help your child notice that we <i>shrink</i> first to find the one, then <i>grow</i> to find the many.</p>
         
         <div class="anatomy-display">
             <div class="bridge-viz" id="bridge-viz">
@@ -117,7 +117,7 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
-        <p style="margin-bottom: 20px;">Use the sliders with your child to see the logic in action. Watch how the <b>Golden Unit</b> stays the same, even as we "stretch" or "shrink" the pile.</p>
+        <p style="margin-bottom: 20px;">Use the sliders with your child. Watch how the <b>Golden Unit</b> stays the same even as we change the "Target Quantity." The math always flows through that single unit cost.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
@@ -133,16 +133,16 @@
                     <input type="range" id="in-t" min="1" max="15" value="8" oninput="run1()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-1">Awaiting scaling logic...</div>
+            <div class="trace-log" id="trace-1">Awaiting the shortcut...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Backwards Divide":</strong> Bright children often try to divide the smaller number by the bigger one (e.g., $5 \div 20$) simply because it feels "easier" to fit them together. This leads to a messy decimal that makes no sense.</p>
+            <p><strong>The "Backwards Divide":</strong> Bright children often try to divide the smaller number by the bigger one (like $5 \div £20$) because it feels "easier" to fit them together. This leads to a messy decimal that makes no sense in a shop.</p>
             
-            <p><strong>The Fix:</strong> Use the <b>"Money is Boss"</b> rule. Tell your child: "In 99% of these problems, the total value (like money or weight) goes into the calculation first." Always divide the <b>Total Value</b> by the <b>Quantity</b> to find your unit cost.</p>
+            <p><strong>The Fix: "Money is Boss."</strong> Tell your child: "The total value (the money or weight) always goes into the calculator first." We always divide the <b>Total Price</b> by the <b>Quantity</b>. If they get a tiny result like $0.25$ for a cake that clearly costs more, ask them: "Does that price look like it belongs in a real shop?"</p>
         </div>
     </section>
 </div>
@@ -177,12 +177,12 @@
 
         // Trace Output
         document.getElementById('trace-1').innerHTML = `
-            <div class="trace-step">→ 1. The Start: We have ${q} items worth £${v}</div>
-            <div class="trace-step">→ 2. The Shrink: Divide £${v} by ${q} pieces</div>
-            <div class="trace-step">→ 3. The Key Found: <b>£${unitValue.toFixed(2)}</b> for one item</div>
+            <div class="trace-step">→ 1. The Start: ${q} items cost £${v}</div>
+            <div class="trace-step">→ 2. The Shrink: Divide £${v} by ${q} items</div>
+            <div class="trace-step">→ 3. The One: <b>£${unitValue.toFixed(2)}</b> per item</div>
             <div class="trace-step">→ 4. The Grow: Multiply £${unitValue.toFixed(2)} by ${t} items</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → NEW TOTAL: £${finalResult.toFixed(2)}
+                → FINAL TOTAL: £${finalResult.toFixed(2)}
             </div>
         `;
     }

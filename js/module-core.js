@@ -18,7 +18,7 @@
     window.gtag = gtag; // Make gtag globally accessible
 })();
 
-const SAMPLE_IDS = []; // Modules enabled for the /sample.html trial
+const SAMPLE_IDS = ["11_sample", "47_sample", "53_sample"]; // Modules enabled for the /sample.html trial
 
 /**
  * SMART LOADER: Automatically fetches the registry if missing.
@@ -44,7 +44,7 @@ async function ensureRegistry() {
  * MAIN INITIALIZATION
  */
 async function initModule(moduleId) {
-    const isSample = SAMPLE_IDS.includes(Number(moduleId));
+    const isSample = SAMPLE_IDS.includes(String(moduleId));
     
     // Track Module View in Analytics
     if (window.gtag) {
@@ -289,7 +289,7 @@ function injectModuleUI(email, currentId, isSample) {
  * COMPLETION LOGIC
  */
 async function markComplete(moduleId) {
-    const isSample = SAMPLE_IDS.includes(Number(moduleId));
+    const isSample = SAMPLE_IDS.includes(String(moduleId));
     if (isSample) return;
 
     const { data: { user } } = await window.supabaseClient.auth.getUser();

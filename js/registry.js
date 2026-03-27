@@ -65,5 +65,10 @@ const COGNIS_MODULES = [
     { id: 56, pillar: "English", cat: "K", title: "Cloze (Contextual)", path: "module-56.html" },
     { id: 57, pillar: "English", cat: "K", title: "Cloze (Grammatical)", path: "module-57.html" },
     { id: 58, pillar: "English", cat: "K", title: "Punctuation Mechanics", path: "module-58.html" },
-    { id: 59, pillar: "English", cat: "K", title: "Tense Consistency", path: "module-59.html" }
+    { id: 59, pillar: "English", cat: "K", title: "Tense Consistency", path: "module-59.html" },
+
+    // SAMPLE MODULES (for /sample.html trial)
+    { id: "11_sample", pillar: "Math", cat: "B", title: "Average Speed (Harmonic)", path: "module-11-sample.html" },
+    { id: "47_sample", pillar: "NVR", cat: "I", title: "Net Folding (Standard Cube)", path: "module-47-sample.html" },
+    { id: "53_sample", pillar: "English", cat: "J", title: "Implicit Inference", path: "module-53-sample.html" }
 ];

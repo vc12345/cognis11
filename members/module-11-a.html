@@ -3,120 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>B1.1: Average Speed - The Big Squash</title>
+    <title>Cognis11: Average Speed Interactive</title>
     <link rel="stylesheet" href="../css/module-style.css">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* UI Overrides for the Demo */
+        body { background: #eaeff2; padding: 20px; }
+        .module-card { margin-bottom: 50px; border: 1px solid #d1d5db; }
+        
+        /* Interactive Visuals */
+        .viz-container { 
+            background: #fff; border: 2px dashed #cbd5e0; 
+            border-radius: 12px; padding: 20px; margin: 20px 0;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* B1.1 Boxes */
+        .hour-box-container { display: flex; gap: 10px; margin-top: 20px; min-height: 80px; }
+        .hour-box { 
+            width: 80px; height: 80px; border: 3px solid var(--cognis-blue);
+            border-radius: 8px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; font-weight: 800;
+            background: #f8fafc; transition: all 0.3s;
+        }
+        .hour-box span { font-size: 0.6rem; text-transform: uppercase; color: #64748b; }
+
+        /* B1.2 Scale */
+        .scale-beam {
+            width: 300px; height: 10px; background: var(--text-main);
+            border-radius: 5px; position: relative; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .scale-pivot { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid var(--cognis-blue); margin-top: -2px; }
+        .weight { position: absolute; bottom: 10px; transition: all 0.5s; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.7rem; }
+        .weight-left { left: 10px; background: var(--trap-red); }
+        .weight-right { right: 10px; background: var(--cognis-gold); }
+    </style>
 </head>
 <body>
 
 <div class="module-card">
     <div class="header">
-        <h1>B1.1: Average Speed — The Big Squash</h1>
+        <h1>B1.1: The Big Squash (Year 3)</h1>
     </div>
 
     <div class="phase">
-        <h2>Phase 1: The X-Ray (The "Fair Share" Logic)</h2>
-        <p>Forget the word "Average." It sounds like homework. Instead, think of <b>"The Fair Share."</b></p>
-        <p>If a car travels 20 miles in 2 hours, we just want to know: <i>"If the miles were shared out perfectly, how many miles would sit in each 1-hour box?"</i></p>
-        
-        <div class="question-tiers">
-            <div class="tier-card">
-                <b>1. The Pile</b>
-                Put all the miles into one big "Distance Pile."
-            </div>
-            <div class="tier-card">
-                <b>2. The Boxes</b>
-                Count how many "Hour Boxes" you have in your hand.
-            </div>
-            <div class="tier-card">
-                <b>3. The Share</b>
-                Drop the miles into the boxes equally. That's your speed!
-            </div>
+        <h2>Phase 1: The X-Ray</h2>
+        <p>Average speed is just a <b>"Fair Share."</b> We take all the miles and deal them out into "Hour Boxes" like playing cards.</p>
+    </div>
+
+    <div class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="viz-container">
+            <div id="miles-pile" style="font-size: 2rem;">🚗💨</div>
+            <div style="font-weight: 800; color: var(--cognis-blue); margin-top: 10px;">THE MILE PILE</div>
+            <div class="hour-box-container" id="box-display">
+                </div>
         </div>
     </div>
 
     <div class="phase">
-        <h2>Phase 2: The Anatomy (The Journey Merger)</h2>
-        <p>Point to the <b>Orange Leg</b> and the <b>Blue Leg</b>. We are going to "squash" them into one big road.</p>
-        
-        <div class="anatomy-display" style="background: #fff;">
-            <div style="display: flex; width: 100%; max-width: 500px; margin-bottom: 10px;">
-                <div style="flex: 1; background: #FF8C00; height: 30px; border-radius: 6px 0 0 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem; font-weight: bold;">10 miles</div>
-                <div style="flex: 2; background: #3182ce; height: 30px; border-radius: 0 6px 6px 0; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem; font-weight: bold;">20 miles</div>
-            </div>
-            <div style="font-size: 1.2rem; font-weight: 800; color: var(--cognis-blue);">↓ SQUASHED INTO ↓</div>
-            <div style="width: 100%; max-width: 500px; background: var(--cognis-blue); height: 40px; border-radius: 6px; margin-top: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800;">TOTAL ROAD: 30 MILES</div>
-        </div>
-        <p style="text-align: center; font-size: 0.85rem; color: #666;">Success is realizing that 10 + 20 is the <u>only</u> thing that matters right now.</p>
-    </div>
-
-    <div class="phase">
-        <h2>Phase 3: The Engine (The Sharing Machine)</h2>
+        <h2>Phase 3: The Engine</h2>
         <div class="engine-container">
             <div class="controls">
-                <p style="font-size: 0.7rem; color: #cbd5e0; margin-bottom: 20px;">CHANGE THE TOTALS TO SEE THE SHARE:</p>
                 <div class="control-group">
-                    <label>The Mile Pile</label>
-                    <input type="range" min="10" max="100" step="10" value="40" id="dist-slider">
-                    <div class="val-out">40 miles</div>
+                    <label>Total Miles (The Pile)</label>
+                    <input type="range" min="10" max="60" step="10" value="30" id="b1-dist">
+                    <div class="val-out" id="b1-dist-val">30 miles</div>
                 </div>
                 <div class="control-group">
-                    <label>The Hour Boxes</label>
-                    <input type="range" min="1" max="5" step="1" value="2" id="time-slider">
-                    <div class="val-out">2 hours</div>
+                    <label>Total Hours (The Boxes)</label>
+                    <input type="range" min="1" max="5" step="1" value="3" id="b1-time">
+                    <div class="val-out" id="b1-time-val">3 hours</div>
                 </div>
             </div>
-            <div class="trace-log">
-                [SYSTEM STATUS: CALCULATING PACE]<br>
-                → Gathering all miles: 40<br>
-                → Preparing 2 hour-boxes...<br>
-                → Sharing 40 into 2 groups...<br>
-                <span style="color: var(--cognis-gold); font-size: 1.1rem;">RESULT: 20 MILES PER HOUR</span>
+            <div class="trace-log" id="b1-log">
+                → Sharing 30 miles into 3 boxes...
             </div>
         </div>
     </div>
 
     <div class="phase">
-        <h2>Phase 4: The Saboteur</h2>
         <div class="trap-box">
-            <h3>The "Double-Counting" Trap</h3>
-            <p>If you ask: "A car goes 10 miles in 1 hour, and 10 miles in 1 hour. What is the average speed?", bright kids often add the hours and the miles, but then get confused and think the speed is "20."</p>
-            <p><strong>The Fix:</strong> Use the <b>"Box Rule."</b> Tell them: <i>"We only want to know how many miles are in ONE box. If 2 boxes have 20 miles, how many in just one?"</i> This forces them to divide without realizing they are doing "hard math."</p>
+            <h3>The "Box Rule"</h3>
+            <p>Tell your child: <b>"Average Speed is just the number inside ONE box."</b> It doesn't matter how many miles there are total; we only care about the share for one single hour.</p>
         </div>
-        
-        <button class="btn-complete" onclick="markComplete('b1_1')">Session Complete: 11+ Logic Mastered</button>
+        <button class="btn-complete">10-Minute Breakthrough Complete</button>
     </div>
 </div>
 
-<script src="../js/module-core.js"></script>
-<script>initModule('b1_1');</script>
+<div class="module-card">
+    <div class="header">
+        <h1>B1.2: The Tug-of-War (Year 4)</h1>
+    </div>
+
+    <div class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>Average Speed isn't the middle; it has <b>Gravity</b>. Whichever speed lasted the longest "wins" and pulls the average toward it.</p>
+    </div>
+
+    <div class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <div class="viz-container">
+            <div class="scale-beam" id="beam">
+                <div class="weight weight-left" id="w-slow">SLOW</div>
+                <div class="weight weight-right" id="w-fast">FAST</div>
+            </div>
+            <div class="scale-pivot"></div>
+            <p style="margin-top: 20px; font-weight: 800;" id="scale-status">The Slow side is heavier!</p>
+        </div>
+    </div>
+
+    <div class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Slow Time (Weight)</label>
+                    <input type="range" min="1" max="10" value="8" id="b2-slow">
+                </div>
+                <div class="control-group">
+                    <label>Fast Time (Weight)</label>
+                    <input type="range" min="1" max="10" value="2" id="b2-fast">
+                </div>
+            </div>
+            <div class="trace-log" id="b2-log">
+                → Slow Time is pulling 80% of the gravity.
+            </div>
+        </div>
+    </div>
+
+    <div class="phase">
+        <div class="trap-box">
+            <h3>The "Tie-Breaker" Secret</h3>
+            <p>The only time the average is in the middle is if the weights are a <b>Perfect Tie</b>. Examiners almost never make it a tie. Look for the winner!</p>
+        </div>
+        <button class="btn-complete">Session Complete</button>
+    </div>
+</div>
+
 <script>
-        // Add this inside the <script> tag of B1.1
-    const distSlider = document.getElementById('dist-slider');
-    const timeSlider = document.getElementById('time-slider');
-    const log = document.querySelector('.trace-log');
-    const vals = document.querySelectorAll('.val-out');
+    // --- B1.1 LOGIC: THE BIG SQUASH ---
+    const b1Dist = document.getElementById('b1-dist');
+    const b1Time = document.getElementById('b1-time');
+    const boxDisplay = document.getElementById('box-display');
+    const b1Log = document.getElementById('b1-log');
 
-    function updateEngine() {
-        const d = parseInt(distSlider.value);
-        const t = parseInt(timeSlider.value);
-        const avg = (d / t).toFixed(1);
+    function updateB1() {
+        const d = parseInt(b1Dist.value);
+        const t = parseInt(b1Time.value);
+        const share = d / t;
+        
+        document.getElementById('b1-dist-val').innerText = d + " miles";
+        document.getElementById('b1-time-val').innerText = t + " hours";
 
-        vals[0].innerText = `${d} miles`;
-        vals[1].innerText = `${t} hours`;
+        boxDisplay.innerHTML = '';
+        for(let i=0; i<t; i++) {
+            boxDisplay.innerHTML += `<div class="hour-box"><span>Hour ${i+1}</span>${share.toFixed(1)}</div>`;
+        }
 
-        log.innerHTML = `
-            [SYSTEM STATUS: CALCULATING PACE]<br>
-            → Gathering all miles: ${d}<br>
-            → Preparing ${t} hour-boxes...<br>
-            → Sharing ${d} into ${t} groups...<br>
-            <span style="color: var(--cognis-gold); font-size: 1.1rem;">RESULT: ${avg} MILES PER HOUR</span>
-        `;
+        b1Log.innerHTML = `→ Total Road: ${d} miles<br>→ Total Boxes: ${t}<br>→ <b>Average Speed: ${share.toFixed(1)} mph</b>`;
     }
 
-    distSlider.addEventListener('input', updateEngine);
-    timeSlider.addEventListener('input', updateEngine);
-    updateEngine(); // Run once at start
+    // --- B1.2 LOGIC: TUG OF WAR ---
+    const b2Slow = document.getElementById('b2-slow');
+    const b2Fast = document.getElementById('b2-fast');
+    const beam = document.getElementById('beam');
+    const wSlow = document.getElementById('w-slow');
+    const wFast = document.getElementById('w-fast');
+    const b2Log = document.getElementById('b2-log');
+    const scaleStatus = document.getElementById('scale-status');
+
+    function updateB2() {
+        const s = parseInt(b2Slow.value);
+        const f = parseInt(b2Fast.value);
+        
+        // Update Visuals
+        wSlow.style.width = (s * 15) + "px";
+        wSlow.style.height = (s * 15) + "px";
+        wFast.style.width = (f * 15) + "px";
+        wFast.style.height = (f * 15) + "px";
+
+        const tilt = (s - f) * 3; // Tilt degree
+        beam.style.transform = `rotate(${-tilt}deg)`;
+
+        const slowPull = Math.round((s / (s + f)) * 100);
+        scaleStatus.innerText = s > f ? "The Slow side is heavier!" : (f > s ? "The Fast side is heavier!" : "It's a perfect tie!");
+        
+        b2Log.innerHTML = `→ Slow Gravity: ${slowPull}%<br>→ Fast Gravity: ${100-slowPull}%<br>→ <b>Result: Average pulled to ${s > f ? 'Slow' : 'Fast'}</b>`;
+    }
+
+    // Initialize
+    b1Dist.oninput = updateB1;
+    b1Time.oninput = updateB1;
+    b2Slow.oninput = updateB2;
+    b2Fast.oninput = updateB2;
+    updateB1();
+    updateB2();
 </script>
+
 </body>
 </html>

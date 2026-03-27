@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 3: Shared Ratios (The Gap) | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cognis-blue: #1b3a5c;
+            --cognis-gold: #c5a059;
+            --trap-red: #e53e3e;
+            --border-light: #e2e8f0;
+        }
+
+        /* SUBSCRIPTION DISPLAY LOGIC */
+        .foundational-only, .supplemental-only { display: none; }
+        body.user-plan-foundational .foundational-only { display: block; }
+        body.user-plan-supplemental .supplemental-only { display: block; }
+
+        /* REFRESHER ACCORDION */
+        details.refresher-box {
+            background: #fff; border: 2px solid var(--cognis-blue);
+            border-radius: 16px; margin: 30px 0; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        details.refresher-box summary {
+            font-weight: 800; color: white; background: var(--cognis-blue);
+            cursor: pointer; padding: 22px 30px; outline: none; list-style: none;
+            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* NAVIGATION SHELL */
+        .module-nav-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border-light); margin-bottom: 30px; }
+        .btn-nav { background: #f1f5f9; color: var(--cognis-blue); padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.8rem; border: 1px solid var(--border-light); transition: all 0.2s; }
+        .btn-nav:hover { background: var(--cognis-blue); color: white; }
+
+        /* VIZ CONTAINERS */
+        .viz-container { 
+            background: #f8fafc; border: 2px dashed #cbd5e0; 
+            border-radius: 16px; padding: 40px; margin: 25px 0;
+            display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; 
+            min-height: 320px; position: relative;
+        }
+
+        /* INTRO: CHUNK FINDER */
+        .chunk-bar { display: flex; gap: 8px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+        .chunk { 
+            width: 60px; height: 60px; border: 3px solid var(--cognis-blue); 
+            border-radius: 8px; background: white; display: flex; 
+            align-items: center; justify-content: center; font-weight: 800;
+            box-shadow: 0 4px 0 var(--cognis-blue); transition: all 0.3s;
+        }
+        .chunk.active { background: var(--cognis-gold); color: white; border-color: var(--cognis-gold); box-shadow: 0 4px 0 #a38445; transform: scale(1.1); }
+
+        /* PROGRESSING: THE BALANCE */
+        .scale-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 180px; width: 100%; position: relative; }
+        .scale-beam { width: 300px; height: 12px; background: #2d3748; border-radius: 6px; position: relative; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2; }
+        .scale-pivot { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid var(--cognis-blue); margin-top: -2px; }
+        .weight { position: absolute; bottom: 12px; transition: all 0.5s; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 0.7rem; text-align: center; line-height: 1.1; padding: 5px; box-sizing: border-box; }
+
+        /* SUPPLEMENTAL MASTER STYLES */
+        .anatomy-display-supp { background: #f8fafc; padding: 60px 40px 40px; border-radius: 12px; border: 2px solid #e2e8f0; position: relative; width: 100%; box-sizing: border-box; }
+        .bar-row-supp { display: flex; align-items: center; margin-bottom: 20px; }
+        .bar-label-supp { width: 100px; font-weight: 800; font-size: 0.75rem; color: var(--cognis-blue); text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0; }
+        .box-container-supp { display: flex; gap: 6px; flex-grow: 1; }
+        .box-supp { width: 45px; height: 45px; border: 3px solid var(--cognis-blue); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem; background: white; transition: all 0.3s ease; }
+        .box-supp.a { background: var(--cognis-blue); color: white; }
+        .box-supp.b { background: #64748b; color: white; }
+        .box-supp.diff-highlight { background: white; color: var(--trap-red); border: 3px dashed var(--trap-red); transform: translateY(-5px); box-shadow: 0 5px 15px rgba(229, 62, 62, 0.2); }
+        
+        /* FIXED BRACKET POSITIONING */
+        .diff-bracket-supp { 
+            position: absolute; 
+            top: 25px; /* Fixed above the bars */
+            border-top: 3px solid var(--trap-red); 
+            border-left: 3px solid var(--trap-red); 
+            border-right: 3px solid var(--trap-red); 
+            height: 15px; display: flex; align-items: center; justify-content: center; 
+            transition: all 0.4s ease; 
+        }
+        .diff-bracket-supp::after {
+            content: attr(data-label);
+            position: absolute; top: -25px; font-weight: 900; font-size: 0.75rem; color: var(--trap-red); white-space: nowrap; text-transform: uppercase;
+        }
+
+        /* UTILITY */
+        .section-tag { display: inline-block; padding: 5px 15px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 20px; background: #f1f5f9; color: var(--cognis-blue); border-left: 4px solid var(--cognis-gold); }
+        .phase { border: 1px solid var(--border-light); padding: 30px; border-radius: 12px; margin-bottom: 30px !important; background: white; }
+        .parent-script { font-style: italic; color: #4a5568; border-left: 3px solid #cbd5e0; padding-left: 20px; margin: 20px 0; line-height: 1.5; }
+        .val-display { color: var(--cognis-gold); font-weight: 800; }
+        .trace-log { margin-top: 15px; padding: 15px; background: #f8fafc; border-radius: 8px; font-size: 0.85rem; line-height: 1.6; border: 1px solid var(--border-light); }
+        input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
+        .btn-complete { background: #10b981 !important; color: white !important; padding: 18px 40px !important; border-radius: 8px !important; font-weight: 800 !important; cursor: pointer; border: none; display: block; margin: 40px auto; transition: opacity 0.2s; }
+        .btn-complete:hover { opacity: 0.9; }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/module-core-a.js"></script>
+</head>
+<body class="user-plan-checking">
+
+<div class="module-card" style="max-width: 900px; margin: 20px auto; padding: 0 20px;">
+    
+    <div class="module-nav-header">
+        <a href="module-2-a.html" class="btn-nav">← Previous: Shared Ratios</a>
+        <div style="text-align: center;">
+            <div style="font-size: 0.65rem; font-weight: 800; letter-spacing: 1px; color: #94a3b8; text-transform: uppercase;">Module 3</div>
+            <div style="font-weight: 800; color: var(--cognis-blue); font-size: 1rem;">THE GAP METHOD</div>
+        </div>
+        <a href="module-4-a.html" class="btn-nav">Next: Scaling Ratios →</a>
+    </div>
+
+    <div class="header">
+        <h1 style="font-family: 'Playfair Display', serif; color: var(--cognis-blue);">Shared Ratios (The Gap)</h1>
+    </div>
+
+    <div id="foundation-bundle">
+        <section class="phase" id="sub-intro">
+            <span class="section-tag">Foundation Intro</span>
+            <h2>The Chunk Finder</h2>
+            <p>Solving a ratio is all about finding the <b>"Secret Value"</b> hidden inside just one chunk. Once we know what one square is worth, we know everything!</p>
+            
+            <div class="parent-script">
+                "We have <b><span id="script-intro-v">£40</span></b>. The ratio is <b><span id="script-intro-a">3</span> : <span id="script-intro-b">1</span></b>. That means we have <span id="script-intro-qty">4</span> chunks total. If we squash the £40 into all of them, how much is in just <b>one</b> square?"
+            </div>
+
+            <div class="viz-container">
+                <div id="intro-pile" style="background: var(--cognis-blue); color: white; padding: 10px 25px; border-radius: 20px; font-weight: 800; margin-bottom: 25px;">TOTAL PILE: £40</div>
+                <div class="chunk-bar" id="intro-chunks"></div>
+            </div>
+
+            <div class="engine-container">
+                <div class="controls">
+                    <div class="control-group">
+                        <label style="font-weight: 800; font-size: 0.8rem;">TOTAL MONEY: <span class="val-display" id="intro-v-disp">£40</span></label>
+                        <input type="range" min="10" max="100" step="10" value="40" id="intro-v-slider">
+                    </div>
+                    <div class="control-group" style="margin-top:20px;">
+                        <label style="font-weight: 800; font-size: 0.8rem;">TOTAL CHUNKS (RATIO SUM): <span class="val-display" id="intro-q-disp">4 chunks</span></label>
+                        <input type="range" min="2" max="8" step="1" value="4" id="intro-q-slider">
+                    </div>
+                </div>
+                <div class="trace-log" id="intro-trace"></div>
+            </div>
+        </section>
+
+        <section class="phase" id="sub-progressing">
+            <span class="section-tag">Foundation Progressing</span>
+            <h2>The Gravity of the Gap</h2>
+            <p>In a ratio, the "Gap Money" only lives in the <b>Extra Parts</b>. Whichever side has more parts is heavier, and that extra weight is where the difference hides.</p>
+            
+            <div class="viz-container">
+                <div class="scale-wrap">
+                    <div class="scale-beam" id="beam">
+                        <div class="weight" style="left:20px; background:var(--cognis-blue);" id="prog-w-a">A</div>
+                        <div class="weight" style="right:20px; background:var(--cognis-gold);" id="prog-w-b">B</div>
+                    </div>
+                    <div class="scale-pivot"></div>
+                </div>
+                <p id="prog-scale-status" style="margin-top:20px; font-weight:800; color:var(--cognis-blue);"></p>
+            </div>
+
+            <div class="engine-container">
+                <div class="control-group">
+                    <label style="font-weight: 800; font-size: 0.8rem;">THE GAP AMOUNT: <span class="val-display" id="prog-v-disp">£30</span></label>
+                    <input type="range" min="10" max="100" step="10" value="30" id="prog-v-slider">
+                </div>
+                <div class="control-group" style="margin-top:20px;">
+                    <label style="font-weight: 800; font-size: 0.8rem;">PARTS A vs B</label>
+                    <div style="display:flex; gap:10px;">
+                        <input type="range" min="1" max="10" value="5" id="prog-a-slider">
+                        <input type="range" min="1" max="10" value="2" id="prog-b-slider">
+                    </div>
+                </div>
+                <div class="trace-log" id="prog-trace"></div>
+            </div>
+        </section>
+    </div>
+
+    <div id="sub-supplemental" class="supplemental-only">
+        <section class="phase">
+            <span class="section-tag">Mastery Phase</span>
+            <h2>The Anatomy of the Gap</h2>
+            <p>The <b>Gap</b> isn't the whole bar—it’s just the overhang. We divide the gap value <i>only</i> by these extra segments.</p>
+            
+            <div class="anatomy-display-supp">
+                <div id="diff-bracket-supp" class="diff-bracket-supp" data-label="THE GAP: £20"></div>
+                <div class="bar-row-supp"><div class="bar-label-supp">Share A</div><div class="box-container-supp" id="bar-a-supp"></div></div>
+                <div class="bar-row-supp"><div class="bar-label-supp">Share B</div><div class="box-container-supp" id="bar-b-supp"></div></div>
+            </div>
+
+            <div class="engine-container">
+                <div class="inputs">
+                    <div class="control-group"><label style="font-weight: 800; font-size: 0.8rem;">THE GAP AMOUNT (£): <span class="val-display" id="d-disp-supp">£20</span></label><input type="range" id="in-d-supp" min="10" max="200" step="10" value="20"></div>
+                    <div class="control-group" style="margin-top:15px;"><label style="font-weight: 800; font-size: 0.8rem;">RATIO - PERSON A: <span class="val-display" id="a-disp-supp">5</span></label><input type="range" id="in-a-supp" min="1" max="10" value="5"></div>
+                    <div class="control-group" style="margin-top:15px;"><label style="font-weight: 800; font-size: 0.8rem;">RATIO - PERSON B: <span class="val-display" id="b-disp-supp">3</span></label><input type="range" id="in-b-supp" min="1" max="10" value="3"></div>
+                </div>
+                <div class="trace-log" id="trace-supp"></div>
+            </div>
+        </section>
+
+        <button class="btn-complete" onclick="alert('Module 3 Complete!')">Complete Supplemental Module</button>
+    </div>
+</div>
+
+<script>
+    // --- LAYOUT LOGIC ---
+    async function applyLayout() {
+        const plan = 'supplemental'; // Default for testing
+        const body = document.body;
+        const bundle = document.getElementById('foundation-bundle');
+        const supp = document.getElementById('sub-supplemental');
+
+        if (plan === 'supplemental') {
+            body.className = 'user-plan-supplemental';
+            const acc = document.createElement('details');
+            acc.className = 'refresher-box';
+            acc.innerHTML = `<summary>▼ Need a Refresh? (Foundations)</summary>`;
+            acc.appendChild(bundle);
+            supp.parentNode.insertBefore(acc, supp);
+        } else {
+            body.className = 'user-plan-foundational';
+            if(supp) supp.remove();
+        }
+    }
+
+    // --- ENGINES ---
+
+    function updateIntro() {
+        const v = parseInt(document.getElementById('intro-v-slider').value) || 40;
+        const q = parseInt(document.getElementById('intro-q-slider').value) || 4;
+        const unit = v / q;
+
+        document.getElementById('intro-v-disp').innerText = `£${v}`;
+        document.getElementById('intro-q-disp').innerText = `${q} chunks`;
+        document.getElementById('script-intro-v').innerText = `£${v}`;
+        document.getElementById('script-intro-qty').innerText = q;
+        document.getElementById('intro-pile').innerText = `TOTAL PILE: £${v}`;
+
+        const container = document.getElementById('intro-chunks');
+        container.innerHTML = '';
+        for(let i=0; i<q; i++) {
+            const c = document.createElement('div');
+            c.className = `chunk ${i === 0 ? 'active' : ''}`;
+            c.innerText = `£${unit.toFixed(0)}`;
+            container.appendChild(c);
+        }
+        document.getElementById('intro-trace').innerHTML = `→ <b>Action:</b> Dividing £${v} by ${q} boxes.<br>→ <b>Result:</b> One box = £${unit.toFixed(2)}.`;
+    }
+
+    function updateProg() {
+        const v = parseInt(document.getElementById('prog-v-slider').value) || 30;
+        const a = parseInt(document.getElementById('prog-a-slider').value) || 5;
+        const b = parseInt(document.getElementById('prog-b-slider').value) || 2;
+        const diff = Math.abs(a - b);
+
+        document.getElementById('prog-v-disp').innerText = `£${v}`;
+        const wa = document.getElementById('prog-w-a');
+        const wb = document.getElementById('prog-w-b');
+        
+        wa.style.height = (a * 10) + 40 + "px"; wa.style.width = (a * 4) + 55 + "px";
+        wb.style.height = (b * 10) + 40 + "px"; wb.style.width = (b * 4) + 55 + "px";
+        wa.innerText = `A (${a})`; wb.innerText = `B (${b})`;
+
+        const tilt = (b - a) * 3;
+        document.getElementById('beam').style.transform = `rotate(${tilt}deg)`;
+
+        if (diff === 0) {
+            document.getElementById('prog-scale-status').innerText = "Balanced (No Gap)";
+            document.getElementById('prog-trace').innerText = "The parts are equal, so there is no 'more than' money.";
+        } else {
+            const unit = v / diff;
+            document.getElementById('prog-scale-status').innerText = a > b ? "Side A is heavier!" : "Side B is heavier!";
+            document.getElementById('prog-trace').innerHTML = `→ <b>The Gap:</b> ${diff} extra boxes = £${v}.<br>→ <b>One Box:</b> £${v} ÷ ${diff} = £${unit.toFixed(2)}.`;
+        }
+    }
+
+    function updateSupp() {
+        const diffAmt = parseInt(document.getElementById('in-d-supp').value) || 20;
+        const a = parseInt(document.getElementById('in-a-supp').value) || 5;
+        const b = parseInt(document.getElementById('in-b-supp').value) || 3;
+        const partDiff = Math.abs(a - b);
+
+        document.getElementById('d-disp-supp').innerText = '£' + diffAmt;
+        document.getElementById('a-disp-supp').innerText = a;
+        document.getElementById('b-disp-supp').innerText = b;
+
+        if (partDiff === 0) {
+            document.getElementById('trace-supp').innerHTML = `<span style="color:var(--trap-red)">Ratios must be different to have a gap!</span>`;
+            document.getElementById('diff-bracket-supp').style.display = 'none';
+            return;
+        }
+
+        const unitValue = diffAmt / partDiff;
+        const barA = document.getElementById('bar-a-supp');
+        const barB = document.getElementById('bar-b-supp');
+        barA.innerHTML = ''; barB.innerHTML = '';
+        const minParts = Math.min(a, b);
+        
+        for(let i=0; i<a; i++) {
+            const d = document.createElement('div');
+            d.className = `box-supp a ${ (a > b && i >= minParts) ? 'diff-highlight' : '' }`;
+            d.innerText = `£${unitValue.toFixed(0)}`;
+            barA.appendChild(d);
+        }
+        for(let i=0; i<b; i++) {
+            const d = document.createElement('div');
+            d.className = `box-supp b ${ (b > a && i >= minParts) ? 'diff-highlight' : '' }`;
+            d.innerText = `£${unitValue.toFixed(0)}`;
+            barB.appendChild(d);
+        }
+
+        // --- BRACKET ALIGNMENT ---
+        const bracket = document.getElementById('diff-bracket-supp');
+        bracket.style.display = 'flex';
+        const boxWidth = 51; // 45px width + 6px gap
+        bracket.style.left = `${100 + (minParts * boxWidth)}px`;
+        bracket.style.width = `${(partDiff * boxWidth) - 6}px`;
+        bracket.setAttribute('data-label', `GAP: £${diffAmt}`);
+
+        document.getElementById('trace-supp').innerHTML = `→ <b>Gap boxes:</b> ${partDiff}<br>→ <b>One box:</b> £${unitValue.toFixed(2)}<br>→ <b>Total A+B:</b> £${(unitValue * (a+b)).toFixed(2)}`;
+    }
+
+    // --- INIT ---
+    document.addEventListener('DOMContentLoaded', () => {
+        applyLayout();
+        
+        const inputs = [
+            'intro-v-slider', 'intro-q-slider', 
+            'prog-v-slider', 'prog-a-slider', 'prog-b-slider',
+            'in-d-supp', 'in-a-supp', 'in-b-supp'
+        ];
+
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) {
+                el.oninput = () => { updateIntro(); updateProg(); updateSupp(); };
+            }
+        });
+
+        updateIntro(); updateProg(); updateSupp();
+    });
+</script>
+</body>
+</html>

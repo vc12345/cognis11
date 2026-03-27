@@ -38,8 +38,8 @@
             background: #f8fafc; border: 2px dashed #cbd5e0; 
             border-radius: 12px; padding: 20px; margin: 25px 0;
             display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; /* Center everything */
-            min-height: 250px; 
+            align-items: center; justify-content: center; 
+            min-height: 280px; 
         }
 
         .hour-box-container { display: flex; gap: 12px; margin-top: 25px; flex-wrap: wrap; justify-content: center; }
@@ -50,19 +50,29 @@
             background: #fff; box-shadow: 0 4px 0 var(--cognis-blue);
         }
 
-        /* TUG OF WAR SCALE */
-        .scale-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        /* TUG OF WAR SCALE - FIXED VERTICAL CENTERING */
+        .scale-wrap { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 150px; /* Locked height for centering */
+            width: 100%;
+            position: relative;
+        }
         .scale-beam {
             width: 300px; height: 12px; background: #2d3748;
             border-radius: 6px; position: relative; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2;
         }
-        .scale-pivot { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid var(--cognis-blue); margin-top: -2px; }
+        .scale-pivot { 
+            width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; 
+            border-bottom: 30px solid var(--cognis-blue); 
+            margin-top: -2px; /* Sits perfectly under beam */
+        }
         .weight { position: absolute; bottom: 12px; transition: all 0.5s; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 0.7rem; }
 
-        /* ORIGINAL JOURNEY MAP STYLES FROM MODULE-11.HTML */
+        /* ORIGINAL JOURNEY MAP STYLES */
         .anatomy-display { padding: 60px 40px; }
         .journey-line { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; position: relative; display: flex; margin: 40px 0; }
-        .leg { height: 100%; position: relative; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .leg { height: 100%; position: relative; transition: width 0.6s; }
         .leg-1 { background: var(--cognis-blue); border-radius: 4px 0 0 4px; }
         .leg-2 { background: var(--cognis-gold); border-radius: 0 4px 4px 0; }
         .marker { position: absolute; width: 24px; height: 24px; border-radius: 50%; border: 4px solid white; top: 50%; transform: translate(-50%, -50%); box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 10; }
@@ -77,6 +87,7 @@
         /* LAYOUT UTILITY */
         .section-tag { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; background: #f1f5f9; color: var(--cognis-blue); }
         .phase { border: 1px solid var(--border-light); margin-bottom: 30px !important; }
+        .parent-script { font-style: italic; color: #4a5568; border-left: 3px solid #cbd5e0; padding-left: 15px; margin: 15px 0; }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -92,10 +103,17 @@
         <section class="phase" id="sub-intro">
             <span class="section-tag">Foundation Intro</span>
             <h2>The Big Squash</h2>
-            <p>Average speed is just a <b>"Fair Share."</b> We take all the miles and deal them out into "Hour Boxes" like playing cards.</p>
+            <p>Average speed isn't a complex formula; it's a <b>"Fair Share"</b> game. Imagine your child has a big pile of miles. To find the average, they just have to deal those miles out into "Hour Boxes" like playing cards until the pile is gone.</p>
             
+            <div class="parent-script">
+                "Look at this pile of <b><span id="script-dist">40</span> miles</b>. We have <b><span id="script-time">2</span> hours</b> to travel. If we want to be 'fair' and do the exact same amount each hour, how many miles go into each box?"
+            </div>
+
             <div class="viz-container">
-                <div style="font-size: 2.5rem; margin-bottom: 10px;">🚗💨</div>
+                <div id="intro-pile-display" style="background: var(--cognis-blue); color: white; padding: 10px 25px; border-radius: 20px; font-weight: 800; margin-bottom: 15px;">
+                    TOTAL PILE: 40 MILES
+                </div>
+                <div style="font-size: 2rem;">🚗💨</div>
                 <div class="hour-box-container" id="box-display-intro"></div>
             </div>
 
@@ -124,8 +142,12 @@
         <section class="phase" id="sub-progressing">
             <span class="section-tag">Foundation Progressing</span>
             <h2>The Tug-of-War</h2>
-            <p>Average Speed isn't the middle; it has <b>Gravity</b>. Whichever speed lasted the longest "wins" and pulls the average toward it.</p>
+            <p>In the 11+, the average speed is rarely right in the middle. It has <b>Gravity</b>. If a car travels slowly for 5 hours and quickly for only 1 hour, the average speed will be "pulled" down toward the slow speed.</p>
             
+            <div class="parent-script">
+                "The car traveled at two different speeds. But look at the weights—we spent much more <b>time</b> going slow. That 'Slow Time' is heavier, so it wins the tug-of-war and pulls the average toward it."
+            </div>
+
             <div class="viz-container">
                 <div class="scale-wrap">
                     <div class="scale-beam" id="beam">
@@ -153,7 +175,7 @@
 
             <div class="trap-box" style="margin-top:20px;">
                 <h3>The "Tie-Breaker" Secret</h3>
-                <p>The only time the average is in the middle is if the weights are a <b>Perfect Tie</b>. Look for the winner!</p>
+                <p>The only time the average is in the middle is if the weights are a <b>Perfect Tie</b>. Look for the winner! The speed with the most time always wins the pull.</p>
             </div>
         </section>
     </div>
@@ -238,15 +260,12 @@
 <button class="btn-complete" onclick="markComplete(11)">Complete Module & Update Lattice</button>
 
 <script>
-    // --- SUBSCRIPTION & LAYOUT LOGIC ---
     async function applyLayout() {
         let plan = 'supplemental'; 
         try { plan = await getUserPlan(); } catch(e) {}
-
         const body = document.body;
         const foundationBundle = document.getElementById('foundation-bundle');
         const suppSection = document.getElementById('sub-supplemental');
-
         if (plan === 'supplemental') {
             body.className = 'user-plan-supplemental';
             const acc = document.createElement('details');
@@ -259,70 +278,58 @@
         }
     }
 
-    // --- ENGINE: INTRO ---
     function updateIntro() {
         const d = parseInt(document.getElementById('intro-dist').value);
         const t = parseInt(document.getElementById('intro-time').value);
         const share = (d / t).toFixed(1);
         document.getElementById('intro-dist-val').innerText = d + " miles";
         document.getElementById('intro-time-val').innerText = t + " hours";
+        document.getElementById('script-dist').innerText = d;
+        document.getElementById('script-time').innerText = t;
+        document.getElementById('intro-pile-display').innerText = `TOTAL PILE: ${d} MILES`;
         
         const container = document.getElementById('box-display-intro');
         container.innerHTML = '';
-        for(let i=0; i<t; i++) {
-            container.innerHTML += `<div class="hour-box"><span>Hour ${i+1}</span>${share}</div>`;
-        }
-        document.getElementById('intro-log').innerHTML = `→ 1. Sharing ${d} miles into ${t} equal hours.<br>→ <b>Average Speed: ${share} mph</b>`;
+        for(let i=0; i<t; i++) container.innerHTML += `<div class="hour-box"><span>Hour ${i+1}</span>${share}</div>`;
+        document.getElementById('intro-log').innerHTML = `→ <b>Action:</b> Squashing ${d} miles into ${t} boxes.<br>→ <b>Result:</b> Each hour holds ${share} miles. That's the Average Speed!`;
     }
 
-    // --- ENGINE: PROGRESSING ---
     function updateProg() {
         const s = parseInt(document.getElementById('prog-slow').value);
         const f = parseInt(document.getElementById('prog-fast').value);
         const total = s + f;
         const slowP = Math.round((s / total) * 100);
-        
         document.getElementById('w-slow').style.width = (s * 15) + "px";
         document.getElementById('w-slow').style.height = (s * 15) + "px";
         document.getElementById('w-fast').style.width = (f * 15) + "px";
         document.getElementById('w-fast').style.height = (f * 15) + "px";
-        
         document.getElementById('beam').style.transform = `rotate(${(f - s) * 2}deg)`;
-        document.getElementById('scale-status').innerText = s > f ? "Slow side is winning the tug!" : (f > s ? "Fast side is winning!" : "It's a perfect tie!");
-        document.getElementById('prog-log').innerHTML = `→ Pull Strength: Slow ${slowP}% vs Fast ${100-slowP}%<br>→ <b>Average is pulled toward: ${s > f ? 'Slow' : 'Fast'}</b>`;
+        document.getElementById('scale-status').innerText = s > f ? "Slow side is winning!" : (f > s ? "Fast side is winning!" : "It's a perfect tie!");
+        document.getElementById('prog-log').innerHTML = `→ <b>Gravity Check:</b> Slow has ${s} units of weight. Fast has ${f}.<br>→ <b>The Winner:</b> The average is pulled toward the ${s > f ? 'Slow' : 'Fast'} speed.`;
     }
 
-    // --- ENGINE: SUPPLEMENTAL (Original logic restored) ---
     function updateSupp() {
         const inputs = ['d1-in', 't1-in', 'd2-in', 't2-in'].map(id => document.getElementById(id));
         const [d1, t1, d2, t2] = inputs.map(i => parseFloat(i.value) || 0);
-        
-        const totalDist = d1 + d2;
-        const totalTime = t1 + t2;
+        const totalDist = d1 + d2; const totalTime = t1 + t2;
         const avgSpeed = totalTime > 0 ? (totalDist / totalTime) : 0;
-
         const p1 = totalDist > 0 ? (d1 / totalDist) * 100 : 50;
         document.getElementById('visual-leg-1').style.width = `${p1}%`;
         document.getElementById('visual-leg-2').style.width = `${100-p1}%`;
-
         document.getElementById('label-d1').innerText = `${d1.toFixed(2)} km`;
         document.getElementById('label-t1').innerText = `${t1.toFixed(2)} hrs`;
         document.getElementById('label-d2').innerText = `${d2.toFixed(2)} km`;
         document.getElementById('label-t2').innerText = `${t2.toFixed(2)} hrs`;
-
         document.getElementById('total-summary').innerText = `TOTAL: ${totalDist.toFixed(2)} km in ${totalTime.toFixed(2)} hours`;
-
         document.getElementById('logic-trace').innerHTML = `
             <div class="trace-step">→ 1. Grand Distance: ${d1} + ${d2} = <b>${totalDist.toFixed(2)} km</b></div>
             <div class="trace-step">→ 2. Grand Time: ${t1} + ${t2} = <b>${totalTime.toFixed(2)} hrs</b></div>
-            <div class="trace-step">→ 3. The Big Calculation: Total Distance ÷ Total Time</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #e2e8f0; margin-top:10px; padding-top:10px;">
                 → AVERAGE SPEED: ${avgSpeed.toFixed(2)} km/h
             </div>
         `;
     }
 
-    // --- INITIALIZE ---
     document.addEventListener('DOMContentLoaded', () => {
         applyLayout();
         document.getElementById('intro-dist').oninput = updateIntro;
@@ -330,7 +337,6 @@
         document.getElementById('prog-slow').oninput = updateProg;
         document.getElementById('prog-fast').oninput = updateProg;
         ['d1-in', 't1-in', 'd2-in', 't2-in'].forEach(id => document.getElementById(id).oninput = updateSupp);
-        
         updateIntro(); updateProg(); updateSupp();
         if(typeof initModule === "function") initModule(11);
     });

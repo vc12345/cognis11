@@ -91,5 +91,39 @@
 
 <script src="../js/module-core.js"></script>
 <script>initModule('b1_2');</script>
+
+<script>
+        // Add this inside the <script> tag of B1.2
+    const slowSlider = document.getElementById('slow-slider');
+    const fastSlider = document.getElementById('fast-slider');
+    const log = document.querySelector('.trace-log');
+
+    function updateTugOfWar() {
+        const slowT = parseInt(slowSlider.value);
+        const fastT = parseInt(fastSlider.value);
+        const totalT = slowT + fastT;
+        
+        // Calculate "Pull" percentage
+        const slowPull = Math.round((slowT / totalT) * 100);
+        const fastPull = 100 - slowPull;
+        
+        let prediction = "MIDDLE-ISH";
+        if (slowPull > 60) prediction = "VERY SLOW";
+        if (fastPull > 60) prediction = "VERY FAST";
+
+        log.innerHTML = `
+            [TUG-OF-WAR STATUS]<br>
+            → Slow Speed Strength: ${slowPull}% ${slowPull > fastPull ? '(WINNING)' : ''}<br>
+            → Fast Speed Strength: ${fastPull}% ${fastPull > slowPull ? '(WINNING)' : ''}<br>
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1)">
+            → LOGIC: The average is anchored to the ${slowPull > fastPull ? 'slow' : 'fast'} speed.<br>
+            <span style="color: var(--cognis-gold)">PREDICTION: ${prediction}</span>
+        `;
+    }
+
+    slowSlider.addEventListener('input', updateTugOfWar);
+    fastSlider.addEventListener('input', updateTugOfWar);
+    updateTugOfWar(); // Run once at start
+</script>
 </body>
 </html>

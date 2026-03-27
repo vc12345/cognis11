@@ -90,5 +90,33 @@
 
 <script src="../js/module-core.js"></script>
 <script>initModule('b1_1');</script>
+<script>
+        // Add this inside the <script> tag of B1.1
+    const distSlider = document.getElementById('dist-slider');
+    const timeSlider = document.getElementById('time-slider');
+    const log = document.querySelector('.trace-log');
+    const vals = document.querySelectorAll('.val-out');
+
+    function updateEngine() {
+        const d = parseInt(distSlider.value);
+        const t = parseInt(timeSlider.value);
+        const avg = (d / t).toFixed(1);
+
+        vals[0].innerText = `${d} miles`;
+        vals[1].innerText = `${t} hours`;
+
+        log.innerHTML = `
+            [SYSTEM STATUS: CALCULATING PACE]<br>
+            → Gathering all miles: ${d}<br>
+            → Preparing ${t} hour-boxes...<br>
+            → Sharing ${d} into ${t} groups...<br>
+            <span style="color: var(--cognis-gold); font-size: 1.1rem;">RESULT: ${avg} MILES PER HOUR</span>
+        `;
+    }
+
+    distSlider.addEventListener('input', updateEngine);
+    timeSlider.addEventListener('input', updateEngine);
+    updateEngine(); // Run once at start
+</script>
 </body>
 </html>

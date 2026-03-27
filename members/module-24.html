@@ -9,11 +9,10 @@
     
     <style>
         /* UNIQUE CSS FOR THE MEAN BRIDGE (LIGHT SCHEME) */
-        .anatomy-display { padding: 40px; background: #f0f4f8; border: 2px solid #e2e8f0; }
+        .anatomy-display { padding: 40px; background: #f0f4f8; border: 2px solid #e2e8f0; border-radius: 12px; }
         
         #bridge-svg { background: white; border-radius: 12px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
         
-        /* Bar Colors matched to Module 23 */
         .stick { fill: var(--cognis-blue); transition: all 0.6s ease; }
         .target-stick { fill: var(--cognis-blue); opacity: 0.15; stroke: var(--cognis-blue); stroke-dasharray: 4; }
         
@@ -26,7 +25,6 @@
         }
         .merged .missing-stick { transform: translateY(0); opacity: 1; }
         
-        /* Text clarity for light background */
         .stat-text { fill: #94a3b8; font-size: 10px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; }
         .stat-val { fill: var(--cognis-blue); font-size: 18px; font-weight: 900; }
         .stat-val.gold { fill: var(--cognis-gold); }
@@ -37,7 +35,9 @@
             padding: 14px 30px; border-radius: 8px; font-weight: 800; 
             cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
             box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+            transition: 0.3s;
         }
+        .btn-bridge:hover { background: #b08d4b; transform: translateY(-2px); }
 
         .engine-container { grid-template-columns: 1fr 1.2fr; }
     </style>
@@ -56,37 +56,37 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A Mean is a "Fair Share" height. To find a missing member of a set, you must compare the <b>Total Height</b> of the current group against the <b>Total Height</b> required to hit the target average.</p>
+        <p>Think of the Mean as the <b>"Fair Share"</b> height. In the 11+, examiners love to give you a group of scores and ask: <i>"What must the next person score to change the average?"</i> The secret is ignoring the average for a moment and looking at the <b>Total Pile</b>. To find the missing person, you just compare the pile you have now against the pile you <b>need</b> to hit that target. The "Bridge" is the number that fills the gap.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
+                <b>The Mystery Number</b>
                 "The mean of 3 numbers is 5. Two of the numbers are 4 and 6. What is the 3rd number?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "Sarah scored 12, 15, and 10 in her tests. What must she score in her 4th test to have a mean of 13?"
+                <b>The Test Scorer</b>
+                "Sarah scored 12, 15, and 10. What must she score next to have a mean of 13?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "The mean weight of 5 children is 40kg. When a 6th child joins, the mean becomes 41kg. Find the weight of the new child."
+                <b>The Weight Shift</b>
+                "5 children weigh 40kg on average. A 6th child joins and the mean becomes 41kg. How heavy is the new child?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The "Bridge" is the difference between the totals. Dropping the <b>Missing Data</b> into the left group levels it up to match the target.</p>
+        <p>This is the <b>Equality Bridge</b>. On the right, you see the "Ghost Set"—this is what the group would look like if everyone scored exactly the target mean. On the left is your real group. Notice the empty space at the end. When you click <b>"Add Missing Data,"</b> the missing score drops in to perfectly level the two sides. The value of that gold bar is the answer to your problem.</p>
         
         <div class="anatomy-display" id="stage">
             <svg id="bridge-svg" width="100%" height="320" viewBox="0 0 700 320" preserveAspectRatio="xMidYMid meet">
                 <g id="left-group"></g>
                 <g id="right-group"></g>
 
-                <text x="150" y="275" class="stat-text" text-anchor="middle">Current Sum</text>
+                <text x="150" y="275" class="stat-text" text-anchor="middle">Current Total Pile</text>
                 <text id="l-sum" x="150" y="300" class="stat-val" text-anchor="middle">0</text>
                 
-                <text x="550" y="275" class="stat-text" text-anchor="middle">Target Sum</text>
+                <text x="550" y="275" class="stat-text" text-anchor="middle">Target Total Pile</text>
                 <text id="r-sum" x="550" y="300" class="stat-val gold" text-anchor="middle">0</text>
             </svg>
             
@@ -98,14 +98,15 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the inputs to build a scenario. Help your child notice Step 3 in the log: we multiply the <b>New Count</b> by the <b>New Mean</b> to find the big "Target Total." This is the master key to every mean problem.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Current Scores (Separated by commas)</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Current Scores (e.g. 12, 15, 10)</label>
                     <input type="text" id="in-vals" value="12, 15, 10" oninput="updateLogic()">
                 </div>
                 <div class="control-group" style="margin-top: 20px;">
-                    <label>Target Mean Required</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Target Average Required</label>
                     <input type="number" id="in-mean" value="13" oninput="updateLogic()">
                 </div>
             </div>
@@ -116,8 +117,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Average of Averages" Trap:</strong> Trying to find the missing score by averaging the current mean and the target mean. If your current mean is 10 and you want to reach 13, it is tempting to think the next score is 16. This logic breaks as soon as the group size changes.</p>
-            <p><strong>The Fix:</strong> Mean problems are <b>Total Volume</b> problems in disguise. Always find the new total (New Count × New Mean) and the old total (Old Count × Old Mean). The difference is always your answer.</p>
+            <p><strong>The "Average of Averages" Trap:</strong> Most children try to solve this by looking only at the averages. If their current mean is 10 and they want 13, they think: <i>"I just need to add 3 more than the average."</i> <b>Stop!</b> This logic breaks because the group is getting bigger. You aren't just adding 3; you are responsible for lifting the average of the <i>entire</i> new group.</p>
+            
+            <p><strong>The Fix: The "Total Volume" Rule.</strong> Remind your child: <i>"Mean is a mask; Total is the truth."</i> Always find the New Total ($New\ Count \times New\ Mean$) and the Old Total ($Old\ Count \times Old\ Mean$). The difference between those two big piles is always the missing value. <b>Find the big totals first.</b></p>
         </div>
     </section>
 </div>
@@ -139,21 +141,18 @@
         const targetSum = targetMean * targetCount;
         const missing = targetSum - knownSum;
 
-        // Render SVG elements
         const lGroup = document.getElementById('left-group');
         const rGroup = document.getElementById('right-group');
         lGroup.innerHTML = ''; rGroup.innerHTML = '';
 
-        const maxVal = Math.max(targetMean, ...knowns, 1);
+        const maxVal = Math.max(targetMean, ...knowns, Math.abs(missing), 1);
         const scale = 180 / maxVal;
 
-        // Current Bars (Navy)
         knowns.forEach((v, i) => {
             const h = v * scale;
             lGroup.innerHTML += `<rect x="${40 + i*35}" y="${230-h}" width="25" height="${h}" class="stick" />`;
         });
 
-        // The Missing Member (Gold)
         const missH = Math.max(0, missing * scale);
         lGroup.innerHTML += `
             <g class="missing-stick">
@@ -161,23 +160,20 @@
                 <text x="${40 + knowns.length*35 + 12}" y="${230-missH-12}" fill="#C5A059" font-weight="900" font-size="13" text-anchor="middle">${missing.toFixed(1)}</text>
             </g>`;
 
-        // Target bars (Phantom/Hollow)
         for(let i=0; i < targetCount; i++) {
             const h = targetMean * scale;
             rGroup.innerHTML += `<rect x="${420 + i*35}" y="${230-h}" width="25" height="${h}" class="stick target-stick" />`;
         }
 
-        // Stats Updates
         document.getElementById('l-sum').textContent = isApplied ? (knownSum + missing).toFixed(1) : knownSum.toFixed(1);
         document.getElementById('r-sum').textContent = targetSum.toFixed(1);
 
-        // Engine Trace
         document.getElementById('engine-trace').innerHTML = `
-            <div class="trace-step">→ 1. Current Sum: ${knowns.join(' + ')} = <b>${knownSum.toFixed(1)}</b></div>
-            <div class="trace-step">→ 2. Target Set Size: <b>${targetCount} members</b></div>
-            <div class="trace-step">→ 3. Target Total: ${targetCount} × ${targetMean} = <b>${targetSum.toFixed(1)}</b></div>
+            <div class="trace-step">→ 1. Pile You Have: ${knowns.join(' + ')} = <b>${knownSum.toFixed(1)}</b></div>
+            <div class="trace-step">→ 2. New Group Size: <b>${targetCount}</b></div>
+            <div class="trace-step">→ 3. Pile You Need: ${targetCount} × ${targetMean} = <b>${targetSum.toFixed(1)}</b></div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → MISSING VALUE: ${targetSum.toFixed(1)} - ${knownSum.toFixed(1)} = ${missing.toFixed(2)}
+                → THE BRIDGE (MISSING VALUE): ${targetSum.toFixed(1)} - ${knownSum.toFixed(1)} = ${missing.toFixed(2)}
             </div>
         `;
     }
@@ -185,7 +181,7 @@
     function toggleBridge() {
         isApplied = !isApplied;
         document.getElementById('stage').classList.toggle('merged', isApplied);
-        document.getElementById('btn-bridge').innerText = isApplied ? "Reset State" : "Add Missing Data";
+        document.getElementById('btn-bridge').innerText = isApplied ? "Reset Bridge" : "Add Missing Data";
         updateLogic();
     }
 

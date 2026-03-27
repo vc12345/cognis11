@@ -3,203 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cognis11: Average Speed Interactive</title>
+    <title>Module 11: Average Speed | Cognis 11+</title>
+    
     <link rel="stylesheet" href="../css/module-style.css">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        /* UI Overrides for the Demo */
-        body { background: #eaeff2; padding: 20px; }
-        .module-card { margin-bottom: 50px; border: 1px solid #d1d5db; }
-        
-        /* Interactive Visuals */
+        /* SUBSCRIPTION DISPLAY LOGIC */
+        .foundational-only, .supplemental-only { display: none; }
+        body.user-plan-foundational .foundational-only { display: block; }
+        body.user-plan-supplemental .supplemental-only { display: block; }
+
+        /* REFRESHER ACCORDION (Only for Supplemental) */
+        details.refresher-box {
+            background: #fff;
+            border: 2px solid var(--cognis-blue);
+            border-radius: 16px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        details.refresher-box summary {
+            font-weight: 800; color: white; background: var(--cognis-blue);
+            cursor: pointer; padding: 20px; outline: none; list-style: none;
+        }
+
+        /* VISUAL CONTAINERS */
         .viz-container { 
-            background: #fff; border: 2px dashed #cbd5e0; 
-            border-radius: 12px; padding: 20px; margin: 20px 0;
-            display: flex; flex-direction: column; align-items: center;
+            background: #f8fafc; border: 2px dashed #cbd5e0; 
+            border-radius: 12px; padding: 20px; margin: 25px 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            min-height: 280px; 
         }
 
-        /* B1.1 Boxes */
-        .hour-box-container { display: flex; gap: 10px; margin-top: 20px; min-height: 80px; }
+        .hour-box-container { display: flex; gap: 12px; margin-top: 25px; flex-wrap: wrap; justify-content: center; }
         .hour-box { 
-            width: 80px; height: 80px; border: 3px solid var(--cognis-blue);
-            border-radius: 8px; display: flex; flex-direction: column;
+            width: 85px; height: 85px; border: 3px solid var(--cognis-blue);
+            border-radius: 12px; display: flex; flex-direction: column;
             align-items: center; justify-content: center; font-weight: 800;
-            background: #f8fafc; transition: all 0.3s;
+            background: #fff; box-shadow: 0 4px 0 var(--cognis-blue);
         }
-        .hour-box span { font-size: 0.6rem; text-transform: uppercase; color: #64748b; }
 
-        /* B1.2 Scale */
+        /* TUG OF WAR SCALE */
+        .scale-wrap { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 150px; width: 100%; position: relative;
+        }
         .scale-beam {
-            width: 300px; height: 10px; background: var(--text-main);
-            border-radius: 5px; position: relative; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 300px; height: 12px; background: #2d3748;
+            border-radius: 6px; position: relative; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2;
         }
-        .scale-pivot { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid var(--cognis-blue); margin-top: -2px; }
-        .weight { position: absolute; bottom: 10px; transition: all 0.5s; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.7rem; }
-        .weight-left { left: 10px; background: var(--trap-red); }
-        .weight-right { right: 10px; background: var(--cognis-gold); }
+        .scale-pivot { 
+            width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; 
+            border-bottom: 30px solid var(--cognis-blue); margin-top: -2px;
+        }
+        .weight { position: absolute; bottom: 12px; transition: all 0.5s; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 0.7rem; }
+
+        /* JOURNEY MAP */
+        .anatomy-display { padding: 60px 40px; }
+        .journey-line { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; position: relative; display: flex; margin: 40px 0; }
+        .leg { height: 100%; position: relative; transition: width 0.6s; }
+        .leg-1 { background: var(--cognis-blue); border-radius: 4px 0 0 4px; }
+        .leg-2 { background: var(--cognis-gold); border-radius: 0 4px 4px 0; }
+        .marker { position: absolute; width: 24px; height: 24px; border-radius: 50%; border: 4px solid white; top: 50%; transform: translate(-50%, -50%); box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 10; }
+        .marker-start { left: 0; background: var(--cognis-blue); }
+        .marker-mid { left: 100%; background: #fff; border-color: var(--cognis-blue); }
+        .marker-end { right: -24px; background: var(--cognis-gold); transform: translateY(-50%); }
+        .leg-label { position: absolute; top: -45px; left: 50%; transform: translateX(-50%); white-space: nowrap; text-align: center; }
+        .leg-label b { display: block; color: var(--cognis-blue); font-size: 0.9rem; }
+        .leg-label span { font-size: 0.75rem; color: #718096; font-weight: 600; }
+        .summary-banner { background: var(--cognis-light); padding: 15px 30px; border-radius: 30px; font-weight: 800; color: var(--cognis-blue); font-size: 1.1rem; border: 1px solid var(--border-light); text-align: center; }
+
+        /* LAYOUT UTILITY */
+        .section-tag { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; background: #f1f5f9; color: var(--cognis-blue); }
+        .phase { border: 1px solid var(--border-light); margin-bottom: 40px !important; position: relative; }
+        .parent-script { font-style: italic; color: #4a5568; border-left: 3px solid #cbd5e0; padding-left: 15px; margin: 15px 0; }
+        
+        /* FOUNDATIONAL COMPLETION BUTTONS */
+        .foundational-only .btn-complete { margin-top: 20px; width: 100%; }
     </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/module-core.js"></script>
 </head>
-<body>
+<body class="user-plan-foundational"> <div class="module-card">
+    <div class="header"><h1>Module 11: Average Speed</h1></div>
 
-<div class="module-card">
-    <div class="header">
-        <h1>B1.1: The Big Squash (Year 3)</h1>
-    </div>
-
-    <div class="phase">
-        <h2>Phase 1: The X-Ray</h2>
-        <p>Average speed is just a <b>"Fair Share."</b> We take all the miles and deal them out into "Hour Boxes" like playing cards.</p>
-    </div>
-
-    <div class="phase">
-        <h2>Phase 2: The Anatomy</h2>
-        <div class="viz-container">
-            <div id="miles-pile" style="font-size: 2rem;">🚗💨</div>
-            <div style="font-weight: 800; color: var(--cognis-blue); margin-top: 10px;">THE MILE PILE</div>
-            <div class="hour-box-container" id="box-display">
-                </div>
-        </div>
-    </div>
-
-    <div class="phase">
-        <h2>Phase 3: The Engine</h2>
-        <div class="engine-container">
-            <div class="controls">
-                <div class="control-group">
-                    <label>Total Miles (The Pile)</label>
-                    <input type="range" min="10" max="60" step="10" value="30" id="b1-dist">
-                    <div class="val-out" id="b1-dist-val">30 miles</div>
-                </div>
-                <div class="control-group">
-                    <label>Total Hours (The Boxes)</label>
-                    <input type="range" min="1" max="5" step="1" value="3" id="b1-time">
-                    <div class="val-out" id="b1-time-val">3 hours</div>
-                </div>
+    <div id="foundation-bundle">
+        <section class="phase" id="sub-intro">
+            <span class="section-tag">Foundation Intro</span>
+            <h2>The Big Squash</h2>
+            <p>Average speed is a <b>"Fair Share"</b> game. Imagine a big pile of miles dealt into "Hour Boxes" until the pile is gone.</p>
+            
+            <div class="parent-script">
+                "Look at this pile of <b><span id="script-dist">40</span> miles</b>. We have <b><span id="script-time">2</span> hours</b>. What is the fair share for one box?"
             </div>
-            <div class="trace-log" id="b1-log">
-                → Sharing 30 miles into 3 boxes...
+
+            <div class="viz-container">
+                <div id="intro-pile-display" style="background: var(--cognis-blue); color: white; padding: 10px 25px; border-radius: 20px; font-weight: 800; margin-bottom: 15px;">TOTAL PILE: 40 MILES</div>
+                <div style="font-size: 2rem;">🚗💨</div>
+                <div class="hour-box-container" id="box-display-intro"></div>
             </div>
-        </div>
-    </div>
 
-    <div class="phase">
-        <div class="trap-box">
-            <h3>The "Box Rule"</h3>
-            <p>Tell your child: <b>"Average Speed is just the number inside ONE box."</b> It doesn't matter how many miles there are total; we only care about the share for one single hour.</p>
-        </div>
-        <button class="btn-complete">10-Minute Breakthrough Complete</button>
-    </div>
-</div>
-
-<div class="module-card">
-    <div class="header">
-        <h1>B1.2: The Tug-of-War (Year 4)</h1>
-    </div>
-
-    <div class="phase">
-        <h2>Phase 1: The X-Ray</h2>
-        <p>Average Speed isn't the middle; it has <b>Gravity</b>. Whichever speed lasted the longest "wins" and pulls the average toward it.</p>
-    </div>
-
-    <div class="phase">
-        <h2>Phase 2: The Anatomy</h2>
-        <div class="viz-container">
-            <div class="scale-beam" id="beam">
-                <div class="weight weight-left" id="w-slow">SLOW</div>
-                <div class="weight weight-right" id="w-fast">FAST</div>
-            </div>
-            <div class="scale-pivot"></div>
-            <p style="margin-top: 20px; font-weight: 800;" id="scale-status">The Slow side is heavier!</p>
-        </div>
-    </div>
-
-    <div class="phase">
-        <h2>Phase 3: The Engine</h2>
-        <div class="engine-container">
-            <div class="controls">
-                <div class="control-group">
-                    <label>Slow Time (Weight)</label>
-                    <input type="range" min="1" max="10" value="8" id="b2-slow">
+            <div class="engine-container">
+                <div class="controls">
+                    <div class="control-group">
+                        <label>The Mile Pile</label>
+                        <input type="range" min="10" max="100" step="10" value="40" id="intro-dist">
+                        <div class="val-out" id="intro-dist-val">40 miles</div>
+                    </div>
+                    <div class="control-group">
+                        <label>The Hour Boxes</label>
+                        <input type="range" min="1" max="5" step="1" value="2" id="intro-time">
+                        <div class="val-out" id="intro-time-val">2 hours</div>
+                    </div>
                 </div>
-                <div class="control-group">
-                    <label>Fast Time (Weight)</label>
-                    <input type="range" min="1" max="10" value="2" id="b2-fast">
+                <div class="trace-log" id="intro-log"></div>
+            </div>
+
+            <div class="trap-box">
+                <h3>The "Box Rule"</h3>
+                <p>Average Speed is just the number inside ONE box.</p>
+            </div>
+
+            <div class="foundational-only">
+                <button class="btn-complete" onclick="markComplete('11-intro')">Complete Intro Step</button>
+            </div>
+        </section>
+
+        <section class="phase" id="sub-progressing">
+            <span class="section-tag">Foundation Progressing</span>
+            <h2>The Tug-of-War</h2>
+            <p>Average speed has <b>Gravity</b>. The speed you spend the most time at "wins" the pull.</p>
+            
+            <div class="parent-script">
+                "We spent more <b>time</b> going slow. That makes 'Slow' heavier, pulling the average down."
+            </div>
+
+            <div class="viz-container">
+                <div class="scale-wrap">
+                    <div class="scale-beam" id="beam"><div class="weight" style="left:15px; background:var(--trap-red);" id="w-slow">SLOW</div><div class="weight" style="right:15px; background:var(--cognis-gold);" id="w-fast">FAST</div></div>
+                    <div class="scale-pivot"></div>
                 </div>
+                <p id="scale-status" style="margin-top:20px; font-weight:800; color:var(--cognis-blue);"></p>
             </div>
-            <div class="trace-log" id="b2-log">
-                → Slow Time is pulling 80% of the gravity.
+
+            <div class="engine-container">
+                <div class="controls">
+                    <div class="control-group"><label>Slow Time</label><input type="range" min="1" max="10" value="8" id="prog-slow"></div>
+                    <div class="control-group"><label>Fast Time</label><input type="range" min="1" max="10" value="2" id="prog-fast"></div>
+                </div>
+                <div class="trace-log" id="prog-log"></div>
             </div>
-        </div>
+
+            <div class="trap-box">
+                <h3>The "Tie-Breaker" Secret</h3>
+                <p>The average is only in the middle if the time is a perfect tie!</p>
+            </div>
+
+            <div class="foundational-only">
+                <button class="btn-complete" onclick="markComplete('11-progressing')">Complete Progressing Step</button>
+            </div>
+        </section>
     </div>
 
-    <div class="phase">
-        <div class="trap-box">
-            <h3>The "Tie-Breaker" Secret</h3>
-            <p>The only time the average is in the middle is if the weights are a <b>Perfect Tie</b>. Examiners almost never make it a tie. Look for the winner!</p>
-        </div>
-        <button class="btn-complete">Session Complete</button>
+    <div id="sub-supplemental" class="supplemental-only">
+        <section class="phase">
+            <h2>Phase 1: The X-Ray</h2>
+            <p>Average speed is your <b>Big Picture Journey</b>. Ignore middle speeds and zoom out...</p>
+        </section>
+
+        <section class="phase">
+            <h2>Phase 2: The Anatomy</h2>
+            <div class="anatomy-display">
+                <div class="journey-line">
+                    <div class="marker marker-start"></div>
+                    <div id="visual-leg-1" class="leg leg-1"><div class="leg-label"><b id="label-d1">30 km</b><span id="label-t1">1.00 hrs</span></div><div class="marker marker-mid"></div></div>
+                    <div id="visual-leg-2" class="leg leg-2"><div class="leg-label"><b id="label-d2">60 km</b><span id="label-t2">2.00 hrs</span></div><div class="marker marker-end"></div></div>
+                </div>
+                <div class="summary-banner" id="total-summary">TOTAL: 90.00 km in 3.00 hours</div>
+            </div>
+        </section>
+
+        <section class="phase">
+            <h2>Phase 3: The Engine</h2>
+            <div class="engine-container">
+                <div class="inputs">
+                    <div class="control-group"><label>Leg 1 Dist</label><input type="number" id="d1-in" value="30"></div>
+                    <div class="control-group"><label>Leg 1 Time</label><input type="number" id="t1-in" value="1"></div>
+                    <div class="control-group"><label>Leg 2 Dist</label><input type="number" id="d2-in" value="60"></div>
+                    <div class="control-group"><label>Leg 2 Time</label><input type="number" id="t2-in" value="2"></div>
+                </div>
+                <div class="trace-log" id="logic-trace"></div>
+            </div>
+        </section>
+
+        <section class="phase">
+            <div class="trap-box">
+                <h3>Phase 4: The Saboteur</h3>
+                <p>Never guess the middle! Dividing Grand Totals is the only way.</p>
+            </div>
+        </section>
+        
+        <button class="btn-complete" onclick="markComplete(11)">Complete Supplemental Module</button>
     </div>
 </div>
 
 <script>
-    // --- B1.1 LOGIC: THE BIG SQUASH ---
-    const b1Dist = document.getElementById('b1-dist');
-    const b1Time = document.getElementById('b1-time');
-    const boxDisplay = document.getElementById('box-display');
-    const b1Log = document.getElementById('b1-log');
+    async function applyLayout() {
+        let plan = 'foundational'; // FOR TESTING: Change this to 'supplemental' to test the other view
+        try { plan = await getUserPlan(); } catch(e) {}
 
-    function updateB1() {
-        const d = parseInt(b1Dist.value);
-        const t = parseInt(b1Time.value);
-        const share = d / t;
-        
-        document.getElementById('b1-dist-val').innerText = d + " miles";
-        document.getElementById('b1-time-val').innerText = t + " hours";
+        const body = document.body;
+        const foundationBundle = document.getElementById('foundation-bundle');
+        const suppSection = document.getElementById('sub-supplemental');
 
-        boxDisplay.innerHTML = '';
-        for(let i=0; i<t; i++) {
-            boxDisplay.innerHTML += `<div class="hour-box"><span>Hour ${i+1}</span>${share.toFixed(1)}</div>`;
+        if (plan === 'supplemental') {
+            body.classList.remove('user-plan-foundational');
+            body.classList.add('user-plan-supplemental');
+            const acc = document.createElement('details');
+            acc.className = 'refresher-box';
+            acc.innerHTML = `<summary>▼ Need a Refresh? (Year 3/4 Foundations)</summary>`;
+            acc.appendChild(foundationBundle);
+            suppSection.parentNode.insertBefore(acc, suppSection);
+        } else {
+            body.classList.add('user-plan-foundational');
+            body.classList.remove('user-plan-supplemental');
+            // Ensure supplemental content is physically removed or hidden
+            if(suppSection) suppSection.style.display = 'none';
         }
-
-        b1Log.innerHTML = `→ Total Road: ${d} miles<br>→ Total Boxes: ${t}<br>→ <b>Average Speed: ${share.toFixed(1)} mph</b>`;
     }
 
-    // --- B1.2 LOGIC: TUG OF WAR ---
-    const b2Slow = document.getElementById('b2-slow');
-    const b2Fast = document.getElementById('b2-fast');
-    const beam = document.getElementById('beam');
-    const wSlow = document.getElementById('w-slow');
-    const wFast = document.getElementById('w-fast');
-    const b2Log = document.getElementById('b2-log');
-    const scaleStatus = document.getElementById('scale-status');
-
-    function updateB2() {
-        const s = parseInt(b2Slow.value);
-        const f = parseInt(b2Fast.value);
-        
-        // Update Visuals
-        wSlow.style.width = (s * 15) + "px";
-        wSlow.style.height = (s * 15) + "px";
-        wFast.style.width = (f * 15) + "px";
-        wFast.style.height = (f * 15) + "px";
-
-        const tilt = (s - f) * 3; // Tilt degree
-        beam.style.transform = `rotate(${-tilt}deg)`;
-
-        const slowPull = Math.round((s / (s + f)) * 100);
-        scaleStatus.innerText = s > f ? "The Slow side is heavier!" : (f > s ? "The Fast side is heavier!" : "It's a perfect tie!");
-        
-        b2Log.innerHTML = `→ Slow Gravity: ${slowPull}%<br>→ Fast Gravity: ${100-slowPull}%<br>→ <b>Result: Average pulled to ${s > f ? 'Slow' : 'Fast'}</b>`;
+    // --- ENGINES ---
+    function updateIntro() {
+        const d = parseInt(document.getElementById('intro-dist').value);
+        const t = parseInt(document.getElementById('intro-time').value);
+        const share = (d / t).toFixed(1);
+        document.getElementById('intro-dist-val').innerText = d + " miles";
+        document.getElementById('intro-time-val').innerText = t + " hours";
+        document.getElementById('script-dist').innerText = d;
+        document.getElementById('script-time').innerText = t;
+        document.getElementById('intro-pile-display').innerText = `TOTAL PILE: ${d} MILES`;
+        const container = document.getElementById('box-display-intro');
+        container.innerHTML = '';
+        for(let i=0; i<t; i++) container.innerHTML += `<div class="hour-box"><span>Hour ${i+1}</span>${share}</div>`;
+        document.getElementById('intro-log').innerHTML = `→ Action: Squashing ${d} miles into ${t} boxes.<br>→ Result: Average Speed is ${share} mph.`;
     }
 
-    // Initialize
-    b1Dist.oninput = updateB1;
-    b1Time.oninput = updateB1;
-    b2Slow.oninput = updateB2;
-    b2Fast.oninput = updateB2;
-    updateB1();
-    updateB2();
+    function updateProg() {
+        const s = parseInt(document.getElementById('prog-slow').value);
+        const f = parseInt(document.getElementById('prog-fast').value);
+        document.getElementById('w-slow').style.width = (s * 15) + "px";
+        document.getElementById('w-slow').style.height = (s * 15) + "px";
+        document.getElementById('w-fast').style.width = (f * 15) + "px";
+        document.getElementById('w-fast').style.height = (f * 15) + "px";
+        document.getElementById('beam').style.transform = `rotate(${(f - s) * 2}deg)`;
+        
+        let logWinner = s > f ? "Slow" : (f > s ? "Fast" : "Neither (Tie)");
+        document.getElementById('scale-status').innerText = s === f ? "It's a perfect tie!" : (s > f ? "Slow side is winning!" : "Fast side is winning!");
+        document.getElementById('prog-log').innerHTML = `→ Gravity Check: Slow ${s} vs Fast ${f}.<br>→ The Winner: Pulled toward ${logWinner}.`;
+    }
+
+    function updateSupp() {
+        const [d1, t1, d2, t2] = ['d1-in', 't1-in', 'd2-in', 't2-in'].map(id => parseFloat(document.getElementById(id).value) || 0);
+        const totalD = d1 + d2; const totalT = t1 + t2;
+        const avg = totalT > 0 ? (totalD / totalT).toFixed(2) : 0;
+        document.getElementById('visual-leg-1').style.width = totalD > 0 ? (d1 / totalD) * 100 + "%" : "50%";
+        document.getElementById('visual-leg-2').style.width = totalD > 0 ? (d2 / totalD) * 100 + "%" : "50%";
+        document.getElementById('total-summary').innerText = `TOTAL: ${totalD.toFixed(2)} km in ${totalT.toFixed(2)} hours`;
+        document.getElementById('logic-trace').innerHTML = `→ Distance: ${totalD} km<br>→ Time: ${totalT} hrs<br>→ <b>AVG SPEED: ${avg} km/h</b>`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        applyLayout();
+        document.getElementById('intro-dist').oninput = updateIntro;
+        document.getElementById('intro-time').oninput = updateIntro;
+        document.getElementById('prog-slow').oninput = updateProg;
+        document.getElementById('prog-fast').oninput = updateProg;
+        ['d1-in', 't1-in', 'd2-in', 't2-in'].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.oninput = updateSupp;
+        });
+        updateIntro(); updateProg(); if(document.getElementById('d1-in')) updateSupp();
+    });
 </script>
-
 </body>
 </html>

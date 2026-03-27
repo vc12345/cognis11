@@ -14,7 +14,7 @@
         body.user-plan-foundational .foundational-only { display: block; }
         body.user-plan-supplemental .supplemental-only { display: block; }
 
-        /* REFRESHER ACCORDION (For Supplemental Users) */
+        /* REFRESHER ACCORDION */
         details.refresher-box {
             background: #fff;
             border: 2px solid var(--cognis-blue);
@@ -38,8 +38,8 @@
             background: #f8fafc; border: 2px dashed #cbd5e0; 
             border-radius: 12px; padding: 20px; margin: 25px 0;
             display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; 
-            min-height: 300px; 
+            align-items: center; justify-content: center; /* Vertical and horizontal centering */
+            min-height: 320px; 
         }
 
         .hour-box-container { display: flex; gap: 12px; margin-top: 25px; flex-wrap: wrap; justify-content: center; }
@@ -49,12 +49,11 @@
             align-items: center; justify-content: center; font-weight: 800;
             background: #fff; box-shadow: 0 4px 0 var(--cognis-blue);
         }
-        .hour-box span { font-size: 0.6rem; text-transform: uppercase; color: #64748b; margin-bottom: 4px; }
 
-        /* TUG OF WAR SCALE - CENTERED VERTICALLY AND HORIZONTALLY */
+        /* TUG OF WAR SCALE - CENTERED */
         .scale-wrap { 
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 160px; 
+            height: 180px; 
             width: 100%;
             position: relative;
         }
@@ -85,7 +84,7 @@
         .leg-label span { font-size: 0.75rem; color: #718096; font-weight: 600; }
         .summary-banner { background: var(--cognis-light); padding: 15px 30px; border-radius: 30px; font-weight: 800; color: var(--cognis-blue); font-size: 1.1rem; border: 1px solid var(--border-light); text-align: center; }
 
-        /* UTILITY */
+        /* LAYOUT UTILITY */
         .section-tag { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; background: #f1f5f9; color: var(--cognis-blue); }
         .phase { border: 1px solid var(--border-light); margin-bottom: 30px !important; }
         .parent-script { font-style: italic; color: #4a5568; border-left: 3px solid #cbd5e0; padding-left: 15px; margin: 15px 0; }
@@ -97,7 +96,7 @@
     <script src="../js/supabase-config.js"></script>
     <script src="../js/module-core.js"></script>
 </head>
-<body class="user-plan-foundational">
+<body class="user-plan-checking">
 
 <div class="module-card">
     <div class="header"><h1>Module 11: Average Speed</h1></div>
@@ -208,11 +207,11 @@
                 <div class="journey-line">
                     <div class="marker marker-start"></div>
                     <div id="visual-leg-1" class="leg leg-1">
-                        <div class="leg-label"><b id="label-d1">30 km</b><span id="label-t1">1.00 hrs</span></div>
+                        <div class="leg-label"><b id="label-d1">30.00 km</b><span id="label-t1">1.00 hrs</span></div>
                         <div class="marker marker-mid"></div>
                     </div>
                     <div id="visual-leg-2" class="leg leg-2">
-                        <div class="leg-label"><b id="label-d2">60 km</b><span id="label-t2">2.00 hrs</span></div>
+                        <div class="leg-label"><b id="label-d2">60.00 km</b><span id="label-t2">2.00 hrs</span></div>
                         <div class="marker marker-end"></div>
                     </div>
                 </div>
@@ -246,12 +245,27 @@
 </div>
 
 <script>
+    // --- ROBUST PLAN CHECK ---
     async function applyLayout() {
-        let plan = 'foundational'; 
-        try { plan = await getUserPlan(); } catch(e) {}
+        if (!window.supabaseClient) {
+            setTimeout(applyLayout, 100);
+            return;
+        }
+
+        const { data: { user } } = await window.supabaseClient.auth.getUser();
+        if (!user) return;
+
+        const { data: profile } = await window.supabaseClient
+            .from('profiles')
+            .select('subscription_plan')
+            .eq('id', user.id)
+            .maybeSingle();
+
+        const plan = profile ? profile.subscription_plan : 'foundational';
         const body = document.body;
         const foundationBundle = document.getElementById('foundation-bundle');
         const suppSection = document.getElementById('sub-supplemental');
+
         if (plan === 'supplemental') {
             body.className = 'user-plan-supplemental';
             const acc = document.createElement('details');
@@ -274,6 +288,7 @@
         document.getElementById('script-dist').innerText = d;
         document.getElementById('script-time').innerText = t;
         document.getElementById('intro-pile-display').innerText = `TOTAL PILE: ${d} MILES`;
+        
         const container = document.getElementById('box-display-intro');
         container.innerHTML = '';
         for(let i=0; i<t; i++) container.innerHTML += `<div class="hour-box"><span>Hour ${i+1}</span>${share}</div>`;
@@ -289,6 +304,7 @@
         document.getElementById('w-fast').style.width = (f * 15) + "px";
         document.getElementById('w-fast').style.height = (f * 15) + "px";
         document.getElementById('beam').style.transform = `rotate(${(f - s) * 2}deg)`;
+        
         let winnerText = s === f ? "It's a perfect tie!" : (s > f ? "Slow side is winning!" : "Fast side is winning!");
         let logWinner = s > f ? "Slow" : (f > s ? "Fast" : "Neither (it's a Tie)");
         document.getElementById('scale-status').innerText = winnerText;
@@ -296,17 +312,25 @@
     }
 
     function updateSupp() {
-        const [d1, t1, d2, t2] = ['d1-in', 't1-in', 'd2-in', 't2-in'].map(id => parseFloat(document.getElementById(id).value) || 0);
-        const totalD = d1 + d2; const totalT = t1 + t2;
-        const avg = totalT > 0 ? (totalD / totalT).toFixed(2) : 0;
-        document.getElementById('visual-leg-1').style.width = totalD > 0 ? (d1 / totalD) * 100 + "%" : "50%";
-        document.getElementById('visual-leg-2').style.width = totalD > 0 ? (d2 / totalD) * 100 + "%" : "50%";
-        document.getElementById('label-d1').innerText = d1.toFixed(2) + " km";
-        document.getElementById('label-t1').innerText = t1.toFixed(2) + " hrs";
-        document.getElementById('label-d2').innerText = d2.toFixed(2) + " km";
-        document.getElementById('label-t2').innerText = t2.toFixed(2) + " hrs";
-        document.getElementById('total-summary').innerText = `TOTAL: ${totalD.toFixed(2)} km in ${totalT.toFixed(2)} hours`;
-        document.getElementById('logic-trace').innerHTML = `→ 1. Grand Distance: ${d1} + ${d2} = <b>${totalD.toFixed(2)} km</b><br>→ 2. Grand Time: ${t1} + ${t2} = <b>${totalT.toFixed(2)} hrs</b><br>→ <b>3. AVERAGE SPEED: ${avg} km/h</b>`;
+        const inputs = ['d1-in', 't1-in', 'd2-in', 't2-in'].map(id => document.getElementById(id));
+        const [d1, t1, d2, t2] = inputs.map(i => parseFloat(i.value) || 0);
+        const totalDist = d1 + d2; const totalTime = t1 + t2;
+        const avgSpeed = totalTime > 0 ? (totalDist / totalTime) : 0;
+        const p1 = totalDist > 0 ? (d1 / totalDist) * 100 : 50;
+        document.getElementById('visual-leg-1').style.width = `${p1}%`;
+        document.getElementById('visual-leg-2').style.width = `${100-p1}%`;
+        document.getElementById('label-d1').innerText = `${d1.toFixed(2)} km`;
+        document.getElementById('label-t1').innerText = `${t1.toFixed(2)} hrs`;
+        document.getElementById('label-d2').innerText = `${d2.toFixed(2)} km`;
+        document.getElementById('label-t2').innerText = `${t2.toFixed(2)} hrs`;
+        document.getElementById('total-summary').innerText = `TOTAL: ${totalDist.toFixed(2)} km in ${totalTime.toFixed(2)} hours`;
+        document.getElementById('logic-trace').innerHTML = `
+            <div class="trace-step">→ 1. Grand Distance: ${d1} + ${d2} = <b>${totalDist.toFixed(2)} km</b></div>
+            <div class="trace-step">→ 2. Grand Time: ${t1} + ${t2} = <b>${totalTime.toFixed(2)} hrs</b></div>
+            <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #e2e8f0; margin-top:10px; padding-top:10px;">
+                → AVERAGE SPEED: ${avgSpeed.toFixed(2)} km/h
+            </div>
+        `;
     }
 
     document.addEventListener('DOMContentLoaded', () => {

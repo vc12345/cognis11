@@ -38,7 +38,7 @@
         .gate-arrow { color: var(--cognis-gold); font-size: 1.5rem; font-weight: bold; }
 
         /* Engine Terminal Customization */
-        .simulation-area { background: #1a202c; padding: 40px; border-radius: 12px; margin-bottom: 20px; }
+        .simulation-area { background: #1a202c; padding: 40px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #2d3748; }
         
         .logic-well {
             background: rgba(255,255,255,0.03);
@@ -96,55 +96,58 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Success in Reading Comprehension requires <b>Empirical Verification</b>. You must distinguish between <b>Facts</b> (statements that can be proven with data, clocks, or rulers) and <b>Opinions</b> (subjective value judgments). While facts are absolute, opinions are often "dressed up" as facts using authoritative language. To find the truth, ignore the tone and look for the measurement.</p>
+        <p>Think of this as <b>"The Truth Filter."</b> In Reading Comprehension, your child must learn to separate <b>Facts</b> (things that can be proven with a clock, a ruler, or a camera) from <b>Opinions</b> (personal feelings or value judgments). The secret weapon is ignoring the "fancy language." Authors often dress up their opinions in very authoritative words to make them sound like facts. To find the truth, your child must ask: <i>"Could a machine prove this?"</i></p>
         
+        
+
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "The sun is a star." (Fact) vs. "The sun is beautiful." (Opinion). Identify the measurable statement.
+                <b>The Direct Proof</b>
+                "The sun is a star." (Fact) vs. "The sun is beautiful." (Opinion). Can we measure beauty?
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "The 42-page report was far too long." Contrast the numerical fact with the subjective judgment.
+                <b>The Number Trap</b>
+                "The report was 42 pages long and was far too tedious." (Contrast the factual count with the subjective feeling).
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "The world-renowned expert argued that the policy was a failure." Is 'failure' a fact because an expert said it?
+                <b>The Authority Filter</b>
+                "The world's greatest scientist argued that the policy was a failure." (Is 'failure' a fact just because an expert said it?)
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Verification Filter</b>. Before accepting a statement, pass it through the "Machine Test." If a computer or a camera cannot confirm the word, it is an Opinion.</p>
+        <p>This is the <b>Measurement Machine</b>. Before your child marks an answer, they should put the statement through this filter. If the output can be recorded as a piece of data, it’s a fact. If the output depends on who is looking at it, it’s an opinion. Help your child see that "stunning" and "difficult" are words that change depending on the person.</p>
         
         <div class="anatomy-display">
             <div class="filter-viz">
-                <div class="logic-gate">Input Statement</div>
+                <div class="logic-gate">A Sentence</div>
                 <div class="gate-arrow">&rarr;</div>
-                <div class="logic-gate" style="border-color:var(--cognis-gold); color:var(--cognis-gold);">Provability Filter</div>
+                <div class="logic-gate" style="border-color:var(--cognis-gold); color:var(--cognis-gold);">Machine Audit</div>
                 <div class="gate-arrow">&rarr;</div>
-                <div class="logic-gate" style="border-color:var(--pass-green); color:var(--pass-green);">Verified Fact</div>
+                <div class="logic-gate" style="border-color:var(--pass-green); color:var(--pass-green);">Provable Data</div>
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Load a diagnostic passage below. Click on the underlined words to "Audit" them. Watch the <b>Trace Log</b> to see why the engine classifies them as facts (measurable) or opinions (subjective). This builds the **Critical Eye** needed for advanced inference questions.</p>
         <div class="simulation-area">
             <div class="logic-well" id="logic-well">
                 </div>
 
             <div class="engine-container">
                 <div class="inputs">
-                    <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Load Diagnostic Passage</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Select Topic</label>
                     <div class="preset-grid">
                         <button class="btn-load active" onclick="loadPassage(0, this)">Hotel Description</button>
-                        <button class="btn-load" onclick="loadPassage(1, this)">Scientific Review</button>
-                        <button class="btn-load" onclick="loadPassage(2, this)">Historical Event</button>
+                        <button class="btn-load" onclick="loadPassage(1, this)">Scientific Experiment</button>
+                        <button class="btn-load" onclick="loadPassage(2, this)">Historical Record</button>
                     </div>
                 </div>
-                <div class="trace-log" id="trace-55">Click underlined words to analyze their provability...</div>
+                <div class="trace-log" id="trace-55">Click words to verify their status...</div>
             </div>
         </div>
     </section>
@@ -152,9 +155,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Expert Fallacy" Trap:</strong> Believing a statement is a fact just because an expert or a famous person said it. (e.g., "The Professor said the movie was terrible.") Because the Professor is a fact, you assume his judgment is a fact too.</p>
+            <p><strong>The "Expert Fallacy" Trap:</strong> This is the sneakiest trap in the 11+. Children often believe a statement is a fact just because a "Professor" or "Doctor" said it. For example: <i>"The Doctor said the medicine tasted horrible."</i> Because the Doctor is real, they assume "horrible" is a fact.</p>
             
-            <p><strong>The Fix:</strong> Use the <b>Measurement Audit</b>. If a word describes a <i>feeling</i> or uses a <i>value-adjective</i> (good, bad, difficult, boring), it is an opinion—even if it's inside a quote. If you cannot prove it with a machine or a record, it remains a personal belief.</p>
+            <p><strong>The Insider Fix: The "Value Word" Audit.</strong> Tell your child: <i>"Adjectives are often opinions in disguise."</i> If a word describes a <i>feeling</i> (good, bad, scary, boring) or a <i>value</i> (best, worst, important), it is an opinion—no matter who says it. If you can't prove it with a tool, it remains a belief. <b>Factual people can still have opinions.</b></p>
         </div>
     </section>
 </div>
@@ -169,7 +172,7 @@
                 { text: "5-star hotel", type: "f" }, { text: "has", type: "x" }, 
                 { text: "exactly", type: "x" }, { text: "42 rooms", type: "f" }
             ],
-            context: "Commercial Property Scan"
+            context: "Property Inspection"
         },
         {
             tokens: [
@@ -178,7 +181,7 @@
                 { text: "three", type: "f" }, { text: "difficult", type: "o" }, 
                 { text: "tests", type: "f" }
             ],
-            context: "Laboratory Review"
+            context: "Lab Report"
         },
         {
             tokens: [
@@ -187,7 +190,7 @@
                 { text: "a", type: "x" }, { text: "disastrous", type: "o" }, 
                 { text: "mistake", type: "o" }
             ],
-            context: "Historical Analysis"
+            context: "History Archive"
         }
     ];
 
@@ -221,22 +224,22 @@
 
     function updateTrace(val, type) {
         const log = document.getElementById('trace-55');
-        let html = `<div class="trace-step">→ 1. Active Context: <b>${currentPassage.context}</b></div>`;
+        let html = `<div class="trace-step">→ 1. Scanning: <b>${currentPassage.context}</b></div>`;
         
         if(!val) {
-            html += `<div class="trace-step">→ 2. Status: Awaiting Analysis</div>`;
+            html += `<div class="trace-step">→ 2. Status: Ready for verification.</div>`;
             log.innerHTML = html;
             return;
         }
 
-        const typeLabel = type === 'f' ? 'FACT (Measurable)' : 'OPINION (Subjective)';
-        const reason = type === 'f' ? 'Can be verified by records/counting.' : 'Based on personal value judgment.';
+        const typeLabel = type === 'f' ? 'FACT (Provable)' : 'OPINION (Personal)';
+        const reason = type === 'f' ? 'This can be counted or recorded objectively.' : 'This depends on a person’s own judgment.';
 
         html += `
-            <div class="trace-step">→ 2. Analyzed: "<b>${val}</b>"</div>
+            <div class="trace-step">→ 2. Auditing: "<b>${val}</b>"</div>
             <div class="trace-step">→ 3. Category: ${typeLabel}</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → RESULT: ${reason}
+                → AUDIT RESULT: ${reason}
             </div>
         `;
         log.innerHTML = html;

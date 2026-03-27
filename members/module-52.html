@@ -50,7 +50,7 @@
         }
 
         /* Engine Terminal Customization */
-        .simulation-area { background: #1a202c; padding: 40px; border-radius: 12px; margin-bottom: 20px; }
+        .simulation-area { background: #1a202c; padding: 40px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #2d3748; }
         
         .passage-well {
             background: rgba(255,255,255,0.03);
@@ -68,6 +68,7 @@
             padding: 0 4px;
             border-bottom: 2px solid transparent;
             transition: 0.2s;
+            font-weight: 700;
         }
         .fact-node:hover { background: rgba(197, 160, 89, 0.2); border-color: var(--cognis-gold); color: white; }
         .fact-node.hit { background: var(--pass-green); color: white; border-color: transparent; }
@@ -100,46 +101,47 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Explicit Retrieval is a test of <b>Processing Speed</b>. Unlike inference, the answer is already sitting on the page—you just have to locate it. Success depends on the "Hook and Type" system: 1. Identify the <b>Noun</b> in the question (The Hook). 2. Identify the <b>Question Word</b> (The Type: Who, When, Where). Then, scan the text for a match. Stop reading; start retrieving.</p>
+        <p>Think of Explicit Retrieval as <b>"Data Mining."</b> In the Reading Comprehension paper, some answers aren't hidden behind clues—they are literally printed on the page. The secret weapon is the <b>"Hook and Type"</b> system. Your child must learn to ignore the story for a moment and look for a specific <b>Noun</b> (the Hook) and a <b>Question Word</b> (the Type, like "Who" or "When"). Success is about scanning speed, not deep thought.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
+                <b>The Color Catcher</b>
                 "The cat wore a <i>blue</i> collar."<br>
-                <b>Q:</b> What color was the collar?
+                <b>Q:</b> What color was the collar? (Target: Adjective)
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
+                <b>The Midnight Runner</b>
                 "Professor Snape left at <i>midnight</i>."<br>
-                <b>Q:</b> When did the Professor leave?
+                <b>Q:</b> When did the Professor leave? (Target: Time/Date)
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
+                <b>The Location Link</b>
                 "The 1892 treaty was signed in <i>Berlin</i>."<br>
-                <b>Q:</b> Where was the treaty finalized?
+                <b>Q:</b> Where was the treaty finalized? (Target: Place Name)
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Fact HUD</b>. The brain must convert a question into a search query. Notice how identifying the "Type" of information (Who, When, Where) restricts the scan to specific word categories.</p>
+        <p>This is the <b>Fact HUD</b>. Before your child looks at the text, they must "program" their brain with a search query. Notice how knowing the "Type" (When) tells the eyes to ignore all the words and search only for numbers or dates. By narrowing the field of vision, they can find the answer in a fraction of the time it takes to re-read the paragraph.</p>
         
         <div class="anatomy-display">
             <div class="hud-container">
                 <div class="scan-line"></div>
-                <div>QUESTION: "When was the base built?"</div>
+                <div>QUERY: "When was the base built?"</div>
                 <div style="margin: 15px 0;">
-                    <span class="hook-box" style="border-color:#3b82f6;">TYPE: WHEN (Date)</span>
-                    <span class="hook-box" style="border-color:#eab308;">HOOK: BASE</span>
+                    <span class="hook-box" style="border-color:#3b82f6;">TYPE: WHEN (Look for numbers)</span>
+                    <span class="hook-box" style="border-color:#eab308;">HOOK: BASE (Target word)</span>
                 </div>
-                <div style="color:var(--pass-green); font-weight:bold;">SCAN STATUS: TARGETING NUMBERS / CAPITALIZED NOUNS</div>
+                <div style="color:var(--pass-green); font-weight:bold; font-size: 0.8rem;">SCAN STATUS: FILTERING FOR TEMPORAL DATA</div>
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Choose a retrieval type below to set the "Filter." Then, click the correct word in the passage to retrieve it. Help your child notice that if they are looking for "Who," their eyes should naturally jump to the capitalized names of people.</p>
         <div class="simulation-area">
             <div class="passage-well" id="passage">
                 In <span class="fact-node" data-type="when">1924</span>, the <span class="fact-node" data-type="who">Explorer Finch</span> discovered the <span class="fact-node" data-type="what">Emerald Idol</span> inside a <span class="fact-node" data-type="where">hidden cave</span>. He used <span class="fact-node" data-type="how">thick rope</span> to reach the floor.
@@ -147,13 +149,13 @@
 
             <div class="engine-container">
                 <div class="inputs">
-                    <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Select Retrieval Scan</label>
-                    <button class="btn-scan active" onclick="setScan('when', '1924', this)">WHEN <span>(Date)</span></button>
-                    <button class="btn-scan" onclick="setScan('who', 'Explorer Finch', this)">WHO <span>(Person)</span></button>
-                    <button class="btn-scan" onclick="setScan('where', 'hidden cave', this)">WHERE <span>(Location)</span></button>
+                    <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">Program Retrieval Scan</label>
+                    <button class="btn-scan active" onclick="setScan('when', '1924', this)">WHEN <span>(Year)</span></button>
+                    <button class="btn-scan" onclick="setScan('who', 'Explorer Finch', this)">WHO <span>(Name)</span></button>
+                    <button class="btn-scan" onclick="setScan('where', 'hidden cave', this)">WHERE <span>(Place)</span></button>
                     <button class="btn-scan" onclick="setScan('what', 'Emerald Idol', this)">WHAT <span>(Object)</span></button>
                 </div>
-                <div class="trace-log" id="trace-52">Awaiting scan parameters...</div>
+                <div class="trace-log" id="trace-52">Awaiting coordinates...</div>
             </div>
         </div>
     </section>
@@ -161,9 +163,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Enjoyment" Trap:</strong> Reading the entire story for fun before looking at the questions. This wastes 2-3 minutes of clock time and clutters your working memory with irrelevant plot points.</p>
+            <p><strong>The "Enjoyment" Trap:</strong> This is the biggest time-waster in the exam. Most children read the entire story from start to finish because they find it interesting. This burns 2-3 minutes of clock time before they even know what the questions are.</p>
             
-            <p><strong>The Fix:</strong> Use <b>Sacrificial Scanning</b>. Read the question <u>first</u>. Identify the "Hook" (the unique noun) and the "Type" (Who/When/Where). Use your finger to scan the page in a fast 'Z' shape. Ignore every word that doesn't match your target type. Extract the fact and move to the next question immediately.</p>
+            <p><strong>The Insider Fix: The "Sacrificial Scan."</strong> Tell your child: <i>"Don't read the story, solve the mystery."</i> They should read the question <b>first</b>. Identify the "Hook" (the unique noun) and the "Type" (Who/When/Where). Use a finger to scan the page in a fast 'Z' shape, ignoring every word that doesn't match the target type. <b>Extract the data, then move on.</b></p>
         </div>
     </section>
 </div>
@@ -172,23 +174,20 @@
 
 <script>
     let activeType = 'when';
-    let activeGoal = '1924';
 
     function setScan(type, goal, btn) {
         activeType = type;
-        activeGoal = goal;
         document.querySelectorAll('.btn-scan').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         
-        // Reset passage visuals
         document.querySelectorAll('.fact-node').forEach(node => {
             node.classList.remove('hit', 'miss');
         });
 
         document.getElementById('trace-52').innerHTML = `
-            <div class="trace-step">→ 1. HUD: Scanning for <b>${type.toUpperCase()}</b></div>
-            <div class="trace-step">→ 2. Filter: ${type === 'when' ? 'Numerical' : type === 'who' ? 'Proper Noun' : 'Adjective/Noun'}</div>
-            <div class="trace-step">→ 3. Status: System Ready</div>
+            <div class="trace-step">→ 1. HUD: Tracking <b>${type.toUpperCase()}</b></div>
+            <div class="trace-step">→ 2. Filter: ${type === 'when' ? 'Digits' : type === 'who' ? 'Proper Nouns' : 'Descriptive Phrases'}</div>
+            <div class="trace-step">→ 3. Status: Awaiting Scan Match</div>
         `;
     }
 
@@ -208,20 +207,20 @@
     function updateTrace(success, val) {
         const trace = document.getElementById('trace-52');
         let html = `
-            <div class="trace-step">→ 1. HUD: Scanning for <b>${activeType.toUpperCase()}</b></div>
-            <div class="trace-step">→ 2. Detection: <b>"${val}"</b></div>
+            <div class="trace-step">→ 1. HUD: Locked on <b>${activeType.toUpperCase()}</b></div>
+            <div class="trace-step">→ 2. Detected: <b>"${val}"</b></div>
         `;
 
         if(success) {
             html += `
                 <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                    → RESULT: FACT RETRIEVED
+                    → RESULT: DATA RETRIEVED (100% MATCH)
                 </div>
             `;
         } else {
             html += `
                 <div class="trace-step" style="color:#f87171; font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                    → ERROR: TYPE MISMATCH
+                    → ERROR: DATA TYPE MISMATCH
                 </div>
             `;
         }

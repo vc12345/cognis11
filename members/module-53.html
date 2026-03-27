@@ -31,7 +31,7 @@
         .formula-operator { color: var(--cognis-gold); font-size: 1.5rem; font-weight: bold; }
 
         /* Engine Terminal Customization */
-        .simulation-area { background: #1a202c; padding: 40px; border-radius: 12px; margin-bottom: 20px; }
+        .simulation-area { background: #1a202c; padding: 40px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #2d3748; }
         
         .evidence-well {
             background: rgba(255,255,255,0.03);
@@ -82,13 +82,13 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Inference is "Detective Work." It is the process of using <b>Textual Evidence</b> to unlock a secret that is not written on the page. Unlike retrieval, where the answer is visible, inference requires you to build a bridge between what you see and what you know about the world. Use the Diagnostic Formula:</p>
+        <p>Think of inference as <b>"Reading the Shadows."</b> In the 11+, examiners won't always tell you how a character feels or what the weather is like. Instead, they give you clues. The secret weapon is realizing that an inference is a bridge. It requires your child to take a piece of <b>Evidence</b> from the text and glue it to their own <b>Real-World Logic</b>. If they can’t prove it using words from the page, it’s just a guess—not an inference.</p>
         
         <div style="text-align: center; margin: 25px 0;">
             <div class="formula-box">
-                <span class="formula-part">Evidence (Text)</span>
+                <span class="formula-part">Evidence (Page)</span>
                 <span class="formula-operator">+</span>
-                <span class="formula-part">Logic (Your Brain)</span>
+                <span class="formula-part">Logic (Brain)</span>
                 <span class="formula-operator">=</span>
                 <span class="formula-part" style="color:var(--cognis-gold)">Inference</span>
             </div>
@@ -96,38 +96,36 @@
 
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
+                <b>The Weather Detective</b>
                 "Leo grabbed his umbrella and yellow boots."<br>
-                <b>Q:</b> What is the weather?<br>
-                <b>A:</b> It is raining.
+                <b>Q:</b> What is the weather? (A: It is raining).
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "Shadows lengthened and stadium lights flickered on."<br>
-                <b>Q:</b> What time of day is it?<br>
-                <b>A:</b> It is dusk/evening.
+                <b>The Time Tracker</b>
+                "Shadows lengthened and the street lamps flickered on."<br>
+                <b>Q:</b> What time is it? (A: Evening/Dusk).
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
+                <b>The Emotion Expert</b>
                 "Arthur’s jagged scrawl was smeared by his trembling hand."<br>
-                <b>Q:</b> How is Arthur feeling?<br>
-                <b>A:</b> He is anxious or frightened.
+                <b>Q:</b> How does Arthur feel? (A: Terrified or Anxious).
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Inference Anchor</b>. An inference is only as strong as its evidence. Success relies on finding the <b>Double Anchor</b>—at least two unrelated clues that point toward the same secret conclusion.</p>
+        <p>This is the <b>Double Anchor</b>. A strong inference is never based on just one word. Look at the sentence below. We know the man is angry not just because his face is red, but because he <b>slammed</b> the phone. Tell your child: <i>"One clue is a guess; two clues is a lock."</i> They should always hunt for that second "Anchor" to be 100% sure of their answer.</p>
         
         <div class="anatomy-display" style="background:#1a202c; color:white; padding:50px;">
              <div style="font-size:1.4rem; font-style:italic;">"The <span style="color:var(--cognis-gold); font-weight:bold; border-bottom:2px solid;">red-faced</span> man <span style="color:var(--cognis-gold); font-weight:bold; border-bottom:2px solid;">slammed</span> the phone down."</div>
-             <div style="margin-top:30px; font-size:0.8rem; color:#94a3b8; text-transform:uppercase; letter-spacing:2px;">Conclusion: The man is angry.</div>
+             <div style="margin-top:30px; font-size:0.8rem; color:#94a3b8; text-transform:uppercase; letter-spacing:2px;">Conclusion: The man is furious.</div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the <b>Evidence Well</b> below. Click the underlined phrases to "collect" them as clues. Once you have enough evidence, select an inference to test the logic. Help your child notice that if they only pick one clue, the engine won't validate the conclusion.</p>
         <div class="simulation-area">
             <div class="evidence-well" id="passage">
                 "Sarah's <span class="clue-node" onclick="toggleClue(this)">stomach somersaulted</span> as she stood behind the <span class="clue-node" onclick="toggleClue(this)">heavy velvet curtain</span>. She gripped her <span class="clue-node" onclick="toggleClue(this)">violin bow</span> so tightly her knuckles turned white."
@@ -135,13 +133,13 @@
 
             <div class="engine-container">
                 <div class="inputs">
-                    <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">Test Inference Logic</label>
-                    <button class="btn-inference" onclick="testInference('holiday', this)">Going on holiday</button>
-                    <button class="btn-inference" onclick="testInference('concert', this)">About to perform a solo</button>
-                    <button class="btn-inference" onclick="testInference('ill', this)">Has a stomach bug</button>
-                    <button class="btn-inference" onclick="testInference('nervous', this)">Feeling very anxious</button>
+                    <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">Test the Conclusion</label>
+                    <button class="btn-inference" onclick="testInference('holiday', this)">She is going on holiday</button>
+                    <button class="btn-inference" onclick="testInference('concert', this)">She is about to perform a solo</button>
+                    <button class="btn-inference" onclick="testInference('ill', this)">She has a stomach bug</button>
+                    <button class="btn-inference" onclick="testInference('nervous', this)">She is feeling very anxious</button>
                 </div>
-                <div class="trace-log" id="trace-53">Awaiting clue selection (Double Anchor required)...</div>
+                <div class="trace-log" id="trace-53">Click clues to find the Double Anchor...</div>
             </div>
         </div>
     </section>
@@ -149,9 +147,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Movie Script" Trap:</strong> Treating the text like a movie and adding details that aren't there. For example, if a character is "carrying a bag," assuming they are "going to the airport" because that's what happens in films. This is a <b>Projection</b>, not an Inference.</p>
+            <p><strong>The "Movie Script" Trap:</strong> Most children treat the text like a movie and add details that simply aren't there. For example, if a character is "carrying a bag," they assume the character is "going to the airport" because that's what happens in films. This is a <b>Projection</b>, not an Inference. It’s a guess, and it will lose them points.</p>
             
-            <p><strong>The Fix:</strong> Use <b>The Double Anchor</b>. To prove an inference is correct, you must find two separate clues that support it. If Sarah has a "somersaulting stomach" (1) and a "violin bow" (2) behind a "curtain" (3), the only logic that fits all three is <b>performance nerves</b>. If your guess only matches one clue, it is a decoy.</p>
+            <p><strong>The Insider Fix: The "Prove It" Test.</strong> Tell your child: <i>"Be a lawyer."</i> For every answer they choose, they must be able to point to two separate words in the text that support it. If they can only find one (or zero!), their answer is a guess. <b>No evidence = No points.</b></p>
         </div>
     </section>
 </div>
@@ -181,18 +179,18 @@
 
     function updateTrace(testType) {
         const log = document.getElementById('trace-53');
-        let html = `<div class="trace-step">→ 1. Evidence Count: <b>${activeClues.length}</b></div>`;
+        let html = `<div class="trace-step">→ 1. Clues Found: <b>${activeClues.length}</b></div>`;
         
         if (activeClues.length < 2) {
-            html += `<div class="trace-step" style="color:#f87171;">→ 2. Status: Insufficient Evidence</div>`;
+            html += `<div class="trace-step" style="color:#f87171;">→ 2. Status: Weak Evidence. Need more anchors.</div>`;
             log.innerHTML = html;
             return;
         }
 
-        html += `<div class="trace-step">→ 2. Logic Anchor: <b>Double Anchor Met</b></div>`;
+        html += `<div class="trace-step">→ 2. Evidence: <b>Double Anchor Achieved</b></div>`;
         
         if (!testType) {
-            html += `<div class="trace-step">→ 3. Action: Select Inference to test</div>`;
+            html += `<div class="trace-step">→ 3. Action: Select a conclusion to test.</div>`;
             log.innerHTML = html;
             return;
         }
@@ -203,10 +201,10 @@
         if (testType === 'concert' || testType === 'nervous') {
             result = "INFERENCE VALIDATED";
         } else if (testType === 'holiday') {
-            result = "INVALID: Logic Mismatch";
+            result = "INVALID: No textual support";
             color = "#f87171";
         } else {
-            result = "INVALID: Partial Match Only";
+            result = "INVALID: Clues contradict this";
             color = "#f87171";
         }
 

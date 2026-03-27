@@ -15,8 +15,8 @@
             border-radius: 12px; 
             margin: 20px 0; 
             text-align: center;
-            border: none;
-            min-height: 450px; /* Increased height to prevent clipping */
+            border: 2px solid #2d3748;
+            min-height: 450px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -29,7 +29,6 @@
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
         }
         
-        /* Cube Face Styling */
         .cube-top { fill: var(--cognis-gold); stroke: #fff; stroke-width: 1; }
         .cube-left { fill: #b58d4a; stroke: #fff; stroke-width: 1; }
         .cube-right { fill: #8e6c38; stroke: #fff; stroke-width: 1; }
@@ -54,7 +53,9 @@
             margin-top: 15px; cursor: pointer; font-size: 0.65rem; 
             padding: 10px; border-radius: 6px; width: 100%;
             text-transform: uppercase; font-weight: 800; letter-spacing: 1px;
+            transition: 0.2s;
         }
+        .btn-secondary:hover { color: white; border-color: var(--cognis-gold); }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -71,27 +72,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Block counting is a test of <b>Volumetric Inference</b>. In a 2D isometric drawing, many blocks are partially or completely hidden from view. To calculate the total volume, you must apply the "Support Logic": if a block is sitting at height $Z$, there must be exactly $Z-1$ blocks stacked beneath it to act as a foundation. Counting only visible faces is the most common path to failure.</p>
+        <p>Think of this as <b>"Invisible Foundations."</b> In the 11+, you are shown a 3D stack of blocks and asked: <i>"How many blocks are here total?"</i> The secret weapon is realizing that <b>Gravity never sleeps</b>. If you see a block sitting on the 3rd floor, there must be two blocks hiding directly beneath it to hold it up. Success isn't about counting what you see—it's about deducing what <i>must</i> be there for the tower to stand.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "Count the blocks in a simple L-shaped stack. How many are in the base layer?"
+                <b>The Simple L-Stack</b>
+                "Count the blocks in a 2-level stack. Don't forget the one hiding in the corner!"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "Identify the 'Hidden Foundations' in a 3x3 grid where one corner is three blocks high."
+                <b>The 3x3 Grid</b>
+                "A corner column is 3 blocks high. How many 'ghost' blocks are supporting the top one?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Calculate the total volume of an irregular 'skyline' structure with several occluded columns."
+                <b>The Skyline Challenge</b>
+                "Calculate the total volume of an irregular building where some columns are completely out of sight."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Volumetric Scanner</b>. Observe the 3D stack. Use the X-Ray engine below to reveal the blocks that are physically required for this structure to stand, but are hidden from the eye.</p>
+        <p>This is the <b>Volumetric Scanner</b>. Below is a random stack of blocks. To the naked eye, it looks like a single surface. Click <b>"Toggle X-Ray Vision"</b> to reveal the red "Support Blocks." These are the blocks required by physics to exist, even though they are hidden behind their neighbors. Notice that the total count always includes these red foundations.</p>
         
         <div class="anatomy-display">
             <svg id="stack-svg" viewBox="0 0 400 400"></svg>
@@ -100,20 +101,22 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the generator to build new structures. Ask your child to guess the total count first, then use the <b>X-Ray</b> to check their work. Watch the <b>Trace Log</b> as it performs a "Column Audit"—counting the height of every stack from the roof down to the floor.</p>
         <div class="engine-container">
             <div class="inputs">
                 <button class="btn-action" onclick="toggleXRay()">Toggle X-Ray Vision</button>
-                <button class="btn-secondary" onclick="render()">Generate New Structure</button>
+                <button class="btn-secondary" onclick="render()">Build New Stack</button>
             </div>
-            <div class="trace-log" id="trace-51">Audit: Calculating vertical column heights...</div>
+            <div class="trace-log" id="trace-51">Scanning for hidden support...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Face-Value" Trap:</strong> Counting visible diamond faces instead of whole blocks. A single corner block on the top level can show 3 faces, tricking your brain into counting it three times.</p>
-            <p><strong>The Fix:</strong> Use <b>Column Tallying</b>. Pick one top-facing diamond. Identify its height (e.g., it is on the 3rd floor). That represents a column of 3 blocks. Note the number, move to the next top-facing diamond, and sum the heights. This ensures you count every foundation block exactly once.</p>
+            <p><strong>The "Face-Value" Trap:</strong> Most children count visible "diamond" faces. Because a single corner block on the top level shows 3 different faces (Top, Left, and Right), they often count that one block three times! This leads to a massive overcount.</p>
+            
+            <p><strong>The Insider Fix: The "Roof Tally" Rule.</strong> Tell your child: <i>"Only count the roofs."</i> They should pick one top-facing gold diamond and ask: <i>"What floor is this on?"</i> If it's on floor 4, that counts as 4 blocks. They should write "4" on that diamond, then move to the next gold roof. <b>Summing the floor numbers of the roofs is the only way to never double-count.</b></p>
         </div>
     </section>
 </div>
@@ -122,8 +125,6 @@
 
 <script>
     function drawCube(svg, x, y, z, isHidden) {
-        // Isometric Projection Math
-        // Shifted isoY origin and multiplier to move stack "upwards" and center it
         const isoX = 200 + (x - y) * 40;
         const isoY = 220 + (x + y) * 22 - z * 45;
         
@@ -146,25 +147,19 @@
         svg.innerHTML = '';
         let total = 0, hidden = 0;
         
-        // Grid constraints (3x3)
         const grid = [];
         for(let x=0; x<3; x++) {
             grid[x] = [];
             for(let y=0; y<3; y++) {
-                // Random height 1-4
                 grid[x][y] = Math.floor(Math.random() * 4) + 1;
             }
         }
 
-        // Back-to-front rendering loop for correct SVG layering (painter's algorithm)
-        // We iterate x then y to draw from the "back" of the isometric view
         for(let x=0; x<3; x++) {
             for(let y=0; y<3; y++) {
                 let h = grid[x][y];
                 total += h;
                 for(let z=0; z<h; z++) {
-                    // A block is hidden if there is a block in front of it OR above it
-                    // For the sake of this anatomy, we mark blocks in levels 0 to h-2 as "foundations"
                     let isUnder = (z < h - 1);
                     if(isUnder) hidden++;
                     drawCube(svg, x, y, z, isUnder);
@@ -174,10 +169,10 @@
 
         document.getElementById('trace-51').innerHTML = `
             <div class="trace-step">→ 1. Total Volume: <b>${total} Blocks</b></div>
-            <div class="trace-step">→ 2. Visible "Roof" Faces: <b>9</b></div>
-            <div class="trace-step">→ 3. Hidden Supports: <b style="color:#f87171">${hidden}</b></div>
+            <div class="trace-step">→ 2. Visible Roofs: <b>9 Gold Surfaces</b></div>
+            <div class="trace-step">→ 3. Red Foundation Blocks: <b style="color:#f87171">${hidden}</b></div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → AUDIT COMPLETE: SUM(Col Heights) = ${total}
+                → AUDIT: ${total} blocks confirmed (Roofs + Foundations).
             </div>
         `;
     }

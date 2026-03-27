@@ -39,7 +39,7 @@
         .logic-connector { color: #cbd5e0; font-weight: bold; font-size: 1.2rem; }
 
         /* Engine Terminal Customization */
-        .simulation-area { background: #1a202c; padding: 40px; border-radius: 12px; margin-bottom: 20px; }
+        .simulation-area { background: #1a202c; padding: 40px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #2d3748; }
         
         .output-well {
             background: rgba(255,255,255,0.03);
@@ -96,45 +96,45 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In reading comprehension, you must distinguish between <b>Voice</b> and <b>Goal</b>. <b>Tone</b> is the emotional temperature of the text (how the author feels), while <b>Purpose</b> is the mechanical intent (why the author wrote it). By auditing the adjectives and verbs separately, you can identify if a text is designed to inform, persuade, or ridicule.</p>
+        <p>Think of this as <b>"The Author's Intent."</b> In the 11+ Comprehension paper, your child must distinguish between the <b>Voice</b> (Tone) and the <b>Goal</b> (Purpose). Tone is the emotional temperature—how the author feels. Purpose is the mechanical job the text is doing—why it was written. By looking at verbs and adjectives separately, we can figure out if the writer is trying to help us, trick us, or just make us laugh.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "Eat your greens now, or no pudding!"<br>
-                <b>Tone:</b> Stern / Authoritative<br>
-                <b>Purpose:</b> To Instruct
+                <b>The Rule-Maker</b>
+                "Clean your room right now!"<br>
+                <b>Tone:</b> Stern. <b>Purpose:</b> To Command.
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "The sun’s golden rays kissed the calm, blue ocean."<br>
-                <b>Tone:</b> Peaceful / Serene<br>
-                <b>Purpose:</b> To Describe
+                <b>The Story-Teller</b>
+                "The golden sun dipped below the velvet clouds."<br>
+                <b>Tone:</b> Serene. <b>Purpose:</b> To Describe.
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "The 'new' law is as effective as a paper umbrella in a storm."<br>
-                <b>Tone:</b> Sarcastic / Cynical<br>
-                <b>Purpose:</b> To Ridicule
+                <b>The 11+ Critic</b>
+                "This 'miracle' cure is as useful as a chocolate teapot."<br>
+                <b>Tone:</b> Sarcastic. <b>Purpose:</b> To Ridicule.
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Semantic Ratio</b>. Purpose is driven by the <b>Verbs</b> (Action Gears), while Tone is determined by the <b>Adjectives</b> (Emotional Paint). Success depends on separating these two layers.</p>
+        <p>This is the <b>Semantic Ratio</b>. Help your child see that Purpose is usually hidden in the <b>Verbs</b> (the action parts), while Tone is painted on with <b>Adjectives</b> (the feeling parts). If you change the adjectives but keep the verbs, the purpose stays the same, but the vibe shifts completely.</p>
         
+        
+
         <div class="anatomy-display">
             <div class="voice-mapping">
-                <div class="component-pill pill-purpose">Verbs &rarr; Purpose</div>
+                <div class="component-pill pill-purpose">Verbs &rarr; Mechanical Purpose</div>
                 <div class="logic-connector">+</div>
-                <div class="component-pill pill-tone">Adjectives &rarr; Tone</div>
+                <div class="component-pill pill-tone">Adjectives &rarr; Emotional Tone</div>
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the <b>Tone-Shifter</b> below. Notice how we are describing the exact same event (the weather), but as you slide from "Clinical" to "Aggressive," the author's voice transforms. Ask your child: <i>"What words changed to make it sound meaner?"</i></p>
         <div class="simulation-area">
             <div class="output-well" id="sentence-output">
                 The rainfall is currently recorded at 5mm per hour.
@@ -146,12 +146,12 @@
                         <div class="slider-labels">
                             <span>Clinical</span>
                             <span>Sarcastic</span>
-                            <span>Aggressive</span>
+                            <span>Angry</span>
                         </div>
                         <input type="range" id="tone-slider" min="0" max="2" value="0" step="1" oninput="shiftTone()">
                     </div>
                 </div>
-                <div class="trace-log" id="trace-54">Awaiting lexical calibration...</div>
+                <div class="trace-log" id="trace-54">Awaiting voice calibration...</div>
             </div>
         </div>
     </section>
@@ -159,9 +159,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Subject" Trap:</strong> Mistaking the *topic* for the *tone*. For example, assuming a story about a rainy day must be "sad." You are reacting to the event, not the author's voice.</p>
+            <p><strong>The "Topic" Trap:</strong> Most children mistake the <i>topic</i> of a story for the <i>tone</i>. For example, if a story is about a rainy day, they assume the tone is "sad." They are reacting to the rain, not the author's actual words.</p>
             
-            <p><strong>The Fix:</strong> Use the <b>Adjective Audit</b>. Strip the story away and look only at the descriptive words. If a sad event is described using "recorded," "standard," and "precise," the tone is <b>Clinical</b>, not sad. The tone lives in the word choice, not the plot.</p>
+            <p><strong>The Insider Fix: The "Adjective Audit."</strong> Tell your child: <i>"Ignore the story, look at the paint."</i> They should list only the descriptive words. If a sad event is described with words like "accurate," "standard," and "noted," the tone is <b>Clinical</b>, not sad. <b>Tone lives in the word choice, not the plot.</b></p>
         </div>
     </section>
 </div>
@@ -178,17 +178,17 @@
             color: "white" 
         },
         { 
-            text: "What a 'wonderful' day for a walk in this beautiful downpour.", 
+            text: "Oh, what a 'delightful' day for a stroll in this soaking downpour.", 
             tone: "Sarcastic", 
-            purpose: "To Ridicule", 
-            key: "'wonderful' / beautiful",
+            purpose: "To Mock", 
+            key: "'delightful' / soaking",
             color: "var(--cognis-gold)" 
         },
         { 
-            text: "This wretched rain has utterly destroyed our entire afternoon!", 
+            text: "This miserable rain has completely ruined our entire afternoon!", 
             tone: "Aggressive", 
             purpose: "To Complain", 
-            key: "wretched / destroyed",
+            key: "miserable / ruined",
             color: "#f87171" 
         }
     ];
@@ -202,11 +202,11 @@
         output.style.color = data.color;
 
         document.getElementById('trace-54').innerHTML = `
-            <div class="trace-step">→ 1. Tone Scan: <b>${data.tone.toUpperCase()}</b></div>
-            <div class="trace-step">→ 2. Key Indicators: [${data.key}]</div>
-            <div class="trace-step">→ 3. Mechanical Intent: <b>${data.purpose}</b></div>
+            <div class="trace-step">→ 1. Voice Detected: <b>${data.tone.toUpperCase()}</b></div>
+            <div class="trace-step">→ 2. Painted with: [${data.key}]</div>
+            <div class="trace-step">→ 3. Author's Goal: <b>${data.purpose}</b></div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → STATUS: VOICE DECODED
+                → STATUS: INTENT IDENTIFIED
             </div>
         `;
     }

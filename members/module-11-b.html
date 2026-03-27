@@ -53,7 +53,7 @@
         /* TUG OF WAR SCALE - FIXED VERTICAL CENTERING */
         .scale-wrap { 
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 150px; /* Locked height for centering */
+            height: 150px; 
             width: 100%;
             position: relative;
         }
@@ -65,7 +65,7 @@
         .scale-pivot { 
             width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; 
             border-bottom: 30px solid var(--cognis-blue); 
-            margin-top: -2px; /* Sits perfectly under beam */
+            margin-top: -2px;
         }
         .weight { position: absolute; bottom: 12px; transition: all 0.5s; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 0.7rem; }
 
@@ -298,14 +298,28 @@
         const s = parseInt(document.getElementById('prog-slow').value);
         const f = parseInt(document.getElementById('prog-fast').value);
         const total = s + f;
-        const slowP = Math.round((s / total) * 100);
+        
         document.getElementById('w-slow').style.width = (s * 15) + "px";
         document.getElementById('w-slow').style.height = (s * 15) + "px";
         document.getElementById('w-fast').style.width = (f * 15) + "px";
         document.getElementById('w-fast').style.height = (f * 15) + "px";
         document.getElementById('beam').style.transform = `rotate(${(f - s) * 2}deg)`;
-        document.getElementById('scale-status').innerText = s > f ? "Slow side is winning!" : (f > s ? "Fast side is winning!" : "It's a perfect tie!");
-        document.getElementById('prog-log').innerHTML = `→ <b>Gravity Check:</b> Slow has ${s} units of weight. Fast has ${f}.<br>→ <b>The Winner:</b> The average is pulled toward the ${s > f ? 'Slow' : 'Fast'} speed.`;
+        
+        let winnerText = "";
+        let logWinner = "";
+        if (s > f) {
+            winnerText = "Slow side is winning!";
+            logWinner = "Slow";
+        } else if (f > s) {
+            winnerText = "Fast side is winning!";
+            logWinner = "Fast";
+        } else {
+            winnerText = "It's a perfect tie!";
+            logWinner = "Neither (it's a Tie)";
+        }
+        
+        document.getElementById('scale-status').innerText = winnerText;
+        document.getElementById('prog-log').innerHTML = `→ <b>Gravity Check:</b> Slow has ${s} units vs Fast ${f}.<br>→ <b>The Winner:</b> The average is pulled toward: <b>${logWinner}</b>.`;
     }
 
     function updateSupp() {

@@ -14,7 +14,7 @@
             border-radius: 12px; 
             padding: 40px; 
             min-height: 450px;
-            border: none;
+            border: 2px solid #2d3748;
         }
 
         .tab-group { display: flex; gap: 10px; margin-bottom: 30px; justify-content: center; }
@@ -56,7 +56,6 @@
         .token-c { background: #48bb78; } 
         .token-d { background: #3182ce; }
 
-        /* Elimination Visuals */
         .perm-row.eliminated { opacity: 0.2; filter: grayscale(1); transform: scale(0.95); }
         .perm-row.eliminated::after { 
             content: ''; position: absolute; top: 50%; left: 10%; right: 10%; 
@@ -111,27 +110,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Logical ordering is the art of <b>Constraint Satisfaction</b>. Instead of trying to guess the correct order, you must treat every clue as a filter. By visualizing every possible arrangement and crossing out the ones that break the rules, the truth reveals itself through a process of elimination.</p>
+        <p>Think of logical ordering as the <b>"Detective's Filter."</b> In the 11+, you are given several clues about who is taller, heavier, or faster than someone else. The secret weapon isn't guessing the order—it's <b>eliminating the impossible</b>. Instead of trying to find the "winner" immediately, your child should treat every clue like a screen that blocks out the wrong answers. By the time they've used every clue, only one truth will remain.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "A is taller than B. There are only two items. Find the valid sequence."
+                <b>The Simple Pair</b>
+                "A is taller than B. There are only two friends. Who is the shortest?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
+                <b>The Trio Chain</b>
                 "B is taller than A, and C is taller than B. Arrange them from shortest to tallest."
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "D is the tallest. B is taller than A, but shorter than C. Identify the full 4-item sequence."
+                <b>The 11+ Challenge</b>
+                "D is the tallest. B is taller than A, but shorter than C. Find the full sequence."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Possibility Matrix</b>. Select the number of items. As you toggle clues in the engine, watch how the impossible sequences are struck from the record.</p>
+        <p>This is the <b>Possibility Matrix</b>. Select the number of items. Below, you see every possible way they could be arranged. As you toggle clues in the engine, watch how the "impossible" rows are instantly struck through. Help your child notice that we are narrowing the search, not searching for a needle in a haystack.</p>
         
         <div class="anatomy-display">
             <div class="tab-group">
@@ -146,22 +145,24 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Toggle the clues below to filter the matrix above. Watch the <b>Trace Log</b> to see the "Surviver Count" drop. The goal is to apply just enough clues until only <b>one surviving row</b> remains—that is your answer.</p>
         <div class="engine-container">
             <div class="inputs">
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">Toggle Logical Clues</label>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">Apply Constraint Filters</label>
                 <div id="rule-box">
                     </div>
-                <button class="btn-reset" onclick="resetRules()">Clear Filter Logic</button>
+                <button class="btn-reset" onclick="resetRules()">Reset Matrix</button>
             </div>
-            <div class="trace-log" id="trace-41">Toggle a clue to begin filtering the matrix...</div>
+            <div class="trace-log" id="trace-41">Apply a clue to start the elimination...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "First Clue" Trap:</strong> Fixing an item in first place as soon as a clue says it is "taller" or "heavier," without checking if there is another item that is taller still.</p>
-            <p><strong>The Fix:</strong> Use <b>Relational Chains</b>. Don't look for the winner immediately. Link the clues together (e.g., A > B and B > C creates the chain A > B > C). Only once all clues are linked should you commit an item to a position.</p>
+            <p><strong>The "First Clue" Trap:</strong> Most children see the first clue (e.g., "A is taller than B") and immediately put A in the first position. <b>Stop!</b> This is a disaster. Just because A is taller than B doesn't mean A is the tallest person in the whole group.</p>
+            
+            <p><strong>The Insider Fix: The "Chain Link" Rule.</strong> Tell your child: <i>"Don't build the house until you have all the bricks."</i> They should link clues together into a chain (A > B and B > C becomes A > B > C). Only once every person is linked should they decide on the final order. <b>Link the clues, then label the spots.</b></p>
         </div>
     </section>
 </div>
@@ -190,7 +191,7 @@
         clues.forEach(r => {
             const btn = document.createElement('button');
             btn.className = 'rule-btn';
-            btn.innerText = `Clue: ${r.t}`; // CONFUSING SUFFIX REMOVED
+            btn.innerText = `Clue: ${r.t}`;
             btn.onclick = () => toggleRule(r, btn);
             ruleBox.appendChild(btn);
         });
@@ -232,8 +233,6 @@
         let validCount = 0;
 
         allPerms.forEach(p => {
-            // Internal Logic: stronger item (r.a) must be to the left of weaker (r.b)
-            // Array Index: 0 is leftmost, higher is rightmost. So index(a) < index(b)
             const isValid = activeRules.every(r => p.indexOf(r.a) < p.indexOf(r.b));
             if(isValid) validCount++;
             
@@ -251,11 +250,11 @@
         }
 
         document.getElementById('trace-41').innerHTML = `
-            <div class="trace-step">→ 1. Total Permutations: <b>${allPerms.length}</b></div>
-            <div class="trace-step">→ 2. Clues Applied: <b>${activeRules.length}</b></div>
-            <div class="trace-step">→ 3. Surviving Options: <b>${validCount}</b></div>
+            <div class="trace-step">→ 1. Possible Worlds: <b>${allPerms.length}</b></div>
+            <div class="trace-step">→ 2. Clues Locked: <b>${activeRules.length}</b></div>
+            <div class="trace-step">→ 3. Remaining Truths: <b>${validCount}</b></div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → LOGIC STATUS: ${validCount === 1 ? 'SOLVED' : 'FILTERING...'}
+                → STATUS: ${validCount === 1 ? 'LOGIC SOLVED' : 'STILL FILTERING...'}
             </div>
         `;
     }

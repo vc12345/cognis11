@@ -14,7 +14,7 @@
             padding: 60px 20px; 
             perspective: 1200px; 
             overflow: hidden;
-            border: none;
+            border: 2px solid #1e293b;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -29,7 +29,6 @@
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* 3D View Class triggered by slider */
         .view-3d .stack-stage {
             transform: rotateX(50deg) rotateZ(-30deg);
         }
@@ -51,7 +50,6 @@
             border: 2px solid rgba(255,255,255,0.1);
         }
 
-        /* Shapes */
         #shape-circle { background: #ef4444; top: 40px; left: 40px; border-radius: 50%; }
         #shape-square { background: #3b82f6; top: 100px; left: 100px; border-radius: 12px; }
         #shape-triangle { 
@@ -74,7 +72,7 @@
         .btn-stack {
             background: #2d3748; color: #a0aec0; border: 1px solid #4a5568; 
             padding: 12px; border-radius: 8px; cursor: pointer; 
-            font-size: 0.7rem; text-transform: uppercase; font-weight: 800;
+            font-size: 0.7rem; text-transform: uppercase; font-weight: 800; 
             width: 100%; text-align: left; margin-bottom: 8px; transition: 0.2s;
             display: flex; justify-content: space-between;
         }
@@ -104,27 +102,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Layering logic requires you to translate a flat 2D image into 3D depth. The core rule is <b>Perimeter Continuity</b>. If a shape's border is unbroken, it is on top. If a shape's border is "interrupted" or cut by another line, it is physically behind. The brain uses these occlusion cues to calculate the sequence of the stack.</p>
+        <p>Think of this as <b>"The Pancake Rule."</b> In Non-Verbal Reasoning, examiners overlap shapes to test if your child can tell which was "dropped" onto the page last. The secret weapon is <b>Perimeter Continuity</b>. If a shape has a perfect, unbroken border, it must be on top. If a shape's border is "cut" or interrupted by another line, it is physically underneath. Mastering this allows your child to peel back the layers of any diagram in their mind.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "A red circle overlaps a blue square. If you can see the full circle but the square is cut, which is on top?"
+                <b>The Simple Overlap</b>
+                "A red circle sits on a blue square. If the circle is whole but the square is cut, which is on top?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "Look at three overlapping shapes. List them in order from the one at the back to the one at the very front."
+                <b>The 3-Layer Stack</b>
+                "Look at three overlapping shapes. Rank them from the 'Bottom of the Pile' to the 'Top of the Pile'."
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Identify the 'Hidden Center' shape. This is a shape that is partially covered by two others, leaving only a fragment visible."
+                <b>The Hidden Fragment</b>
+                "Identify the middle shape—the one that is partially covered by two others, leaving only a sliver visible."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>3D Depth Scanner</b>. Move the slider to "explode" the diagram. This reveals the true order of the layers by physically separating them in space.</p>
+        <p>This is the <b>3D Depth Scanner</b>. Move the slider to "explode" the shapes. Notice how they separate into a vertical stack. Help your child see that the shape with the number "1" (the winner) is the only one whose edges are never crossed by another line. This is the <b>Unbroken Border</b> rule in action.</p>
         
         <div class="anatomy-display" id="anatomy-stage">
             <div class="stack-stage" id="stack-container">
@@ -135,8 +133,8 @@
 
             <div class="depth-control-box">
                 <div style="display:flex; justify-content: space-between; margin-bottom: 12px;">
-                    <span class="label-3d">2D (FLAT)</span>
-                    <span class="label-3d">3D (EXPLODED)</span>
+                    <span class="label-3d">2D (Normal View)</span>
+                    <span class="label-3d">3D (X-Ray View)</span>
                 </div>
                 <input type="range" id="depth-slider" min="0" max="1" step="1" value="0" oninput="renderStack()">
             </div>
@@ -145,24 +143,26 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the controls to re-stack the pile. Click any shape in the "Anatomy" stage above to move it to the front. Watch the <b>Trace Log</b> to see how the logic of "occlusion" (hiding) changes as the order shifts. This is exactly how your child should "dissect" complex NVR matrices.</p>
         <div class="engine-container">
             <div class="inputs">
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Set Front Shape</label>
-                <button class="btn-stack" id="btn-circle" onclick="reorder('circle')">Red Circle <span>Front</span></button>
-                <button class="btn-stack" id="btn-square" onclick="reorder('square')">Blue Square <span>Front</span></button>
-                <button class="btn-stack" id="btn-triangle" onclick="reorder('triangle')">Gold Triangle <span>Front</span></button>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">Manipulate the Stack</label>
+                <button class="btn-stack" id="btn-circle" onclick="reorder('circle')">Red Circle <span>Move to Front</span></button>
+                <button class="btn-stack" id="btn-square" onclick="reorder('square')">Blue Square <span>Move to Front</span></button>
+                <button class="btn-stack" id="btn-triangle" onclick="reorder('triangle')">Gold Triangle <span>Move to Front</span></button>
                 
                 <button class="btn-stack" style="margin-top:10px; border-color:var(--cognis-gold); color:var(--cognis-gold);" onclick="randomize()">Randomize Depth</button>
             </div>
-            <div class="trace-log" id="trace-44">Scanning boundary intersections...</div>
+            <div class="trace-log" id="trace-44">Scanning intersections...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Shared Border" Trap:</strong> When two shapes have the same color or a very thin border, your brain might merge them into a single complex shape. This causes you to miss the fact that one is actually behind the other.</p>
-            <p><strong>The Fix:</strong> Use the <b>Vertex Hunt</b>. Ignore the large areas of color and focus entirely on the "T-junctions" (where lines meet). If Shape A's line stops at Shape B's edge, Shape A is at the back. The "winner" is the shape whose line never stops for anyone.</p>
+            <p><strong>The "Same Color" Trap:</strong> If two shapes are the same color or have very thin borders, your child's brain might merge them into one weird, giant shape. This makes them miss the fact that one is actually hiding behind the other.</p>
+            
+            <p><strong>The Insider Fix: The "T-Junction" Hunt.</strong> Tell your child: <i>"Look for the Ts."</i> They should ignore the big blobs of color and look only at where lines meet. If Shape A's line stops suddenly at Shape B's edge (making a 'T' shape), Shape A is the loser—it’s at the back. <b>The shape that never stops its lines is the one on top.</b></p>
         </div>
     </section>
 </div>
@@ -170,7 +170,6 @@
 <button class="btn-complete" onclick="markComplete(44)">Complete Module & Update Lattice</button>
 
 <script>
-    // Internal state: Back to Front
     let currentOrder = ['triangle', 'square', 'circle']; 
     const shapes = {
         'circle': { id: 'shape-circle', name: 'Red Circle', btn: 'btn-circle' },
@@ -179,7 +178,6 @@
     };
 
     function reorder(key) {
-        // Remove and push to end (making it front)
         currentOrder = currentOrder.filter(k => k !== key);
         currentOrder.push(key);
         renderStack();
@@ -193,8 +191,6 @@
     function renderStack() {
         const is3D = document.getElementById('depth-slider').value === "1";
         const stage = document.getElementById('anatomy-stage');
-        
-        // Toggle the 3D rotation class
         stage.classList.toggle('view-3d', is3D);
 
         currentOrder.forEach((key, index) => {
@@ -202,24 +198,19 @@
             const el = document.getElementById(config.id);
             const btn = document.getElementById(config.btn);
             
-            // Set Z-Index (0 to 2)
             el.style.zIndex = index + 10;
             
-            // Text label: 1 for Front, 3 for Back
             const depthRank = 3 - index;
             if(key === 'triangle') el.querySelector('span').innerText = depthRank;
             else el.innerText = depthRank;
 
-            // Handle 3D Translation
             if (is3D) {
-                // Front is +100, Mid is 0, Back is -100
                 const zPos = (index - 1) * 100;
                 el.style.transform = `translateZ(${zPos}px)`;
             } else {
                 el.style.transform = `translateZ(0px)`;
             }
 
-            // Update Engine Buttons
             if(index === 2) btn.classList.add('active');
             else btn.classList.remove('active');
         });
@@ -233,11 +224,11 @@
         const back = shapes[currentOrder[0]].name;
 
         document.getElementById('trace-44').innerHTML = `
-            <div class="trace-step">→ 1. Front (Complete Outline): <b style="color:var(--cognis-gold)">${front}</b></div>
-            <div class="trace-step">→ 2. Middle (Partial Occlusion): <b>${middle}</b></div>
-            <div class="trace-step">→ 3. Back (Maximum Occlusion): <b>${back}</b></div>
+            <div class="trace-step">→ 1. Front (The Winner): <b style="color:var(--cognis-gold)">${front}</b></div>
+            <div class="trace-step">→ 2. Middle (Partial Hide): <b>${middle}</b></div>
+            <div class="trace-step">→ 3. Back (Fully Hidden): <b>${back}</b></div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → STACK SEQUENCE VALIDATED
+                → DEPTH SCAN VALIDATED
             </div>
         `;
     }

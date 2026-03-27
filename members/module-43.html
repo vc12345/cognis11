@@ -119,28 +119,30 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Reflection is a <b>Mirror Operation</b> that reverses the orientation (handedness) of a shape across an axis. While rotation preserves the sequence of features, reflection flips them. To solve high-level Non-Verbal Reasoning puzzles, use the <b>Equidistant Rule</b>: track the point furthest from the mirror—it must remain the furthest point in the reflected output, just on the opposite side.</p>
+        <p>Think of reflection as <b>"The Mirror Trap."</b> In the 11+, examiners love to confuse your child by showing shapes that have been flipped upside down or side-to-side. The secret weapon is the <b>Equidistant Rule</b>: every point on the original shape has a twin on the other side of the mirror. If a corner is 2 inches away from the mirror line on the left, its twin must be exactly 2 inches away on the right. If the "arms" of a shape point away from the mirror, the reflected arms must point away too.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "Reflect a square across a vertical axis. Does it look different?"
+                <b>The Vertical Flip</b>
+                "Reflect a simple square across a vertical line. Does the shape change?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "Perform a horizontal flip on an asymmetrical 'P' shape. Which way is it facing?"
+                <b>The Asymmetry Test</b>
+                "Perform a horizontal flip on a 'P' shape. Which way is the loop facing now?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Identify the complex result of two consecutive diagonal reflections at 45°."
+                <b>The 11+ Diagonal</b>
+                "Identify the result of a reflection across a 45° diagonal line. Where does the top corner land?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Mirror Axis</b>. Pick a vertex on the shape. Measure its distance to the red dashed line. The reflection must place that vertex at the exact same distance on the opposite side. If the "arms" of the shape point away from the axis, they must point away in the result.</p>
+        <p>This is the <b>Mirror Axis</b>. Point to the red dashed line—that is your mirror. Pick one corner of the gold 'F' shape. Count how many grid squares it is from the mirror. In a true reflection, that corner must land the exact same distance away on the other side. Use the <b>Equidistant Rule</b> to track the furthest points first; they are the easiest to spot in a lineup.</p>
         
+        
+
         <div class="anatomy-display">
             <svg id="reflect-svg" viewBox="-150 -150 300 300">
                 <line x1="-150" y1="0" x2="150" y2="0" class="grid-line" />
@@ -158,29 +160,30 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Select an axis (Vertical, Horizontal, or Diagonal) and click <b>"Perform Reflection."</b> Watch the shape flip across the red line. Help your child notice that the "ghost" shape stays at the origin to show you the difference between the "before" and "after."</p>
         <div class="engine-container">
             <div class="inputs">
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Select Axis Angle</label>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Choose Mirror Angle</label>
                 <div class="axis-group">
-                    <button class="btn-axis active" onclick="setAxis(90, this)">Vertical</button>
-                    <button class="btn-axis" onclick="setAxis(0, this)">Horizontal</button>
-                    <button class="btn-axis" onclick="setAxis(45, this)">45° Diagonal</button>
-                    <button class="btn-axis" onclick="setAxis(135, this)">135° Diagonal</button>
+                    <button class="btn-axis active" onclick="setAxis(90, this)">Vertical (Y)</button>
+                    <button class="btn-axis" onclick="setAxis(0, this)">Horizontal (X)</button>
+                    <button class="btn-axis" onclick="setAxis(45, this)">45° Slope</button>
+                    <button class="btn-axis" onclick="setAxis(135, this)">135° Slope</button>
                 </div>
                 
-                <button class="btn-action" onclick="performReflection()">Perform Reflection</button>
-                <button class="btn-secondary" onclick="resetEngine()">Reset Origin</button>
+                <button class="btn-action" onclick="performReflection()">Perform Flip</button>
+                <button class="btn-secondary" onclick="resetEngine()">Reset to Start</button>
             </div>
-            <div class="trace-log" id="trace-43">Shape initialized in Top-Left quadrant...</div>
+            <div class="trace-log" id="trace-43">Ready for projection...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Slide" Trap:</strong> Mistaking a reflection for a simple translation. Many students assume the shape just moves to a new quadrant without changing its orientation (how it "faces").</p>
+            <p><strong>The "Slide" Trap:</strong> Many children think reflection is just a simple slide (translation). They assume the shape just moves to the other side of the line without changing its "face." If the 'F' is facing right on the left side, they'll draw it facing right on the right side too.</p>
             
-            <p><strong>The Fix:</strong> Use <b>Corner Geometry</b>. Pick the corner furthest from the origin. In a vertical reflection, that point must land at the same height but on the far right. The internal "features" (like the arms of the F) must reverse their direction relative to the mirror.</p>
+            <p><strong>The Insider Fix: The "Corner Count."</strong> Tell your child: <i>"The furthest point stays the furthest."</i> Pick the tip of the shape. If it's the furthest thing on the left, it must become the furthest thing on the right. If they just slide the shape, that tip will suddenly be the closest thing to the mirror. <b>Count the gaps to prove the flip.</b></p>
         </div>
     </section>
 </div>
@@ -189,7 +192,7 @@
 
 <script>
     let currentAxis = 90;
-    let matrix = [1, 0, 0, 1]; // [a, b, c, d] in CSS matrix(a,b,c,d,tx,ty)
+    let matrix = [1, 0, 0, 1];
 
     function setAxis(deg, btn) {
         currentAxis = deg;
@@ -202,15 +205,12 @@
     function performReflection() {
         const rad = (currentAxis * Math.PI) / 180;
         
-        // Reflection Matrix for line through origin at angle theta:
-        // [ cos(2θ)  sin(2θ) ]
-        // [ sin(2θ) -cos(2θ) ]
+        // Reflection Matrix logic
         const r11 = Math.cos(2 * rad);
         const r21 = Math.sin(2 * rad);
         const r12 = Math.sin(2 * rad);
         const r22 = -Math.cos(2 * rad);
 
-        // Standard Matrix Multiplication (M_new = Reflection * M_current)
         const a = r11 * matrix[0] + r12 * matrix[1];
         const b = r21 * matrix[0] + r22 * matrix[1];
         const c = r11 * matrix[2] + r12 * matrix[3];
@@ -222,7 +222,6 @@
 
     function applyMatrix() {
         const shape = document.getElementById('f-shape');
-        // CSS matrix order: a, b, c, d, tx, ty
         shape.style.transform = `matrix(${matrix[0]}, ${matrix[1]}, ${matrix[2]}, ${matrix[3]}, 0, 0)`;
         updateTrace(true);
     }
@@ -235,22 +234,21 @@
 
     function updateTrace(actionPerformed = false) {
         const log = document.getElementById('trace-43');
-        const m = matrix.map(n => n.toFixed(2));
         
         let html = `
-            <div class="trace-step">→ 1. Axis: ${currentAxis}° Orientation.</div>
-            <div class="trace-step">→ 2. Matrix: [${m[0]}, ${m[1]}, ${m[2]}, ${m[3]}]</div>
+            <div class="trace-step">→ 1. Axis Locked: <b>${currentAxis}°</b></div>
+            <div class="trace-step">→ 2. Scan: Tracking vertex distance...</div>
         `;
 
         if(actionPerformed) {
             html += `
                 <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                    → STATUS: REFLECTION COMPLETE
+                    → STATUS: FLIP VALIDATED
                 </div>
-                <div class="trace-step" style="font-size:0.7rem; opacity:0.7;">Rule: Vertex distances preserved across axis.</div>
+                <div class="trace-step" style="font-size:0.7rem; opacity:0.7;">Distances flipped perfectly across the ${currentAxis}° line.</div>
             `;
         } else {
-            html += `<div class="trace-step">→ 3. Status: Ready for projection.</div>`;
+            html += `<div class="trace-step">→ 3. Status: Waiting for flip command.</div>`;
         }
         
         log.innerHTML = html;

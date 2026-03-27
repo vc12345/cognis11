@@ -1,4 +1,4 @@
-// js/module-core.js
+// js/module-core-a.js
 
 /**
  * GOOGLE ANALYTICS 4 INTEGRATION
@@ -28,12 +28,12 @@ async function ensureRegistry() {
     return new Promise((resolve) => {
         const script = document.createElement('script');
         const isInMembers = window.location.pathname.includes('/members/');
-        // Updated to registry-a.js for the consolidated system
+        // MANDATORY: Sandbox Registry
         script.src = isInMembers ? '../js/registry-a.js' : 'js/registry-a.js'; 
         
         script.onload = () => resolve(true);
         script.onerror = () => {
-            console.error("Core: registry-a.js not found at " + script.src);
+            console.error("Core-A: registry-a.js not found at " + script.src);
             resolve(false);
         };
         document.head.appendChild(script);
@@ -41,7 +41,7 @@ async function ensureRegistry() {
 }
 
 /**
- * PLAN HELPER: Used by modules to determine which submodules to show
+ * PLAN HELPER: Used by module-X-a.html to determine layout
  */
 async function getUserPlan() {
     if (!window.supabaseClient) return 'foundational';
@@ -77,7 +77,6 @@ async function initModule(moduleId) {
         return; 
     }
 
-    // Wait for Supabase
     if (!window.supabaseClient) {
         let attempts = 0;
         while (!window.supabaseClient && attempts < 20) {
@@ -106,11 +105,7 @@ async function initModule(moduleId) {
 
     const userPlan = profile.subscription_plan || 'foundational';
 
-    /**
-     * SEQUENTIAL LOCKDOWN LOGIC
-     * Foundational: Open Library (No lock)
-     * Supplemental: Still locked by sID (the master integer ID)
-     */
+    // Sequential lock is disabled for Foundational users in the Sandbox
     if (userPlan === 'supplemental') {
         const masterId = parseInt(moduleId);
         if (masterId > 1) {
@@ -119,7 +114,6 @@ async function initModule(moduleId) {
                 .select('module_id')
                 .eq('user_id', user.id);
 
-            // Check against sIDs (numeric strings)
             const completedSIDs = completedData ? completedData.map(item => String(item.module_id)) : [];
             const prevModuleSID = String(masterId - 1);
 
@@ -153,14 +147,12 @@ function injectModuleUI(email, currentId, isSample) {
         <style>
             body { background-color: #FAFAF6 !important; padding-bottom: 80px; }
             .module-card { max-width: 920px !important; margin: 20px auto !important; }
-            
             .cognis-m-nav {
                 background: #ffffff; border-bottom: 1px solid #E5E3DD;
                 padding: 12px 30px; display: flex; justify-content: space-between;
                 align-items: center; position: sticky; top: 0; z-index: 1000;
             }
             .cognis-m-nav a { color: #1B3A5C !important; text-decoration: none; font-weight: 600; font-size: 0.85rem; }
-
             .module-footer-nav {
                 max-width: 920px; margin: 40px auto;
                 display: ${isSample ? 'none' : 'flex'}; justify-content: space-between; gap: 20px;
@@ -191,7 +183,7 @@ function injectModuleUI(email, currentId, isSample) {
 }
 
 /**
- * COMPLETION LOGIC: Now accepts strings ('11-p') and integers (11)
+ * COMPLETION LOGIC
  */
 async function markComplete(moduleId) {
     if (!window.supabaseClient) return;
@@ -202,7 +194,6 @@ async function markComplete(moduleId) {
         window.gtag('event', 'module_complete', { 'module_id': moduleId });
     }
 
-    // Upsert as a string. Supabase 'text' column handles both '11' and '11-p'
     const { error } = await window.supabaseClient
         .from('module_progress')
         .upsert([{ 

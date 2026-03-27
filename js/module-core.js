@@ -18,7 +18,7 @@
     window.gtag = gtag; // Make gtag globally accessible
 })();
 
-const SAMPLE_IDS = [11, 47, 53]; // Modules enabled for the /sample.html trial
+const SAMPLE_IDS = []; // Modules enabled for the /sample.html trial
 
 /**
  * SMART LOADER: Automatically fetches the registry if missing.

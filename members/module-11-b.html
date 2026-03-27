@@ -9,76 +9,75 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* SUBSCRIPTION LOGIC HIDING */
+        /* SUBSCRIPTION DISPLAY LOGIC */
         .foundational-only, .supplemental-only { display: none; }
-        
         body.user-plan-foundational .foundational-only { display: block; }
         body.user-plan-supplemental .supplemental-only { display: block; }
 
-        /* ACCORDION STYLING FOR SUPPLEMENTAL USERS */
+        /* REFRESHER ACCORDION */
         details.refresher-box {
-            background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            margin: 20px 0;
-            padding: 10px;
+            background: #fff;
+            border: 2px solid var(--cognis-blue);
+            border-radius: 16px;
+            margin: 30px 0;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
         details.refresher-box summary {
             font-weight: 800;
-            color: var(--cognis-blue);
+            color: white;
+            background: var(--cognis-blue);
             cursor: pointer;
-            padding: 10px;
+            padding: 20px;
             outline: none;
+            list-style: none;
         }
+        details.refresher-box summary::-webkit-details-marker { display: none; }
 
-        /* DYNAMIC SVG VISUAL STYLES */
+        /* VISUAL CONTAINERS */
         .viz-container { 
-            background: #fff; border: 2px dashed #cbd5e0; 
-            border-radius: 12px; padding: 20px; margin: 20px 0;
+            background: #f8fafc; border: 2px dashed #cbd5e0; 
+            border-radius: 12px; padding: 40px; margin: 25px 0;
             display: flex; flex-direction: column; align-items: center;
+            min-height: 200px; /* Bigger container for the Scale */
         }
-        .hour-box-container { display: flex; gap: 10px; margin-top: 20px; min-height: 80px; flex-wrap: wrap; justify-content: center; }
-        .hour-box { 
-            width: 70px; height: 70px; border: 3px solid var(--cognis-blue);
-            border-radius: 8px; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; font-weight: 800;
-            background: #f8fafc; font-size: 0.9rem;
-        }
-        .hour-box span { font-size: 0.55rem; text-transform: uppercase; color: #64748b; }
-
-        .scale-beam {
-            width: 260px; height: 8px; background: #2d3748;
-            border-radius: 4px; position: relative; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .scale-pivot { width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 20px solid var(--cognis-blue); margin-top: -2px; }
-        .weight { position: absolute; bottom: 8px; transition: all 0.5s; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.6rem; }
         
-        /* ORIGINAL JOURNEY MAP STYLES (For Supplemental) */
-        .journey-line { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; position: relative; display: flex; margin: 40px 0; }
-        .leg { height: 100%; position: relative; transition: width 0.6s; }
-        .leg-1 { background: var(--cognis-blue); border-radius: 4px 0 0 4px; }
-        .leg-2 { background: var(--cognis-gold); border-radius: 0 4px 4px 0; }
-        .marker { position: absolute; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; top: 50%; transform: translate(-50%, -50%); box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 10; }
-        .marker-mid { left: 100%; background: #fff; border-color: var(--cognis-blue); }
+        .hour-box-container { display: flex; gap: 12px; margin-top: 25px; flex-wrap: wrap; justify-content: center; }
+        .hour-box { 
+            width: 85px; height: 85px; border: 3px solid var(--cognis-blue);
+            border-radius: 12px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; font-weight: 800;
+            background: #fff; box-shadow: 0 4px 0 var(--cognis-blue);
+        }
+        .hour-box span { font-size: 0.6rem; text-transform: uppercase; color: #64748b; margin-bottom: 4px; }
+
+        /* TUG OF WAR SCALE */
+        .scale-beam {
+            width: 320px; height: 12px; background: #2d3748;
+            border-radius: 6px; position: relative; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .scale-pivot { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid var(--cognis-blue); margin-top: -2px; }
+        .weight { position: absolute; bottom: 12px; transition: all 0.5s; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 0.7rem; }
+
+        /* FIXING THE "RED BOXES" (Phase styling) */
+        .phase { border: 1px solid var(--border-light); margin-bottom: 30px !important; }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
     <script src="../js/module-core.js"></script>
 </head>
-<body class="user-plan-checking"> <div class="module-card">
-    <div class="header">
-        <h1>Module 11: Average Speed</h1>
-    </div>
+<body class="user-plan-supplemental"> <div class="module-card">
+    <div class="header"><h1>Module 11: Average Speed</h1></div>
 
-    <div id="sub-intro" class="submodule-wrapper">
-        <section class="phase">
+    <div id="foundation-bundle">
+        <section class="phase" id="sub-intro">
             <h2 class="section-tag">Foundation Intro</h2>
             <h3>The Big Squash</h3>
-            <p>Average speed is just a <b>"Fair Share."</b> We take all the miles and deal them out into "Hour Boxes" like playing cards.</p>
+            <p>Average speed is just a <b>"Fair Share."</b> We take all the miles and deal them out into "Hour Boxes."</p>
             
             <div class="viz-container">
-                <div id="miles-pile" style="font-size: 2rem;">🚗💨</div>
+                <div style="font-size: 2.5rem; margin-bottom: 10px;">🚗💨</div>
                 <div class="hour-box-container" id="box-display-intro"></div>
             </div>
 
@@ -86,58 +85,61 @@
                 <div class="controls">
                     <div class="control-group">
                         <label>The Mile Pile</label>
-                        <input type="range" min="10" max="60" step="10" value="30" id="intro-dist">
-                        <div class="val-out" id="intro-dist-val">30 miles</div>
+                        <input type="range" min="10" max="100" step="10" value="40" id="intro-dist">
+                        <div class="val-out" id="intro-dist-val">40 miles</div>
                     </div>
                     <div class="control-group">
                         <label>The Hour Boxes</label>
-                        <input type="range" min="1" max="5" step="1" value="3" id="intro-time">
-                        <div class="val-out" id="intro-time-val">3 hours</div>
+                        <input type="range" min="1" max="5" step="1" value="2" id="intro-time">
+                        <div class="val-out" id="intro-time-val">2 hours</div>
                     </div>
                 </div>
-                <div class="trace-log" id="intro-log">→ Sharing miles...</div>
+                <div class="trace-log" id="intro-log"></div>
             </div>
         </section>
-    </div>
 
-    <div id="sub-progressing" class="submodule-wrapper">
-        <section class="phase">
+        <section class="phase" id="sub-progressing">
             <h2 class="section-tag">Foundation Progressing</h2>
             <h3>The Tug-of-War</h3>
-            <p>Average Speed isn't the middle; it has <b>Gravity</b>. Whichever speed lasted the longest "wins" and pulls the average toward it.</p>
+            <p>Whichever speed lasted the longest "wins" the gravity battle and pulls the average toward it.</p>
             
             <div class="viz-container">
                 <div class="scale-beam" id="beam">
-                    <div class="weight" style="left:10px; background:var(--trap-red);" id="w-slow">SLOW</div>
-                    <div class="weight" style="right:10px; background:var(--cognis-gold);" id="w-fast">FAST</div>
+                    <div class="weight" style="left:15px; background:var(--trap-red);" id="w-slow">SLOW</div>
+                    <div class="weight" style="right:15px; background:var(--cognis-gold);" id="w-fast">FAST</div>
                 </div>
                 <div class="scale-pivot"></div>
-                <p id="scale-status" style="margin-top:15px; font-weight:800; font-size:0.8rem;"></p>
+                <p id="scale-status" style="margin-top:20px; font-weight:800; color:var(--cognis-blue);"></p>
             </div>
 
             <div class="engine-container">
                 <div class="controls">
-                    <div class="control-group"><label>Slow Time</label><input type="range" min="1" max="10" value="8" id="prog-slow"></div>
-                    <div class="control-group"><label>Fast Time</label><input type="range" min="1" max="10" value="2" id="prog-fast"></div>
+                    <div class="control-group">
+                        <label>Slow Time (Weight)</label>
+                        <input type="range" min="1" max="10" value="8" id="prog-slow">
+                    </div>
+                    <div class="control-group">
+                        <label>Fast Time (Weight)</label>
+                        <input type="range" min="1" max="10" value="2" id="prog-fast">
+                    </div>
                 </div>
-                <div class="trace-log" id="prog-log">→ Calculating pull...</div>
+                <div class="trace-log" id="prog-log"></div>
             </div>
         </section>
     </div>
 
-    <div id="sub-supplemental" class="supplemental-only submodule-wrapper">
+    <div id="sub-supplemental" class="supplemental-only">
         <section class="phase">
-            <h2 class="section-tag" style="background:var(--cognis-blue); color:white;">Supplemental Mastery</h2>
+            <h2 class="section-tag" style="background:var(--cognis-blue); color:white;">Exam Mastery</h2>
             <h3>The Journey Merger</h3>
-            <p>In the 11+, we ignore middle speeds. We squash the journey into <b>Grand Totals</b>.</p>
+            <p>In the 11+, we ignore middle speeds and calculate using <b>Grand Totals</b>.</p>
             
-            <div class="anatomy-display" style="background:#fff; border-radius:12px; border:1px solid #e2e8f0; padding:40px;">
-                <div class="journey-line">
-                    <div class="marker" style="left:0; background:var(--cognis-blue);"></div>
-                    <div id="leg-1" class="leg leg-1"><div class="marker marker-mid"></div></div>
-                    <div id="leg-2" class="leg leg-2"><div class="marker" style="right:-20px; background:var(--cognis-gold); transform:translateY(-50%);"></div></div>
+            <div class="viz-container" style="background:white; border:1px solid #e2e8f0;">
+                <div style="width:100%; height:8px; background:#e2e8f0; border-radius:4px; position:relative; display:flex; margin:40px 0;">
+                    <div id="leg-1" style="height:100%; background:var(--cognis-blue); position:relative; transition:width 0.5s;"></div>
+                    <div id="leg-2" style="height:100%; background:var(--cognis-gold); position:relative; transition:width 0.5s;"></div>
                 </div>
-                <div id="supp-total-banner" style="text-align:center; font-weight:800; color:var(--cognis-blue);">TOTAL: --</div>
+                <div id="supp-total-banner" style="font-weight:800; color:var(--cognis-blue); font-size:1.2rem;"></div>
             </div>
 
             <div class="engine-container">
@@ -154,7 +156,7 @@
         <section class="phase">
             <div class="trap-box">
                 <h3>The Saboteur</h3>
-                <p><strong>The "Speed Splitter" Trap:</strong> If a car travels at 40mph then 60mph, don't guess 50. Dividing <b>Grand Totals</b> is the only way to win.</p>
+                <p>Never guess the middle number! Dividing <b>Grand Totals</b> is the only way to beat the trap.</p>
             </div>
         </section>
     </div>
@@ -163,31 +165,31 @@
 <button class="btn-complete" onclick="markComplete(11)">Complete Module & Update Lattice</button>
 
 <script>
-    // 1. SUBSCRIPTION HANDLING
-    async function checkPlanAndLayout() {
-        const plan = await getUserPlan(); // Function in module-core.js
+    // --- LAYOUT SWITCHER ---
+    async function applyLayout() {
+        // Force 'supplemental' if testing locally or can't reach DB
+        let plan = 'supplemental'; 
+        try { plan = await getUserPlan(); } catch(e) {}
+
         const body = document.body;
-        
+        const foundationBundle = document.getElementById('foundation-bundle');
+        const suppSection = document.getElementById('sub-supplemental');
+
         if (plan === 'supplemental') {
-            body.classList.add('user-plan-supplemental');
-            // Move Foundation parts into an accordion
-            const wrapper = document.createElement('details');
-            wrapper.className = 'refresher-box';
-            wrapper.innerHTML = '<summary>Need a Refresh? (Year 3/4 Foundations)</summary>';
-            
-            const intro = document.getElementById('sub-intro');
-            const prog = document.getElementById('sub-progressing');
-            const supp = document.getElementById('sub-supplemental');
-            
-            wrapper.appendChild(intro);
-            wrapper.appendChild(prog);
-            body.querySelector('.module-card').insertBefore(wrapper, supp);
+            body.className = 'user-plan-supplemental';
+            // Create Accordion
+            const acc = document.createElement('details');
+            acc.className = 'refresher-box';
+            acc.innerHTML = `<summary>▼ Need a Refresh? (Year 3/4 Foundations)</summary>`;
+            acc.appendChild(foundationBundle);
+            // Place accordion before the supplemental content
+            suppSection.parentNode.insertBefore(acc, suppSection);
         } else {
-            body.classList.add('user-plan-foundational');
+            body.className = 'user-plan-foundational';
         }
     }
 
-    // 2. INTERACTIVE LOGIC (INTRO)
+    // --- ENGINE: INTRO ---
     function updateIntro() {
         const d = parseInt(document.getElementById('intro-dist').value);
         const t = parseInt(document.getElementById('intro-time').value);
@@ -200,26 +202,27 @@
         for(let i=0; i<t; i++) {
             container.innerHTML += `<div class="hour-box"><span>Hour ${i+1}</span>${share}</div>`;
         }
-        document.getElementById('intro-log').innerHTML = `→ <b>Average: ${share} mph</b>`;
+        document.getElementById('intro-log').innerHTML = `→ Total Pile: ${d} miles shared into ${t} boxes.<br>→ <b>Average Speed: ${share} mph</b>`;
     }
 
-    // 3. INTERACTIVE LOGIC (PROGRESSING)
+    // --- ENGINE: PROGRESSING ---
     function updateProg() {
         const s = parseInt(document.getElementById('prog-slow').value);
         const f = parseInt(document.getElementById('prog-fast').value);
-        const slowPull = Math.round((s / (s + f)) * 100);
+        const total = s + f;
+        const slowPull = Math.round((s / total) * 100);
         
-        document.getElementById('w-slow').style.width = (s * 12) + "px";
-        document.getElementById('w-slow').style.height = (s * 12) + "px";
-        document.getElementById('w-fast').style.width = (f * 12) + "px";
-        document.getElementById('w-fast').style.height = (f * 12) + "px";
+        document.getElementById('w-slow').style.width = (s * 15) + "px";
+        document.getElementById('w-slow').style.height = (s * 15) + "px";
+        document.getElementById('w-fast').style.width = (f * 15) + "px";
+        document.getElementById('w-fast').style.height = (f * 15) + "px";
         
         document.getElementById('beam').style.transform = `rotate(${(f - s) * 2}deg)`;
-        document.getElementById('scale-status').innerText = s > f ? "Slow is heavier!" : "Fast is heavier!";
-        document.getElementById('prog-log').innerHTML = `→ Slow Gravity: ${slowPull}%`;
+        document.getElementById('scale-status').innerText = s > f ? "Slow Time wins the Tug-of-War!" : "Fast Time wins the Tug-of-War!";
+        document.getElementById('prog-log').innerHTML = `→ Slow Gravity: ${slowPull}%<br>→ Fast Gravity: ${100-slowPull}%<br>→ <b>Result: Average is pulled toward ${s > f ? 'Slow' : 'Fast'}</b>`;
     }
 
-    // 4. INTERACTIVE LOGIC (SUPPLEMENTAL)
+    // --- ENGINE: SUPPLEMENTAL ---
     function updateSupp() {
         const d1 = parseFloat(document.getElementById('s-d1').value) || 0;
         const t1 = parseFloat(document.getElementById('s-t1').value) || 0;
@@ -234,13 +237,13 @@
         document.getElementById('leg-1').style.width = p1 + "%";
         document.getElementById('leg-2').style.width = (100 - p1) + "%";
         
-        document.getElementById('supp-total-banner').innerText = `TOTAL: ${totalD}km in ${totalT}hrs`;
-        document.getElementById('supp-log').innerHTML = `→ Grand Distance: ${totalD}km<br>→ Grand Time: ${totalT}hrs<br>→ <b>Average: ${avg} km/h</b>`;
+        document.getElementById('supp-total-banner').innerText = `TOTAL: ${totalD} km in ${totalT} hours`;
+        document.getElementById('supp-log').innerHTML = `→ 1. Grand Distance: ${d1} + ${d2} = ${totalD}km<br>→ 2. Grand Time: ${t1} + ${t2} = ${totalT}hrs<br>→ <b>3. AVERAGE SPEED: ${avg} km/h</b>`;
     }
 
-    // INIT
+    // --- INITIALIZE ---
     document.addEventListener('DOMContentLoaded', () => {
-        checkPlanAndLayout();
+        applyLayout();
         document.getElementById('intro-dist').oninput = updateIntro;
         document.getElementById('intro-time').oninput = updateIntro;
         document.getElementById('prog-slow').oninput = updateProg;
@@ -248,7 +251,7 @@
         ['s-d1', 's-t1', 's-d2', 's-t2'].forEach(id => document.getElementById(id).oninput = updateSupp);
         
         updateIntro(); updateProg(); updateSupp();
-        initModule(11);
+        if(typeof initModule === "function") initModule(11);
     });
 </script>
 </body>

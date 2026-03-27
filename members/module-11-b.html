@@ -15,56 +15,64 @@
     </div>
 
     <div class="phase">
-        <h2>Phase 1: The X-Ray</h2>
-        <p>Time is like gravity. It pulls the Average Speed toward whichever speed lasted the longest. We call this the <b>Tug-of-War</b>.</p>
+        <h2>Phase 1: The X-Ray (The "Gravity" Secret)</h2>
+        <p>In the 11+, examiners want your child to guess the <b>Middle Number</b>. But Average Speed has gravity!</p>
+        <p>Whichever speed you spend the <b>most time</b> doing is the "Winner." It pulls the average toward it like a heavy magnet.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Strategy A</b>
-                Spent 5 hours walking? The average will be "walking speed."
+                <b>The Long Crawl</b>
+                If you walk for 4 hours at 2mph, that 2mph is very "heavy."
             </div>
             <div class="tier-card">
-                <b>Strategy B</b>
-                Spent 1 minute sprinting? The sprint speed is too weak to move the average.
+                <b>The Short Sprint</b>
+                If you run for 1 minute at 20mph, that 20mph is very "light."
             </div>
             <div class="tier-card">
-                <b>The Goal</b>
-                Look for the "Time Winner" to guess where the average will land.
+                <b>The Result</b>
+                The average will be stuck near the "heavy" walking speed.
             </div>
         </div>
     </div>
 
     <div class="phase">
-        <h2>Phase 2: The Anatomy</h2>
-        <p>Notice which block is <b>wider</b>. That leg of the journey took more time, so it "wins" the tug-of-war.</p>
+        <h2>Phase 2: The Anatomy (The Speed Scale)</h2>
+        <p>Look at the <b>Balance Scale</b>. The "Slow" side is massive because the car stayed there for a long time. The "Fast" side is tiny.</p>
         
         <div class="anatomy-display">
-            <div style="display: flex; width: 100%; height: 60px; border-radius: 8px; overflow: hidden; border: 2px solid var(--cognis-blue);">
-                <div style="width: 80%; background: var(--cognis-blue); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">SLOW WALK (4 HOURS)</div>
-                <div style="width: 20%; background: var(--cognis-gold); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">SPRINT (1 HR)</div>
+            <div style="display: flex; align-items: flex-end; gap: 40px;">
+                <div style="width: 100px; height: 150px; background: #e53e3e; border-radius: 8px; position: relative;">
+                    <div style="position: absolute; top: -25px; width: 100%; text-align: center; font-weight: 800; font-size: 0.7rem;">SLOW (3hrs)</div>
+                    <div style="height: 100%; width: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900;">HEAVY</div>
+                </div>
+                <div style="width: 40px; height: 40px; background: #38a169; border-radius: 8px; position: relative;">
+                    <div style="position: absolute; top: -25px; width: 100%; text-align: center; font-weight: 800; font-size: 0.7rem;">FAST (10min)</div>
+                </div>
             </div>
-            <p style="margin-top: 15px; font-weight: 700;">The "Slow" side is heavier. It pulls the average down!</p>
+            <p style="margin-top: 30px; font-weight: 800; color: var(--cognis-blue);">RESULT: The average is "pulled" to the SLOW side.</p>
         </div>
     </div>
 
     <div class="phase">
-        <h2>Phase 3: The Engine</h2>
+        <h2>Phase 3: The Engine (The Gravity Simulator)</h2>
         <div class="engine-container">
             <div class="controls">
                 <div class="control-group">
-                    <label>Slow Leg Time (Hours)</label>
-                    <input type="number" value="4" id="slow-time">
+                    <label>Time Spent Walking (Slow)</label>
+                    <input type="range" min="1" max="10" value="8" id="slow-slider">
                 </div>
                 <div class="control-group">
-                    <label>Fast Leg Time (Hours)</label>
-                    <input type="number" value="1" id="fast-time">
+                    <label>Time Spent Running (Fast)</label>
+                    <input type="range" min="1" max="10" value="1" id="fast-slider">
                 </div>
             </div>
             <div class="trace-log">
-                → Slow Time: 4.00 hrs (HEAVY)<br>
-                → Fast Time: 1.00 hrs (LIGHT)<br>
-                → Result: Average is stuck near the slow speed.<br>
-                <span style="color: var(--cognis-gold)">AVERAGE: Pulled by Gravity</span>
+                [TUG-OF-WAR STATUS]<br>
+                → Slow Speed Strength: 80% (WINNING)<br>
+                → Fast Speed Strength: 10% (LOSING)<br>
+                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1)">
+                → LOGIC: The average is anchored to the slow speed.<br>
+                <span style="color: var(--cognis-gold)">AVERAGE PREDICTION: VERY SLOW</span>
             </div>
         </div>
     </div>
@@ -72,12 +80,12 @@
     <div class="phase">
         <h2>Phase 4: The Saboteur</h2>
         <div class="trap-box">
-            <h3>The "Middle-Man" Trap</h3>
-            <p>If a car travels at 20mph then 60mph, bright children will shout "40mph!" because it's exactly in the middle. They forget that the clock isn't usually a tie.</p>
-            <p><strong>The Fix:</strong> Ask your child: <i>"Is the time a perfect tie?"</i> If they spent 3 hours going slow and 1 hour going fast, the answer <b>cannot</b> be the middle number. It must be pulled toward the slow side.</p>
+            <h3>The "Fair-Play" Trap</h3>
+            <p>If a question says: "A plane flies at 500mph then 300mph," bright kids want to say "400mph" because it's fair. They are treating it like a tie.</p>
+            <p><strong>The Fix:</strong> Point to the clock. Say: <i>"Look at the time! One speed lasted much longer. In a tug-of-war, the person who pulls for longer wins. The middle number is a lie!"</i></p>
         </div>
         
-        <button class="btn-complete" onclick="markComplete('b1_2')">Mark Module Complete</button>
+        <button class="btn-complete" onclick="markComplete('b1_2')">Session Complete: 11+ Logic Mastered</button>
     </div>
 </div>
 

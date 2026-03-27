@@ -15,58 +15,63 @@
     </div>
 
     <div class="phase">
-        <h2>Phase 1: The X-Ray</h2>
-        <p>To find the average speed, we ignore the "fast" and "slow" bits. We just want to find the <b>One Steady Pace</b> that fits the whole trip.</p>
+        <h2>Phase 1: The X-Ray (The "Fair Share" Logic)</h2>
+        <p>Forget the word "Average." It sounds like homework. Instead, think of <b>"The Fair Share."</b></p>
+        <p>If a car travels 20 miles in 2 hours, we just want to know: <i>"If the miles were shared out perfectly, how many miles would sit in each 1-hour box?"</i></p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Level 1: The Road</b>
-                How many miles did we travel altogether? (Add the distances).
+                <b>1. The Pile</b>
+                Put all the miles into one big "Distance Pile."
             </div>
             <div class="tier-card">
-                <b>Level 2: The Clock</b>
-                How many hours did it take altogether? (Add the times).
+                <b>2. The Boxes</b>
+                Count how many "Hour Boxes" you have in your hand.
             </div>
             <div class="tier-card">
-                <b>Level 3: The Squash</b>
-                Share the total miles into the total hours. That's your speed!
+                <b>3. The Share</b>
+                Drop the miles into the boxes equally. That's your speed!
             </div>
         </div>
     </div>
 
     <div class="phase">
-        <h2>Phase 2: The Anatomy</h2>
-        <p>Point to the <b>Journey Line</b>. We aren't looking at two separate trips anymore; we are watching them merge into one long road.</p>
+        <h2>Phase 2: The Anatomy (The Journey Merger)</h2>
+        <p>Point to the <b>Orange Leg</b> and the <b>Blue Leg</b>. We are going to "squash" them into one big road.</p>
         
-        <div class="anatomy-display">
-            <div style="font-weight: 800; color: var(--cognis-blue); margin-bottom: 20px;">THE JOURNEY SQUASH</div>
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <div style="padding: 15px; background: #e2e8f0; border-radius: 8px;">Leg 1: 10 miles</div>
-                <div style="font-size: 1.5rem;">+</div>
-                <div style="padding: 15px; background: #e2e8f0; border-radius: 8px;">Leg 2: 10 miles</div>
+        <div class="anatomy-display" style="background: #fff;">
+            <div style="display: flex; width: 100%; max-width: 500px; margin-bottom: 10px;">
+                <div style="flex: 1; background: #FF8C00; height: 30px; border-radius: 6px 0 0 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem; font-weight: bold;">10 miles</div>
+                <div style="flex: 2; background: #3182ce; height: 30px; border-radius: 0 6px 6px 0; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.7rem; font-weight: bold;">20 miles</div>
             </div>
-            <div style="margin-top: 20px; font-size: 1.2rem; font-weight: 700;">→ TOTAL ROAD: 20 MILES</div>
+            <div style="font-size: 1.2rem; font-weight: 800; color: var(--cognis-blue);">↓ SQUASHED INTO ↓</div>
+            <div style="width: 100%; max-width: 500px; background: var(--cognis-blue); height: 40px; border-radius: 6px; margin-top: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800;">TOTAL ROAD: 30 MILES</div>
         </div>
+        <p style="text-align: center; font-size: 0.85rem; color: #666;">Success is realizing that 10 + 20 is the <u>only</u> thing that matters right now.</p>
     </div>
 
     <div class="phase">
-        <h2>Phase 3: The Engine</h2>
+        <h2>Phase 3: The Engine (The Sharing Machine)</h2>
         <div class="engine-container">
             <div class="controls">
+                <p style="font-size: 0.7rem; color: #cbd5e0; margin-bottom: 20px;">CHANGE THE TOTALS TO SEE THE SHARE:</p>
                 <div class="control-group">
-                    <label>Total Distance (Miles)</label>
-                    <input type="number" value="30" id="dist-in">
+                    <label>The Mile Pile</label>
+                    <input type="range" min="10" max="100" step="10" value="40" id="dist-slider">
+                    <div class="val-out">40 miles</div>
                 </div>
                 <div class="control-group">
-                    <label>Total Time (Hours)</label>
-                    <input type="number" value="3" id="time-in">
+                    <label>The Hour Boxes</label>
+                    <input type="range" min="1" max="5" step="1" value="2" id="time-slider">
+                    <div class="val-out">2 hours</div>
                 </div>
             </div>
             <div class="trace-log">
-                → Total Distance: 30.00 miles<br>
-                → Total Time: 3.00 hours<br>
-                → Sharing: 30 ÷ 3 = 10<br>
-                <span style="color: var(--cognis-gold)">AVERAGE SPEED: 10 mph</span>
+                [SYSTEM STATUS: CALCULATING PACE]<br>
+                → Gathering all miles: 40<br>
+                → Preparing 2 hour-boxes...<br>
+                → Sharing 40 into 2 groups...<br>
+                <span style="color: var(--cognis-gold); font-size: 1.1rem;">RESULT: 20 MILES PER HOUR</span>
             </div>
         </div>
     </div>
@@ -74,12 +79,12 @@
     <div class="phase">
         <h2>Phase 4: The Saboteur</h2>
         <div class="trap-box">
-            <h3>The "Speed Jumble" Trap</h3>
-            <p>If a car goes 10mph then 30mph, children often want to "plus" those numbers to get 40mph. It feels like more numbers should mean a bigger answer!</p>
-            <p><strong>The Fix:</strong> Hide the individual speeds with your hand. Tell your child: <i>"Speeds are invisible until the very end. We only care about the Whole Road and the Whole Clock."</i></p>
+            <h3>The "Double-Counting" Trap</h3>
+            <p>If you ask: "A car goes 10 miles in 1 hour, and 10 miles in 1 hour. What is the average speed?", bright kids often add the hours and the miles, but then get confused and think the speed is "20."</p>
+            <p><strong>The Fix:</strong> Use the <b>"Box Rule."</b> Tell them: <i>"We only want to know how many miles are in ONE box. If 2 boxes have 20 miles, how many in just one?"</i> This forces them to divide without realizing they are doing "hard math."</p>
         </div>
         
-        <button class="btn-complete" onclick="markComplete('b1_1')">Mark Module Complete</button>
+        <button class="btn-complete" onclick="markComplete('b1_1')">Session Complete: 11+ Logic Mastered</button>
     </div>
 </div>
 

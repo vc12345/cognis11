@@ -19,7 +19,7 @@
             justify-content: center; 
             min-height: 420px; 
             position: relative; 
-            border: none;
+            border: 2px solid #2d3748;
         }
 
         .radial-container { position: relative; width: 320px; height: 320px; }
@@ -36,7 +36,6 @@
         }
         .word-path b { color: var(--cognis-gold); text-decoration: underline; font-size: 2.2rem; }
         
-        /* Positioning words around the center */
         #w1 { top: -10%; left: 50%; transform: translateX(-50%); }
         #w2 { bottom: 10%; left: -20%; transform: rotate(-60deg); }
         #w3 { bottom: 10%; right: -20%; transform: rotate(60deg); }
@@ -84,27 +83,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>This is a <b>Linguistic Triangulation</b> puzzle. You must identify the single letter that completes the spelling of three different words simultaneously. To solve it, you cannot look at words in isolation; you must find the mathematical intersection where all three spelling rules are satisfied 100% of the time.</p>
+        <p>Think of this as <b>"The Keyhole Rule."</b> In the 11+, your child will find puzzles where three different words are all missing the exact same letter. The secret weapon is <b>Linguistic Triangulation</b>. They aren't looking for three separate answers; they are looking for the <i>only</i> letter in the alphabet that is powerful enough to complete three different spelling rules at the same time. If it doesn't work for all three, it's a decoy.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                Find the letter that completes this set: <i>B_RD</i>, <i>C_RD</i>, <i>H_RD</i>.
+                <b>The Middle Vowel</b>
+                "Find the letter that completes: <i>B_RD</i>, <i>C_RD</i>, <i>H_RD</i>."
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                Find the letter that completes this set: <i>S_AMP</i>, <i>S_ICK</i>, <i>S_OP</i>.
+                <b>The Consonant Blend</b>
+                "Find the letter that completes: <i>S_AMP</i>, <i>S_ICK</i>, <i>S_OP</i>."
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                Find the letter that completes this set: <i>_RAIN</i>, <i>_RACK</i>, <i>_RICK</i>.
+                <b>The 11+ Prefix</b>
+                "Find the letter that completes: <i>_RAIN</i>, <i>_RACK</i>, <i>_RICK</i>."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Master Key</b>. Type a letter into the central gold keyhole to see if it successfully unlocks all three word paths at once.</p>
+        <p>This is the <b>Master Key</b>. Type a single letter into the central gold keyhole. Point out to your child how the paths light up. If they type a letter that only completes one word, the other two paths remain broken. The answer is only correct when the whole system is "unlocked" and readable.</p>
         
         <div class="anatomy-display">
             <div class="radial-container">
@@ -120,23 +119,25 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Choose a word set below and try different "Keys" in the keyhole above. Watch the <b>Trace Log</b> as it validates each word. Help your child notice how some letters are "Almost Right"—they work for two words but fail on the third. This is where the examiner tries to steal their points.</p>
         <div class="engine-container">
             <div class="inputs">
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Select Word Set</label>
-                <button class="btn-preset active" onclick="setRadial('B_RD', 'C_RD', 'H_RD', this)">Set A: Middle Vowel (A)</button>
-                <button class="btn-preset" onclick="setRadial('S_AMP', 'S_ICK', 'S_OP', this)">Set B: Consonant Blend (T)</button>
-                <button class="btn-preset" onclick="setRadial('_RAIN', '_RACK', '_RICK', this)">Set C: Word Prefix (T)</button>
-                <button class="btn-preset" onclick="setRadial('HOU_E', 'MOU_E', 'ROU_E', this)">Set D: Suffix Sibilant (S)</button>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Select Word Challenge</label>
+                <button class="btn-preset active" onclick="setRadial('B_RD', 'C_RD', 'H_RD', this)">Set A: Middle Vowels (Try 'A')</button>
+                <button class="btn-preset" onclick="setRadial('S_AMP', 'S_ICK', 'S_OP', this)">Set B: Consonant Blend (Try 'T')</button>
+                <button class="btn-preset" onclick="setRadial('_RAIN', '_RACK', '_RICK', this)">Set C: Word Prefix (Try 'T')</button>
+                <button class="btn-preset" onclick="setRadial('HOU_E', 'MOU_E', 'ROU_E', this)">Set D: Suffix Sibilant (Try 'S')</button>
             </div>
-            <div class="trace-log" id="trace-37">Awaiting key input for validation...</div>
+            <div class="trace-log" id="trace-37">Awaiting the Master Key...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "First Word" Bias:</strong> Spotting a letter that works for the first word and immediately assuming it's the answer without checking the others. For example, in <i>RA_N</i>, you might see "RAN" and stop, but the letter "N" won't work for the other words in the set.</p>
-            <p><strong>The Fix:</strong> Use <b>Total Validation</b>. A candidate letter is only a "possibility" until it has been physically tested against all three words. If word 3 fails, the letter is a decoy. Always cycle through the entire set before selecting your final answer.</p>
+            <p><strong>The "First Word" Trap:</strong> Most children find a letter that works for the very first word and immediately circle it. For example, in <i>RA_N</i>, they see "RAN" and stop. They don't realize that the letter 'N' will make gibberish out of the other two words in the set.</p>
+            
+            <p><strong>The Insider Fix: The "Total Validation" Rule.</strong> Tell your child: <i>"Test the whole set or the Saboteur wins."</i> A letter is just a <b>guess</b> until it has been physically checked against all three words. If word number 3 doesn't make sense, they must throw that letter away and try the next one. <b>The answer must be a triple-threat.</b></p>
         </div>
     </section>
 </div>
@@ -163,21 +164,19 @@
         document.getElementById('w2').innerHTML = templates[1].replace('_', `<b>${displayKey}</b>`);
         document.getElementById('w3').innerHTML = templates[2].replace('_', `<b>${displayKey}</b>`);
 
-        // Style words when active
         const words = [document.getElementById('w1'), document.getElementById('w2'), document.getElementById('w3')];
         words.forEach(w => {
             w.style.color = key ? "white" : "rgba(255,255,255,0.4)";
         });
 
-        // Trace Log
-        let trace = `<div class="trace-step">→ 1. Active Set: [${templates.join(', ')}]</div>`;
-        trace += `<div class="trace-step">→ 2. Key Trial: <b style="color:var(--cognis-gold)">${key || '?'}</b></div>`;
+        let trace = `<div class="trace-step">→ 1. Word Set: [${templates.join(', ')}]</div>`;
+        trace += `<div class="trace-step">→ 2. Testing Key: <b style="color:var(--cognis-gold)">${key || '?'}</b></div>`;
         
         const results = templates.map(t => t.replace('_', key || '_'));
         
         trace += `
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → VALIDATION: ${results.join(' | ')}
+                → TRIPLE CHECK: ${results.join(' | ')}
             </div>
         `;
         

@@ -114,27 +114,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Odd One Out is a test of <b>Threshold Categorization</b>. Success does not require reading all five words. By processing words from left to right, you can establish a "Majority Rule" as soon as you identify a shared property between any two words. Once the rule is set, the first word that breaks it is the outlier. Stop processing immediately to save time.</p>
+        <p>Think of this as the <b>"Group Gatekeeper."</b> In the 11+, you are looking for a common bond that connects four of the words, leaving one "intruder" behind. The secret weapon isn't reading—it's <b>speed-sorting</b>. If your child can find a shared property between just the first few words, they’ve already found the rule. The first word that snaps that pattern is the target. They don't need to process the whole line to get the points.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "Apple, Banana, Carrot, Grape, Pear." (Identifying fruit vs vegetable).
+                <b>The Kitchen Cabinet</b>
+                "Apple, Banana, Carrot, Grape, Pear." (Finding the vegetable among the fruits).
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "Silver, Gold, Copper, Iron, Wood." (Identifying metals vs non-metals).
+                <b>The Metal Mine</b>
+                "Silver, Gold, Copper, Iron, Wood." (Spotting the non-metal).
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Brave, Bold, Fearless, Reckless, Courageous." (Identifying positive trait vs negative trait).
+                <b>The 11+ Nuance</b>
+                "Brave, Bold, Fearless, Reckless, Courageous." (Comparing positive traits vs. a negative one).
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Logic Sieve</b>. Watch how the majority rule is established. Note that the simulation "locks" the answer the moment the 2+1 threshold is met—any words remaining behind the mask are irrelevant.</p>
+        <p>This is the <b>Logic Sieve</b>. Watch how we establish a "Majority Rule" one word at a time. Notice that the moment we hit the <b>2 vs. 1</b> threshold, the answer is mathematically locked. Any words remaining behind the "?" masks are just distractions that cost time. Click "Scan Next Word" to see the sieve in action.</p>
         
         <div class="anatomy-display">
             <div class="word-row" id="sieve-row">
@@ -145,9 +145,10 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Move the outlier to different positions. Help your child notice that no matter where the "intruder" is hiding, we can usually stop thinking before we reach the fifth box. This <b>Stop-Point Logic</b> is the difference between finishing the paper and running out of time.</p>
         <div class="engine-container">
             <div class="inputs">
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">1. Position Outlier</label>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">1. Hide the Outlier</label>
                 <div class="scenario-grid">
                     <button class="btn-scenario active" onclick="loadScenario(0, this)">Pos 1</button>
                     <button class="btn-scenario" onclick="loadScenario(1, this)">Pos 2</button>
@@ -156,16 +157,16 @@
                     <button class="btn-scenario" onclick="loadScenario(4, this)">Pos 5</button>
                 </div>
             </div>
-            <div class="trace-log" id="trace-40">Awaiting scan initiation...</div>
+            <div class="trace-log" id="trace-40">Ready to begin the scan...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Linear Scan" Trap:</strong> Reading all 5 words before starting to categorize. Most students treat the set as a single unit. This wastes 5–10 seconds per question on words that don't change the answer.</p>
+            <p><strong>The "Linear Scan" Trap:</strong> Most children read all 5 words as a single list before they even start thinking about categories. This "storytime" approach wastes 5 to 10 seconds per question on information that doesn't change the outcome.</p>
             
-            <p><strong>The Fix:</strong> Use the <b>2+1 Rule</b>. If Word 1 and Word 2 match, the category is set. If Word 3 is different, it is the answer. If Word 1 and 2 are different, Word 3 acts as the tie-breaker. The moment you have a 2:1 ratio, the logic is closed. Stop scanning.</p>
+            <p><strong>The Insider Fix: The "2 + 1" Rule.</strong> Tell your child: <i>"The answer is revealed at word three."</i> If Word 1 and 2 match, the rule is set. If Word 3 is different, that's the answer—stop reading! If Word 1 and 2 are different, Word 3 is the tie-breaker. <b>The moment you have two of a kind and one oddity, the logic is closed.</b></p>
         </div>
     </section>
 </div>
@@ -174,10 +175,10 @@
 
 <script>
     const scenarios = [
-        {words: ["OVEN", "SPOON", "FORK", "KNIFE", "TONGS"], out: 0, reason: "Kitchen Appliance vs. Utensils"},
-        {words: ["IRON", "WOOD", "GOLD", "SILVER", "COPPER"], out: 1, reason: "Metals vs. Organic Material"},
+        {words: ["OVEN", "SPOON", "FORK", "KNIFE", "TONGS"], out: 0, reason: "Appliance vs. Utensils"},
+        {words: ["IRON", "WOOD", "GOLD", "SILVER", "COPPER"], out: 1, reason: "Metals vs. Organic"},
         {words: ["LION", "TIGER", "EAGLE", "BEAR", "WOLF"], out: 2, reason: "Mammals vs. Birds"},
-        {words: ["BRAVE", "BOLD", "VALIANT", "CRUEL", "NOBLE"], out: 3, reason: "Heroic traits vs. Negative trait"},
+        {words: ["BRAVE", "BOLD", "VALIANT", "CRUEL", "NOBLE"], out: 3, reason: "Positive vs. Negative"},
         {words: ["APPLE", "PEAR", "PEACH", "PLUM", "ONION"], out: 4, reason: "Fruits vs. Vegetables"}
     ];
 
@@ -200,7 +201,7 @@
         const row = document.getElementById('sieve-row');
         row.innerHTML = scenarios[idx].words.map(() => `<div class="word-box">?</div>`).join('');
         
-        document.getElementById('trace-40').innerHTML = `<div class="trace-step">→ 1. Scenario: ${scenarios[idx].reason}</div><div class="trace-step">→ 2. Status: Ready to scan...</div>`;
+        document.getElementById('trace-40').innerHTML = `<div class="trace-step">→ 1. Rule Type: ${scenarios[idx].reason}</div><div class="trace-step">→ 2. Status: Ready to scan...</div>`;
     }
 
     function unmaskNext() {
@@ -218,23 +219,25 @@
         else mCount++;
 
         const trace = document.getElementById('trace-40');
-        let html = `<div class="trace-step">→ 1. Current Ratio: ${mCount} Majority vs ${oCount} Outlier</div>`;
+        let html = `<div class="trace-step">→ 1. Ratio: ${mCount} Majority vs ${oCount} Outlier</div>`;
 
-        // The Logic Threshold (2+1 Rule)
-        if (mCount >= 2 && oCount >= 1) {
+        if ((mCount >= 2 && oCount >= 1) || (mCount >= 3 && revealed >= 2)) {
             logicLocked = true;
+            const outlierIdx = scenarios[currentS].out;
             for (let i = 0; i <= revealed; i++) {
-                if (i === scenarios[currentS].out) boxes[i].classList.add('outlier');
+                if (i === outlierIdx) boxes[i].classList.add('outlier');
                 else boxes[i].classList.add('majority');
             }
+            
+            const resultWord = scenarios[currentS].words[outlierIdx];
             html += `
                 <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                    → RESULT: LOGIC CLOSED (${word} found)
+                    → RESULT: LOGIC CLOSED (${resultWord} is the outlier)
                 </div>
-                <div class="trace-step" style="font-size:0.7rem; opacity:0.7;">Efficiency: Scanned ${revealed+1}/5 words. Stop processing now.</div>
+                <div class="trace-step" style="font-size:0.7rem; opacity:0.7;">Time Saved: Scanned only ${revealed+1}/5 words. Stop now!</div>
             `;
         } else {
-            html += `<div class="trace-step">→ 2. Status: Evidence inconclusive. Scan next...</div>`;
+            html += `<div class="trace-step">→ 2. Status: Evidence inconclusive. Scanning...</div>`;
         }
 
         trace.innerHTML = html;

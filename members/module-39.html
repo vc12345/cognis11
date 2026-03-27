@@ -9,7 +9,7 @@
     
     <style>
         /* UNIQUE CSS FOR ANALOGY BRIDGE */
-        .anatomy-display { padding: 50px 20px; background: #f8fafc; border-radius: 12px; }
+        .anatomy-display { padding: 50px 20px; background: #f8fafc; border-radius: 12px; border: 2px solid #e2e8f0; }
         
         .bridge-stage { 
             display: flex; 
@@ -55,6 +55,7 @@
             font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 2px;
+            text-align: center;
         }
 
         .engine-container { grid-template-columns: 1fr 1.2fr; }
@@ -85,19 +86,19 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>An analogy is a <b>Logical Ratio</b>. The bridge that connects the first pair must be the exact same bridge that connects the second. To crack the code, you must build a "Bridge Sentence" (e.g., <i>A [Verb] B</i>). If the sentence works for the first pair, it must be used as a rigid template for the second to find the missing word.</p>
+        <p>Think of an analogy as a <b>"Logic Ratio"</b>: $A : B :: C : D$. In the 11+, your child isn't just matching words; they are matching <i>relationships</i>. The secret weapon is the <b>Bridge Sentence</b>. If the connection between the first pair is "A is a part of B," then the second pair must follow that exact rule without exception. If the bridge doesn't hold both pairs, the logic is broken.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
+                <b>The Simple Connection</b>
                 <i>Finger : Hand :: Toe : [?]</i>
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
+                <b>The "Made Of" Rule</b>
                 <i>Scale : Fish :: Feather : [?]</i>
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
+                <b>The 11+ Environment</b>
                 <i>Arid : Desert :: Humid : [?]</i>
             </div>
         </div>
@@ -105,7 +106,7 @@
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Logic Hinge</b>. Use the buttons below to see how the central "Bridge Sentence" forces both word pairs to follow the same rules of engagement.</p>
+        <p>This is the <b>Logic Mirror</b>. Notice how the central "Bridge Sentence" (the gold dashed line) acts as a rigid template. Point out to your child that if they change the words, they <b>cannot</b> change the bridge. The rules of the top floor must be obeyed by the bottom floor perfectly.</p>
         
         <div class="anatomy-display">
             <div class="bridge-stage">
@@ -114,7 +115,7 @@
                 <div class="node" id="p1-2">FINGER</div>
             </div>
             
-            <div class="exactly-like">▼ (Exactly Like) ▼</div>
+            <div class="exactly-like">▼ MUST BE MIRRORED ▼</div>
             
             <div class="bridge-stage">
                 <div class="node" id="p2-1" style="border-color:var(--cognis-gold)">FOOT</div>
@@ -126,25 +127,27 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Select a logic type below to see how the <b>Bridge Sentence</b> connects the word sets. Ask your child to read the bridge out loud for both pairs. If it sounds natural for both, they've cracked the logic.</p>
         <div class="engine-container">
             <div class="inputs">
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Select Logic Bridge</label>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Choose a Logic Type</label>
                 <div class="preset-grid">
                     <button class="btn-logic active" onclick="setLogic('HAND','HAS A','FINGER','FOOT','TOE', this)">Part-to-Whole</button>
-                    <button class="btn-logic" onclick="setLogic('FISH','HAS','SCALES','BIRD','FEATHERS', this)">Surface-to-Subject</button>
-                    <button class="btn-logic" onclick="setLogic('PUPPY','GROWS INTO','DOG','KITTEN','CAT', this)">Junior-to-Senior</button>
-                    <button class="btn-logic" onclick="setLogic('DESERT','IS','ARID','RAINFOREST','HUMID', this)">Property-to-Object</button>
+                    <button class="btn-logic" onclick="setLogic('FISH','HAS','SCALES','BIRD','FEATHERS', this)">Protective Covering</button>
+                    <button class="btn-logic" onclick="setLogic('PUPPY','BECOMES','DOG','KITTEN','CAT', this)">Age Progression</button>
+                    <button class="btn-logic" onclick="setLogic('DESERT','IS','ARID','RAINFOREST','HUMID', this)">Defining Property</button>
                 </div>
             </div>
-            <div class="trace-log" id="trace-39">Select a logic type to test the bridge...</div>
+            <div class="trace-log" id="trace-39">Construction logic active...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Inversion" Trap:</strong> Getting the relationship correct but the order wrong. If the first pair is <i>Subject : Property</i>, the second pair cannot be <i>Property : Subject</i>.</p>
-            <p><strong>The Fix:</strong> Use the <b>Sentence Template</b>. If you say "A Hand HAS A Finger," you must test the second pair using the same order: "A Foot HAS A Toe." If you say "A Toe HAS A Foot," the logic is inverted and your answer will be wrong. Direction is as important as the connection itself.</p>
+            <p><strong>The "Inversion" Trap:</strong> This is the most common mistake. Your child might correctly identify that a finger is part of a hand, but then they pick "Toe : Foot" in the wrong order. If the first pair is <i>Large : Small</i>, the second pair <b>must</b> be <i>Large : Small</i>.</p>
+            
+            <p><strong>The Insider Fix: The "Direction Test."</strong> Tell your child: <i>"The bridge is a one-way street."</i> They should physically draw an arrow between the words. If the arrow goes from left to right for the first pair, it must go left to right for the second. If they say "A Finger is in a Hand," but then "A Foot is in a Toe," the logic has crashed. <b>Order is everything.</b></p>
         </div>
     </section>
 </div>
@@ -165,11 +168,10 @@
         document.getElementById('p2-2').innerText = w4;
 
         document.getElementById('trace-39').innerHTML = `
-            <div class="trace-step">→ 1. Pair A: <b>${w1}</b> — ${verb} — <b>${w2}</b></div>
-            <div class="trace-step">→ 2. Logic: <b>${btn ? btn.innerText : 'Synchronized'}</b></div>
-            <div class="trace-step">→ 3. Pair B: <b>${w3}</b> — ${verb} — <b>${w4}</b></div>
+            <div class="trace-step">→ 1. Building Bridge: <b>${w1}</b> ${verb} <b>${w2}</b></div>
+            <div class="trace-step">→ 2. Testing Symmetry: Does <b>${w3}</b> ${verb} <b>${w4}</b>?</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → ANALOGY VALIDATED
+                → STATUS: ANALOGY MIRRORED
             </div>
         `;
     }

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B1.1: Average Speed - The Big Squash</title>
+    <link rel="stylesheet" href="../css/module-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="module-card">
+    <div class="header">
+        <h1>B1.1: Average Speed — The Big Squash</h1>
+    </div>
+
+    <div class="phase">
+        <h2>Phase 1: The X-Ray</h2>
+        <p>To find the average speed, we ignore the "fast" and "slow" bits. We just want to find the <b>One Steady Pace</b> that fits the whole trip.</p>
+        
+        <div class="question-tiers">
+            <div class="tier-card">
+                <b>Level 1: The Road</b>
+                How many miles did we travel altogether? (Add the distances).
+            </div>
+            <div class="tier-card">
+                <b>Level 2: The Clock</b>
+                How many hours did it take altogether? (Add the times).
+            </div>
+            <div class="tier-card">
+                <b>Level 3: The Squash</b>
+                Share the total miles into the total hours. That's your speed!
+            </div>
+        </div>
+    </div>
+
+    <div class="phase">
+        <h2>Phase 2: The Anatomy</h2>
+        <p>Point to the <b>Journey Line</b>. We aren't looking at two separate trips anymore; we are watching them merge into one long road.</p>
+        
+        <div class="anatomy-display">
+            <div style="font-weight: 800; color: var(--cognis-blue); margin-bottom: 20px;">THE JOURNEY SQUASH</div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <div style="padding: 15px; background: #e2e8f0; border-radius: 8px;">Leg 1: 10 miles</div>
+                <div style="font-size: 1.5rem;">+</div>
+                <div style="padding: 15px; background: #e2e8f0; border-radius: 8px;">Leg 2: 10 miles</div>
+            </div>
+            <div style="margin-top: 20px; font-size: 1.2rem; font-weight: 700;">→ TOTAL ROAD: 20 MILES</div>
+        </div>
+    </div>
+
+    <div class="phase">
+        <h2>Phase 3: The Engine</h2>
+        <div class="engine-container">
+            <div class="controls">
+                <div class="control-group">
+                    <label>Total Distance (Miles)</label>
+                    <input type="number" value="30" id="dist-in">
+                </div>
+                <div class="control-group">
+                    <label>Total Time (Hours)</label>
+                    <input type="number" value="3" id="time-in">
+                </div>
+            </div>
+            <div class="trace-log">
+                → Total Distance: 30.00 miles<br>
+                → Total Time: 3.00 hours<br>
+                → Sharing: 30 ÷ 3 = 10<br>
+                <span style="color: var(--cognis-gold)">AVERAGE SPEED: 10 mph</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="phase">
+        <h2>Phase 4: The Saboteur</h2>
+        <div class="trap-box">
+            <h3>The "Speed Jumble" Trap</h3>
+            <p>If a car goes 10mph then 30mph, children often want to "plus" those numbers to get 40mph. It feels like more numbers should mean a bigger answer!</p>
+            <p><strong>The Fix:</strong> Hide the individual speeds with your hand. Tell your child: <i>"Speeds are invisible until the very end. We only care about the Whole Road and the Whole Clock."</i></p>
+        </div>
+        
+        <button class="btn-complete" onclick="markComplete('b1_1')">Mark Module Complete</button>
+    </div>
+</div>
+
+<script src="../js/module-core.js"></script>
+<script>initModule('b1_1');</script>
+</body>
+</html>

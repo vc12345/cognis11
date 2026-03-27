@@ -97,27 +97,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Hidden word puzzles test <b>Boundary Dissolution</b>. In standard reading, we see spaces as walls that define where words begin and end. To find a hidden word, you must ignore these structural walls and treat the sentence as a continuous stream of characters. Most hidden words are "Bridge Words"—they exist across the seam where two words meet.</p>
+        <p>Think of this as <b>"The Seam Secret."</b> In standard reading, our eyes see spaces as walls that define where words begin and end. In the 11+, examiners love to "glue" a secret word across those gaps. To find it, your child must learn to dissolve those walls and treat the whole sentence as a continuous stream. Most hidden words are <b>"Bridge Words"</b>—they steal their letters from the end of one word and the start of the next.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "Find the 3-letter word hidden in the phrase: 'THE ATOM'."
+                <b>The Atomic Bridge</b>
+                "Find the 3-letter word hidden in: 'THE ATOM'."
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "Find the 4-letter word hidden in the phrase: 'FISH ARE DEEP'."
+                <b>The Deep Forest</b>
+                "Find the 4-letter word hidden in: 'FISH ARE DEEP'."
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Find the 4-letter word hidden in the phrase: 'MADE A FOUL'."
+                <b>The Foul Play</b>
+                "Find the 4-letter word hidden in: 'MADE A FOUL'."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Seam Scanner</b>. Use the examples below to see how removing spaces reveals words that were previously invisible to the eye.</p>
+        <p>This is the <b>Seam Scanner</b>. Point to the "Bridge" in the examples below. Notice how the space between words disappears, revealing a completely different word that was hiding in plain sight. Help your child see that the "ghost word" doesn't care about the original meaning of the sentence.</p>
         
         <div class="anatomy-display">
             <div id="scanner" class="scanner-beam"></div>
@@ -126,38 +126,40 @@
         </div>
         
         <div class="btn-example-row">
-            <button class="btn-example" onclick="setPhrase('THE ATOM', 3)">EAT (3-letter)</button>
-            <button class="btn-example" onclick="setPhrase('FISH ARE DEEP', 4)">HARE (4-letter)</button>
-            <button class="btn-example" onclick="setPhrase('MADE A FOUL', 4)">DEAF (4-letter)</button>
+            <button class="btn-example" onclick="setPhrase('THE ATOM', 3)">EAT (at the junction)</button>
+            <button class="btn-example" onclick="setPhrase('FISH ARE DEEP', 4)">HARE (bridging FISH and ARE)</button>
+            <button class="btn-example" onclick="setPhrase('MADE A FOUL', 4)">DEAF (bridging MADE and A)</button>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Type a phrase and use the <b>Scanner Position</b> slider to hunt for bridges. Adjust the <b>Window Width</b> to look for longer or shorter words. Ask your child to stop you the moment they see a real word appear in the gold beam.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Input Phrase</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Type a Phrase</label>
                     <input type="text" id="phrase-in" class="input-text" value="THE ATOM" oninput="update33()">
                 </div>
                 <div class="control-group" style="margin-top:20px;">
-                    <label>Scanner Position</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Scanner Position</label>
                     <input type="range" id="scan-slider" min="0" max="100" value="35" oninput="update33()">
                 </div>
                 <div class="control-group" style="margin-top:20px;">
-                    <label>Window Width (Word Length)</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Target Word Length</label>
                     <input type="range" id="scan-width" min="2" max="5" value="3" oninput="update33()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-33">Collapsing spaces for pattern discovery...</div>
+            <div class="trace-log" id="trace-33">Collapsing the spaces...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Intra-Word" Trap:</strong> Searching for a smaller word entirely *inside* one of the existing words (e.g., finding the word "CAT" inside "SCATTER"). In 11+ exams, the hidden word almost never sits comfortably inside another word.</p>
-            <p><strong>The Fix:</strong> Use <b>Seam Searching</b>. Physically place your finger or a pen over the space between two words. The hidden word will nearly always be formed by taking the last few letters of one word and the first few letters of the next. Focus 100% of your attention on the junctions.</p>
+            <p><strong>The "Inside Job" Trap:</strong> Most children look for a small word entirely <i>inside</i> one of the big words (like finding "CAT" inside "SCATTER"). In the 11+, the hidden word is almost <b>never</b> inside a single word. If it were that easy, it wouldn't be a puzzle!</p>
+            
+            <p><strong>The Insider Fix: The "Pinch" Method.</strong> Tell your child: <i>"The answer lives in the cracks."</i> Have them place their finger over the space between two words. They should look at the 2 letters before the space and the 2 letters after the space. That junction is the 90% "Hot Zone" where the hidden word is hiding. <b>Focus on the seams, ignore the centers.</b></p>
         </div>
     </section>
 </div>
@@ -168,7 +170,6 @@
     function setPhrase(p, w) {
         document.getElementById('phrase-in').value = p;
         document.getElementById('scan-width').value = w;
-        // Center the beam roughly on a known hit for the example
         const positions = {"THE ATOM": 35, "FISH ARE DEEP": 38, "MADE A FOUL": 33};
         document.getElementById('scan-slider').value = positions[p] || 50;
         update33();
@@ -198,11 +199,11 @@
         scanner.style.width = (widthVal / totalChars * 100) + "%";
 
         document.getElementById('trace-33').innerHTML = `
-            <div class="trace-step">→ 1. Total Stream: <b>${collapsed}</b></div>
-            <div class="trace-step">→ 2. Searching for: <b>${widthVal}-letter</b> patterns</div>
-            <div class="trace-step">→ 3. Current Focus: <b style="color:var(--cognis-gold)">${collapsed.substring(Math.floor(leftPercent/100 * totalChars), Math.floor(rightPercent/100 * totalChars))}</b></div>
+            <div class="trace-step">→ 1. Character Stream: <b>${collapsed}</b></div>
+            <div class="trace-step">→ 2. Scan Window: <b>${widthVal} letters</b></div>
+            <div class="trace-step">→ 3. Active Search: <b style="color:var(--cognis-gold)">${collapsed.substring(Math.floor(leftPercent/100 * totalChars), Math.floor(rightPercent/100 * totalChars))}</b></div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → STATUS: Pattern Scan Active
+                → STATUS: Scanning the Seams
             </div>
         `;
     }

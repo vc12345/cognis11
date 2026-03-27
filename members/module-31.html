@@ -16,6 +16,7 @@
             justify-content: center; 
             min-height: 200px;
             border: none;
+            border-radius: 12px;
         }
 
         .word-stream { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
@@ -77,27 +78,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In advanced coding, the rule depends on the <b>property</b> of the letter. Vowels (A, E, I, O, U) and Consonants are treated as separate groups. You must categorize every letter through a mental gatekeeper before applying its specific transformation rule.</p>
+        <p>Think of this as <b>"The Sorting Office."</b> In advanced coding, the rule depends on <i>what kind</i> of letter you are holding. Vowels (A, E, I, O, U) go through the blue door, and Consonants go through the red door. The secret weapon is realizing that each group has its own math. Your child must learn to act like a gatekeeper—categorizing every letter through a mental "check" before they even think about shifting it.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "If Vowels shift +1 and Consonants stay the same, what is the code for the word 'BAT'?"
+                <b>The Basic Gate</b>
+                "If Vowels shift +1 and Consonants stay the same, what is the code for 'BAT'?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
+                <b>The Split Shift</b>
                 "Vowels shift +2, Consonants shift -1. Find the code for the word 'DOG'."
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "A word is encoded using split rules to become 'QMANFU'. Decode it back to 'PLANET'."
+                <b>The 11+ Challenge</b>
+                "A word is encoded using split rules to become 'QMANFU'. Can you reverse the gates to find 'PLANET'?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Property Gatekeeper</b>. Each tile identified the letter type (Blue for Vowel, Red for Consonant) and applies the unique math for that group.</p>
+        <p>This is the <b>Property Gatekeeper</b>. Notice how the colors change based on the letter type. Blue tiles are for <b>Vowels</b> and Red tiles are for <b>Consonants</b>. Help your child see that the letter 'A' in the middle of a word might jump forward, while the 'B' next to it might jump backward. They aren't following one path; they are following two different sets of orders.</p>
         <div class="anatomy-display">
             <div class="word-stream" id="gate-display"></div>
         </div>
@@ -105,33 +106,35 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Type a word and set separate shifts for Vowels and Consonants. Watch the <b>Trace Log</b> as it sorts each character. Ask your child to spot the moment the rule "flips"—usually when the word moves from a consonant to a vowel. This visual "tagging" is exactly how they should solve these in the exam.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Test Word</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Type your Test Word</label>
                     <input type="text" id="word-in" class="input-text" value="BRAIN" maxlength="10" oninput="run31()">
                 </div>
                 
                 <div class="shift-controls">
                     <div class="shift-box">
-                        <label>VOWEL SHIFT</label>
+                        <label style="color: #3182ce;">VOWEL SHIFT</label>
                         <input type="number" id="v-shift" value="1" oninput="run31()">
                     </div>
                     <div class="shift-box">
-                        <label>CONS. SHIFT</label>
+                        <label style="color: #e53e3e;">CONS. SHIFT</label>
                         <input type="number" id="c-shift" value="-1" oninput="run31()">
                     </div>
                 </div>
             </div>
-            <div class="trace-log" id="trace-31">Awaiting data for categorization...</div>
+            <div class="trace-log" id="trace-31">Categorizing the word...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "One-Track" Trap:</strong> Students often apply the first rule they read to the entire word, forgetting that the rule "re-evaluates" itself at every single letter.</p>
-            <p><strong>The Fix:</strong> Use <b>Property Tagging</b>. Before shifting anything, physically or mentally "tag" every letter as a V (Vowel) or C (Consonant). Only once the word is mapped should you apply the math. If you don't tag first, you will miss the pivot point where the rule flips.</p>
+            <p><strong>The "One-Track" Trap:</strong> Most children get into a rhythm. If they shift the first two consonants by -1, their brain will go on autopilot and shift the vowel by -1 as well. They forget that the rule "re-boots" itself at every single letter.</p>
+            
+            <p><strong>The Insider Fix: The "Label Before You Leap" Rule.</strong> Tell your child: <i>"Don't do the math yet."</i> Before they shift anything, they should write a tiny 'V' or 'C' above every letter in the word. Only once the whole word is tagged should they pick up their pencil to do the jumping. <b>Tagging stops the autopilot.</b></p>
         </div>
     </section>
 </div>
@@ -167,13 +170,13 @@
                 </div>
             `;
             
-            trace += `<div class="trace-step" style="font-size:0.75rem;">${char} [${isVowel?'V':'C'}] shifts ${shift > 0 ? '+' + shift : shift} → <b>${newChar}</b></div>`;
+            trace += `<div class="trace-step" style="font-size:0.75rem;">${char} [${isVowel?'Blue Door':'Red Door'}] shifts ${shift > 0 ? '+' + shift : shift} → <b>${newChar}</b></div>`;
         }
 
         document.getElementById('trace-31').innerHTML = `
             ${trace}
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → ENCODED WORD: ${finalResult || '...'}
+                → CIPHER RESULT: ${finalResult || '...'}
             </div>
         `;
     }

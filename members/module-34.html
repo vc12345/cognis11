@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module 34: Hinge Bridge | Cognis 11+</title>
+    <title>Module 34: Compound Word Bridge | Cognis 11+</title>
     
     <link rel="stylesheet" href="../css/module-style.css">
     
@@ -14,6 +14,7 @@
             padding: 80px 20px; 
             border-radius: 12px;
             overflow: hidden;
+            border: 2px solid #e2e8f0;
         }
 
         .bridge-stage { 
@@ -78,7 +79,6 @@
             white-space: nowrap;
         }
 
-        /* Fixed Slider Controls - No Overlap */
         .slider-control-box {
             max-width: 450px;
             margin: 60px auto 0;
@@ -122,27 +122,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Compound word bridges are <b>Hinge Words</b>—linguistic connectors that serve two masters simultaneously. To solve these, you must identify a single word that acts as the suffix for the first word and the prefix for the second. This requires dual-process thinking: maintaining one successful connection while scanning for a second.</p>
+        <p>Think of this as the <b>"Word Hinge."</b> In the 11+, you are looking for one single word that can glue two separate words together. This mystery word must act as the <i>end</i> of the first word and the <i>start</i> of the second. The secret weapon is dual-scanning: your child must find a word that is strong enough to hold up both sides of the bridge at the same time.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "Find the word that fits in the middle: RAIN [ ____ ] BALL. It must make a word with both."
+                <b>The Weather Game</b>
+                "Find the word that fits: RAIN [ ____ ] BALL. It must make a new word with both."
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "Find the 4-letter bridge: FOOT [ ____ ] ROOM. Both words must be common compound nouns."
+                <b>The Four-Letter Link</b>
+                "Find the bridge: FOOT [ ____ ] ROOM. Both must be real compound nouns."
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Identify the bridge for SEA [ ____ ] SIDE. The connection must work perfectly at both junctions."
+                <b>The Sea Captain</b>
+                "Identify the bridge for SEA [ ____ ] SIDE. The hinge must click into place perfectly."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Hinge Mechanism</b>. Type a potential bridge word in the gold box, then move the slider to "slide" it into the Left and Right blocks to test the connection.</p>
+        <p>This is the <b>Hinge Mechanism</b>. Type a word into the gold box, then move the slider to "slide" it toward the blue blocks. Notice how the word has to survive two different connections. If it only works on one side, the bridge collapses!</p>
         
         <div class="anatomy-display">
             <div class="bridge-stage">
@@ -156,9 +156,9 @@
             
             <div class="slider-control-box">
                 <div class="slider-labels">
-                    <span style="text-align: left;">Connect A</span>
+                    <span style="text-align: left;">Left Check</span>
                     <span style="text-align: center;">Neutral</span>
-                    <span style="text-align: right;">Connect B</span>
+                    <span style="text-align: right;">Right Check</span>
                 </div>
                 <input type="range" id="hinge-slider" min="0" max="100" value="50" oninput="update34()">
             </div>
@@ -167,26 +167,28 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the input boxes to set up a challenge. Type your bridge word and slide the hinge to see the new compound words form. Help your child notice that the bridge word never changes—it just changes its "partner."</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Set Word A (Prefix)</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Set Word A (The Start)</label>
                     <input type="text" id="in-w1" class="input-text" value="RAIN" oninput="update34()">
                 </div>
                 <div class="control-group" style="margin-top:20px;">
-                    <label>Set Word B (Suffix)</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Set Word B (The Finish)</label>
                     <input type="text" id="in-w2" class="input-text" value="BALL" oninput="update34()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-34">Slide the hinge to test the validity of the bridge...</div>
+            <div class="trace-log" id="trace-34">Slide the gold box to test the bridge...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Half-Match" Trap:</strong> Finding a word that connects perfectly to the first block and assuming it's correct without checking the second (e.g., choosing COAT for RAIN-COAT, even though COAT-BALL is not a word).</p>
-            <p><strong>The Fix:</strong> Use the <b>Tug-of-War Test</b>. Once you find a candidate for the first word, mentally "pull" it over to the second. If it doesn't click into place to form a common compound word, discard it immediately. A bridge only counts if it supports both sides.</p>
+            <p><strong>The "Half-Match" Trap:</strong> Most children find a word that fits perfectly with the first block (like RAIN-COAT) and get so excited they forget to check the second block. They write down "COAT" even though "COAT-BALL" isn't a word!</p>
+            
+            <p><strong>The Insider Fix: The "Tug-of-War" Rule.</strong> Tell your child: <i>"The bridge word is being pulled from both sides."</i> Once they have a candidate, they must mentally pull it over to the second word. If it doesn't "click" instantly to form a common word they recognize, it's a fake. <b>It must work on both sides to be true.</b></p>
         </div>
     </section>
 </div>
@@ -208,26 +210,24 @@
         blockL.innerText = w1 || "???";
         blockR.innerText = w2 || "???";
         
-        // Horizontal travel
         const offset = (sliderVal - 50) * 1.3;
         mover.style.transform = `translateX(${offset}px)`;
 
         let status = "Scanning...";
-        let resultLine = "...";
+        let resultLine = "Move the slider to test the hinge.";
 
         if(sliderVal < 25) {
             status = "Locked Left";
-            resultLine = `Formation: <b>${w1}${bridge || '____'}</b>`;
+            resultLine = `Formation A: <b>${w1}${bridge || '____'}</b>`;
             blockL.style.boxShadow = "0 0 25px rgba(197, 160, 89, 0.4)";
             blockL.style.transform = "scale(1.05)";
         } else if(sliderVal > 75) {
             status = "Locked Right";
-            resultLine = `Formation: <b>${bridge || '____'}${w2}</b>`;
+            resultLine = `Formation B: <b>${bridge || '____'}${w2}</b>`;
             blockR.style.boxShadow = "0 0 25px rgba(197, 160, 89, 0.4)";
             blockR.style.transform = "scale(1.05)";
         } else {
             status = "Neutral State";
-            resultLine = "Align to test connections";
             blockL.style.boxShadow = "none";
             blockR.style.boxShadow = "none";
             blockL.style.transform = "scale(1)";
@@ -237,11 +237,11 @@
         connLabel.innerText = status;
 
         document.getElementById('trace-34').innerHTML = `
-            <div class="trace-step">→ 1. Prefix Word: <b>${w1}</b></div>
-            <div class="trace-step">→ 2. Suffix Word: <b>${w2}</b></div>
-            <div class="trace-step">→ 3. Input Bridge: <b style="color:var(--cognis-gold)">${bridge || 'EMPTY'}</b></div>
+            <div class="trace-step">→ 1. Left Partner: <b>${w1}</b></div>
+            <div class="trace-step">→ 2. Right Partner: <b>${w2}</b></div>
+            <div class="trace-step">→ 3. Hinge Word: <b style="color:var(--cognis-gold)">${bridge || 'EMPTY'}</b></div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → ${resultLine}
+                → STATUS: ${resultLine}
             </div>
         `;
     }

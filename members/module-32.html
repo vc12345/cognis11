@@ -9,7 +9,7 @@
     
     <style>
         /* UNIQUE CSS FOR CRYPTOGRAPHY LAB */
-        .anatomy-display { padding: 40px; background: #1a202c; border: none; }
+        .anatomy-display { padding: 40px; background: #1a202c; border: none; border-radius: 12px; }
         
         .rosetta-stone {
             background: rgba(255,255,255,0.03);
@@ -30,7 +30,7 @@
             margin-top: 8px; border-bottom: 2px solid #4a5568; 
             width: 100%; height: 35px; text-align: center;
         }
-        .code-slot.space { width: 20px; } /* Empty space for phrases */
+        .code-slot.space { width: 20px; }
 
         .variant-selector { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; }
         .v-btn { 
@@ -61,7 +61,7 @@
             text-transform: uppercase;
         }
 
-        .engine-container { grid-template-columns: 1fr 1.2fr; }
+        .engine-container { grid-template-columns: 1fr 1.3fr; }
         .reset-btn {
             background: transparent; border: 2px solid var(--cognis-gold);
             color: var(--cognis-gold); padding: 10px 20px; border-radius: 8px;
@@ -80,38 +80,38 @@
 
 <div class="module-card" style="margin-top: 40px;">
     <div class="header">
-        <h1>Module 32: Symbol-to-Word Mapping</h1>
+        <h1>Module 32: Symbol Mapping</h1>
     </div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Breaking a symbol code is about spotting <b>Patterns</b>. If a symbol repeats, the letter it hides must also repeat in that exact spot. By matching the "shape" of the code (where the duplicates are) to the "shape" of the words, you can crack the entire message without needing a key.</p>
+        <p>Think of symbol mapping as <b>"Pattern Fingerprinting."</b> In the 11+, you are given a code made of strange shapes and asked to match it to a word. The secret weapon isn't knowing what the symbols mean—it's knowing <b>where they repeat</b>. If a symbol appears twice, the letter it hides <i>must</i> also appear twice in those exact same spots. Cracking the code is simply a game of finding the word with the same repeating "skeleton" as the symbols.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "If Triangle = G and Circle = O, what 3-letter word is Triangle-Circle-Triangle?"
+                <b>The Simple Swap</b>
+                "If Δ = G and Ω = O, what 3-letter word is represented by Δ-Ω-Δ?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "The word is either STEER, STARE, or STAIR. If the code is Square-Bolt-Star-Star-Leaf, which word is it? How do you know?"
+                <b>The Double-Letter Trap</b>
+                "The word is STEER, STARE, or STAIR. If the code is Square-Star-Circle-Circle-Triangle, which word is it?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Given the code: Star-Circle-Bolt / Star-Leaf-Sun. If the words are 'THE END' and 'THE DOG', find the code for 'G'."
+                <b>The Phrase Cracker</b>
+                "Two codes: 'Ψ-Ω-Σ' and 'Ψ-Δ-Γ'. If the words are 'THE END' and 'THE DOG', which symbol stands for 'G'?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Select a structural variant below. Assign letters to the symbols in the bank to see if they fit the word's "shape."</p>
+        <p>This is the <b>Pattern Matcher</b>. Select a word type below. Notice how the symbols are placed. Assign letters to the <b>Key Bank</b> at the bottom. Watch how typing a letter for one symbol instantly updates every matching symbol in the word. This "global update" is exactly how a detective's brain should work.</p>
         
         <div class="anatomy-display">
             <div class="variant-selector">
-                <button class="v-btn active" onclick="setTarget('PUPPY', this)">5-Letter Word</button>
-                <button class="v-btn" onclick="setTarget('SUN IS HOT', this)">3-Word Phrase</button>
-                <button class="v-btn" onclick="setTarget('BANANAS', this)">8-Letter Pattern</button>
+                <button class="v-btn active" onclick="setTarget('PUPPY', this)">Double Letter Word</button>
+                <button class="v-btn" onclick="setTarget('SUN IS HOT', this)">Short Phrase</button>
+                <button class="v-btn" onclick="setTarget('BANANAS', this)">Repeating Pattern</button>
             </div>
 
             <div class="rosetta-stone">
@@ -126,22 +126,24 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the <b>Key Bank</b> above to experiment with the mapping. Notice <b>Structural Integrity</b>: if you decide that Δ is 'A', every Δ must become an 'A'. If the word stops making sense, your initial "Pattern Match" was likely wrong.</p>
         <div class="engine-container">
             <div class="inputs">
                 <p style="font-size: 0.75rem; color: #a0aec0; margin-bottom: 20px;">
-                    Logic Test: If you change one symbol, every instance of that symbol must update. This is <b>Structural Integrity</b>.
+                    Logic Test: If you map a letter, it fills every slot for that symbol. Can you complete the current pattern?
                 </p>
-                <button class="reset-btn" onclick="resetDecoder()">Clear All Mapping</button>
+                <button class="reset-btn" onclick="resetDecoder()">Clear All Mappings</button>
             </div>
-            <div class="trace-log" id="trace-32">Choose a pattern variant to begin decoding...</div>
+            <div class="trace-log" id="trace-32">Assign a letter to a symbol to begin...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Visual Mimic" Trap:</strong> Trying to "guess" letters based on what a symbol looks like (e.g., assuming a Circle must be 'O' or a Bolt must be 'S').</p>
-            <p><strong>The Fix:</strong> Ignore the shape; follow the <b>Position</b>. If a symbol appears at positions 2 and 3 of a 5-letter word, you are looking for words with double letters in the middle (like APPLE or SPEED). Logic beats eyes every time.</p>
+            <p><strong>The "Visual Guess" Trap:</strong> Most children look at a symbol and try to guess the letter based on its shape (e.g., assuming a Circle <i>must</i> be 'O' or a Bolt <i>must</i> be 'S'). This is a trap set by examiners to lead them to the wrong answer.</p>
+            
+            <p><strong>The Insider Fix: The "Position Check."</strong> Tell your child: <i>"The shape is a lie; the position is the truth."</i> If a symbol appears at position 2 and 5 of a word, they are only looking for words with the same letter at position 2 and 5 (like L<b>E</b>V<b>E</b>L). <b>Ignore the drawing; count the slots.</b></p>
         </div>
     </section>
 </div>
@@ -174,7 +176,6 @@
         uniqueChars.forEach((char, i) => charToSym[char] = allSymbols[i]);
         activeSymbols = Object.values(charToSym);
 
-        // Render Symbols
         for (let char of currentTarget) {
             if (char === " ") {
                 display.innerHTML += `<div class="code-slot space"></div>`;
@@ -189,7 +190,6 @@
             `;
         }
 
-        // Render Mapping Bank
         activeSymbols.forEach(s => {
             bank.innerHTML += `
                 <div class="key-pair">
@@ -204,25 +204,27 @@
 
     function updateMap(sym, val) {
         userMap[sym] = val.toUpperCase();
-        const slot = document.getElementById(`slot-${sym}`);
-        if(slot) slot.innerText = userMap[sym];
+        const slots = document.querySelectorAll(`[id="slot-${sym}"]`);
+        slots.forEach(slot => {
+            if(slot) slot.innerText = userMap[sym];
+        });
         updateTrace();
     }
 
     function updateTrace() {
-        let trace = `<div class="trace-step">→ 1. Target Structure: <b>${currentTarget.replace(/./g, (c) => c === " " ? " " : "_")}</b></div>`;
-        
         let count = 0;
+        let trace = `<div class="trace-step">→ 1. Fingerprint: <b>${currentTarget.replace(/./g, (c) => c === " " ? " " : "_")}</b></div>`;
+        
         for(let sym of activeSymbols) {
             if(userMap[sym]) {
-                trace += `<div class="trace-step">→ Symbol [${sym}] mapped to: <b>${userMap[sym]}</b></div>`;
+                trace += `<div class="trace-step">→ Mapping [${sym}] globally to [<b>${userMap[sym]}</b>]</div>`;
                 count++;
             }
         }
 
         trace += `
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → CRACKED: ${count}/${activeSymbols.length} UNIQUE CHARACTERS
+                → RECONSTRUCTION: ${count}/${activeSymbols.length} SYMBOLS IDENTIFIED
             </div>
         `;
         

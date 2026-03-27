@@ -14,6 +14,7 @@
             padding: 60px 20px; 
             border-radius: 12px;
             text-align: center;
+            border: 2px solid #2d3748;
         }
 
         .word-box { 
@@ -92,27 +93,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Word Morphing (or "Stolen Letters") tests <b>Structural Lexical Analysis</b>. You are required to move exactly one letter from the first word and insert it into the second word to form two entirely new, valid words. Success relies on identifying which letter's removal leaves a coherent root, while its addition creates a new meaning elsewhere.</p>
+        <p>Think of this as the <b>"Stolen Letter"</b> mystery. In the 11+, your child will be shown two words and told that exactly one letter has moved from the first word into the second. The goal is to create two entirely new, valid words. The secret weapon is recognizing that the letter you move must be "expendable"—it must leave a perfect word behind while creating a perfect word at its destination.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "Move one letter from the word <i>CHART</i> to the word <i>EAT</i> to make two new words."
+                <b>The Easy Swap</b>
+                "Move one letter from <i>CHART</i> to <i>EAT</i> to make two new words."
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "One letter can be moved from <i>STEAM</i> to <i>BIT</i>. Identify the letter and its new position."
+                <b>The Hidden Slot</b>
+                "One letter can be moved from <i>STEAM</i> to <i>BIT</i>. Where does it land?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Find the letter that moves from <i>POUND</i> to <i>EACH</i>. Both results must be real English words."
+                <b>The 11+ Challenge</b>
+                "Find the letter that migrates from <i>POUND</i> to <i>EACH</i>. Both results must be real words."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Morph Lab</b>. 1. Click a letter in the top word to "pick it up". 2. Use the slider to find an insertion slot in the bottom word.</p>
+        <p>This is the <b>Morph Lab</b>. 1. Click a letter in the top row to "stipple" it. 2. Use the slider to find its new home in the bottom word. Point out to your child that as the letter moves, both words change their meaning instantly. If one side looks like gibberish, the "stolen" letter is the wrong one.</p>
         
         <div class="anatomy-display">
             <div id="word-a-box" class="word-box">
@@ -122,8 +123,8 @@
             
             <div style="max-width: 400px; margin: 50px auto 0;">
                 <div style="display:flex; justify-content: space-between; margin-bottom: 8px;">
-                    <span style="font-size:0.6rem; color:#94a3b8; font-weight:800; text-transform:uppercase;">Start of word  </span>
-                    <span style="font-size:0.6rem; color:#94a3b8; font-weight:800; text-transform:uppercase;">  End of word</span>
+                    <span style="font-size:0.6rem; color:#94a3b8; font-weight:800; text-transform:uppercase;">Front of word</span>
+                    <span style="font-size:0.6rem; color:#94a3b8; font-weight:800; text-transform:uppercase;">Back of word</span>
                 </div>
                 <input type="range" id="slot-slider" min="0" max="4" value="0" oninput="updateMorph()">
             </div>
@@ -139,24 +140,26 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Experiment with the presets above. Watch the <b>Trace Log</b> to see the "Dictionary Check" in action. Help your child notice that we aren't just adding letters to the end of a word; the stolen letter often likes to hide right in the middle.</p>
         <div class="engine-container">
             <div class="inputs">
                 <p style="font-size: 0.75rem; color: #a0aec0;">
-                    Verification Engine: Both outcomes must pass the "Dictionary Check."
+                    Verification Rule: You are looking for the only letter whose migration leaves the first word intact.
                 </p>
                 <div style="margin-top: 20px; color: var(--cognis-gold); font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">
-                    Migration Status: <span id="mig-status">Active</span>
+                    Morphing Engine: <span id="mig-status">Online</span>
                 </div>
             </div>
-            <div class="trace-log" id="trace-35">Select a letter to begin the morph...</div>
+            <div class="trace-log" id="trace-35">Click a letter above to start the morph...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "One-Sided" Trap:</strong> Finding a letter that creates a brilliant new word when added to the second box, but ignoring the fact that the first word is now a gibberish sequence of letters.</p>
-            <p><strong>The Fix:</strong> Use the <b>Dual Dictionary Check</b>. Every time you move a letter, ask yourself: 1. Is the first word still a real word? 2. Is the second word a real word? If either answer is "No," that letter is a decoy. Focus on letters whose removal leaves a common, recognizable root.</p>
+            <p><strong>The "One-Sided" Trap:</strong> Most children find a letter that makes a great new word in the second box (e.g., taking the 'H' from CHART to make HEAT) and stop there. They forget to check if the word they left behind (CART) is actually a real word!</p>
+            
+            <p><strong>The Insider Fix: The "Dual Dictionary" Rule.</strong> Tell your child: <i>"The letter is a bridge—if one side collapses, the answer is wrong."</i> They must perform two separate checks: 1. Is the first word still alive? 2. Is the second word newly born? If they don't see two real words, they must put the letter back and try another one. <b>Both words must pass the test.</b></p>
         </div>
     </section>
 </div>
@@ -188,26 +191,23 @@
         const slider = document.getElementById('slot-slider');
         const insPos = parseInt(slider.value);
 
-        // Render Word A Nodes
         boxA.innerHTML = wordA.split('').map((l, i) => 
             `<div class="letter-node ${i === activeIdx ? 'selected' : ''}" onclick="selectLetter(${i})">${l}</div>`
         ).join('');
 
-        // Calculate and Render Word B
         const stolen = wordA[activeIdx];
         const newBMarkup = wordB.slice(0, insPos) + `<span class="insertion-point">${stolen}</span>` + wordB.slice(insPos);
         displayB.innerHTML = newBMarkup;
 
-        // Trace Data
         const remainA = wordA.slice(0, activeIdx) + wordA.slice(activeIdx + 1);
         const morphedB = wordB.slice(0, insPos) + stolen + wordB.slice(insPos);
 
         document.getElementById('trace-35').innerHTML = `
-            <div class="trace-step">→ 1. Moving Letter: <b style="color:var(--cognis-gold)">${stolen}</b></div>
-            <div class="trace-step">→ 2. Result A: <b>${remainA}</b></div>
-            <div class="trace-step">→ 3. Result B: <b>${morphedB}</b></div>
+            <div class="trace-step">→ 1. Selected Letter: <b style="color:var(--cognis-gold)">${stolen}</b></div>
+            <div class="trace-step">→ 2. Remainder Word: <b>${remainA}</b></div>
+            <div class="trace-step">→ 3. New Target Word: <b>${morphedB}</b></div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → MIGRATION: ${remainA} | ${morphedB}
+                → RESULT: ${remainA} and ${morphedB}
             </div>
         `;
     }

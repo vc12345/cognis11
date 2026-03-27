@@ -9,7 +9,7 @@
     
     <style>
         /* UNIQUE CSS FOR ANGLE SIMULATION */
-        .anatomy-display { padding: 40px; background: #1a202c; border: none; }
+        .anatomy-display { padding: 40px; background: #1a202c; border: none; border-radius: 12px; }
         
         #canvas-27 { 
             background: #0f172a; 
@@ -38,7 +38,7 @@
         }
 
         .engine-container { grid-template-columns: 1fr 1.2fr; }
-        input[type=range] { margin-top: 15px; }
+        input[type=range] { margin-top: 15px; width: 100%; accent-color: var(--cognis-gold); }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -55,27 +55,32 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Geometry is the study of <b>Invariant Relationships</b>. In angle logic, a single line (the transversal) cutting through parallel lines creates two families of angles. Every angle in the entire system is either equal to the others in its family, or combines with the other family to equal exactly 180°.</p>
+        <p>Think of angles on parallel lines as <b>"The Shadow Rule."</b> In the 11+, you’ll often see a single line (the transversal) cutting through a pair of parallel train tracks. The secret weapon is realizing that you only ever have <b>two numbers</b> to deal with. Every single angle in that messy diagram belongs to one of two "families." They are either identical twins, or they add up to exactly <b>180°</b> to make a straight line.</p>
         
+        
+
+[Image of alternate corresponding and co-interior angles]
+
+
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "Angles on a straight line add to 180°. If one angle is 110°, find the value of its neighbor."
+                <b>The Straight Line</b>
+                "Angles on a flat road add to 180°. If one side is 110°, what is its neighbor?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "Parallel lines are cut by a transversal. If the top-right angle is 60°, what is the value of the 'Alternate' (Z) angle?"
+                <b>The 'Z' Switch</b>
+                "Parallel lines are cut by a slope. If the top-right is 60°, what is its 'Alternate' (Z) partner?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Identify 'Co-interior' (C) angles. If one is 75°, why must the other be 105°?"
+                <b>The 'C' Squeeze</b>
+                "Find the 'Co-interior' (C) angles. If one is 75°, why must the other be 105°?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Transversal Pivot</b>. Watch how the eight angles are actually just two values (Acute and Obtuse) repeated across the junctions.</p>
+        <p>This is the <b>Transversal Pivot</b>. Point to the gold line—that’s the road crossing the tracks. Notice how the eight different angles are actually just two values repeated over and over. They alternate like a pattern. Move the slider below to see how the "Acute Family" and "Obtuse Family" swap sizes as the road turns.</p>
         
         <div class="anatomy-display">
             <svg id="canvas-27" width="100%" height="300" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet">
@@ -94,27 +99,29 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Rotate the transversal slope with your child. Watch the <b>Trace Log</b>. Help them notice that no matter how steep the road gets, the gold number (Acute) and the blue number (Obtuse) always combine to make that magical <b>180°</b>.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Rotate Transversal Slope (θ)</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Rotate the Road (Angle θ)</label>
                     <input type="range" id="angle-slider" min="20" max="160" value="60" oninput="update27()">
                     <div style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.6rem; color: #a0aec0; font-weight: bold;">
-                        <span>BACKWARD</span>
-                        <span>PERPENDICULAR</span>
-                        <span>FORWARD</span>
+                        <span>STEEP LEFT</span>
+                        <span>SQUARE</span>
+                        <span>STEEP RIGHT</span>
                     </div>
                 </div>
             </div>
-            <div class="trace-log" id="trace-27">Rotate the slider to trigger the logic scan...</div>
+            <div class="trace-log" id="trace-27">Rotate the slider to see the pattern lock...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Visual Parallel" Trap:</strong> Assuming lines are parallel just because they "look" parallel on the page. Students often apply Z, F, and C angle logic to lines that are slightly tilted toward each other.</p>
-            <p><strong>The Fix:</strong> Look for <b>Explicit Proof</b>. You can only use parallel line logic if the question states they are parallel, or if the lines feature the standard "Arrowhead" symbols. Without those symbols, the angles at the top and bottom junctions have no relationship.</p>
+            <p><strong>The "Looks Parallel" Trap:</strong> Many children see two lines that "look" like tracks and immediately start using Z and F angle rules. <b>This is a trap.</b> If the lines aren't perfectly parallel, the angles at the top track have absolutely no connection to the ones at the bottom.</p>
+            
+            <p><strong>The Insider Fix: The "Arrow Hunt."</strong> Tell your child: <i>"The math is illegal without the arrows."</i> They must look for the little arrowheads printed on the lines or the words "Parallel Lines" in the text. If those aren't there, they can only solve angles on a single track, not jump between them. <b>No arrows = No jumping.</b></p>
         </div>
     </section>
 </div>
@@ -126,7 +133,6 @@
         const theta = parseInt(document.getElementById('angle-slider').value);
         const rad = (theta * Math.PI) / 180;
         
-        // Pivot transversal around center (300, 150)
         const dx = 130 * Math.cos(rad);
         const dy = 130 * Math.sin(rad);
 
@@ -136,7 +142,6 @@
         tLine.setAttribute('x2', 300 - dx); 
         tLine.setAttribute('y2', 150 + dy);
 
-        // Logic: Acute vs Obtuse Families
         const acuteVal = Math.min(theta, 180 - theta);
         const obtuseVal = 180 - acuteVal;
         const rightIsAcute = theta < 90;
@@ -147,11 +152,9 @@
         const labLB = document.getElementById('lab-left-bot');
         const labRB = document.getElementById('lab-right-bot');
 
-        // Color Palette from module-style
         const gold = "#c5a059";
         const blue = "#3182ce";
 
-        // Update Labels
         labRT.textContent = rightIsAcute ? acuteVal + '°' : obtuseVal + '°';
         labRT.setAttribute('fill', rightIsAcute ? gold : blue);
         labRT.setAttribute('x', 300 + offset);
@@ -160,7 +163,6 @@
         labLT.setAttribute('fill', rightIsAcute ? blue : gold);
         labLT.setAttribute('x', 300 - offset);
 
-        // Mirror to bottom junction
         labRB.textContent = labRT.textContent;
         labRB.setAttribute('fill', labRT.getAttribute('fill'));
         labRB.setAttribute('x', 300 + offset);
@@ -170,11 +172,11 @@
         labLB.setAttribute('x', 300 - offset);
 
         document.getElementById('trace-27').innerHTML = `
-            <div class="trace-step">→ 1. Transversal Tilt: <b>${theta}°</b></div>
-            <div class="trace-step">→ 2. Primary Family (Acute): ${acuteVal}°</div>
-            <div class="trace-step">→ 3. Secondary Family (Obtuse): ${obtuseVal}°</div>
+            <div class="trace-step">→ 1. Road Angle: <b>${theta}°</b></div>
+            <div class="trace-step">→ 2. Acute Family (Gold): <b>${acuteVal}°</b></div>
+            <div class="trace-step">→ 3. Obtuse Family (Blue): <b>${obtuseVal}°</b></div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → SYSTEM TOTAL: ${acuteVal} + ${obtuseVal} = 180°
+                → STRAIGHT LINE CHECK: ${acuteVal}° + ${obtuseVal}° = 180°
             </div>
         `;
     }

@@ -9,12 +9,14 @@
     
     <style>
         /* UNIQUE CSS FOR CAESAR WHEEL */
-        .anatomy-display { padding: 40px; background: #1a202c; border: none; }
+        .anatomy-display { padding: 40px; background: #1a202c; border: none; border-radius: 12px; }
         
         #caesar-svg { 
             background: #0f172a; 
             border-radius: 50%; 
             box-shadow: 0 0 40px rgba(0,0,0,0.5), inset 0 0 20px rgba(197, 160, 89, 0.1);
+            display: block;
+            margin: 0 auto;
         }
 
         .ring-text { 
@@ -66,27 +68,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Relative letter shifting (often called the Caesar Cipher) is a logic puzzle where each letter is substituted for another based on its distance from the original. It requires <b>Pattern Persistence</b>: once the "Key" or "Offset" is identified, it must be applied with perfect consistency across every character in the string to reveal the hidden message.</p>
+        <p>Think of this as <b>"The Secret Service Code."</b> In the 11+, your child will encounter words hidden behind a "shift"—where each letter has been moved a certain number of steps down the alphabet. The secret weapon is <b>Pattern Persistence</b>. Once your child figures out the "Key" (how many steps 'A' moved to become its new letter), they must apply that exact same jump to every other letter in the word to crack the code.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "If the word 'CAT' is coded as 'DBU', what is the shift? Use that same pattern to code the word 'DOG'."
+                <b>The Single Step</b>
+                "If 'CAT' is coded as 'DBU', what is the shift? Use that same pattern to code 'DOG'."
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
+                <b>The Decoder Ring</b>
                 "In a secret code, 'FISH' becomes 'HKUJ'. Find the key and decode the mystery word 'BIRD'."
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "The code is reversed (A=Z, B=Y). If the message is 'BCZ', what was the original word?"
+                <b>The Reverse Riddle</b>
+                "The code is flipped (A=Z, B=Y). If the message is 'BCZ', what was the original word?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Concentric Cipher</b>. The outer ring is your "Plain" alphabet; the inner ring is your "Cipher" alphabet. Rotate the inner ring to set the pattern.</p>
+        <p>This is the <b>Concentric Cipher</b>. The outer ring is the "Normal" alphabet; the inner ring is the "Secret" alphabet. Point to the gold line at the top—that’s the <b>Sync Point</b>. When you rotate the inner ring, the relationship between every letter pair shifts. Help your child notice that the distance between letters never changes; the whole alphabet moves together like a set of locked gears.</p>
         
         <div class="anatomy-display">
             <svg id="caesar-svg" width="100%" height="400" viewBox="0 0 420 420" preserveAspectRatio="xMidYMid meet">
@@ -103,30 +105,32 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the slider to rotate the inner dial and type a word into the box. Watch the <b>Trace Log</b> as it translates each letter using your custom key. Ask your child to predict the coded letter for 'A' before they move the slider—if they can guess one, they can solve the whole word.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Shift Alpha (Rotate Inner Dial)</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Rotate the Inner Dial (Shift)</label>
                     <input type="range" id="shift-slider" min="0" max="25" value="1" oninput="run30()">
                 </div>
                 <div class="control-group">
-                    <label>Alphabet Direction</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Alphabet Flow</label>
                     <button id="btn-reverse" class="btn-toggle" onclick="toggleReverse()">Standard (A→B→C)</button>
                 </div>
                 <div class="control-group">
-                    <label>Word to Process</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Your Word</label>
                     <input type="text" id="word-in" class="input-text" value="FISH" maxlength="10" oninput="run30()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-30">Adjust the dial to sync the alphabets...</div>
+            <div class="trace-log" id="trace-30">Sync the alphabets to reveal the code...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Static Alphabet" Trap:</strong> Assuming the alphabet is a flat line that stops at 'Z'. Students often get stuck when a shift moves past the end of the sequence.</p>
-            <p><strong>The Fix:</strong> Use the <b>Loop Principle</b>. Treat the alphabet like a 26-hour clock face. If you are at 'Z' and need to shift forward 2, you don't stop; you "wrap around" back to 'A' and then 'B'. Always visualize the alphabet as a continuous ring to solve complex offsets.</p>
+            <p><strong>The "Alphabet Wall" Trap:</strong> Most children visualize the alphabet as a flat line. When a shift moves past 'Z', they freeze because they think the alphabet has "run out" of room. If the code is $+2$ and they need to code 'Y', they get stuck.</p>
+            
+            <p><strong>The Insider Fix: The "Alphabet Clock" Rule.</strong> Tell your child: <i>"The alphabet is a ring, not a ruler."</i> Just like a clock goes from 12 back to 1, the alphabet goes from Z back to A. If they hit the 'Wall' at Z, they just keep counting from the start. <b>Z is not the end; it's just the bridge back to A.</b></p>
         </div>
     </section>
 </div>
@@ -161,10 +165,8 @@
             const ix = 210 + 115 * Math.cos(angle);
             const iy = 210 + 115 * Math.sin(angle);
 
-            // Outer ring is fixed
             const plainChar = alphabet[i];
             
-            // Inner ring logic
             let cipherIdx;
             if (!isReversed) {
                 cipherIdx = (i + offset) % 26;
@@ -179,9 +181,8 @@
             innerG.innerHTML += `<text x="${ix}" y="${iy}" class="ring-text inner-text ${isActive ? 'active-pair' : ''}" text-anchor="middle" dominant-baseline="middle">${cipherChar}</text>`;
         }
 
-        // Logic Trace
         const keyChar = alphabet[isReversed ? (26-offset)%26 : offset];
-        let trace = `<div class="trace-step">→ 1. Pattern Locked: <b>A = ${keyChar}</b></div>`;
+        let trace = `<div class="trace-step">→ 1. Key Identified: <b>A = ${keyChar}</b></div>`;
         let results = [];
         
         for (let c of word) {
@@ -193,12 +194,12 @@
                 codeChar = alphabet[(offset - idx + 26) % 26];
             }
             results.push(codeChar);
-            trace += `<div class="trace-step" style="font-size:0.75rem;">${c} shifts to → <b>${codeChar}</b></div>`;
+            trace += `<div class="trace-step" style="font-size:0.75rem;">Decoding <b>${c}</b> → <b>${codeChar}</b></div>`;
         }
 
         trace += `
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → CIPHER RESULT: ${results.join('') || '...'}
+                → ENCRYPTED WORD: ${results.join('') || '...'}
             </div>
         `;
         document.getElementById('trace-30').innerHTML = trace;

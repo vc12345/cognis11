@@ -9,7 +9,7 @@
     
     <style>
         /* UNIQUE CSS FOR NET SIMULATION */
-        .anatomy-display { padding: 40px; background: #f8fafc; }
+        .anatomy-display { padding: 40px; background: #f8fafc; border-radius: 12px; border: 2px solid #e2e8f0; }
         
         .net-svg-container {
             background: white;
@@ -45,7 +45,7 @@
 
         .dim-inputs { display: flex; gap: 10px; margin-top: 20px; }
         .dim-inputs div { flex: 1; }
-        .dim-inputs input { width: 100% !important; text-align: center; }
+        .dim-inputs input { width: 100% !important; text-align: center; background: #2d3748; color: white; border: 1px solid #4a5568; padding: 10px; border-radius: 8px; font-weight: 800; }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -62,27 +62,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Spatial reasoning requires mentally "folding" a 2D map into a 3D object. The core logical rule of nets is the <b>Invariant Gap</b>: in any valid 3D shape, opposite faces (like the Lid and Base) can never touch. In a flat net, they are always separated by exactly one "buffer" square.</p>
+        <p>Think of this as <b>"Mental Origami."</b> In the 11+, your child will be shown flat paper shapes (nets) and asked to turn them into 3D boxes in their mind. The secret is that boxes have rules about <b>opposites</b>. A Lid and a Base can never touch; in a flat net, they must always be separated by exactly one "buffer" face. If your child can spot these gaps, they can "fold" any box without ever picking up a pair of scissors.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "A cube net has a side length of 4cm. What is the total volume of the cube when folded?"
+                <b>The Cube Core</b>
+                "A cube net has a side of 4cm. What is the total volume when folded?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "A cuboid net has a 5x3 base and a flap height of 2. Calculate the capacity of the box."
+                <b>The Cuboid Capacity</b>
+                "A net has a 5x3 base and a flap height of 2. How much space is inside the box?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Identify the 'Lid' face in this non-standard Z-pattern layout. Which face will be opposite the Base?"
+                <b>The Pattern Spotter</b>
+                "Look at this non-standard Z-pattern. Which face will be directly opposite the Base?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>Select a layout below to see how the <b>Base</b> and <b>Lid</b> relate. Notice how they never share an edge, regardless of the pattern.</p>
+        <p>Select a layout below to see how the <b>Base</b> (gold) and <b>Lid</b> (blue) behave. Point out to your child that no matter how weird the pattern looks, the Lid and Base are <b>never neighbors</b>. They always have one face standing between them, acting as the "bridge."</p>
         
         <div class="anatomy-display">
             <div class="net-svg-container">
@@ -94,9 +94,10 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Toggle through the <b>Net Patterns</b>. Ask your child to predict which face is the "Lid" before you click. Then, use the <b>Dimensions</b> boxes to see how the total volume is calculated by multiplying the Base area by the "flap" height.</p>
         <div class="engine-container">
             <div class="inputs">
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">1. Net Patterns</label>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">1. Choose your Fold</label>
                 <div class="preset-grid">
                     <button class="btn-preset active" onclick="setNet('cross', this)">Standard Cross</button>
                     <button class="btn-preset" onclick="setNet('z-pattern', this)">Z-Pattern</button>
@@ -104,22 +105,23 @@
                     <button class="btn-preset" onclick="setNet('t-shape', this)">T-Shape</button>
                 </div>
 
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; margin-top: 25px; display: block;">2. Dimensions</label>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; margin-top: 25px; display: block;">2. Box Dimensions</label>
                 <div class="dim-inputs">
                     <div><small style="color:#a0aec0; font-size:0.6rem;">LENGTH</small><input type="number" id="in-l" value="5" oninput="run28()"></div>
                     <div><small style="color:#a0aec0; font-size:0.6rem;">WIDTH</small><input type="number" id="in-w" value="4" oninput="run28()"></div>
                     <div><small style="color:#a0aec0; font-size:0.6rem;">HEIGHT</small><input type="number" id="in-h" value="3" oninput="run28()"></div>
                 </div>
             </div>
-            <div class="trace-log" id="engine-trace">Toggle layouts to verify the topological rules.</div>
+            <div class="trace-log" id="engine-trace">Toggle layouts to see the "Bridge" rule in action.</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Neighbor" Trap:</strong> Mistakenly assuming that two faces that touch (share an edge) on the 2D net will be opposite each other in 3D.</p>
-            <p><strong>The Fix:</strong> Use the <b>Leapfrog Rule</b>. If you pick a face, the face opposite to it is always one "jump" away. If two squares touch on the net, they must be neighbors in the 3D world, never opposites. Opposites are always separated by exactly one face.</p>
+            <p><strong>The "Friendly Neighbor" Trap:</strong> Most children assume that if two squares touch (share an edge) on the flat paper, they will be opposite each other in 3D. <b>This is the opposite of the truth!</b> If they touch on paper, they are neighbors in the box.</p>
+            
+            <p><strong>The Fix: The "Leapfrog" Rule.</strong> Tell your child: <i>"Opposites never touch."</i> To find a face's partner, you have to jump over exactly one face. If you pick a square and "leapfrog" over the next one, you’ve found its opposite. If they touch on the net, they are <b>perpendicular</b>, not opposite. <b>One jump = One opposite.</b></p>
         </div>
     </section>
 </div>
@@ -148,7 +150,6 @@
         const svg = document.getElementById('net-svg');
         svg.innerHTML = '';
         
-        // Draw Faces
         nets[currentLayout].forEach(f => {
             const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
             rect.setAttribute('x', f.x * S + 80); 
@@ -169,7 +170,6 @@
             }
         });
 
-        // Volume Logic
         const l = parseFloat(document.getElementById('in-l').value) || 0;
         const w = parseFloat(document.getElementById('in-w').value) || 0;
         const h = parseFloat(document.getElementById('in-h').value) || 0;
@@ -178,14 +178,14 @@
         document.getElementById('net-desc').innerText = `Layout: ${currentLayout.replace('-', ' ')}`;
         
         document.getElementById('engine-trace').innerHTML = `
-            <div class="trace-step">→ 1. Base Dimensions: ${l} x ${w}</div>
-            <div class="trace-step">→ 2. Base Area: ${l} × ${w} = ${l*w} units²</div>
-            <div class="trace-step">→ 3. Flap Height (Extrusion): ${h} units</div>
+            <div class="trace-step">→ 1. Floor Space: ${l} × ${w} = <b>${l*w} units²</b></div>
+            <div class="trace-step">→ 2. Stack Height: <b>${h} layers</b></div>
+            <div class="trace-step">→ 3. The Squeeze: ${l*w} × ${h}</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
                 → TOTAL VOLUME: ${vol.toFixed(2)} units³
             </div>
             <div style="font-size:0.7rem; color:#a0aec0; margin-top:15px; font-style:italic;">
-                * Topological Rule: In all valid layouts, the Lid and Base are separated by exactly one face.
+                * Leapfrog Rule: In any valid net, opposites like the Lid and Base are separated by exactly one buffer face.
             </div>
         `;
     }

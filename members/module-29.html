@@ -9,12 +9,14 @@
     
     <style>
         /* UNIQUE CSS FOR CIPHER DIAL */
-        .anatomy-display { padding: 40px; background: #1a202c; border: none; }
+        .anatomy-display { padding: 40px; background: #1a202c; border: none; border-radius: 12px; }
         
         #cipher-svg { 
             background: #0f172a; 
             border-radius: 50%; 
             box-shadow: 0 0 40px rgba(0,0,0,0.5), inset 0 0 20px rgba(197, 160, 89, 0.1);
+            display: block;
+            margin: 0 auto;
         }
 
         .ring-text { 
@@ -66,27 +68,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Alpha-Numeric decoding is the process of translating linguistic symbols into mathematical values. It requires <b>Mapping Consistency</b>: whether the code is a direct sequence (A=1), a reversed sequence (A=26), or a shifted sequence (A=3), the logic must be applied uniformly across the entire string without breaking the pattern.</p>
+        <p>Think of this as the <b>"Secret Agent Rule."</b> In the 11+, examiners love to hide messages by swapping letters for numbers. Whether they use a simple count ($A=1$), a reverse countdown ($A=26$), or a shifted code ($A=3$), the secret weapon is <b>Mapping Consistency</b>. Once your child identifies the "Key" (which letter equals which number), they must apply that exact same logic to every letter in the word without breaking the pattern.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "If A=1 and B=2, what is the numerical code for the word 'FISH'?"
+                <b>The Direct Code</b>
+                "If $A=1$ and $B=2$, what is the numerical code for the word 'FISH'?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "If the alphabet is reversed so A=26 and Z=1, what is the code for 'CAT'?"
+                <b>The Reverse Riddle</b>
+                "If the alphabet is flipped so $A=26$ and $Z=1$, what is the code for 'CAT'?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "A secret code uses a +3 offset (A=4). Decode the sequence '4-18-21-13' to find the word."
+                <b>The 11+ Shift</b>
+                "A secret code uses a $+3$ offset ($A=4$). Decode the numbers '4-18-21-13' to find the word."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Cipher Dial</b>. Rotate the dial to change the mapping. The gold line indicates the "Key" (which letter equals 1).</p>
+        <p>This is the <b>Cipher Dial</b>. Point to the outer ring of letters and the inner ring of numbers. The gold line at the top indicates our <b>Master Key</b>. When the dial rotates, the relationship between every letter and number changes instantly. Help your child notice how the whole alphabet moves together like a locked gears—if you know one pair, you know them all.</p>
         
         <div class="anatomy-display">
             <svg id="cipher-svg" width="100%" height="400" viewBox="0 0 420 420" preserveAspectRatio="xMidYMid meet">
@@ -103,30 +105,32 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the slider to rotate the dial and type a word into the box. Watch the <b>Trace Log</b> as it translates each letter using the active key. Ask your child to predict the number for the next letter before the engine reveals it. Notice how the "Mapping Direction" button flips the logic from a standard count to a reverse countdown.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Rotate Alpha Dial (Shift)</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Set the Key (Rotation)</label>
                     <input type="range" id="shift-dial" min="0" max="25" value="0" oninput="run29()">
                 </div>
                 <div class="control-group">
-                    <label>Mapping Direction</label>
-                    <button id="btn-reverse" class="btn-toggle" onclick="toggleReverse()">Standard (A→B)</button>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Dial Direction</label>
+                    <button id="btn-reverse" class="btn-toggle" onclick="toggleReverse()">Standard (A=1)</button>
                 </div>
                 <div class="control-group">
-                    <label>Target Word</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">Your Message</label>
                     <input type="text" id="word-in" class="input-text" value="CODE" maxlength="10" oninput="run29()">
                 </div>
             </div>
-            <div class="trace-log" id="trace-29">Adjust the dial to calculate the code...</div>
+            <div class="trace-log" id="trace-29">Adjust the dial to decode...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Wrap-Around" Trap:</strong> When a shift moves past Z (26) or before A (1), students often get confused and stop. For example, in a -2 shift, they might think A has no value.</p>
-            <p><strong>The Fix:</strong> Use <b>Circular Logic</b>. Treat the alphabet like a clock face. If you are at Z and go forward 1, you land back on A. If you are at A and go back 1, you land on Z. The sequence 1-26 is a continuous loop that never ends.</p>
+            <p><strong>The "Alphabet Wall" Trap:</strong> When a shift moves past Z or before A, children often freeze. If the code is $A=24$, and they need to find the value of $C$, they think the alphabet has "run out" of room.</p>
+            
+            <p><strong>The Insider Fix: The "Alphabet Clock" Rule.</strong> Tell your child: <i>"The alphabet is a circle, not a line."</i> Just like a clock goes from 12 back to 1, the alphabet goes from Z back to A. If they hit the "Wall" at Z, they just keep counting from 1 again at A. <b>There is no end to the loop.</b></p>
         </div>
     </section>
 </div>
@@ -188,12 +192,12 @@
                 num = ((offset - charIdx + 26) % 26) + 1;
             }
             results.push(num);
-            trace += `<div class="trace-step" style="font-size:0.75rem;">${c} map to pos ${charIdx+1} w/ shift → <b>${num}</b></div>`;
+            trace += `<div class="trace-step" style="font-size:0.75rem;">Decoding letter <b>${c}</b> using Key → <b>${num}</b></div>`;
         }
 
         trace += `
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → FINAL CODE: ${results.join('-') || '...'}
+                → NUMERICAL CODE: ${results.join('-') || '...'}
             </div>
         `;
         document.getElementById('trace-29').innerHTML = trace;

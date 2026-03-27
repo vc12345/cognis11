@@ -13,7 +13,7 @@
             background: #1a202c; 
             padding: 60px 20px; 
             text-align: center; 
-            border: none;
+            border: 2px solid #2d3748;
             border-radius: 12px;
         }
 
@@ -103,27 +103,27 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A non-verbal series is a visual pattern that evolves across a sequence of frames. To predict the final frame, you must calculate the <b>Delta</b>—the specific unit of change between steps. If an object rotates 45 degrees in Frame 2, it must follow that exact mathematical vector in Frame 4. Success depends on tracking individual elements rather than the whole image.</p>
+        <p>Think of this as <b>"The Detective's Film Strip."</b> In the 11+, you are shown a row of boxes where a pattern is evolving step-by-step. The secret weapon is finding the <b>Delta</b>—the exact mathematical rule of change between Frame 1 and Frame 2. If a dot jumps two inches to the right in the first step, it <i>must</i> do the exact same thing in the final step. Instead of looking at the whole picture, your child should track just one tiny piece of the "film" at a time.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "A circle moves from the top-left to the bottom-right and back again. What is the pattern?"
+                <b>The Single Jump</b>
+                "A circle moves from the top-left to the bottom-right. Where will it land next?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "A shape rotates 90 degrees clockwise and flips its color from black to white in each step."
+                <b>The Dual Rule</b>
+                "A shape rotates 90° clockwise AND flips its color from black to white in each step."
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Triple Variables: An object changes its position, its internal shading, and its orientation all at once."
+                <b>The 11+ Triple Threat</b>
+                "An object changes position, shading, and size all at once. Track them separately!"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Vector Scan</b>. Isolate the moving elements. Notice how each part follows its own rigid rule of progression.</p>
+        <p>This is the <b>Vector Scan</b>. Point to the frames below. Notice how the elements move independently. Each "character" in the box has its own script to follow. When we isolate them, the complex dance becomes a series of simple, predictable steps. Use the engine below to change the script.</p>
         
         <div class="anatomy-display">
             <div class="series-row" id="series-row">
@@ -133,26 +133,28 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Select a <b>Foundational Rule</b> to see basic movement, or challenge your child with a <b>Complex Logic</b> pattern. Watch the <b>Trace Log</b> as it identifies the specific "Deltas" (the change vectors) for each moving part.</p>
         <div class="engine-container">
             <div class="inputs">
                 <span class="section-label">Foundational Rules</span>
-                <button class="btn-logic active" onclick="loadSeries('slider', this)">Linear Translation</button>
-                <button class="btn-logic" onclick="loadSeries('light', this)">State Cycling</button>
-                <button class="btn-logic" onclick="loadSeries('pingpong', this)">Binary Alternation</button>
+                <button class="btn-logic active" onclick="loadSeries('slider', this)">Steady Slide (Linear)</button>
+                <button class="btn-logic" onclick="loadSeries('light', this)">The Stoplight (Cycling)</button>
+                <button class="btn-logic" onclick="loadSeries('pingpong', this)">Back & Forth (Binary)</button>
                 
                 <span class="section-label">Complex Logic</span>
                 <button class="btn-logic" onclick="loadSeries('orbit', this)">The Dual Orbit</button>
                 <button class="btn-logic" onclick="loadSeries('binary', this)">Attribute Shifting</button>
             </div>
-            <div class="trace-log" id="trace-46">Isolate the elements. Do not look at the whole frame...</div>
+            <div class="trace-log" id="trace-46">Isolate the elements. The answer is in the parts, not the whole...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Visual Overload" Trap:</strong> Attempting to "guess" the final answer by staring at all moving parts simultaneously. The brain becomes overwhelmed by the noise and misses the specific Delta of the center shape.</p>
-            <p><strong>The Fix:</strong> Use <b>Component Tracking</b>. Physically cover the center of the frame and track only the corner dots first. Once you have their rule, ignore them completely and look only at the center shape. Treat the image like three separate, simple puzzles instead of one complex one.</p>
+            <p><strong>The "Visual Overload" Trap:</strong> Most children try to "feel" the answer by staring at the whole frame until it makes sense. Their brain gets overwhelmed by all the moving parts and misses the one tiny detail that actually solves the puzzle.</p>
+            
+            <p><strong>The Insider Fix: The "Pinch" Method.</strong> Tell your child: <i>"Divide and conquer."</i> They should use their fingers to physically cover up everything in the box except for <b>one</b> element (like a tiny dot in the corner). They should solve the rule for that one dot first. Once they have it, they ignore that dot and move to the next shape. <b>Three simple puzzles are easier to solve than one big one.</b></p>
         </div>
     </section>
 </div>
@@ -171,34 +173,34 @@
         for(let i=0; i<4; i++) {
             const frame = document.createElement('div');
             frame.className = `frame ${i === 3 ? 'target-frame' : ''}`;
-            frame.innerHTML = `<div class="frame-label">${i === 3 ? 'PREDICTION' : 'FRAME ' + (i+1)}</div>`;
+            frame.innerHTML = `<div class="frame-label">${i === 3 ? 'PREDICTION' : 'STEP ' + (i+1)}</div>`;
             
             if(type === 'slider') {
                 const left = 15 + (i * 25);
                 frame.innerHTML += `<div class="element dot" style="top:45px; left:${left}px"></div>`;
                 traceText = `
-                    <div class="trace-step">→ 1. Element: Gold Circle</div>
-                    <div class="trace-step">→ 2. Vector: +25px Right (Translation)</div>
+                    <div class="trace-step">→ 1. Tracker: Gold Circle</div>
+                    <div class="trace-step">→ 2. Delta: Moving +25px Right per step</div>
                     <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                        → RULE: LINEAR PROGRESSION
+                        → RULE: CONSTANT TRANSLATION
                     </div>`;
             }
             if(type === 'light') {
                 const colors = ['#ef4444', '#eab308', '#22c55e', '#ef4444'];
                 frame.innerHTML += `<div class="element dot" style="top:45px; left:45px; width:30px; height:30px; background:${colors[i]}"></div>`;
                 traceText = `
-                    <div class="trace-step">→ 1. Element: Center Beacon</div>
-                    <div class="trace-step">→ 2. State: Red → Gold → Green</div>
+                    <div class="trace-step">→ 1. Tracker: Central Beacon</div>
+                    <div class="trace-step">→ 2. Delta: Red → Gold → Green → Red</div>
                     <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                        → RULE: FINITE STATE CYCLE
+                        → RULE: STATE CYCLING
                     </div>`;
             }
             if(type === 'pingpong') {
                 const left = (i % 2 === 0) ? '15px' : '75px';
                 frame.innerHTML += `<div class="element dot" style="top:15px; left:${left}"></div>`;
                 traceText = `
-                    <div class="trace-step">→ 1. Element: Corner Dot</div>
-                    <div class="trace-step">→ 2. Logic: If Even, Left; If Odd, Right</div>
+                    <div class="trace-step">→ 1. Tracker: Corner Dot</div>
+                    <div class="trace-step">→ 2. Delta: Left on Even, Right on Odd</div>
                     <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
                         → RULE: BINARY ALTERNATION
                     </div>`;
@@ -208,10 +210,10 @@
                 frame.innerHTML += `<div class="element dot" style="top:${corners[i].t}; left:${corners[i].l}"></div>`;
                 frame.innerHTML += `<div class="element bar" style="top:52px; left:35px; transform:rotate(${i*45}deg); background:var(--cognis-gold)"></div>`;
                 traceText = `
-                    <div class="trace-step">→ 1. Outer: Clockwise Corner Jump</div>
-                    <div class="trace-step">→ 2. Inner: +45° Clockwise Rotation</div>
+                    <div class="trace-step">→ 1. Outer Delta: Clockwise Corner Hop</div>
+                    <div class="trace-step">→ 2. Inner Delta: +45° Clockwise Spin</div>
                     <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                        → RULE: INDEPENDENT DUAL ORBIT
+                        → RULE: DUAL COMPONENT PROGRESSION
                     </div>`;
             }
             if(type === 'binary') {
@@ -220,8 +222,8 @@
                 const barT = 15 + (i * 20);
                 frame.innerHTML += `<div class="element bar" style="top:${barT}px; left:10px; width:20px; background:#22c55e"></div>`;
                 traceText = `
-                    <div class="trace-step">→ 1. Primary: Alternating Shading</div>
-                    <div class="trace-step">→ 2. Secondary: Vertical Translation</div>
+                    <div class="trace-step">→ 1. Feature A: Alternating Color</div>
+                    <div class="trace-step">→ 2. Feature B: Steady Downward Drop</div>
                     <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
                         → RULE: MULTI-ATTRIBUTE SHIFT
                     </div>`;

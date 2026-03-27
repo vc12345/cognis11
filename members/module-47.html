@@ -97,56 +97,56 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A cube net is a 2D blueprint of a 3D solid. The secret to mastering these in the 11+ is identifying <b>Opposite Pairs</b>. Because opposite faces can never touch or be visible at the same time on a folded cube, finding them allows you to eliminate decoy answers instantly. Use the <b>Leapfrog Rule</b>: in any straight line of three or more squares, the faces separated by exactly one square are opposites.</p>
+        <p>Think of a cube net as a <b>"Flattened Cardboard Box."</b> In the 11+, the biggest hurdle is mentally folding that 2D shape back into a 3D solid. The secret weapon? Identifying <b>Opposite Pairs</b>. Because opposite faces (like the Lid and Base) can never touch each other and can never be seen at the same time, finding them is the fastest way to spot impossible decoy answers. Use the <b>Leapfrog Rule</b>: in any straight line of three or more squares, the faces separated by exactly one "jump" are partners.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                Identify the "base" face if the top face is selected in a standard Cross net.
+                <b>The Standard Cross</b>
+                Identify the "Base" face if the "Top" face is selected in a 1-4-1 net.
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                Find the three opposite pairs in a 1-4-1 "T-shape" net.
+                <b>The T-Shape</b>
+                Find all three opposite pairs in a standard T-style layout.
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                Solve the "Z-Net" where no straight line of three squares exists.
+                <b>The Advanced "Z"</b>
+                Solve a "Z-Net" where there are no long straight lines of three squares.
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Pairing Map</b>. Select a face on the net below to reveal its opposite. Notice the "Leapfrog" pattern: the engine always jumps over exactly one face to find the match. If two faces are opposites, they can <u>never</u> share an edge on the finished cube.</p>
+        <p>This is the <b>Pairing Map</b>. Click any numbered face on the net below. The engine will instantly highlight its partner in red. Note how it always <b>jumps over exactly one face</b> to find its opposite. If two numbers are highlighted as opposites here, they can <u>never</u> share an edge on the finished cube. This is the ultimate "No-Go" rule for elimination.</p>
         
         <div class="anatomy-display">
-            <div class="net-grid" id="net-container">
-                </div>
+            <div class="net-grid" id="net-container"></div>
             <div style="margin-top: 30px; color: #94a3b8; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
-                Interactive Blueprint: Click a face to audit its opposite
+                Interactive Blueprint: Click a face to find its partner
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Swap between different net layouts below. Use the <b>Trace Log</b> to confirm your child's guesses. Challenge them: <i>"If I pick face 2, where is its parallel partner?"</i> This builds the mental muscle required to see through 3D distractions.</p>
         <div class="engine-container">
             <div class="inputs">
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">Select Net Geometry</label>
-                <button class="btn-variant active" onclick="loadNet('cross', this)">1-4-1 (The Cross)</button>
-                <button class="btn-variant" onclick="loadNet('t-aligned', this)">1-4-1 (The T-Style)</button>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">Choose your layout</label>
+                <button class="btn-variant active" onclick="loadNet('cross', this)">1-4-1 (Standard Cross)</button>
+                <button class="btn-variant" onclick="loadNet('t-aligned', this)">1-4-1 (T-Style)</button>
                 <button class="btn-variant" onclick="loadNet('z-shape', this)">2-3-1 (The Z-Net)</button>
             </div>
-            <div class="trace-log" id="trace-47">Select a net configuration to begin...</div>
+            <div class="trace-log" id="trace-47">Select a layout to audit the logic...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Touching Corner" Trap:</strong> Assuming that if two faces share a corner on the flat net, they must touch on the cube. This is a visual illusion. Many faces that seem far apart on the net actually fold to meet at a single edge.</p>
+            <p><strong>The "Touching Corner" Trap:</strong> Most children assume that if two squares share a corner on a flat sheet of paper, they must touch on the cube. <b>This is an illusion!</b> In the 3D world, many faces that look far apart on the net actually fold to meet at the exact same edge.</p>
             
-            <p><strong>The Fix:</strong> Use the <b>Opposite Shield</b>. Don't look for what *does* touch; look for what *can't*. Find your three opposite pairs first. If a 3D cube answer shows two of those opposites sharing an edge, that answer is mathematically impossible. Cross it out immediately.</p>
+            <p><strong>The Insider Fix: The "Opposite Shield."</strong> Tell your child: <i>"Don't look for what DOES touch; look for what CAN'T."</i> Find the three opposite pairs first. If a 3D answer shows two of those opposites sharing a line or a corner, that answer is a scientific impossibility. <b>Cross it out and move on—no second-guessing needed.</b></p>
         </div>
     </section>
 </div>
@@ -189,25 +189,26 @@
                 div.classList.add('active');
                 const opp = nets[id].opps[val];
                 if(opp) {
-                    document.getElementById('f' + opp).classList.add('opposite');
+                    const oppEl = document.getElementById('f' + opp);
+                    if (oppEl) oppEl.classList.add('opposite');
                     updateTrace(val, opp);
                 }
             };
             cont.appendChild(div);
         });
         
-        document.getElementById('trace-47').innerHTML = `<div class="trace-step">→ Net "${id.toUpperCase()}" loaded.</div><div class="trace-step">→ Click a numbered face to find its partner.</div>`;
+        document.getElementById('trace-47').innerHTML = `<div class="trace-step">→ Net structure loaded.</div><div class="trace-step">→ Click a face to test the Leapfrog Rule.</div>`;
     }
 
     function updateTrace(active, opp) {
         const log = document.getElementById('trace-47');
         log.innerHTML = `
             <div class="trace-step">→ 1. Selected: Face ${active}</div>
-            <div class="trace-step">→ 2. Scan: Identifying parallel plane...</div>
+            <div class="trace-step">→ 2. Scan: Jumping over one face...</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → RESULT: FACE ${opp} IS OPPOSITE
+                → PARTNERS: ${active} AND ${opp}
             </div>
-            <div class="trace-step" style="font-size:0.7rem; opacity:0.7;">Logic: These two faces can never share an edge.</div>
+            <div class="trace-step" style="font-size:0.7rem; opacity:0.7;">Remember: Partners can never share an edge on the finished cube.</div>
         `;
     }
 

@@ -19,7 +19,7 @@
             align-items: flex-start; 
             gap: 40px; 
             min-height: 320px;
-            border: none;
+            border: 2px solid #2d3748;
         }
 
         .view-column { display: flex; flex-direction: column; align-items: center; gap: 15px; }
@@ -56,7 +56,6 @@
             box-shadow: inset 0 0 5px rgba(255,255,255,0.2);
         }
         
-        /* Result View Animation */
         #result-view { opacity: 0; transform: translateY(10px); transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         #result-view.visible { opacity: 1; transform: translateY(0); }
 
@@ -82,7 +81,9 @@
             font-weight: 900; cursor: pointer; text-transform: uppercase; 
             margin-top: 15px; letter-spacing: 1px;
             box-shadow: 0 4px 15px rgba(197, 160, 89, 0.3);
+            transition: 0.3s;
         }
+        .btn-action:hover { background: #b08d4b; transform: translateY(-2px); }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -99,28 +100,30 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Paper folding requires <b>Mental Symmetrical Projection</b>. Each fold line acts as a primary axis of reflection. To solve these puzzles, you must reverse the process step-by-step, mirroring every punch across the crease lines until you return to the original sheet dimensions. The core logic is that a hole never "moves"—it only duplicates through reflection.</p>
+        <p>Think of this as <b>"Mental Mirroring."</b> In the 11+, you are shown a piece of paper being folded and then "punched" with a hole. The secret weapon is realizing that you aren't trying to guess where the holes land—you are <b>unfolding the paper in reverse</b>. Every crease line is a perfect mirror. If there’s a hole on the left of a fold, there <i>must</i> be an identical twin on the right. Your child’s job is to trace these reflections step-by-step until the paper is flat again.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                1 Fold (Half). 1 Punch. Trace the symmetry across a single vertical axis to find the pair.
+                <b>The Single Split</b>
+                "1 Fold (Half). 1 Punch. Trace the symmetry across the vertical center to find the pair."
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                2 Folds (Quarter). 2 Punches. Analyze the pattern across both X and Y axes to find the group of 8.
+                <b>The Quarter Fold</b>
+                "2 Folds (Quarter). 2 Punches. Mirror the pattern across both the X and Y axes to find the group of 8."
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                3 Folds (Diagonal or Strip). Complex radial reflection where the hole positions rotate.
+                <b>The 11+ Masterclass</b>
+                "3 Folds (Complex). Analyze radial reflections where the hole positions seem to 'rotate' around the center."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Reflection Matrix</b>. 1. Select a fold complexity. 2. Observe the initial punch. 3. Click "Unfold" to propagate the pattern across the axes.</p>
+        <p>This is the <b>Reflection Matrix</b>. Look at the "Folded State" below. This represents the final scrap of paper before it's unfolded. Notice the position of the black dots (the punches). When you click <b>"Unfold Page,"</b> watch how the engine clones those holes across the gold crease lines. The holes don't move; they simply multiply like a kaleidoscope.</p>
         
+        
+
         <div class="anatomy-display">
             <div class="view-column">
                 <span class="view-label">Folded State</span>
@@ -135,22 +138,24 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Select a complexity tier below. Ask your child to point to where they think the holes will appear in the "Unfolded Result" before you click the button. This builds the <b>Prototyping</b> skill required to solve these questions in seconds rather than minutes.</p>
         <div class="engine-container">
             <div class="inputs">
-                <button class="btn-tier active" onclick="loadTier(1, this)">Tier 1: 1 Fold (Half)</button>
-                <button class="btn-tier" onclick="loadTier(2, this)">Tier 2: 2 Folds (Quarter)</button>
-                <button class="btn-tier" onclick="loadTier(3, this)">Tier 3: 3 Folds (Eighth)</button>
+                <button class="btn-tier active" onclick="loadTier(1, this)">Tier 1: The Half Fold</button>
+                <button class="btn-tier" onclick="loadTier(2, this)">Tier 2: The Quarter Fold</button>
+                <button class="btn-tier" onclick="loadTier(3, this)">Tier 3: The Strip Fold</button>
                 <button class="btn-action" onclick="unfold()">Unfold Page</button>
             </div>
-            <div class="trace-log" id="trace-50">Select a fold pattern to begin the projection...</div>
+            <div class="trace-log" id="trace-50">Select a pattern to begin the projection...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Slide" Fallacy:</strong> Thinking the hole simply moves to the other side of the paper while staying in the same relative position (e.g. always staying in the "top-left" of its section).</p>
-            <p><strong>The Fix:</strong> Use <b>Crease Anchoring</b>. Every crease is a mirror. If a hole is 10mm away from the fold line on the left, its duplicate MUST be exactly 10mm away on the right. If you have two folds, apply this mirror logic twice—once for each axis. Distance to the crease is the only constant.</p>
+            <p><strong>The "Slide" Fallacy:</strong> Most children think the hole simply "moves" to the other side of the paper while staying in the same relative spot (e.g., always staying in the "top-left" corner of its section). <b>This is a point-stealing trap.</b></p>
+            
+            <p><strong>The Insider Fix: The "Distance Constant."</strong> Tell your child: <i>"The crease is a magnet."</i> If a hole is 10mm away from the fold line, its mirror-twin <b>must</b> be exactly 10mm away on the other side. If the hole is near the edge, its twin is near the edge. Distance to the crease is the only thing that never lies. <b>Mirror the distance, not the position.</b></p>
         </div>
     </section>
 </div>
@@ -180,7 +185,7 @@
             unfolded.innerHTML += '<div class="crease" style="width:2px; height:100%; left:50%;"></div>';
             unfolded.innerHTML += '<div class="punch" style="top:40px; left:30px;"></div>';
             unfolded.innerHTML += '<div class="punch" style="top:40px; left:170px;"></div>';
-            trace = "Single Axis: Mirroring across the Vertical centerline.";
+            trace = "Single Mirror: Horizontal projection across the center crease.";
         } else if(t === 2) {
             folded.style.width = '100px'; folded.style.height = '100px';
             folded.innerHTML += '<div class="punch" style="top:25px; left:25px;"></div>';
@@ -191,7 +196,7 @@
             
             const holes = [[25,25], [25,175], [70,75], [70,125], [175,25], [175,175], [130,75], [130,125]];
             holes.forEach(h => unfolded.innerHTML += `<div class="punch" style="top:${h[0]}px; left:${h[1]}px;"></div>`);
-            trace = "Dual Axis: Quadrant reflection across X and Y creaselines.";
+            trace = "Dual Mirror: 4-way symmetry across the X and Y axes.";
         } else {
             folded.style.width = '100px'; folded.style.height = '50px';
             folded.innerHTML += '<div class="punch" style="top:25px; left:30px;"></div>';
@@ -200,18 +205,17 @@
             unfolded.innerHTML += '<div class="crease" style="width:2px; height:100%; left:50%;"></div>';
             
             for(let row=0; row<4; row++) {
-                let t1 = row % 2 === 0 ? 25 + (row*50) : 25 + (row*50); 
-                unfolded.innerHTML += `<div class="punch" style="top:${t1}px; left:30px;"></div>`;
-                unfolded.innerHTML += `<div class="punch" style="top:${t1}px; left:170px;"></div>`;
+                unfolded.innerHTML += `<div class="punch" style="top:${25 + (row*50)}px; left:30px;"></div>`;
+                unfolded.innerHTML += `<div class="punch" style="top:${25 + (row*50)}px; left:170px;"></div>`;
             }
-            trace = "Complex Strip: 8-segment symmetrical propagation.";
+            trace = "Accordion Mirror: 8-segment symmetrical propagation.";
         }
 
         document.getElementById('trace-50').innerHTML = `
-            <div class="trace-step">→ 1. Pattern: <b>Tier ${t} Complexity</b></div>
-            <div class="trace-step">→ 2. Fold Axis: ${t === 1 ? 'Vertical' : t === 2 ? 'Cross' : 'Multi-Horizontal'}</div>
+            <div class="trace-step">→ 1. Setup: <b>Tier ${t} Fold</b></div>
+            <div class="trace-step">→ 2. Scan: Identifying ${t === 1 ? 'one' : t === 2 ? 'two' : 'multiple'} mirror planes...</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → ${trace}
+                → LOGIC: ${trace}
             </div>
         `;
     }

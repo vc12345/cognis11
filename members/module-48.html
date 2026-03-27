@@ -15,9 +15,10 @@
             border-radius: 12px; 
             margin: 20px 0; 
             text-align: center;
-            border: none;
+            border: 2px solid #2d3748;
             min-height: 420px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
         }
@@ -88,58 +89,63 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>A net is the <b>Structural Blueprint</b> of a 3D object. Success in advanced Non-Verbal Reasoning depends on identifying two constants: the <b>Base Geometry</b> (which determines the number of faces) and the <b>Connection Logic</b> (how those faces are arranged). Prisms always feature a "Belt" of rectangles connected to two identical bases, while Pyramids feature a single base with a "Star" of triangles.</p>
+        <p>Think of a net as the <b>"Unfolded Cardboard Skeleton"</b> of a 3D shape. While cubes are common, the 11+ often throws weird shapes like pyramids and prisms at your child. The secret weapon is identifying the <b>Base Shape</b> first. Once you know the "Floor," you know exactly how many "Walls" the shape needs to close. <b>Pyramids</b> have one floor and a star of triangles; <b>Prisms</b> have two identical floors connected by a belt of rectangles.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "Count the triangular faces on a square-based pyramid. Why must there be exactly four?"
+                <b>The Pyramid Point</b>
+                "Count the triangles on a square-based pyramid. Why must there be exactly four?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "A pentagonal prism is unfolded. Identify the number of rectangular panels required to wrap the shape."
+                <b>The Prism Belt</b>
+                "A pentagonal prism is unfolded. How many rectangular panels are needed to wrap it?"
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Examine an octagonal solid blueprint. How many side-flaps must exist to prevent gaps in the 3D form?"
+                <b>The 11+ Gap Test</b>
+                "Look at an octagonal solid net. How many side-flaps are missing if there are only six rectangles?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Blueprint Generator</b>. Watch how the geometry shifts to accommodate different bases. Notice how the Prism "Caps" flip to maintain a perfect overlapping edge with the central belt.</p>
+        <p>This is the <b>Blueprint Generator</b>. Toggle between a Pyramid and a Prism below. Notice that as you add more sides to the <b>Floor</b> (the shaded gold area), the number of <b>Walls</b> attached to it must increase perfectly to match. If a floor has 5 sides, but the net only has 4 walls, that shape will always have a "leak" when folded.</p>
         
         <div class="anatomy-display">
             <svg id="net-svg" viewBox="0 0 400 400"></svg>
+            <p style="margin-top: 20px; color: #94a3b8; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
+                Structural Audit: Floor edges must match Wall counts
+            </p>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the controls to build different blueprints. Ask your child: <i>"If this floor has 6 sides, how many rectangles do we need to make the walls?"</i> Watch the <b>Trace Log</b> to confirm the mathematical relationship between the base and the faces.</p>
         <div class="engine-container">
             <div class="inputs">
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 10px;">1. Object Type</label>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 10px;">1. Select Shape Type</label>
                 <div class="type-toggle">
                     <button class="toggle-btn active" id="type-pyramid" onclick="setType('pyramid')">Pyramid</button>
                     <button class="toggle-btn" id="type-prism" onclick="setType('prism')">Prism</button>
                 </div>
 
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 10px;">2. Base Geometry</label>
-                <button class="btn-logic active" id="side-3" onclick="setSides(3)">Triangle (3-Sides)</button>
-                <button class="btn-logic" id="side-4" onclick="setSides(4)">Square (4-Sides)</button>
-                <button class="btn-logic" id="side-5" onclick="setSides(5)">Pentagon (5-Sides)</button>
-                <button class="btn-logic" id="side-6" onclick="setSides(6)">Hexagon (6-Sides)</button>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 10px;">2. Expand the Floor</label>
+                <button class="btn-logic active" id="side-3" onclick="setSides(3)">Triangle Base</button>
+                <button class="btn-logic" id="side-4" onclick="setSides(4)">Square Base</button>
+                <button class="btn-logic" id="side-5" onclick="setSides(5)">Pentagon Base</button>
+                <button class="btn-logic" id="side-6" onclick="setSides(6)">Hexagon Base</button>
             </div>
-            <div class="trace-log" id="trace-48">Select a geometry configuration to calculate the net...</div>
+            <div class="trace-log" id="trace-48">Select a geometry to calculate the blueprint...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Inventory Only" Trap:</strong> Assuming a net is correct just because it has the right number of shapes (e.g., seeing 5 triangles for a pentagonal pyramid and clicking 'Correct' immediately).</p>
-            <p><strong>The Fix:</strong> Use the <b>Perimeter Contact Test</b>. Count the edges of the base shape. Every single edge of that base must touch a "wall" face. If the base is a pentagon but the triangles are all clumped on one side, the shape cannot close. Connection logic is more important than face counts.</p>
+            <p><strong>The "Inventory Only" Trap:</strong> Most children assume a net is correct just because it has the right number of shapes. For example, they see a pentagon and 5 triangles and click "Correct." <b>Stop!</b> If those triangles are all clumped on one side of the pentagon, they can't fold up to meet at the top.</p>
+            
+            <p><strong>The Insider Fix: The "Edge-to-Wall" Rule.</strong> Tell your child: <i>"Every side of the floor needs a wall."</i> They should physically count the edges of the base shape. Then, they must check that there is a face ready to fold up from <b>each</b> of those edges. If any side of the floor is "empty," the net is an impostor. <b>Connection beats counting every time.</b></p>
         </div>
     </section>
 </div>
@@ -210,10 +216,6 @@
                 let pts = [];
                 const centerY = isTop ? (startY - apothem) : (startY + rectH + apothem);
                 const centerX = startX + (edgeLength / 2);
-                
-                // MATH FIX: Offset by PI/2 for top/bottom side alignment
-                // Top base needs its BOTTOM side flat (angle PI/2)
-                // Bottom base needs its TOP side flat (angle -PI/2)
                 const offset = isTop ? (Math.PI / 2 - Math.PI / currentSides) : (-Math.PI / 2 - Math.PI / currentSides);
 
                 for (let i = 0; i < currentSides; i++) {
@@ -228,11 +230,11 @@
         }
 
         document.getElementById('trace-48').innerHTML = `
-            <div class="trace-step">→ 1. Solid: <b>${currentSides}-Sided ${currentType}</b></div>
-            <div class="trace-step">→ 2. Base Edges: <b>${currentSides}</b></div>
-            <div class="trace-step">→ 3. Geometry: All edges aligned</div>
+            <div class="trace-step">→ 1. Object: <b>${currentSides}-Sided ${currentType.charAt(0).toUpperCase() + currentType.slice(1)}</b></div>
+            <div class="trace-step">→ 2. Wall Count: <b>${currentSides} faces</b></div>
+            <div class="trace-step">→ 3. Floor Verification: Correct base symmetry.</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → TOPOLOGY MAPPED
+                → BLUEPRINT VALIDATED
             </div>
         `;
     }

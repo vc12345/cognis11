@@ -43,7 +43,7 @@
             backface-visibility: visible;
         }
 
-        /* Symbol Mapping */
+        /* Symbol Mapping & Faces */
         .f-front  { transform: rotateY(0deg) translateZ(60px); background: var(--cognis-gold); color: #1a202c; }
         .f-back   { transform: rotateY(180deg) translateZ(60px); background: #3182ce; color: white; }
         .f-right  { transform: rotateY(90deg) translateZ(60px); background: #48bb78; color: white; }
@@ -106,28 +106,30 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>In the 11+ Non-Verbal Reasoning exam, you are often asked to identify a cube after it has been spun or flipped. Success depends on <b>Adjacency Logic</b>. Since you only see three faces at a time, you must pick one "Anchor" face and track its neighbors. If the Star is above the Circle in the original view, it must remain above the Circle in any rotation unless the entire cube has been turned upside down.</p>
+        <p>Think of this as <b>"3D Tracking."</b> In the 11+, examiners show a cube and then ask you to find it again after it’s been spun like a top or flipped over. The secret weapon is <b>Adjacency Logic</b>. Since you only ever see three faces at once, your child must pick an "Anchor" face and track its neighbors. If the Star is directly above the Circle in the original, it will stay above the Circle no matter how much you spin it horizontally.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "Identify which cube represents a single 90° horizontal turn to the right."
+                <b>The Horizontal Spin</b>
+                "Identify the cube after one 90° turn to the right. Which side face becomes the front?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "Spot the 'Impossible Neighbor'—a face that is known to be opposite but is shown touching."
+                <b>The Adjacency Audit</b>
+                "Find the 'Impossible Neighbor'—a face that is opposite the anchor but is shown touching it."
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Audit orientation: Does the arrow face toward or away from the adjacent Square?"
+                <b>The Orientation Trap</b>
+                "Does the arrow point toward the Star or away from it after a 180° flip?"
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Spatial Matrix</b>. Use the spinner engine below to manipulate the cube. Observe the "Fixed Adjacency": as the cube rotates, notice how the relationship between the symbols stays constant even though their positions on your screen change.</p>
+        <p>This is the <b>Spatial Matrix</b>. Use the controls below to spin the cube. Notice how the relationship between faces is "Fixed." Even when symbols move to the top or side, they keep the same neighbors. Help your child visualize the "Back" and "Bottom" faces that are currently hidden—this mental X-ray is the key to 11+ success.</p>
         
+        
+
         <div class="anatomy-display">
             <div class="cube-viewport" id="cube-element">
                 <div class="face f-front">★</div>
@@ -138,33 +140,34 @@
                 <div class="face f-bottom">♣</div>
             </div>
             <div style="margin-top: 50px; color: #94a3b8; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">
-                3D Projection: Use controls to rotate
+                3D Laboratory: Spin to verify adjacency
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Manipulate the cube's axes below. Watch the <b>Trace Log</b> as it tracks the exact orientation. Ask your child: <i>"If the Star (★) is on the front and we flip it up, what symbol will be on top now?"</i> This builds the spatial intuition needed for the fastest-paced NVR sections.</p>
         <div class="engine-container">
             <div class="inputs">
-                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">Manipulate Axis</label>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">Rotate the Cube</label>
                 <div class="spin-grid">
-                    <button class="btn-spin" onclick="rotateCube('y', 90)">Spin Right <span>Y-Axis</span></button>
-                    <button class="btn-spin" onclick="rotateCube('x', 90)">Flip Up <span>X-Axis</span></button>
+                    <button class="btn-spin" onclick="rotateCube('y', 90)">Turn Right <span>Y-Axis</span></button>
+                    <button class="btn-spin" onclick="rotateCube('x', 90)">Flip Over <span>X-Axis</span></button>
                     <button class="btn-spin" onclick="rotateCube('z', 90)">Tilt Clockwise <span>Z-Axis</span></button>
                 </div>
-                <button class="btn-reset" onclick="resetCube()">Reset View</button>
+                <button class="btn-reset" onclick="resetCube()">Reset Origin</button>
             </div>
-            <div class="trace-log" id="trace-49">Orientation: Front (★), Top (♦), Right (▲)...</div>
+            <div class="trace-log" id="trace-49">Orientation mapping active...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Impossible Neighbor" Trap:</strong> Choosing an answer where two faces are touching, even though you know they are <b>Opposites</b>. Most distractors will use correct symbols but place them in impossible positions.</p>
+            <p><strong>The "Mirage Neighbor" Trap:</strong> Distractors often use the correct symbols but place them in impossible spots. They might show two faces touching that you know are actually <b>Opposites</b> (like the front and back of the box).</p>
             
-            <p><strong>The Fix:</strong> Use the <b>Law of Opposites</b>. If the Star and the Circle are on opposite sides of the cube, they can <u>never</u> be visible at the same time. If a multiple-choice option shows both, cross it out immediately. Don't waste time checking its rotation.</p>
+            <p><strong>The Insider Fix: The "Law of Opposites."</strong> Tell your child: <i>"Opposites are shy."</i> If Symbol A and Symbol B are on opposite sides of the cube, they can <b>never</b> be seen at the same time. If a multiple-choice answer shows both, it’s a lie. Cross it out immediately and don't waste another second checking its rotation. <b>Opposites can never be neighbors.</b></p>
         </div>
     </section>
 </div>
@@ -194,17 +197,16 @@
     function updateTrace() {
         const log = document.getElementById('trace-49');
         log.innerHTML = `
-            <div class="trace-step">→ 1. Rotation X: ${rotX % 360}°</div>
-            <div class="trace-step">→ 2. Rotation Y: ${rotY % 360}°</div>
-            <div class="trace-step">→ 3. Rotation Z: ${rotZ % 360}°</div>
+            <div class="trace-step">→ 1. Spin (Y): ${rotY % 360}°</div>
+            <div class="trace-step">→ 2. Tilt (X): ${rotX % 360}°</div>
+            <div class="trace-step">→ 3. Lean (Z): ${rotZ % 360}°</div>
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → STATUS: ORIENTATION LOGGED
+                → STATUS: SPATIAL COORDS LOGGED
             </div>
-            <div class="trace-step" style="font-size:0.7rem; opacity:0.7;">Check: Are opposites still invisible?</div>
+            <div class="trace-step" style="font-size:0.7rem; opacity:0.7;">Check: Does the front face still hide its opposite?</div>
         `;
     }
 
-    // Initial tilted state for depth
     window.onload = () => {
         const cube = document.getElementById('cube-element');
         cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) rotateZ(${rotZ}deg)`;

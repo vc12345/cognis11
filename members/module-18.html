@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module 18: BODMAS Dynamic | Cognis 11+</title>
+    <title>Module 18: BODMAS Hierarchy | Cognis 11+</title>
     
     <link rel="stylesheet" href="../css/module-style.css">
     
@@ -20,9 +20,10 @@
             border-radius: 50px; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border: 2px solid var(--cognis-light);
+            text-align: center;
         }
         
-        .sieve { width: 100%; max-width: 500px; border: 2px solid #cbd5e0; border-radius: 12px; background: white; overflow: hidden; }
+        .sieve { width: 100%; max-width: 500px; border: 2px solid #cbd5e0; border-radius: 12px; background: white; overflow: hidden; margin: 0 auto; }
         .sieve-layer { height: 65px; display: flex; align-items: center; padding: 0 20px; border-bottom: 1px dashed #cbd5e0; position: relative; transition: background 0.3s; }
         .sieve-layer:last-child { border-bottom: none; }
         .sieve-layer.active { background: #fffbeb; }
@@ -58,31 +59,34 @@
 <body>
 
 <div class="module-card" style="margin-top: 40px;">
-    <div class="header"><h1>Module 18: BODMAS hierarchy</h1></div>
+    <div class="header">
+        <h1>Module 18: BODMAS Hierarchy</h1>
+    </div>
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Mathematics has a <b>Priority Gravity</b>. High-energy operations (Brackets, Orders) must be solved and "filtered" before lower-energy operations are even considered.</p>
+        <p>This is the <b>"Hierarchy of Power."</b> In the 11+, examiners love to set traps by putting addition at the start of a sentence and multiplication at the end. Your child's brain will want to solve it like a book—left to right. But in math, symbols have "energy levels." High-energy operations (Multiplication, Powers) will always "crush" low-energy ones (Addition, Subtraction) into waiting their turn.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "Find the value of 5 + 3 x 2. Does the addition or the multiplication happen first?"
+                <b>The Left-Right Trap</b>
+                "Find the value of $5 + 3 \times 2$. Does the addition or the multiplication happen first?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "Solve (15 - 5) / 2 + 4. Remember the brackets create a 'shield' around the subtraction."
+                <b>The Shielded Math</b>
+                "Solve $(15 - 5) \div 2 + 4$. Remember the brackets create a 'shield' around the subtraction."
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Calculate 10 + 2 to the power of 3 / (6 - 2). Trace the path from Orders down to Addition."
+                <b>The Energy Path</b>
+                "Calculate $10 + 2^3 \div (6 - 2)$. Trace the path from the 'Power' down to the 'Plus'."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Priority Sieve</b>. Watch as the equation is broken down. Symbols are caught in different layers based on their "weight."</p>
+        <p>Think of this as the <b>Priority Sieve</b>. When you throw an equation into the machine, the symbols get caught in different layers. The top layers are the "Heavyweights"—they must be dealt with before anything can fall through to the layers below. Point to the sieve: the symbols at the top have all the power.</p>
+        
         <div class="anatomy-display">
             <div class="equation-bar" id="eq-display">2 + 3 x 10</div>
             
@@ -97,6 +101,7 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the builder below to create your own messy equation. Click <b>"Filter Equation"</b> to watch the symbols get caught in their correct priority layers. Help your child notice that no matter where a 'x' is placed, it always lands in Layer 3, above the '+' in Layer 4.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="builder-grid" id="builder">
@@ -105,12 +110,9 @@
                     <button class="add-btn" onclick="addTerm()">+</button>
                     <button class="solve-btn" onclick="runBODMAS()">Filter Equation</button>
                 </div>
-                <p style="font-size: 0.65rem; color: #a0aec0; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px;">
-                    Use the + to expand. Click 'Filter' to solve.
-                </p>
             </div>
             <div class="trace-log" id="engine-trace">
-                Build an equation and click "Filter" to see the logic sieve in action.
+                Build an equation and click "Filter" to see the hierarchy in action.
             </div>
         </div>
     </section>
@@ -118,9 +120,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Left-to-Right" Trap:</strong> Treating math like reading a book. If you see 10 - 2 x 3, many people do 10 - 2 = 8 first, then 8 x 3 = 24.
-            <br><br>
-            <strong>The Fix:</strong> Perform a <b>Priority Scan</b>. Before picking up your pen, scan the line for the "Heaviest" operator. Multiplication and Powers are physically heavier and will "crush" Addition into waiting its turn.</p>
+            <p><strong>The "Bookworm" Trap:</strong> Most children read an equation from left to right, just like a storybook. If they see $10 - 2 \times 3$, they will confidently do $10 - 2 = 8$ first, then $8 \times 3 = 24$. <b>This is a disaster.</b></p>
+            
+            <p><strong>The Fix: The "Priority Scan."</strong> Tell your child: <i>"The pen doesn't move until the eyes scan the line."</i> They must hunt for the 'Heavyweights' first. In $10 - 2 \times 3$, the multiplication is heavier. It happens first: $2 \times 3 = 6$. Then, and only then, does the subtraction happen: $10 - 6 = 4$. <b>Eyes first, pen second.</b></p>
         </div>
     </section>
 </div>
@@ -159,7 +161,7 @@
     }
 
     function addTerm() {
-        if(terms.length >= 6) return; // Limit for visual clarity
+        if(terms.length >= 6) return; 
         terms[terms.length-1].op = '+';
         terms.push({val: 5});
         renderBuilder();
@@ -183,21 +185,18 @@
             if(t.op) bins[priority[t.op]].push(t.op === '/' ? '÷' : t.op);
         });
 
-        // Update Sieve Visuals
         ['o','dm','as'].forEach(cat => {
             const container = document.getElementById('bin-'+cat);
             container.innerHTML = bins[cat].map(op => `<div class="token ${cat}">${op}</div>`).join('');
             document.getElementById('layer-'+cat).classList.toggle('active', bins[cat].length > 0);
         });
 
-        // Manual Step-by-Step for Trace
-        let currentExpr = terms.map(t => t.op ? `${t.val} ${t.op}` : t.val).join(' ');
-        let log = `<div class="trace-step">→ Starting Equation: <b>${currentExpr}</b></div>`;
+        let currentExpr = terms.map(t => t.op ? `${t.val} ${t.op === '/' ? '÷' : t.op}` : t.val).join(' ');
+        let log = `<div class="trace-step">→ Equation: <b>${currentExpr}</b></div>`;
         
-        // Simplified Logic Mockup for Trace (Visual representation of priority)
-        if(bins.o.length > 0) log += `<div class="trace-step">→ Layer 2: Solving Powers (Orders) first.</div>`;
-        if(bins.dm.length > 0) log += `<div class="trace-step">→ Layer 3: Solving Division and Multiplication.</div>`;
-        if(bins.as.length > 0) log += `<div class="trace-step">→ Layer 4: Final Addition and Subtraction.</div>`;
+        if(bins.o.length > 0) log += `<div class="trace-step">→ Layer 2: Solving <b>Powers</b> (Orders) first.</div>`;
+        if(bins.dm.length > 0) log += `<div class="trace-step">→ Layer 3: Solving <b>Division / Multiplication</b>.</div>`;
+        if(bins.as.length > 0) log += `<div class="trace-step">→ Layer 4: Finally <b>Addition / Subtraction</b>.</div>`;
         
         log += `<div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">→ Scan Complete. Hierarchy locked.</div>`;
 

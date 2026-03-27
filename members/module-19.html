@@ -9,7 +9,7 @@
     
     <style>
         /* UNIQUE CSS FOR PHYSICS SCALE */
-        .anatomy-display { padding: 40px; background: #f0f4f8; position: relative; height: 420px; overflow: hidden; }
+        .anatomy-display { padding: 40px; background: #f0f4f8; position: relative; height: 420px; overflow: hidden; border-radius: 12px; border: 2px solid #e2e8f0; }
         
         .scale-pivot { 
             width: 0; height: 0; 
@@ -53,7 +53,7 @@
         #left-pan { left: -80px; }
         #right-pan { right: -80px; }
         
-        .eq-text { font-size: 1rem; font-weight: 800; color: var(--cognis-blue); }
+        .eq-text { font-size: 1.1rem; font-weight: 800; color: var(--cognis-blue); }
         .weight-badge { 
             font-size: 0.6rem; font-weight: 800; color: #94a3b8; 
             text-transform: uppercase; margin-top: 4px; display: block; 
@@ -86,30 +86,30 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>This module tests <b>Structural Reversibility</b>. You must find the operational path that connects numbers to a fixed target. Success requires identifying "Heavy" operators (Powers, Roots, Multiplication) before guessing signs.</p>
+        <p>Think of this as <b>"Mathematical Search and Rescue."</b> You have the numbers and the destination, but the bridges (the signs) have vanished. In the 11+, solving these is not about guessing; it's about identifying <b>"Heavy" Operators</b>. If the target is very high or very low, you know a multiplication or division must be lurking somewhere. Your job is to find the operational path that creates a perfect balance.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
+                <b>The Single Bridge</b>
                 "Which sign makes this balance?"<br>
                 10 <div class="q-box"></div> 2 = 5
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "Find the missing operators:"<br>
+                <b>The Double Jump</b>
+                "Find the two missing signs:"<br>
                 12 <div class="q-box"></div> 3 <div class="q-box"></div> 2 = 18
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "Solve using Powers or Roots:"<br>
-                Square root of 16 <div class="q-box"></div> 2 <div class="q-box"></div> 3 = 12
+                <b>The 11+ Powerplay</b>
+                "Solve using square roots:"<br>
+                $\sqrt{16}$ <div class="q-box"></div> 2 <div class="q-box"></div> 3 = 12
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>An equation is a physical scale. If the left side is "heavier" than the target, the scale will tilt. Balance is only achieved when the math is perfect.</p>
+        <p>An equation is a <b>Physical Scale</b>. If the calculation on the left is "heavier" than the target on the right, the scale will tilt. Balance is only achieved when the math is perfect. Watch the pans below—they will only level out when you find the correct "weight" for your signs.</p>
         
         <div class="anatomy-display">
             <div class="scale-beam" id="beam">
@@ -123,7 +123,7 @@
                             <span id="v-op2" style="color:var(--cognis-gold)">?</span> 
                             <span id="v-c">4</span>
                         </div>
-                        <span class="weight-badge">Left Weight: <span id="v-calc">0</span></span>
+                        <span class="weight-badge">Calculated Weight: <span id="v-calc">0</span></span>
                     </div>
                 </div>
 
@@ -141,10 +141,11 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Use the controls below to build a "Weight Challenge." Try to balance the scale by selecting the right operators. Help your child notice how <b>Multiplication (x)</b> and <b>Powers (^)</b> add massive weight, while <b>Division (÷)</b> slims it down instantly.</p>
         <div class="engine-container">
             <div class="inputs">
                 <div class="control-group">
-                    <label>Set A / First Sign</label>
+                    <label>Value A / First Sign</label>
                     <div class="input-row">
                         <select id="in-pre" style="width: 70px;"><option value="none">A</option><option value="sqrt">√A</option></select>
                         <input type="number" id="in-a" value="16" style="width: 60px;">
@@ -152,7 +153,7 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <label>Set B / Second Sign / Set C</label>
+                    <label>Value B / Second Sign / Value C</label>
                     <div class="input-row">
                         <input type="number" id="in-b" value="2" style="width: 60px;">
                         <select id="in-op2" style="width: 80px;"><option value="">— Op —</option><option value="+">+</option><option value="-">-</option><option value="x">x</option><option value="/">÷</option><option value="^">^</option></select>
@@ -160,19 +161,20 @@
                     </div>
                 </div>
                 <div class="control-group" style="border-top:1px solid #4a5568; padding-top:15px; margin-top:10px;">
-                    <label>Target Result</label>
+                    <label>The Target Weight</label>
                     <input type="number" id="in-target" value="12" style="width: 100%; border: 2px solid var(--cognis-gold);">
                 </div>
             </div>
-            <div class="trace-log" id="engine-trace">Select operators to test the balance...</div>
+            <div class="trace-log" id="engine-trace">Test the balance...</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Linear" Trap:</strong> Most students read equations left-to-right like a story. For example, if they see 2 + 3 to the power of 2, they might say 2 + 3 = 5, then 5 squared = 25.</p>
-            <p><strong>The Fix:</strong> Use the <b>Priority Filter</b>. Roots and Powers are "Heavy" operators. They must be solved before addition or subtraction can even be considered. In the example above, 3 squared is solved first (9), making the true weight 11.</p>
+            <p><strong>The "Linear Story" Trap:</strong> Most children read missing sign problems like a book—left to right. If they see $2 + 3^2$, they often do $2 + 3 = 5$, then $5^2 = 25$. This "storytelling" math will fail every single time in the 11+.</p>
+            
+            <p><strong>The Fix: The "Heavyweight" First Rule.</strong> Tell your child: <i>"BODMAS is a gravity rule."</i> Roots and Powers are the heaviest; they must be solved before addition or subtraction can even move. In the example above, the power happens first ($3^2 = 9$), making the true weight $2 + 9 = 11$. <b>Find the heaviest sign first, then balance the rest.</b></p>
         </div>
     </section>
 </div>
@@ -195,7 +197,6 @@
         const c = parseFloat(document.getElementById('in-c').value) || 0;
         const target = parseFloat(document.getElementById('in-target').value) || 0;
 
-        // Visual Updates
         document.getElementById('v-pre').innerText = pre === 'sqrt' ? '√' : '';
         document.getElementById('v-a').innerText = a;
         document.getElementById('v-op1').innerText = op1 || '?';
@@ -205,30 +206,30 @@
         document.getElementById('v-target').innerText = target;
 
         if (!op1 || !op2) {
-            engineTrace.innerHTML = "Select both operators to calculate the weight.";
+            engineTrace.innerHTML = "Select both operators to see if the scale balances.";
             resetScale();
             return;
         }
 
-        // MATH LOGIC (Internal BODMAS)
         let valA = pre === 'sqrt' ? Math.sqrt(a) : a;
         let current = 0;
         let steps = [];
-        steps.push(`Initial value A: ${valA}`);
+        steps.push(`Starting with Value A: ${valA.toFixed(1)}`);
 
-        // BODMAS check: is op2 heavier than op1?
         const weight = { '+':1, '-':1, 'x':2, '/':2, '^':3 };
         
         if (weight[op2] > weight[op1]) {
-            steps.push(`BODMAS: Solving ${b} ${op2} ${c} first.`);
+            steps.push(`<b>BODMAS Alert:</b> Sign 2 (${op2}) is heavier than Sign 1 (${op1}).`);
             let temp = calc(b, op2, c);
+            steps.push(`Solving heavy part: ${b} ${op2} ${c} = ${temp}`);
             current = calc(valA, op1, temp);
-            steps.push(`Result: ${valA} ${op1} ${temp} = ${current}`);
+            steps.push(`Final Calculation: ${valA.toFixed(1)} ${op1} ${temp} = ${current.toFixed(1)}`);
         } else {
-            steps.push(`BODMAS: Solving ${valA} ${op1} ${b} first.`);
+            steps.push(`<b>BODMAS Alert:</b> Sign 1 (${op1}) is heavier or equal to Sign 2.`);
             let temp = calc(valA, op1, b);
+            steps.push(`Solving first part: ${valA.toFixed(1)} ${op1} ${b} = ${temp}`);
             current = calc(temp, op2, c);
-            steps.push(`Result: ${temp} ${op2} ${c} = ${current}`);
+            steps.push(`Final Calculation: ${temp} ${op2} ${c} = ${current.toFixed(1)}`);
         }
 
         function calc(n1, op, n2) {
@@ -242,10 +243,7 @@
 
         document.getElementById('v-calc').innerText = current.toFixed(1);
         
-        // Physics Simulation
         const diff = current - target;
-        // Negative tilt moves LEFT side DOWN. Positive tilt moves RIGHT side DOWN.
-        // If Left (current) is heavier (diff > 0), tilt should be negative.
         const tilt = Math.max(-25, Math.min(25, diff * -2.5));
         
         beam.style.transform = `rotate(${tilt}deg)`;
@@ -254,7 +252,10 @@
 
         engineTrace.innerHTML = steps.map(s => `<div class="trace-step">→ ${s}</div>`).join('');
         if (Math.abs(current - target) < 0.01) {
-            engineTrace.innerHTML += `<div style="color:#10b981; font-weight:bold; margin-top:10px; border-top:1px solid #4a5568; padding-top:10px;">★ SYSTEM BALANCED ★</div>`;
+            engineTrace.innerHTML += `<div style="color:#10b981; font-weight:bold; margin-top:10px; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">★ SCALE BALANCED ★</div>`;
+        } else {
+            const direction = current > target ? "too heavy" : "too light";
+            engineTrace.innerHTML += `<div style="color:#ef4444; font-weight:bold; margin-top:10px;">The calculation is ${direction}!</div>`;
         }
     }
 

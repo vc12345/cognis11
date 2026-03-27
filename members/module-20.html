@@ -9,7 +9,7 @@
     
     <style>
         /* UNIQUE CSS FOR THE FORMULA LAB */
-        .anatomy-display { padding: 40px; background: #f0f4f8; }
+        .anatomy-display { padding: 40px; background: #f0f4f8; border-radius: 12px; border: 2px solid #e2e8f0; }
         
         .vial-rack { 
             display: flex; 
@@ -39,6 +39,7 @@
             width: 100%;
             max-width: 600px;
             text-align: center;
+            margin: 0 auto;
         }
 
         .formula-view { 
@@ -69,11 +70,10 @@
         }
         .sim-btn:hover { background: #b08d4b; transform: translateY(-2px); }
 
-        /* Engine Custom Grid */
         .engine-container { grid-template-columns: 1fr 1.2fr; }
         .vial-inputs { display: flex; gap: 10px; margin-bottom: 20px; }
         .vial-inputs div { flex: 1; }
-        .vial-inputs input { width: 100% !important; text-align: center; }
+        .vial-inputs input { width: 100% !important; text-align: center; background: #2d3748; color: white; border: 1px solid #4a5568; padding: 10px; border-radius: 8px; font-weight: 800; }
         
         .preset-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
         .preset-btn { 
@@ -98,27 +98,28 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Substitution is the act of replacing algebraic variables with fixed numerical values. It requires <b>Entity Precision</b>: recognizing that when a number and letter touch (like 3A), it is an implied multiplication.</p>
+        <p>Think of substitution as a <b>Recipe Swap</b>. You are given a formula (the recipe), but you need to swap the ingredients (the letters) for real numbers. In the 11+, children often get confused when letters and numbers are "glued" together. The secret is knowing that in Algebra, <b>touching means multiplying</b>. If your child can visualize the letter as a container waiting for a value to be poured in, they’ll master this instantly.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "If a = 10 and b = 3, what is the value of a + b?"
+                <b>The Simple Sum</b>
+                "If $a = 10$ and $b = 3$, what is the value of $a + b$?"
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "If x = 5 and y = 4, calculate 3x - 2y."
+                <b>The "Glue" Challenge</b>
+                "If $x = 5$ and $y = 4$, calculate $3x - 2y$."
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "If p = 4 and q = 9, find the value of (p squared + q) / 5."
+                <b>The 11+ Powerplay</b>
+                "If $p = 4$ and $q = 9$, find the value of $(p^2 + q) \div 5$."
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Formula Lab</b>. Variables (A, B, C) are containers. Use the "Logic Lens" to see the numbers being poured into the formula.</p>
+        <p>Think of this as the <b>Variable Lab</b>. Point to the Vials below. Each vial holds a specific "weight" (the value). When we apply the <b>Logic Lens</b>, we peer inside the formula to see the real numbers taking their places. Help your child notice how the letters vanish as the numbers are "poured" in.</p>
+        
         <div class="anatomy-display">
             <div class="vial-rack">
                 <div class="vial"><span>Vial A</span><b id="v-a">12</b></div>
@@ -134,16 +135,17 @@
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Change the values in the vials and select different formulas. Use the <b>Logic Lens</b> above to show your child exactly how the math is structured before it's solved. Notice how brackets appear to protect the numbers once they are swapped.</p>
         <div class="engine-container">
             <div class="inputs">
-                <label>1. Set Variable Values</label>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">1. Set Vial Values</label>
                 <div class="vial-inputs">
                     <div><input type="number" id="in-a" value="12"></div>
                     <div><input type="number" id="in-b" value="2"></div>
                     <div><input type="number" id="in-c" value="5"></div>
                 </div>
                 
-                <label>2. Select Formula</label>
+                <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800;">2. Select Experiment</label>
                 <div class="preset-grid">
                     <button class="preset-btn active" onclick="setFormula(['3A', '+', '2B', '+', '5C'], this)">3A + 2B + 5C</button>
                     <button class="preset-btn" onclick="setFormula(['A', '+', 'B', '^2', '/', 'C'], this)">A + B² / C</button>
@@ -153,15 +155,16 @@
                     <button class="preset-btn" onclick="setFormula(['(A+C)', '/', 'B'], this)">(A + C) / B</button>
                 </div>
             </div>
-            <div class="trace-log" id="engine-trace">Select a preset to begin substitution.</div>
+            <div class="trace-log" id="engine-trace">Select a preset to begin.</div>
         </div>
     </section>
 
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Digit Gluing" Trap:</strong> If A = 5, many students see "3A" and think the answer is 35. They simply stick the number next to the letter.</p>
-            <p><strong>The Fix:</strong> In Algebra, touching means <b>Multiplying</b>. Think of the letter as a container. You aren't putting the number 5 next to the 3; you are pouring the value 5 into the container. Result: 3 x (5) = 15.</p>
+            <p><strong>The "Digit Gluing" Trap:</strong> If $A = 5$, many students see "$3A$" and think the answer is $35$. They are treating the letter like a placeholder in a two-digit number!</p>
+            
+            <p><strong>The Fix: The "Invisible Times" Rule.</strong> Remind your child: <i>"Algebra is crowded."</i> If a number and a letter are touching, they are secretly multiplying to save space. You aren't putting the number $5$ next to the $3$; you are multiplying them. Result: $3 \times 5 = 15$. <b>If they touch, they multiply.</b></p>
         </div>
     </section>
 </div>
@@ -195,38 +198,31 @@
         const c = parseFloat(document.getElementById('in-c').value) || 0;
         const map = { A: a, B: b, C: c };
 
-        // Update Anatomy Vials
         document.getElementById('v-a').innerText = a;
         document.getElementById('v-b').innerText = b;
         document.getElementById('v-c').innerText = c;
 
-        // Update Formula Display
         let display = activeFormula.join(' ').replace(/\^2/g, '²').replace(/x/g, '×');
         
         if (lensOn) {
             display = activeFormula.map(token => {
                 if (['+', '-', 'x', '/', '(', ')', '^2'].includes(token)) return token === 'x' ? '×' : token === '^2' ? '²' : token;
-                // Handle complex tokens like 3A
                 const match = token.match(/^(\d*)([A-Z])$/);
                 if (match) {
                     const coeff = match[1] === "" ? "" : match[1] + "×";
                     return `(${coeff}${map[match[2]]})`;
                 }
-                // Handle brackets like (A+C)
                 if (token === '(A+C)') return `(${map.A}+${map.C})`;
                 return token;
             }).join(' ');
         }
         document.getElementById('viz-formula').innerText = display;
 
-        // Trace Logic
         runCalculations(map);
     }
 
     function runCalculations(map) {
-        let trace = `<div class="trace-step">→ 1. Identify Variable Values: A=${map.A}, B=${map.B}, C=${map.C}</div>`;
-        
-        // Dynamic Calculation Logic for presets
+        let trace = `<div class="trace-step">→ 1. Swapping letters for: A=${map.A}, B=${map.B}, C=${map.C}</div>`;
         let result = 0;
         let steps = [];
 
@@ -242,7 +238,7 @@
             steps = [`5(${map.C}) - (${map.A} × ${map.B})`, `${5*map.C} - ${map.A*map.B}`];
         } else if (formulaKey === 'A/B+C^2') {
             result = (map.A / map.B) + Math.pow(map.C, 2);
-            steps = [`${map.A}/${map.B} + ${map.C}²`, `${map.A/map.B} + ${Math.pow(map.C,2)}`];
+            steps = [`${map.A}/${map.B} + ${map.C}²`, `${(map.A/map.B).toFixed(2)} + ${Math.pow(map.C,2)}`];
         } else if (formulaKey === '2Ax3B/C') {
             result = (2 * map.A * 3 * map.B) / map.C;
             steps = [`(2×${map.A}) × (3×${map.B}) / ${map.C}`, `${2*map.A} × ${3*map.B} / ${map.C}`];
@@ -251,11 +247,11 @@
             steps = [`(${map.A} + ${map.C}) / ${map.B}`, `${map.A+map.C} / ${map.B}`];
         }
 
-        steps.forEach(s => trace += `<div class="trace-step">→ Process: ${s}</div>`);
+        steps.forEach(s => trace += `<div class="trace-step">→ Processing: ${s}</div>`);
 
         trace += `
             <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                → FINAL RESULT: ${result.toFixed(2)}
+                → FINAL VALUE: ${result.toFixed(2)}
             </div>
         `;
 

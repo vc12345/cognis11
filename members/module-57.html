@@ -40,7 +40,7 @@
         .logic-label { font-size: 0.6rem; color: #94a3b8; margin-top: 8px; display: block; }
 
         /* Engine Terminal Customization */
-        .simulation-area { background: #1a202c; padding: 40px; border-radius: 12px; margin-bottom: 20px; }
+        .simulation-area { background: #1a202c; padding: 40px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #2d3748; }
         
         .grammar-well {
             background: rgba(255,255,255,0.03);
@@ -116,53 +116,53 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Grammatical Cloze is the study of <b>Syntactic Slots</b>. Every sentence has a mechanical skeleton: there is always a <b>Noun</b> (the subject) and a <b>Verb</b> (the action). You can expand this skeleton with extra information: <b>Adjectives</b> describe the noun, while <b>Adverbs</b> describe how the verb is being performed. To solve these, you must identify the "Job" the missing word is doing.</p>
+        <p>Think of this as <b>"Sentence Engineering."</b> In the 11+, grammatical cloze tests aren't about the story—they are about the <b>Syntactic Skeleton</b>. Every sentence is a machine with specific slots. There is always a <b>Noun</b> (the subject) and a <b>Verb</b> (the action). You can add "Expansion Modules": <b>Adjectives</b> to describe the noun, or <b>Adverbs</b> to describe the action. To solve these, your child must identify the "Job" the missing word is being hired to do.</p>
         
+        
+
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
+                <b>The Noun Detailer</b>
                 "The ______ cat slept."<br>
-                <b>Slot:</b> Adjective (Noun detail)<br>
-                <b>Fit:</b> Large / Fluffy
+                <b>Slot:</b> Adjective (Info about the cat). <b>Fit:</b> Fluffy.
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
+                <b>The Action Engine</b>
                 "He ______ through the park."<br>
-                <b>Slot:</b> Verb (The Action)<br>
-                <b>Fit:</b> Sprinting / Walked
+                <b>Slot:</b> Verb (The primary action). <b>Fit:</b> Sprinted.
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
+                <b>The Verb Detailer</b>
                 "The plane landed ______."<br>
-                <b>Slot:</b> Adverb (Verb detail)<br>
-                <b>Fit:</b> Smoothly / Safely
+                <b>Slot:</b> Adverb (Info about the landing). <b>Fit:</b> Smoothly.
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Blueprint Skeleton</b>. Notice how adjectives and adverbs are "Expansion Modules" that attach themselves to the core Noun and Verb components.</p>
+        <p>This is the <b>Skeleton Map</b>. Notice how the core Noun and Verb are the "Pillars." The Adjectives and Adverbs (in gold) are optional parts that "snap on" to provide extra data. If your child can identify which pillar or snap-on is missing, they can eliminate 75% of the word bank instantly.</p>
         
         <div class="anatomy-display">
             <div class="syntax-map">
-                <div class="blueprint-slot ext">ADJECTIVE <span class="logic-label">Noun Info</span></div>
-                <div class="blueprint-slot">NOUN <span class="logic-label">The Core</span></div>
+                <div class="blueprint-slot ext">ADJECTIVE <span class="logic-label">Modifies Noun</span></div>
+                <div class="blueprint-slot">NOUN <span class="logic-label">The Subject</span></div>
                 <div class="blueprint-slot">VERB <span class="logic-label">The Action</span></div>
-                <div class="blueprint-slot ext">ADVERB <span class="logic-label">Verb Info</span></div>
+                <div class="blueprint-slot ext">ADVERB <span class="logic-label">Modifies Verb</span></div>
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Load a syntax case below and identify which "Word Class" is missing. Watch the <b>Trace Log</b> to see the "Structural Analysis." Help your child realize that even if they don't know the meaning of a word, they can often guess its class by its suffix (like <i>-ly</i> for adverbs or <i>-ed</i> for verbs).</p>
         <div class="simulation-area">
             <div class="grammar-well" id="grammar-well">
                 </div>
 
             <div class="engine-container">
                 <div class="inputs">
-                    <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Load Syntax Case</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Load a Sentence Blueprint</label>
                     <div class="preset-grid">
                         <button class="btn-load active" onclick="loadCase(0, this)">Case: Adjective Slot</button>
                         <button class="btn-load" onclick="loadCase(1, this)">Case: Verb Slot</button>
@@ -170,11 +170,11 @@
                         <button class="btn-load" onclick="loadCase(3, this)">Case: Noun Slot</button>
                     </div>
 
-                    <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-top: 20px;">2. Assign Word Class</label>
+                    <label style="font-size: 0.65rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-top: 20px;">2. Identify the Missing Part</label>
                     <div class="class-bank" id="class-bank">
                         </div>
                 </div>
-                <div class="trace-log" id="trace-57">Awaiting structural analysis...</div>
+                <div class="trace-log" id="trace-57">Awaiting skeleton scan...</div>
             </div>
         </div>
     </section>
@@ -182,9 +182,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Cool Story" Trap:</strong> Choosing a word that makes the story sound interesting, but makes no sense grammatically. For example, picking "Bravely" for the gap in "The _____ explorer" because explorers are brave. Even though it sounds right, "Bravely" is an adverb and cannot describe a noun.</p>
+            <p><strong>The "Cool Story" Trap:</strong> Most children pick a word because it makes the story sound exciting, even if it’s grammatically broken. For example, picking "Bravely" for the gap in "The _____ explorer" because explorers are brave. Even though it "feels" right, "Bravely" is an adverb and physically cannot describe a noun.</p>
             
-            <p><strong>The Fix:</strong> Use the <b>Substitution Test</b>. Forget the story and look at the "neighbors." If the word is between "The" and a "Noun," it <u>must</u> be an <b>Adjective</b>. If the word is after an action and ends in -ly, it is an <b>Adverb</b>. Let the grammar dictate the word, not the plot.</p>
+            <p><strong>The Insider Fix: The "Substitution Test."</strong> Tell your child: <i>"Look at the neighbors."</i> If the gap is between "The" and a "Noun," it <b>must</b> be an Adjective. They should try swapping in a very simple word like "Red" or "Big." If "Big" fits the grammar, then the answer must be an adjective. <b>Let the rules of the machine pick the part.</b></p>
         </div>
     </section>
 </div>
@@ -194,28 +194,28 @@
 <script>
     const cases = [
         {
-            text: "The <span class='syntax-gap' id='active-slot'>SELECT SLOT</span> explorer found a cave.",
+            text: "The <span class='syntax-gap' id='active-slot'>[SELECT TYPE]</span> explorer found a cave.",
             target: "ADJECTIVE",
-            example: "Brave / Old",
-            logic: "The gap provides more information about the Noun [Explorer]."
+            example: "Fearless / Ancient",
+            logic: "The gap is describing a Noun (Explorer)."
         },
         {
-            text: "The giant <span class='syntax-gap' id='active-slot'>SELECT SLOT</span> across the field.",
+            text: "The giant <span class='syntax-gap' id='active-slot'>[SELECT TYPE]</span> across the field.",
             target: "VERB",
-            example: "Lumbered / Ran",
-            logic: "The sentence is missing its core Action."
+            example: "Stomped / Glided",
+            logic: "The sentence is missing its central Action."
         },
         {
-            text: "The scientist watched the test <span class='syntax-gap' id='active-slot'>SELECT SLOT</span>.",
+            text: "The scientist watched the test <span class='syntax-gap' id='active-slot'>[SELECT TYPE]</span>.",
             target: "ADVERB",
-            example: "Closely / Daily",
-            logic: "The gap provides more information about the Verb [Watched]."
+            example: "Intently / Weekly",
+            logic: "The gap is describing the Action (Watched)."
         },
         {
-            text: "The shimmering <span class='syntax-gap' id='active-slot'>SELECT SLOT</span> was full of water.",
+            text: "The shimmering <span class='syntax-gap' id='active-slot'>[SELECT TYPE]</span> was full of water.",
             target: "NOUN",
-            example: "Lake / Vessel",
-            logic: "The sentence is missing its core Subject."
+            example: "Cavern / Bucket",
+            logic: "The sentence is missing its central Subject."
         }
     ];
 
@@ -254,27 +254,27 @@
 
     function updateTrace(val, success) {
         const log = document.getElementById('trace-57');
-        let html = `<div class="trace-step">→ 1. Skeleton: <b>${currentCase.target === 'NOUN' || currentCase.target === 'VERB' ? 'CORE COMPONENT' : 'EXPANSION MODULE'}</b></div>`;
+        let html = `<div class="trace-step">→ 1. Blueprint: <b>${currentCase.target === 'NOUN' || currentCase.target === 'VERB' ? 'CORE PILLAR' : 'SNAP-ON MODULE'}</b></div>`;
         
         if(!val) {
-            html += `<div class="trace-step">→ 2. Status: Mapping syntax...</div>`;
+            html += `<div class="trace-step">→ 2. Status: Mapping sentence skeleton...</div>`;
             log.innerHTML = html;
             return;
         }
 
-        html += `<div class="trace-step">→ 2. Testing Class: <b>${val}</b></div>`;
+        html += `<div class="trace-step">→ 2. Auditor: Testing class <b>${val}</b></div>`;
         
         if(success) {
             html += `
                 <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                    → RESULT: SYNTAX VALIDATED
+                    → RESULT: GRAMMATICAL MATCH
                 </div>
-                <div class="trace-step" style="font-size:0.7rem; opacity:0.8;">Example: ${currentCase.example}</div>
+                <div class="trace-step" style="font-size:0.7rem; opacity:0.8;">Logic: ${currentCase.logic} (e.g. ${currentCase.example})</div>
             `;
         } else {
             html += `
                 <div class="trace-step" style="color:#f87171; font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                    → ERROR: WORD CLASS MISMATCH
+                    → ERROR: MECHANICAL MISMATCH
                 </div>
             `;
         }

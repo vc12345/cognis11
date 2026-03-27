@@ -63,7 +63,7 @@
         }
 
         /* Engine Terminal Customization */
-        .simulation-area { background: #1a202c; padding: 40px; border-radius: 12px; margin-bottom: 20px; }
+        .simulation-area { background: #1a202c; padding: 40px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #2d3748; }
         
         .sentence-well {
             background: rgba(255,255,255,0.03);
@@ -141,66 +141,64 @@
 
     <section class="phase">
         <h2>Phase 1: The X-Ray</h2>
-        <p>Cloze tests are a trial of <b>Semantic Anchor Alignment</b>. Every sentence contains "Magnet Words"—specific clues that physically pull for a certain vocabulary match. Success depends on reading <i>past the gap</i> to find the resolution. If a sentence mentions an "empty water bottle" and a "desert," the missing word is mathematically forced to be <i>parched</i>, not just <i>tired</i>.</p>
+        <p>Think of contextual cloze as <b>"Semantic Radar."</b> In the 11+, you are hunting for <b>Magnet Words</b>—specific clues that physically pull a certain vocabulary match toward the gap. Success isn't about guessing what fits; it's about reading <i>past the hole</i> to find the resolution. If a sentence mentions an "empty water bottle" and a "desert," the missing word is mathematically forced to be <i>parched</i>, not just <i>unhappy</i>.</p>
         
         <div class="question-tiers">
             <div class="tier-card">
-                <b>Advanced Year 2</b>
-                "The content cat ______ as it curled by the warm fire."<br>
-                <b>Clue:</b> Content / Fire<br>
-                <b>Fit:</b> Purred
+                <b>The Content Cat</b>
+                "The cat ______ as it curled by the warm fire."<br>
+                <b>Magnet Words:</b> Content / Warm Fire. <b>Fit:</b> Purred.
             </div>
             <div class="tier-card">
-                <b>Average Year 4</b>
-                "The hiker was so ______ that he ate his dinner in seconds."<br>
-                <b>Clue:</b> Dinner / Seconds<br>
-                <b>Fit:</b> Famished
+                <b>The Hungry Hiker</b>
+                "He was so ______ that he ate his dinner in seconds."<br>
+                <b>Magnet Words:</b> Ate / Seconds. <b>Fit:</b> Famished.
             </div>
             <div class="tier-card">
-                <b>Advanced Year 5</b>
-                "The politician’s ______ speech failed to convince the crowd."<br>
-                <b>Clue:</b> Failed / Skeptical<br>
-                <b>Fit:</b> Vague
+                <b>The 11+ Politician</b>
+                "The leader’s ______ speech failed to convince the crowd."<br>
+                <b>Magnet Words:</b> Failed / Skeptical. <b>Fit:</b> Vague.
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 2: The Anatomy</h2>
-        <p>The <b>Context Radar</b>. Notice how the "Magnet Words" before and after the gap create a narrow window of possibility. To solve Cloze, you must find the word that satisfies both anchors.</p>
+        <p>This is the <b>Context Radar</b>. Notice how the Magnet Words before and after the gap create a narrow window of possibility. To solve a Cloze puzzle, you must find the only word in the bank that satisfies <b>both</b> anchors at the same time. If it only matches one, it’s a decoy.</p>
         
         <div class="anatomy-display">
             <div class="radar-line"></div>
             <div class="logic-bridge">
-                <div class="anchor-pill">Clue A: "Empty Bottle"</div>
+                <div class="anchor-pill">Magnet A: "Empty Bottle"</div>
                 <div style="color:var(--cognis-gold); font-weight:bold;">&rarr;</div>
                 <div class="gap-node">PARCHED</div>
                 <div style="color:var(--cognis-gold); font-weight:bold;">&larr;</div>
-                <div class="anchor-pill">Clue B: "Desert Sun"</div>
+                <div class="anchor-pill">Magnet B: "Desert Sun"</div>
             </div>
         </div>
     </section>
 
     <section class="phase">
         <h2>Phase 3: The Engine</h2>
+        <p style="margin-bottom: 20px;">Load a scenario below and select the word you think fits best. Watch the <b>Trace Log</b> to see the "Anchor Analysis" in action. Help your child realize that the sentence is a set of scales; the correct word must balance the logic on both sides.</p>
         <div class="simulation-area">
             <div class="sentence-well" id="sentence-well">
                 </div>
 
             <div class="engine-container">
                 <div class="inputs">
-                    <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Load Scenario</label>
+                    <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 12px;">1. Load Sentence</label>
                     <div class="preset-grid">
                         <button class="btn-scenario active" onclick="loadScenario(0, this)">The Thirsty Hiker</button>
                         <button class="btn-scenario" onclick="loadScenario(1, this)">The Stormy Voyage</button>
                         <button class="btn-scenario" onclick="loadScenario(2, this)">The Diligent Student</button>
                     </div>
 
-                    <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-top: 20px;">2. Select Semantic Fit</label>
+                    <label style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase; font-weight: 800; display: block; margin-top: 20px;">2. Pick the Fit</label>
                     <div class="option-bank" id="option-bank">
                         </div>
                 </div>
-                <div class="trace-log" id="trace-56">Select a scenario to begin anchor analysis...</div>
+                <div class="trace-log" id="trace-56">Ready for anchor analysis...</div>
             </div>
         </div>
     </section>
@@ -208,9 +206,9 @@
     <section class="phase">
         <div class="trap-box">
             <h3>Phase 4: The Saboteur</h3>
-            <p><strong>The "Sounds Right" Trap:</strong> Choosing a word because it fits a common phrase in your head, even if it contradicts the clues. (e.g., choosing "The hiker felt <i>happy</i>" because it sounds nice, ignoring the fact that he is lost and out of water).</p>
+            <p><strong>The "Sounds Right" Trap:</strong> Most children choose a word because it fits a common phrase in their head, even if it contradicts the clues in the sentence. For example, they might pick "The hiker felt <i>happy</i>" because it sounds nice, completely ignoring the fact that he is lost and out of water.</p>
             
-            <p><strong>The Fix:</strong> Use the <b>Evidence Check</b>. Before you commit, you must find at least <u>two</u> anchor words in the sentence that support your choice. If you pick "Parched," your anchors are "Empty bottle" and "Arid." If you can only find one anchor, the word is likely a distractor.</p>
+            <p><strong>The Insider Fix: The "Evidence Check."</strong> Tell your child: <i>"No word is an island."</i> Before they commit, they must point to at least <b>two</b> Magnet Words in the sentence that support their choice. If they pick 'Parched,' their magnets are 'Empty bottle' and 'Arid.' If they can only find one magnet, the word is a distractor. <b>Evidence beats 'feeling' every time.</b></p>
         </div>
     </section>
 </div>
@@ -224,21 +222,21 @@
             anchors: ["Grueling Climb", "Empty Bottle"],
             options: ["Excited", "Parched", "Relieved", "Freezing"],
             correct: "Parched",
-            logic: "High physical effort + zero hydration = Extreme thirst."
+            logic: "Extreme effort + zero water = Extreme thirst."
         },
         {
             text: "The captain grew <span class='ui-gap' id='active-gap'>________</span> when he saw the dark clouds gathering on the horizon.",
             anchors: ["Dark Clouds", "Horizon"],
             options: ["Apprehensive", "Cheerful", "Bored", "Angry"],
             correct: "Apprehensive",
-            logic: "Impending storm + responsibility = Concern/Fear."
+            logic: "Storm approaching + responsibility = Anxiety/Worry."
         },
         {
             text: "The student's <span class='ui-gap' id='active-gap'>________</span> effort resulted in a perfect score on the final exam.",
-            anchors: ["Resulted", "Perfect Score"],
+            anchors: ["Perfect Score", "Resulted"],
             options: ["Careless", "Meticulous", "Rapid", "Initial"],
             correct: "Meticulous",
-            logic: "Perfect result = Extreme attention to detail."
+            logic: "Perfect score = Total attention to detail."
         }
     ];
 
@@ -275,27 +273,27 @@
 
     function updateTrace(val, success) {
         const log = document.getElementById('trace-56');
-        let html = `<div class="trace-step">→ 1. Anchors Found: [${currentScenario.anchors.join(' + ')}]</div>`;
+        let html = `<div class="trace-step">→ 1. Magnets Detected: [${currentScenario.anchors.join(' & ')}]</div>`;
         
         if(!val) {
-            html += `<div class="trace-step">→ 2. Status: Scanning context...</div>`;
+            html += `<div class="trace-step">→ 2. Status: Scanning for contextual match...</div>`;
             log.innerHTML = html;
             return;
         }
 
-        html += `<div class="trace-step">→ 2. Testing: "<b>${val}</b>"</div>`;
+        html += `<div class="trace-step">→ 2. Auditor: Testing "<b>${val}</b>"</div>`;
         
         if(success) {
             html += `
                 <div class="trace-step" style="color:var(--cognis-gold); font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                    → RESULT: SEMANTIC MATCH CONFIRMED
+                    → RESULT: ANCHOR ALIGNMENT 100%
                 </div>
                 <div class="trace-step" style="font-size:0.7rem; opacity:0.8;">${currentScenario.logic}</div>
             `;
         } else {
             html += `
                 <div class="trace-step" style="color:#f87171; font-weight:bold; border-top:1px solid #4a5568; margin-top:10px; padding-top:10px;">
-                    → ERROR: CONTEXTUAL MISMATCH
+                    → ERROR: MAGNET MISMATCH
                 </div>
             `;
         }

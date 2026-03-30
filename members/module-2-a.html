@@ -10,7 +10,6 @@
     
     <style>
         /* SUBSCRIPTION DISPLAY LOGIC */
-        .user-plan-checking .submodule-wrapper { visibility: hidden; }
         .foundational-only, .supplemental-only { display: none; }
         body.user-plan-foundational .foundational-only { display: block; }
         body.user-plan-supplemental .supplemental-only { display: block; }
@@ -22,165 +21,150 @@
             border-radius: 16px;
             margin: 30px 0;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
         details.refresher-box summary {
             font-weight: 800;
             color: white;
             background: var(--cognis-blue);
             cursor: pointer;
-            padding: 22px 30px;
+            padding: 20px;
             outline: none;
             list-style: none;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         /* VIZ CONTAINERS */
         .viz-container { 
             background: #f8fafc; border: 2px dashed #cbd5e0; 
-            border-radius: 12px; padding: 40px; margin: 25px 0;
+            border-radius: 12px; padding: 20px; margin: 25px 0;
             display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; 
-            min-height: 320px; position: relative;
+            align-items: center; justify-content: center;
+            min-height: 340px; 
+            position: relative;
         }
 
-        /* INTRO: RATIO BOXES */
-        .ratio-groups-wrap { display: flex; gap: 40px; align-items: flex-start; justify-content: center; width: 100%; }
-        .ratio-side { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .box-stack { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-width: 180px; }
-        .intro-box { 
-            width: 50px; height: 50px; border: 3px solid var(--cognis-blue); 
-            border-radius: 8px; background: white; display: flex; 
-            align-items: center; justify-content: center; font-weight: 800;
-            box-shadow: 0 4px 0 var(--cognis-blue); font-size: 0.8rem;
+        /* FOUNDATIONAL LOGS (Friendly Discoveries) */
+        .discovery-log {
+            background: #fdfbf7;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #f0e6d2;
+            font-size: 0.95rem;
+            color: #5d5c58;
+            line-height: 1.5;
         }
-        .intro-box.side-b { border-color: var(--cognis-gold); box-shadow: 0 4px 0 var(--cognis-gold); }
+        .discovery-log b { color: var(--cognis-blue); }
+        .discovery-step { margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; }
+        .discovery-step::before { content: '✨'; }
 
-        /* PROGRESSING: SCALE */
-        .scale-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 180px; width: 100%; position: relative; }
-        .scale-beam { width: 300px; height: 12px; background: #2d3748; border-radius: 6px; position: relative; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2; }
-        .scale-pivot { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid var(--cognis-blue); margin-top: -2px; }
-        .weight { position: absolute; bottom: 12px; transition: all 0.5s; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; color: white; font-weight: 900; }
+        /* INTRO: SWEETS ON PLATES */
+        .plate { fill: #fff; stroke: #e2e8f0; stroke-width: 2; }
+        .sweet-blue { fill: var(--cognis-blue); stroke: #001a35; stroke-width: 1; }
+        .sweet-gold { fill: var(--cognis-gold); stroke: #a38241; stroke-width: 1; }
 
-        /* SUPPLEMENTAL MASTER STYLES */
-        .anatomy-display-supp { background: #f8fafc; padding: 40px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; border: 2px solid #e2e8f0; }
-        .ratio-bar-supp { display: flex; width: 100%; height: 60px; border-radius: 8px; overflow: hidden; border: 3px solid var(--cognis-blue); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .ratio-box-supp { flex: 1; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 0.9rem; border-right: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease; }
-        .box-a-supp { background: #1b3a5c; }
-        .box-b-supp { background: var(--cognis-gold); }
-        .anatomy-labels-supp { display: flex; justify-content: space-between; width: 100%; margin-top: 15px; font-weight: 800; color: var(--cognis-blue); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
+        /* PROGRESSING: VALUE ENVELOPES */
+        .envelope { fill: #fff; stroke: #cbd5e0; stroke-width: 2; transition: all 0.3s; }
+        .env-active { stroke: var(--cognis-gold); stroke-width: 3; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+
+        /* SUPPLEMENTAL: RATIO BAR */
+        .ratio-bar-main { display: flex; width: 100%; max-width: 600px; height: 60px; border-radius: 10px; overflow: hidden; border: 3px solid var(--cognis-blue); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .ratio-box { flex: 1; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; border-right: 1px solid rgba(255,255,255,0.2); transition: all 0.3s; }
+        .box-a { background: var(--cognis-blue); }
+        .box-b { background: var(--cognis-gold); }
 
         /* UTILITY */
-        .section-tag { display: inline-block; padding: 5px 15px; border-radius: 4px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 20px; background: #f1f5f9; color: var(--cognis-blue); border-left: 4px solid var(--cognis-gold); }
-        .phase { border: 1px solid var(--border-light); margin-bottom: 30px !important; }
-        .parent-script { font-style: italic; color: #4a5568; border-left: 3px solid #cbd5e0; padding-left: 20px; margin: 20px 0; line-height: 1.5; }
-        .val-display { color: var(--cognis-gold); font-weight: 800; }
-        input[type=range] { width: 100%; accent-color: var(--cognis-gold); cursor: pointer; }
+        .section-tag { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; background: #f1f5f9; color: var(--cognis-blue); border-left: 3px solid var(--cognis-gold); }
+        .parent-script { font-style: italic; color: #4a5568; border-left: 3px solid #cbd5e0; padding-left: 15px; margin: 15px 0; }
+        .btn-interact { background: var(--cognis-blue); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; margin-top: 10px; }
+        .btn-interact:hover { background: #004080; transform: translateY(-2px); }
+        .btn-interact:active { transform: translateY(0); }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
-    <script src="../js/module-core.js"></script>
+    <script src="../js/module-core-a.js"></script>
 </head>
 <body class="user-plan-checking">
 
-<div class="module-card" style="margin-top: 20px;">
-    <div class="header"><h1>Module 2: Shared Ratios</h1></div>
+<div class="module-card">
+    <div class="header"><h1>Module 2: Shared Ratios (Total Known)</h1></div>
 
     <div id="foundation-bundle">
         <section class="phase" id="sub-intro">
             <span class="section-tag">Foundation Intro</span>
-            <h2>The Coin Squash</h2>
-            <p>Sharing a ratio is just like dealing cards. You have a big pile of coins, and you want to give them to two people fairly. The secret is that <b>every box must hold the same amount</b>. Once you know what's in one box, you can count the total for everyone.</p>
+            <h2>The Sweet Share</h2>
+            <p>A ratio isn't just a list of numbers; it's a <b>Sharing Rule</b>. If the rule is <b>2:1</b>, it means every single time you give 2 sweets to the blue plate, you <i>must</i> give 1 sweet to the gold plate.</p>
             
             <div class="parent-script">
-                "We have a pile of <b><span id="script-intro-v">£60</span></b>. The ratio is <b><span id="script-intro-a">2</span> : <span id="script-intro-b">1</span></b>. That means we need 3 boxes total. Let's squash the money into those boxes so they are all exactly equal!"
+                "We have a pile of sweets and a sharing rule. Let's follow the rule. Each 'round' of sharing uses up a certain number of sweets. Watch how many sets we can deal before the pile is empty!"
             </div>
 
             <div class="viz-container">
-                <div id="intro-total-pile" style="background: var(--cognis-blue); color: white; padding: 10px 25px; border-radius: 20px; font-weight: 800; margin-bottom: 25px;">TOTAL PILE: £60</div>
-                <div class="ratio-groups-wrap">
-                    <div class="ratio-side">
-                        <div style="font-weight: 800; color: var(--cognis-blue); font-size: 0.7rem;">SIDE A</div>
-                        <div class="box-stack" id="intro-stack-a"></div>
-                    </div>
-                    <div style="font-size: 2rem; align-self: center; color: #cbd5e0;">:</div>
-                    <div class="ratio-side">
-                        <div style="font-weight: 800; color: var(--cognis-gold); font-size: 0.7rem;">SIDE B</div>
-                        <div class="box-stack" id="intro-stack-b"></div>
-                    </div>
-                </div>
+                <svg width="400" height="220" viewBox="0 0 400 220" id="sweet-svg">
+                    <circle cx="200" cy="50" r="40" fill="#f1f5f9" stroke="#cbd5e0" stroke-dasharray="4" />
+                    <text x="200" y="55" text-anchor="middle" font-size="12" font-weight="800" fill="#94a3b8">PILE</text>
+                    
+                    <ellipse cx="100" cy="160" rx="60" ry="30" class="plate" />
+                    <ellipse cx="300" cy="160" rx="60" ry="30" class="plate" />
+                    <text x="100" y="210" text-anchor="middle" font-size="10" font-weight="800" fill="var(--cognis-blue)">BLUE SIDE</text>
+                    <text x="300" y="210" text-anchor="middle" font-size="10" font-weight="800" fill="var(--cognis-gold)">GOLD SIDE</text>
+                    
+                    <g id="sweet-container"></g>
+                </svg>
+                <button class="btn-interact" id="btn-deal" onclick="dealSet()">Deal One Set</button>
+                <button class="btn-interact" style="background:#94a3b8; font-size: 0.7rem; padding: 5px 10px;" onclick="resetIntro()">Reset Pile</button>
             </div>
 
             <div class="engine-container">
                 <div class="controls">
                     <div class="control-group">
-                        <label>Total Coin Pile</label>
-                        <input type="range" min="10" max="200" step="10" value="60" id="intro-v-slider">
-                        <div class="val-out" id="intro-v-disp">£60</div>
+                        <label>Rule: Blue Side</label>
+                        <input type="range" min="1" max="4" value="2" id="intro-a" oninput="resetIntro()">
+                        <div class="val-out" id="intro-a-val">2</div>
                     </div>
                     <div class="control-group">
-                        <label>Ratio (A : B)</label>
-                        <div style="display:flex; gap:10px;">
-                            <input type="range" min="1" max="5" value="2" id="intro-a-slider">
-                            <input type="range" min="1" max="5" value="1" id="intro-b-slider">
-                        </div>
-                        <div class="val-out" id="intro-ratio-disp">2 : 1</div>
+                        <label>Rule: Gold Side</label>
+                        <input type="range" min="1" max="4" value="1" id="intro-b" oninput="resetIntro()">
+                        <div class="val-out" id="intro-b-val">1</div>
                     </div>
                 </div>
-                <div class="trace-log" id="intro-trace"></div>
+                <div class="discovery-log" id="intro-log">
+                    Ready to share? Click 'Deal' to start!
+                </div>
             </div>
-
-            <div class="trap-box">
-                <h3>The "Box Rule"</h3>
-                <p>Tell your child: <b>"The ratio tells you how many boxes to draw."</b> If the ratio is 2:1, you draw 3 boxes. The total money always gets 'squashed' into the total number of boxes!</p>
-            </div>
-
-            
         </section>
 
         <section class="phase" id="sub-progressing">
             <span class="section-tag">Foundation Progressing</span>
-            <h2>The Gravity of Parts</h2>
-            <p>Ratios have <b>Gravity</b>. If one side of the ratio is a bigger number, it is "heavier." It wins the tug-of-war and pulls more of the total money toward its side of the scale.</p>
+            <h2>The Magic Envelope</h2>
+            <p>To share a large number like £100, we don't deal individual coins. We find the <b>Value of One Envelope</b>. Once you know what's inside one envelope, you just hand them out to match the ratio.</p>
             
             <div class="parent-script">
-                "Look at the scale. Side A has 4 parts and Side B only has 1. Because Side A has more parts, it is much heavier. It 'pulls' more of our £100 total into its pile!"
+                "Look at these envelopes. The ratio 3:2 means we have <b>5 envelopes in total</b>. If we split the whole £100 into those 5 envelopes, how much goes in each one? That's our magic number!"
             </div>
 
             <div class="viz-container">
-                <div class="scale-wrap">
-                    <div class="scale-beam" id="beam">
-                        <div class="weight" style="left:20px; background:var(--cognis-blue);" id="prog-w-a">A</div>
-                        <div class="weight" style="right:20px; background:var(--cognis-gold);" id="prog-w-b">B</div>
-                    </div>
-                    <div class="scale-pivot"></div>
-                </div>
-                <p id="prog-scale-status" style="margin-top:20px; font-weight:800; color:var(--cognis-blue);"></p>
+                <svg width="400" height="150" viewBox="0 0 400 150" id="env-svg"></svg>
+                <div id="env-summary" style="margin-top:15px; font-weight:800; color:var(--cognis-blue);"></div>
             </div>
 
             <div class="engine-container">
                 <div class="controls">
                     <div class="control-group">
-                        <label>Total Value (£)</label>
-                        <input type="range" min="50" max="500" step="50" value="100" id="prog-v-slider">
+                        <label>Total to Split (£)</label>
+                        <input type="range" min="20" max="400" step="20" value="100" id="prog-total" oninput="updateProg()">
+                        <div class="val-out" id="prog-total-val">£100</div>
                     </div>
                     <div class="control-group">
-                        <label>Parts A vs Parts B</label>
-                        <div style="display:flex; gap:10px;">
-                            <input type="range" min="1" max="10" value="4" id="prog-a-slider">
-                            <input type="range" min="1" max="10" value="1" id="prog-b-slider">
+                        <label>Ratio (A:B)</label>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <input type="number" id="prog-a" value="3" style="width:50px; background:var(--engine-input); color:white; border:none; padding:8px; border-radius:6px; font-weight:800;" oninput="updateProg()">
+                            <span style="color:white; font-size:1.2rem; font-weight:800;">:</span>
+                            <input type="number" id="prog-b" value="2" style="width:50px; background:var(--engine-input); color:white; border:none; padding:8px; border-radius:6px; font-weight:800;" oninput="updateProg()">
                         </div>
                     </div>
                 </div>
-                <div class="trace-log" id="prog-trace"></div>
-            </div>
-
-            <div class="trap-box">
-                <h3>The "Tie-Breaker" Secret</h3>
-                <p>The only time the scale is balanced is if the ratio is **1:1**. Any other ratio means one side is pulling harder. Always find the value of "One Part" first to see how much weight each single part adds!</p>
+                <div class="discovery-log" id="prog-log"></div>
             </div>
 
             <div class="foundational-only">
@@ -195,42 +179,42 @@
             <p>Think of a ratio as a <b>Chocolate Bar</b>. To share it fairly, you don't just look at two people; you look at the total number of "chunks." The secret weapon for every ratio problem is finding the <b>Value of One Chunk</b>. Once your child knows what one single piece is worth, they can hand out the right amount to anyone.</p>
             
             <div class="question-tiers">
-                <div class="tier-card"><b>The Sweet Shop</b> "Share 15 sweets between Ben and Sam in the ratio 2:1. How many does Ben get?"</div>
-                <div class="tier-card"><b>The Cash Prize</b> "A £60 prize is split in the ratio 5:7. What is the larger share?"</div>
-                <div class="tier-card"><b>The Ruler Challenge</b> "A 1.5m line is divided 3:2. Find the difference between the two lengths."</div>
+                <div class="tier-card"><b>Level 1</b> "Share £20 in the ratio 3:1. How much is the larger share?"</div>
+                <div class="tier-card"><b>Level 2</b> "A 40cm rope is cut 5:3. How much longer is the first piece?"</div>
+                <div class="tier-card"><b>Level 3</b> "A map scale is 2:7. If the total distance is 180km, find the smaller leg."</div>
             </div>
         </section>
 
         <section class="phase">
             <h2>Phase 2: The Anatomy</h2>
-            <p>This is the <b>Partition Bar</b>. Every box inside this bar is identical. To find the "Value of One Box," you must divide the <b>Total Amount</b> by the <b>Total Number of Boxes</b>. Point to the bar below—count the boxes together to find the "Total Parts" before you do any math.</p>
-            <div class="anatomy-display-supp">
-                <div class="ratio-bar-supp" id="ratio-bar-supp"></div>
-                <div class="anatomy-labels-supp">
-                    <span id="label-total-supp">Total: £100</span>
-                    <span id="label-parts-supp" style="color: var(--cognis-gold);">Total Parts: 5</span>
+            <p>This is the <b>Partition Bar</b>. Every box inside this bar is identical. To find the "Value of One Box," you must divide the <b>Total Amount</b> by the <b>Total Number of Boxes</b>. Count the boxes below with your child—always find the "Total Parts" first.</p>
+            <div class="anatomy-display">
+                <div class="ratio-bar-main" id="supp-bar"></div>
+                <div style="display:flex; justify-content:space-between; width:100%; max-width:600px; margin-top:20px; font-weight:800; color:var(--cognis-blue);">
+                    <span id="label-v">Total: £100</span>
+                    <span id="label-p" style="color:var(--cognis-gold);">5 Parts</span>
                 </div>
             </div>
         </section>
 
         <section class="phase">
             <h2>Phase 3: The Engine</h2>
-            <p style="margin-bottom: 20px;">Adjust the ratio sliders with your child. Watch how the <b>Total Parts</b> change, and see how the "Total Value" is spread across every single box.</p>
+            <p style="margin-bottom: 20px;">Use the sliders to test different scenarios. Watch how the <b>Total Parts</b> change the value of a single chunk. Remind your child: <i>"The bar length stays the same, but the slices get smaller as we add more parts!"</i></p>
             <div class="engine-container">
                 <div class="inputs">
-                    <div class="control-group"><label>Total Value (£): <span class="val-display" id="v-disp-supp">£100</span></label><input type="range" id="in-v" min="10" max="500" step="10" value="100"></div>
-                    <div class="control-group" style="margin-top:15px;"><label>Ratio Part A: <span class="val-display" id="a-disp-supp">3</span></label><input type="range" id="in-a" min="1" max="10" value="3"></div>
-                    <div class="control-group" style="margin-top:15px;"><label>Ratio Part B: <span class="val-display" id="b-disp-supp">2</span></label><input type="range" id="in-b" min="1" max="10" value="2"></div>
+                    <div class="control-group"><label>Total Value (£)</label><input type="range" id="in-v" min="10" max="1000" step="10" value="100" oninput="runSupp()"></div>
+                    <div class="control-group"><label>Part A</label><input type="range" id="in-a" min="1" max="12" value="3" oninput="runSupp()"></div>
+                    <div class="control-group"><label>Part B</label><input type="range" id="in-b" min="1" max="12" value="2" oninput="runSupp()"></div>
                 </div>
-                <div class="trace-log" id="trace-supp">Awaiting the split...</div>
+                <div class="trace-log" id="supp-log"></div>
             </div>
         </section>
 
         <section class="phase">
             <div class="trap-box">
                 <h3>Phase 4: The Saboteur</h3>
-                <p><b>The "One-Sided" Mistake:</b> Children often try to divide the total by just one side of the ratio. They forget that the money covers the <i>whole</i> bar, not just one person's share.</p>
-                <p><b>The Fix: The "Add First" Rule.</b> Remind your child: "Before you divide, you must find the <b>Whole Bar</b>." Add the ratio numbers together (A + B) first to see the total number of parts. Only then can you find the value of one chunk.</p>
+                <p><b>The "One-Sided" Mistake:</b> Bright children often divide the total by just one side of the ratio (e.g., $£100 \div 3$). They forget that the total covers the <i>entire</i> bar, not just one person's share.</p>
+                <p><b>The Fix: The "Add First" Rule.</b> Always ask: "How many chunks are in the <b>Whole Bar</b>?" Add the ratio numbers together (A + B) before touching the division key. Once they have the value of one chunk, they are bulletproof.</p>
             </div>
         </section>
         
@@ -239,13 +223,13 @@
 </div>
 
 <script>
-    // --- LAYOUT ENGINE ---
+    /* --- SHARED SYSTEM --- */
     async function applyLayout() {
         if (!window.supabaseClient) { setTimeout(applyLayout, 100); return; }
         const { data: { user } } = await window.supabaseClient.auth.getUser();
         if (!user) return;
         const { data: profile } = await window.supabaseClient.from('profiles').select('subscription_plan').eq('id', user.id).maybeSingle();
-        const plan = profile ? profile.subscription_plan : 'supplemental';
+        const plan = profile ? profile.subscription_plan : 'foundational'; 
 
         const body = document.body;
         const bundle = document.getElementById('foundation-bundle');
@@ -255,7 +239,7 @@
             body.className = 'user-plan-supplemental';
             const acc = document.createElement('details');
             acc.className = 'refresher-box';
-            acc.innerHTML = `<summary>▼ Need a Refresh? (Year 3/4 Foundations)</summary>`;
+            acc.innerHTML = `<summary>▼ Need a Refresh? (Years 2-4 Ratios)</summary>`;
             acc.appendChild(bundle);
             supp.parentNode.insertBefore(acc, supp);
         } else {
@@ -264,109 +248,120 @@
         }
     }
 
-    // --- INTRO ENGINE (THE SQUASH) ---
-    function updateIntro() {
-        const v = parseInt(document.getElementById('intro-v-slider').value);
-        const a = parseInt(document.getElementById('intro-a-slider').value);
-        const b = parseInt(document.getElementById('intro-b-slider').value);
-        const totalParts = a + b;
-        const unit = v / totalParts;
-
-        document.getElementById('intro-v-disp').innerText = `£${v}`;
-        document.getElementById('intro-ratio-disp').innerText = `${a} : ${b}`;
-        document.getElementById('script-intro-v').innerText = `£${v}`;
-        document.getElementById('script-intro-a').innerText = a;
-        document.getElementById('script-intro-b').innerText = b;
-        document.getElementById('intro-total-pile').innerText = `TOTAL PILE: £${v}`;
-
-        const stackA = document.getElementById('intro-stack-a');
-        const stackB = document.getElementById('intro-stack-b');
-        stackA.innerHTML = ''; stackB.innerHTML = '';
-
-        for(let i=0; i<a; i++) stackA.innerHTML += `<div class="intro-box">£${unit.toFixed(0)}</div>`;
-        for(let i=0; i<b; i++) stackB.innerHTML += `<div class="intro-box side-b">£${unit.toFixed(0)}</div>`;
-
-        document.getElementById('intro-trace').innerHTML = `→ <b>Action:</b> Adding parts ${a} + ${b} = ${totalParts} total boxes.<br>→ <b>Result:</b> £${v} ÷ ${totalParts} = £${unit.toFixed(2)} in every single box.`;
+    /* --- INTRO ENGINE: SWEET SHARE --- */
+    let dealtSets = 0;
+    function resetIntro() {
+        dealtSets = 0;
+        document.getElementById('sweet-container').innerHTML = '';
+        document.getElementById('intro-a-val').innerText = document.getElementById('intro-a').value;
+        document.getElementById('intro-b-val').innerText = document.getElementById('intro-b').value;
+        document.getElementById('intro-log').innerHTML = "Pile refilled. Ready to share!";
+        document.getElementById('btn-deal').disabled = false;
+        document.getElementById('btn-deal').style.opacity = '1';
     }
 
-    // --- PROGRESSING ENGINE (TUG OF WAR) ---
-    function updateProg() {
-        const v = parseInt(document.getElementById('prog-v-slider').value);
-        const a = parseInt(document.getElementById('prog-a-slider').value);
-        const b = parseInt(document.getElementById('prog-b-slider').value);
-        const totalParts = a + b;
-        const unitValue = v / totalParts;
-
-        const beam = document.getElementById('beam');
-        const wa = document.getElementById('prog-w-a');
-        const wb = document.getElementById('prog-w-b');
-
-        wa.style.height = (a * 15) + 40 + "px"; wa.style.width = (a * 5) + 60 + "px";
-        wb.style.height = (b * 15) + 40 + "px"; wb.style.width = (b * 5) + 60 + "px";
-
-        const tilt = (b - a) * 3;
-        beam.style.transform = `rotate(${tilt}deg)`;
-
-        document.getElementById('prog-scale-status').innerText = a > b ? "Side A is heavier!" : (b > a ? "Side B is heavier!" : "Balanced tie!");
-        document.getElementById('prog-trace').innerHTML = `→ <b>Gravity Check:</b> Side A has ${a} parts, Side B has ${b}.<br>→ <b>The Pull:</b> Side ${a > b ? 'A' : 'B'} pulls £${(unitValue * Math.max(a,b)).toFixed(2)} of the total.`;
-    }
-
-    // --- SUPPLEMENTAL ENGINE (1:1 Restoration) ---
-    function updateSupp() {
-        const total = parseInt(document.getElementById('in-v').value);
-        const a = parseInt(document.getElementById('in-a').value);
-        const b = parseInt(document.getElementById('in-b').value);
-        const sumParts = a + b;
-        const unitValue = total / sumParts;
-        const shareA = unitValue * a;
-        const shareB = unitValue * b;
-
-        document.getElementById('v-disp-supp').innerText = '£' + total;
-        document.getElementById('a-disp-supp').innerText = a;
-        document.getElementById('b-disp-supp').innerText = b;
-        document.getElementById('label-total-supp').innerText = `Total: £${total}`;
-        document.getElementById('label-parts-supp').innerText = `Total Parts: ${sumParts}`;
-
-        const bar = document.getElementById('ratio-bar-supp');
-        bar.innerHTML = '';
+    function dealSet() {
+        const a = parseInt(document.getElementById('intro-a').value);
+        const b = parseInt(document.getElementById('intro-b').value);
+        const setTotal = a + b;
+        dealtSets++;
+        
+        const container = document.getElementById('sweet-container');
+        
+        // Visual deal animation logic
         for(let i=0; i<a; i++) {
-            const div = document.createElement('div');
-            div.className = 'ratio-box-supp box-a-supp';
-            div.innerText = `£${unitValue.toFixed(0)}`;
-            bar.appendChild(div);
+            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            circle.setAttribute("cx", 100 + (Math.random()*40-20));
+            circle.setAttribute("cy", 160 + (Math.random()*20-10));
+            circle.setAttribute("r", "6");
+            circle.setAttribute("class", "sweet-blue");
+            container.appendChild(circle);
         }
         for(let i=0; i<b; i++) {
-            const div = document.createElement('div');
-            div.className = 'ratio-box-supp box-b-supp';
-            div.innerText = `£${unitValue.toFixed(0)}`;
-            bar.appendChild(div);
+            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            circle.setAttribute("cx", 300 + (Math.random()*40-20));
+            circle.setAttribute("cy", 160 + (Math.random()*20-10));
+            circle.setAttribute("r", "6");
+            circle.setAttribute("class", "sweet-gold");
+            container.appendChild(circle);
         }
 
-        document.getElementById('trace-supp').innerHTML = `→ 1. Total Chunks: ${sumParts}<br>→ 2. One Chunk: £${unitValue.toFixed(2)}<br>→ 3. Final: £${shareA.toFixed(2)} : £${shareB.toFixed(2)}`;
+        document.getElementById('intro-log').innerHTML = `
+            <div class="discovery-step">Round ${dealtSets}: We dealt <b>${setTotal}</b> sweets.</div>
+            <div class="discovery-step">Total on Plates: <b>${dealtSets * a}</b> Blue vs <b>${dealtSets * b}</b> Gold.</div>
+        `;
+
+        if(dealtSets >= 5) {
+            document.getElementById('btn-deal').disabled = true;
+            document.getElementById('btn-deal').style.opacity = '0.5';
+            document.getElementById('intro-log').innerHTML += `<div class="discovery-step"><b>The pile is empty!</b> Look how the ratio stays the same no matter how many rounds we play.</div>`;
+        }
     }
 
-    // --- INIT ---
+    /* --- PROGRESSING ENGINE: ENVELOPES --- */
+    function updateProg() {
+        const tot = parseInt(document.getElementById('prog-total').value);
+        const a = parseInt(document.getElementById('prog-a').value) || 1;
+        const b = parseInt(document.getElementById('prog-b').value) || 1;
+        const parts = a + b;
+        const valPer = tot / parts;
+        
+        document.getElementById('prog-total-val').innerText = '£' + tot;
+        
+        const svg = document.getElementById('env-svg');
+        svg.innerHTML = '';
+        const envW = 40;
+        const gap = 8;
+        const startX = (400 - (parts * (envW + gap))) / 2;
+
+        for(let i=0; i<parts; i++) {
+            const color = i < a ? '#002d5b' : '#c5a059';
+            const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            g.innerHTML = `
+                <rect x="${startX + i*(envW+gap)}" y="40" width="${envW}" height="35" fill="${color}" rx="4" />
+                <path d="M${startX + i*(envW+gap)},40 L${startX + i*(envW+gap) + envW/2},55 L${startX + i*(envW+gap) + envW},40" fill="none" stroke="white" stroke-width="2" />
+                <text x="${startX + i*(envW+gap) + envW/2}" y="100" text-anchor="middle" font-size="10" font-weight="900" fill="#1b3a5c">£${valPer.toFixed(0)}</text>
+            `;
+            svg.appendChild(g);
+        }
+
+        document.getElementById('env-summary').innerText = `1 Envelope = £${valPer.toFixed(2)}`;
+        document.getElementById('prog-log').innerHTML = `
+            <div class="discovery-step">We added the ratio sides: <b>${a} + ${b} = ${parts}</b> envelopes.</div>
+            <div class="discovery-step">We divided the total: <b>£${tot} ÷ ${parts} = £${valPer.toFixed(2)}</b> in each.</div>
+        `;
+    }
+
+    /* --- SUPPLEMENTAL ENGINE: BAR MODEL --- */
+    function runSupp() {
+        const v = parseInt(document.getElementById('in-v').value);
+        const a = parseInt(document.getElementById('in-a').value);
+        const b = parseInt(document.getElementById('in-b').value);
+        const totalP = a + b;
+        const unit = v / totalP;
+
+        document.getElementById('label-v').innerText = `Total: £${v}`;
+        document.getElementById('label-p').innerText = `${totalP} Parts`;
+
+        const bar = document.getElementById('supp-bar');
+        bar.innerHTML = '';
+        for(let i=0; i<a; i++) bar.innerHTML += `<div class="ratio-box box-a">£${unit.toFixed(0)}</div>`;
+        for(let i=0; i<b; i++) bar.innerHTML += `<div class="ratio-box box-b">£${unit.toFixed(0)}</div>`;
+
+        document.getElementById('supp-log').innerHTML = `
+            → 1. Add Parts: ${a} + ${b} = <b>${totalP} chunks</b><br>
+            → 2. Find Unit: £${v} ÷ ${totalP} = <b>£${unit.toFixed(2)}</b><br>
+            → 3. Result A: ${a} × £${unit.toFixed(2)} = <b>£${(a*unit).toFixed(2)}</b><br>
+            → 4. Result B: ${b} × £${unit.toFixed(2)} = <b>£${(b*unit).toFixed(2)}</b>
+        `;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         applyLayout();
-        // Intro
-        document.getElementById('intro-v-slider').oninput = updateIntro;
-        document.getElementById('intro-a-slider').oninput = updateIntro;
-        document.getElementById('intro-b-slider').oninput = updateIntro;
-        // Progressing
-        document.getElementById('prog-v-slider').oninput = updateProg;
-        document.getElementById('prog-a-slider').oninput = updateProg;
-        document.getElementById('prog-b-slider').oninput = updateProg;
-        // Supplemental
-        ['in-v', 'in-a', 'in-b'].forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.oninput = updateSupp;
-        });
-
-        updateIntro(); updateProg();
-        if(document.getElementById('in-v')) updateSupp();
+        updateProg();
+        if(document.getElementById('in-v')) runSupp();
         if(typeof initModule === "function") initModule(2);
     });
 </script>
-
 </body>
 </html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 38: Number Series | Cognis 11+</title>
+    
+    <link rel="stylesheet" href="../css/module-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* SUBSCRIPTION DISPLAY LOGIC */
+        .foundational-only, .supplemental-only { display: none; }
+        body.user-plan-foundational .foundational-only { display: block; }
+        body.user-plan-supplemental .supplemental-only { display: block; }
+
+        /* REFRESHER ACCORDION */
+        details.refresher-box {
+            background: #fff; border: 2px solid var(--cognis-blue);
+            border-radius: 16px; margin: 30px 0; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        details.refresher-box summary {
+            font-weight: 800; color: white; background: var(--cognis-blue);
+            cursor: pointer; padding: 20px; outline: none; list-style: none;
+        }
+
+        /* VIZ CONTAINERS */
+        .viz-container { 
+            background: #f8fafc; border: 2px dashed #cbd5e0; 
+            border-radius: 12px; padding: 20px; margin: 25px 0;
+            display: flex; flex-direction: column; 
+            align-items: center; justify-content: center;
+            min-height: 380px; position: relative;
+            overflow: hidden;
+        }
+
+        /* LOGS (Friendly Discoveries) */
+        .discovery-log {
+            background: #fdfbf7; padding: 20px; border-radius: 12px;
+            border: 1px solid #f0e6d2; font-size: 0.95rem; color: #5d5c58; line-height: 1.5;
+        }
+        .discovery-step { margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; }
+        .discovery-step::before { content: '🪜'; }
+
+        /* INTRO: STEPPING STONES */
+        .stone-path { display: flex; gap: 15px; align-items: center; position: relative; }
+        .stone { width: 50px; height: 50px; background: #e2e8f0; border: 3px solid #cbd5e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--cognis-blue); transition: all 0.3s; }
+        .stone.active { background: var(--cognis-gold); border-color: #b45309; color: white; transform: scale(1.1); box-shadow: 0 5px 15px rgba(197, 160, 89, 0.3); }
+        .jump-arc { position: absolute; top: -30px; stroke: var(--cognis-gold); stroke-width: 3; fill: none; stroke-dasharray: 5; opacity: 0; transition: opacity 0.5s; }
+
+        /* PROGRESSING: PATTERN DETECTIVE */
+        .number-box-f { padding: 15px 20px; background: white; border: 2px solid var(--cognis-blue); border-radius: 8px; font-weight: 900; font-size: 1.5rem; color: var(--cognis-blue); position: relative; }
+        .interval-f { position: absolute; top: -45px; left: 50%; transform: translateX(-50%); font-size: 0.9rem; color: var(--cognis-gold); font-weight: 800; opacity: 0; transition: 0.4s; }
+
+        /* SUPPLEMENTAL: SEQUENCE ENGINE */
+        .sequence-belt { display: flex; gap: 10px; overflow-x: auto; padding: 20px; width: 100%; justify-content: center; }
+        .seq-node { min-width: 60px; height: 60px; background: #1a202c; color: var(--cognis-gold); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.2rem; border: 2px solid #2d3748; transition: transform 0.3s; }
+        .seq-node.new { animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop-in { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* UTILITY */
+        .section-tag { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; background: #f1f5f9; color: var(--cognis-blue); border-left: 3px solid var(--cognis-gold); }
+        .parent-script { font-style: italic; color: #4a5568; border-left: 3px solid #cbd5e0; padding-left: 15px; margin: 15px 0; }
+        .btn-action { background: var(--cognis-blue); color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; margin-top: 10px; }
+        .input-box { background: #2d3748; color: white; border: 1px solid #4a5568; padding: 10px; border-radius: 8px; font-weight: 800; text-align: center; }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/module-core-a.js"></script>
+</head>
+<body class="user-plan-checking">
+
+<div class="module-card">
+    <div class="header"><h1>Module 38: Number Series</h1></div>
+
+    <div id="foundation-bundle">
+        <section class="phase" id="sub-intro">
+            <span class="section-tag">Foundation Intro</span>
+            <h2>The Stepping Stones</h2>
+            <p>A number series is just a path across a river. To get from one stone to the next, you have to jump the same distance every time. If the first jump is **+2**, then every jump must be **+2** to stay on the path!</p>
+            
+            <div class="parent-script">
+                "We are standing on stone **2**. To get to the next stone, we jump 2 spaces. Click 'Take Jump' to see the path grow. Notice how we are always adding the same number! This constant jump is the 'Rule' of our sequence."
+            </div>
+
+            <div class="viz-container">
+                <div class="stone-path" id="intro-path">
+                    <div class="stone active">2</div>
+                    <div class="stone">?</div>
+                    <div class="stone">?</div>
+                    <div class="stone">?</div>
+                </div>
+                <button class="btn-action" style="margin-top: 40px;" onclick="runIntroJump()">Take a Jump (+2)</button>
+                <button class="btn-action" style="background:#94a3b8; font-size:0.7rem;" onclick="resetIntro()">Reset Path</button>
+            </div>
+
+            <div class="discovery-log" id="intro-log">Waiting to jump...</div>
+        </section>
+
+        <section class="phase" id="sub-progressing">
+            <span class="section-tag">Foundation Progressing</span>
+            <h2>The Pattern Detective</h2>
+            <p>To solve a mystery series, you have to find the "Hidden Jump" (the interval). Once you find the jump between the first two numbers, you must check if it works for the next pair too. Only then is the rule safe!</p>
+            
+            <div class="parent-script">
+                "Look at these numbers: **5, 8, 11**. What is the jump between 5 and 8? It's **+3**. Now, look at 8 and 11. Is that jump also **+3**? Yes! Click 'Reveal Rule' to see if our detective work is correct."
+            </div>
+
+            <div class="viz-container">
+                <div style="display:flex; gap:25px;">
+                    <div class="number-box-f">5 <div class="interval-f" id="int-1">+3</div></div>
+                    <div class="number-box-f">8 <div class="interval-f" id="int-2">+3</div></div>
+                    <div class="number-box-f">11 <div class="interval-f" id="int-3">+3</div></div>
+                    <div class="number-box-f" style="border-color:var(--cognis-gold);">?</div>
+                </div>
+                <button class="btn-action" style="margin-top: 60px;" onclick="revealProgRule()">Reveal Hidden Rule</button>
+            </div>
+
+            <div class="discovery-log" id="prog-log">Numbers: 5, 8, 11. What comes next?</div>
+        </section>
+    </div>
+
+    <div id="sub-supplemental" class="supplemental-only">
+        <section class="phase">
+            <h2>Phase 1: The X-Ray</h2>
+            <p>Think of this as <b>"Finding the Rhythm."</b> In the 11+, number series aren't always a steady drumbeat. Sometimes the jump changes (e.g., $+1, +2, +3$) or uses two different operations (e.g., $\times 2, +1$). The secret weapon is finding the <b>Interval of the Interval</b>. If the first jumps don't make sense, look at how the jumps themselves are changing.</p>
+            
+            <div class="question-tiers">
+                <div class="tier-card"><b>Arithmetic</b> "Find the next term: $4, 7, 10, 13...$"</div>
+                <div class="tier-card"><b>Growing Jumps</b> "Find the next term: $2, 3, 5, 8...$ (The jump is $+1, +2, +3$)."</div>
+                <div class="tier-card"><b>Alternating</b> "Solve $10, 5, 12, 7...$ (Look for two different sequences in one)."</div>
+            </div>
+        </section>
+
+        <section class="phase">
+            <h2>Phase 2: The Anatomy</h2>
+            <p>The <b>Sequence Engine</b>. Set your starting number and your rule. Watch how the chain grows. Notice that for complex series, the jump is not a single number, but a moving target. Use the "Dual Check" to verify the rhythm.</p>
+            <div class="anatomy-display" style="background:#1a202c; padding:20px;">
+                <div id="s-belt" class="sequence-belt"></div>
+                <div style="text-align:center; margin-top:20px;">
+                    <button class="btn-action" style="background:var(--cognis-gold);" onclick="stepSupp()">Generate Next Term</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="phase">
+            <h2>Phase 3: The Engine</h2>
+            <p style="margin-bottom: 20px;">Build a custom pattern. Try a **Growing Jump** (where the interval increases by 1 each time) to see how the numbers accelerate.</p>
+            <div class="engine-container">
+                <div class="inputs">
+                    <div class="control-group"><label>Start Number</label><input type="number" id="si-start" value="2" class="input-box" oninput="initSupp()"></div>
+                    <div class="control-group"><label>Base Jump</label><input type="number" id="si-jump" value="3" class="input-box" oninput="initSupp()"></div>
+                    <div class="control-group"><label>Growing Rule (+X each step)</label><input type="number" id="si-grow" value="0" class="input-box" oninput="initSupp()"></div>
+                </div>
+                <div class="trace-log" id="supp-log"></div>
+            </div>
+        </section>
+
+        <section class="phase">
+            <div class="trap-box">
+                <h3>Phase 4: The Saboteur</h3>
+                <p><b>The "One-Jump" Trap:</b> Most children find the jump between the first two numbers ($4$ to $6 = +2$) and immediately use it for the whole line. They don't check if the second jump is different!</p>
+                <p><b>The Fix: The "Two-Step Check."</b> <i>"One jump is a guess; two jumps is a rule."</i> Never move your pencil until you have checked the interval between the 1st and 2nd, and the 2nd and 3rd numbers. If they match, you've found the truth.</p>
+            </div>
+        </section>
+        
+        <button class="btn-complete" onclick="markComplete(38)">Complete Module</button>
+    </div>
+</div>
+
+<script>
+    /* --- SHARED LAYOUT --- */
+    async function applyLayout() {
+        if (!window.supabaseClient) { setTimeout(applyLayout, 100); return; }
+        const { data: { user } } = await window.supabaseClient.auth.getUser();
+        if (!user) return;
+        const { data: profile } = await window.supabaseClient.from('profiles').select('subscription_plan').eq('id', user.id).maybeSingle();
+        const plan = profile ? profile.subscription_plan : 'foundational'; 
+
+        if (plan === 'supplemental') {
+            document.body.className = 'user-plan-supplemental';
+            const acc = document.createElement('details');
+            acc.className = 'refresher-box';
+            acc.innerHTML = `<summary>▼ Need a Refresh? (Years 2-4 Operations & Logic)</summary>`;
+            acc.appendChild(document.getElementById('foundation-bundle'));
+            document.getElementById('sub-supplemental').parentNode.insertBefore(acc, document.getElementById('sub-supplemental'));
+        } else {
+            document.body.className = 'user-plan-foundational';
+            if(document.getElementById('sub-supplemental')) document.getElementById('sub-supplemental').remove();
+        }
+    }
+
+    /* --- INTRO: STONES --- */
+    let introStep = 0;
+    function runIntroJump() {
+        if(introStep >= 3) return;
+        introStep++;
+        const stones = document.getElementById('intro-path').querySelectorAll('.stone');
+        stones[introStep].classList.add('active');
+        const nextVal = 2 + (introStep * 2);
+        stones[introStep].textContent = nextVal;
+        document.getElementById('intro-log').innerHTML = `<div class="discovery-step">Jumped +2 to reach <b>${nextVal}</b>!</div>`;
+    }
+    function resetIntro() {
+        introStep = 0;
+        const stones = document.getElementById('intro-path').querySelectorAll('.stone');
+        stones.forEach((s, i) => {
+            s.classList.remove('active');
+            s.textContent = i === 0 ? "2" : "?";
+        });
+        stones[0].classList.add('active');
+        document.getElementById('intro-log').innerHTML = "Path reset.";
+    }
+
+    /* --- PROGRESSING: DETECTIVE --- */
+    function revealProgRule() {
+        document.querySelectorAll('.interval-f').forEach(el => el.style.opacity = '1');
+        document.getElementById('prog-log').innerHTML = `<div class="discovery-step">The jump is consistently <b>+3</b>. So the next number is 11 + 3 = <b>14</b>!</div>`;
+    }
+
+    /* --- SUPPLEMENTAL: ENGINE --- */
+    let sChain = [];
+    let curJump = 0;
+    function initSupp() {
+        const start = parseInt(document.getElementById('si-start').value) || 0;
+        curJump = parseInt(document.getElementById('si-jump').value) || 0;
+        sChain = [start];
+        renderSuppBelt();
+        document.getElementById('supp-log').innerHTML = `→ Sequence started at <b>${start}</b>.<br>→ Starting jump: <b>${curJump}</b>.`;
+    }
+    function stepSupp() {
+        if(sChain.length >= 8) return;
+        const last = sChain[sChain.length - 1];
+        const growth = parseInt(document.getElementById('si-grow').value) || 0;
+        
+        const next = last + curJump;
+        sChain.push(next);
+        
+        let jumpLog = `Jumped ${curJump>=0?'+':''}${curJump}`;
+        curJump += growth;
+        if(growth !== 0) jumpLog += ` (Jump grew to ${curJump})`;
+
+        renderSuppBelt();
+        document.getElementById('supp-log').innerHTML = `→ ${jumpLog}<br>→ New term: <b>${next}</b>`;
+    }
+    function renderSuppBelt() {
+        const belt = document.getElementById('s-belt');
+        belt.innerHTML = sChain.map((v, i) => `<div class="seq-node ${i===sChain.length-1?'new':''}">${v}</div>`).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        applyLayout(); resetIntro();
+        if(document.getElementById('si-start')) initSupp();
+        if(typeof initModule === "function") initModule(38);
+    });
+</script>
+</body>
+</html>

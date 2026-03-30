@@ -15,7 +15,7 @@
     <style>
         :root { --navy:#1B3A5C; --steel:#2E6DA4; --gold:#c5a059; --cream:#FAFAF6; --off:#F4F2ED; --grey:#64748b; --dgrey:#334155; --lgrey:#E2E8F0; }
         * { box-sizing:border-box; margin:0; padding:0; }
-        body { font-family:'DM Sans', sans-serif; background:var(--cream); color:var(--dgrey); font-size:16px; line-height:1.6; -webkit-font-smoothing: antialiased; }
+        body { font-family:'DM Sans', sans-serif; background:var(--cream); color:var(--dgrey); font-size:16px; line-height:1.6; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
         .wrap { max-width:850px; margin:0 auto; padding:0 32px; }
         
         nav { border-bottom:1px solid var(--lgrey); padding:18px 32px; display:flex; align-items:center; justify-content:space-between; background:#fff; position:sticky; top:0; z-index:100; }
@@ -24,16 +24,14 @@
         .nav-link { font-size:.85rem; color:var(--navy); text-decoration:none; font-weight:600; text-transform: uppercase; letter-spacing: 1px; }
 
         /* HERO */
-        .hero { padding:100px 32px 60px; max-width:850px; margin:0 auto; text-align:center; }
+        .hero { padding:100px 32px 40px; max-width:850px; margin:0 auto; text-align:center; }
         .hero-tag { font-size:.75rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); margin-bottom:20px; }
         .hero h1 { font-family:'Playfair Display', serif; font-size:clamp(2.4rem, 6vw, 3.4rem); color:var(--navy); margin-bottom:20px; line-height:1.1; }
-        .hero p { font-size:1.15rem; color:var(--grey); max-width:700px; margin:0 auto; }
+        .hero p { font-size:1.15rem; color:var(--grey); max-width:700px; margin:0 auto 30px; }
 
-        /* THESIS BAND (Complementary Nature) */
-        .thesis-band { background: var(--navy); color: white; padding: 80px 32px; margin: 40px 0; }
-        .thesis-inner { max-width: 760px; margin: 0 auto; text-align: center; }
-        .thesis-band h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; margin-bottom: 20px; line-height: 1.2; }
-        .thesis-band p { font-size: 1.05rem; color: rgba(255,255,255,0.8); line-height: 1.7; }
+        /* HERO CTA */
+        .hero-cta-link { font-size: 0.85rem; font-weight: 800; color: var(--navy); text-decoration: none; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--gold); padding-bottom: 4px; transition: 0.2s; }
+        .hero-cta-link:hover { color: var(--gold); }
 
         /* SECTIONS */
         section { padding:60px 0; border-top:1px solid var(--lgrey); }
@@ -63,6 +61,12 @@
         .plan-features li { font-size: 0.88rem; color: var(--dgrey); padding: 8px 0; border-bottom: 1px solid var(--off); display: flex; gap: 10px; align-items: flex-start; }
         .plan-features li::before { content: '✓'; color: #2d6a4f; font-weight: 900; }
 
+        /* THESIS BAND (Complementary Nature) */
+        .thesis-band { background: var(--navy); color: white; padding: 80px 32px; margin: 60px 0; border-radius: 12px; }
+        .thesis-inner { max-width: 760px; margin: 0 auto; text-align: center; }
+        .thesis-band h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; margin-bottom: 20px; line-height: 1.2; }
+        .thesis-band p { font-size: 1.05rem; color: rgba(255,255,255,0.8); line-height: 1.7; }
+
         /* BUTTONS */
         .btn-plan { display: block; width: 100%; text-align: center; background: var(--navy); color: #fff; padding: 16px; border-radius: 8px; font-size: 0.95rem; font-weight: 700; text-decoration: none; border: none; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 14px rgba(27, 58, 92, 0.1); }
         .btn-plan:hover { opacity: 0.9; transform: translateY(-1px); }
@@ -82,9 +86,6 @@
 
         @media (max-width: 850px) { .pitch-grid, .plans-grid { grid-template-columns: 1fr; } }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/js/supabase-config.js"></script>
-    <script src="/js/auth-system.js"></script>
 </head>
 <body>
 
@@ -100,6 +101,7 @@
         <div class="hero-tag">Enrollment</div>
         <h1>Help them understand it <em>first.</em></h1>
         <p>11+ prep doesn't have to be a chore. Spend 10 minutes showing your child <b>how</b> the problems work, so the rest of their practice becomes easier.</p>
+        <a href="#pricing" class="hero-cta-link">View Plans & Pricing ↓</a>
     </div>
 
     <section style="border-top:none; padding-top:0;">
@@ -128,20 +130,10 @@
             </div>
         </div>
     </section>
-</div>
 
-<section class="thesis-band">
-    <div class="thesis-inner">
-        <p style="text-transform:uppercase; font-size:0.7rem; letter-spacing:2px; color:var(--gold); margin-bottom:15px; font-weight:800;">The Complementary Model</p>
-        <h2>Efficiency over repetition.</h2>
-        <p>Traditional 11+ preparation relies on rote learning and volume. Cognis11+ offers a shortcut. By providing genuine understanding of the underlying patterns, your child stops "guessing" and starts identifying the solution structures immediately. It’s the boost they need to break through speed plateaus.</p>
-    </div>
-</section>
-
-<div class="wrap">
-    <section style="border-top: none;">
+    <section id="pricing">
         <h2 style="text-align:center; font-family:'Playfair Display'; font-size: 2.2rem; margin-bottom: 10px; color: var(--navy);">Two plans. <em>Simple pricing.</em></h2>
-        <p style="text-align:center; color: var(--grey); margin-bottom: 40px;">Less than the price of a single textbook. rolling monthly subscription.</p>
+        <p style="text-align:center; color: var(--grey); margin-bottom: 40px;">Less than the price of a single textbook. Rolling monthly subscription.</p>
 
         <div class="plans-grid">
             <div class="plan">
@@ -176,6 +168,14 @@
             </div>
         </div>
     </section>
+
+    <div class="thesis-band">
+        <div class="thesis-inner">
+            <p style="text-transform:uppercase; font-size:0.7rem; letter-spacing:2px; color:var(--gold); margin-bottom:15px; font-weight:800;">The Complementary Model</p>
+            <h2>Efficiency over repetition.</h2>
+            <p>Traditional 11+ preparation relies on rote learning and volume. Cognis11+ offers a shortcut. By providing genuine understanding of the underlying patterns, your child stops "guessing" and starts identifying the solution structures immediately. It’s the boost they need to break through speed plateaus.</p>
+        </div>
+    </div>
 </div>
 
 <div class="modal-bg" id="modalBg">
@@ -201,6 +201,9 @@
     <p>© 2026 Cognis11 · Reasoning-First Preparation. <a href="mailto:hello@cognis11.com" style="color:var(--navy); text-decoration:none;">hello@cognis11.com</a></p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-config.js"></script>
+<script src="/js/auth-system.js"></script>
 <script>
     function openModal(planId, label) {
         document.getElementById('selected-plan').value = planId;

@@ -3,35 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Cognis 11+</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Learning Lattice | Cognis 11+</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/dashboard.css">
     
     <style>
-        /* NEW PROGRESS INDICATOR STYLES */
-        .progress-indicator-row {
+        /* NEW COMPLETION BADGE */
+        .check-badge {
+            width: 24px;
+            height: 24px;
+            background: #276245;
+            color: white;
+            border-radius: 50%;
             display: flex;
-            gap: 4px;
-            margin-top: 8px;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 900;
+            box-shadow: 0 2px 8px rgba(39, 98, 69, 0.3);
         }
 
-        .progress-box {
-            height: 6px;
-            flex: 1;
-            background: #e2e8f0;
-            border-radius: 2px;
-            transition: background 0.4s ease;
+        /* UP NEXT HIGHLIGHT */
+        .module-card.is-up-next {
+            border: 2px solid var(--cognis-gold) !important;
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.2) !important;
+            background: #fffdf9 !important;
+            transform: scale(1.02);
         }
-
-        .progress-box.filled {
+        
+        .up-next-tag {
             background: var(--cognis-gold);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: inline-block;
         }
 
-        .module-card.is-locked {
-            opacity: 0.6;
-            cursor: not-allowed;
-            pointer-events: none;
-            filter: grayscale(1);
+        /* CATEGORY GUIDE INTEGRATION */
+        .guide-container {
+            margin-bottom: 50px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+
+        .guide-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .guide-header h2 {
+            font-size: 0.8rem;
+            color: var(--cognis-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .category-key {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+        }
+
+        .key-item {
+            font-size: 0.75rem;
+            color: #475569;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            line-height: 1.4;
+        }
+
+        .key-item b {
+            color: var(--cognis-blue);
+            background: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            min-width: 20px;
+            text-align: center;
         }
 
         .status-badge.status-active { background: #dcfce7; color: #166534; }
@@ -57,6 +120,26 @@
                 </div>
             </div>
         </header>
+
+        <section class="guide-container">
+            <div class="guide-header">
+                <h2>Category Logic Guide</h2>
+                <span style="font-size: 0.6rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Curriculum v1.1</span>
+            </div>
+            <div class="category-key">
+                <div class="key-item"><b>A</b> Proportionality & Fractions</div>
+                <div class="key-item"><b>B</b> Motion & Time</div>
+                <div class="key-item"><b>C</b> Operational Logic</div>
+                <div class="key-item"><b>D</b> Data & Geometry</div>
+                <div class="key-item"><b>E</b> Coding & Decoding</div>
+                <div class="key-item"><b>F</b> Word Mechanics</div>
+                <div class="key-item"><b>G</b> Semantic Logic</div>
+                <div class="key-item"><b>H</b> 2D Transformations</div>
+                <div class="key-item"><b>I</b> 3D & Manipulation</div>
+                <div class="key-item"><b>J</b> Comprehension Logic</div>
+                <div class="key-item"><b>K</b> Applied Linguistics</div>
+            </div>
+        </section>
 
         <main id="lattice-root"></main>
     </div>
@@ -90,7 +173,7 @@
                     .eq('id', user.id)
                     .maybeSingle();
 
-                let userPlan = 'foundational'; // Default fallback
+                let userPlan = 'foundational'; 
                 if (profile) {
                     userPlan = profile.subscription_plan || 'foundational';
                     const status = profile.subscription_status || 'inactive';
@@ -99,13 +182,20 @@
                     statusEl.className = `status-badge status-${status}`;
                 }
 
-                // Fetch progress as strings (to match "11-p" format)
                 const { data: completedData } = await window.supabaseClient
                     .from('module_progress')
                     .select('module_id')
                     .eq('user_id', user.id);
 
                 const completedSet = new Set(completedData ? completedData.map(item => String(item.module_id)) : []);
+
+                // IDENTIFY THE "UP NEXT" MODULE
+                // Find the lowest mod.id that is NOT completed
+                const nextUpModule = COGNIS_MODULES.find(m => {
+                    const checkID = userPlan === 'supplemental' ? m.sID : m.fID;
+                    return !completedSet.has(String(checkID));
+                });
+                const nextUpId = nextUpModule ? nextUpModule.id : null;
 
                 const root = document.getElementById('lattice-root');
                 root.innerHTML = ''; 
@@ -127,62 +217,28 @@
                     const groupContainer = document.getElementById(`group-${pillarName}`);
 
                     COGNIS_MODULES.filter(m => m.pillar === pillarName).forEach(mod => {
-                        const isFoundationalDone = completedSet.has(String(mod.fID));
-                        const isMasteryDone = completedSet.has(String(mod.sID));
-                        
-                        let isLocked = false;
-                        let cardDone = false;
+                        const checkID = userPlan === 'supplemental' ? mod.sID : mod.fID;
+                        const cardDone = completedSet.has(String(checkID));
+                        const isUpNext = mod.id === nextUpId;
 
-                        if (userPlan === 'supplemental') {
-                            // Supplemental Plan: Mastery ID (sID) determines completion and sequential unlock
-                            cardDone = isMasteryDone;
-                            if (mod.id > 1) {
-                                const prevMod = COGNIS_MODULES.find(m => m.id === mod.id - 1);
-                                if (prevMod && !completedSet.has(String(prevMod.sID))) {
-                                    isLocked = true;
-                                }
-                            }
-                        } else {
-                            // Foundational Plan: fID determines completion. Sequential unlock REMOVED.
-                            cardDone = isFoundationalDone;
-                            isLocked = false; 
-                        }
-
-                        // Progress indicators (boxes)
-                        let progressHTML = '';
-                        if (userPlan === 'supplemental') {
-                            // 2 Boxes: Box 1 = Foundation, Box 2 = Mastery
-                            progressHTML = `
-                                <div class="progress-indicator-row">
-                                    <div class="progress-box ${isFoundationalDone ? 'filled' : ''}"></div>
-                                    <div class="progress-box ${isMasteryDone ? 'filled' : ''}"></div>
-                                </div>
-                            `;
-                        } else {
-                            // 1 Box: Foundation
-                            progressHTML = `
-                                <div class="progress-indicator-row">
-                                    <div class="progress-box ${isFoundationalDone ? 'filled' : ''}"></div>
-                                </div>
-                            `;
-                        }
-
-                        const card = document.createElement(isLocked ? 'div' : 'a');
-                        card.className = `module-card ${cardDone ? 'is-complete' : ''} ${isLocked ? 'is-locked' : ''}`;
-                        if (!isLocked) card.href = mod.path;
+                        const card = document.createElement('a');
+                        card.className = `module-card ${cardDone ? 'is-complete' : ''} ${isUpNext ? 'is-up-next' : ''}`;
+                        card.href = mod.path;
                         
                         card.innerHTML = `
                             <div class="card-top">
-                                <span class="cat-tag">Category ${mod.cat}</span>
-                                ${cardDone ? '<span class="check-mark">✓</span>' : ''}
-                                ${isLocked ? '<span class="lock-tag">Locked 🔒</span>' : ''}
+                                <div style="display:flex; flex-direction:column;">
+                                    ${isUpNext ? '<span class="up-next-tag">Up Next</span>' : ''}
+                                    <span class="cat-tag">Category ${mod.cat}</span>
+                                </div>
+                                ${cardDone ? '<div class="check-badge">✓</div>' : ''}
                             </div>
                             <h3 class="mod-title">${mod.title}</h3>
                             <div class="card-bottom">
-                                <div style="width: 100%;">
-                                    <span class="mod-id">MODULE ${String(mod.id).padStart(2, '0')}</span>
-                                    ${progressHTML}
-                                </div>
+                                <span class="mod-id">MODULE ${String(mod.id).padStart(2, '0')}</span>
+                                <span class="status-text" style="color: ${cardDone ? '#276245' : 'var(--steel)'}">
+                                    ${cardDone ? 'Revision Mode' : 'Start Module →'}
+                                </span>
                             </div>
                         `;
                         groupContainer.appendChild(card);

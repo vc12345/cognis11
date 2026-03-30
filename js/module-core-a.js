@@ -61,6 +61,9 @@ async function getUserPlan() {
  * MAIN INITIALIZATION
  */
 async function initModule(moduleId) {
+    // Check if the user has already smashed this goal
+    await checkCompletionStatus(moduleId);
+
     const isSample = SAMPLE_IDS.includes(String(moduleId));
     
     if (window.gtag) {
@@ -129,6 +132,32 @@ async function initModule(moduleId) {
     injectModuleUI(user.email, moduleId, false);
 }
 
+async function checkCompletionStatus(moduleId) {
+    const { data: { user } } = await window.supabaseClient.auth.getUser();
+    if (!user) return;
+
+    const { data } = await window.supabaseClient
+        .from('module_progress')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('module_id', moduleId)
+        .maybeSingle();
+
+    if (data) {
+        disableCompleteButton();
+    }
+}
+
+function disableCompleteButton() {
+    const btn = document.querySelector('.btn-complete');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerText = "Module Completed ✓";
+        btn.classList.add('is-finished'); // Good for specific CSS hooks
+    }
+}
+
+
 /**
  * UI INJECTION
  */
@@ -187,26 +216,41 @@ function injectModuleUI(email, currentId, isSample) {
  * COMPLETION LOGIC
  */
 async function markComplete(moduleId) {
-    if (!window.supabaseClient) return;
-    const { data: { user } } = await window.supabaseClient.auth.getUser();
-    if (!user) return;
-
-    if (window.gtag) {
-        window.gtag('event', 'module_complete', { 'module_id': moduleId });
+    const btn = document.querySelector('.btn-complete');
+    
+    // 1. Visual Feedback: Show we are working
+    if (btn) {
+        btn.disabled = true;
+        btn.innerText = "Saving Progress...";
     }
 
-    const { error } = await window.supabaseClient
-        .from('module_progress')
-        .upsert([{ 
-            user_id: user.id, 
-            module_id: String(moduleId) 
-        }], { onConflict: 'user_id, module_id' });
+    try {
+        const { data: { user } } = await window.supabaseClient.auth.getUser();
+        if (!user) throw new Error("No user logged in");
 
-    if (error) {
-        console.error(error);
-        alert("Error saving progress.");
-    } else {
-        alert("Progress Saved! ✅");
-        window.location.href = "/members/dashboard-a.html";
+        // 2. Use upsert to prevent duplicates at the database level anyway
+        const { error } = await window.supabaseClient
+            .from('module_progress')
+            .upsert({ 
+                user_id: user.id, 
+                module_id: moduleId,
+                completed_at: new Date().toISOString()
+            }, { onConflict: 'user_id, module_id' });
+
+        if (error) throw error;
+
+        // 3. Success: Permanently lock the button for this session
+        disableCompleteButton();
+        console.log(`Module ${moduleId} marked as complete.`);
+
+    } catch (err) {
+        console.error("Error saving progress:", err);
+        alert("Failed to save progress. Please try again.");
+        
+        // 4. Fail-safe: Re-enable the button if it didn't save
+        if (btn) {
+            btn.disabled = false;
+            btn.innerText = "Complete Module & Update Lattice";
+        }
     }
 }

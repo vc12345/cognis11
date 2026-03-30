@@ -186,3 +186,13 @@ body {
 @media (max-width: 768px) {
     .engine-container, .question-tiers { grid-template-columns: 1fr; }
 }
+
+.btn-complete:disabled {
+    background-color: #276245 !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    border: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+}

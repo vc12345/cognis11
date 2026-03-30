@@ -106,7 +106,7 @@ async function initModule(moduleId) {
     const userPlan = profile.subscription_plan || 'foundational';
 
     // Sequential lock is disabled for Foundational users in the Sandbox
-    if (userPlan === 'supplemental') {
+    /*if (userPlan === 'supplemental') {
         const masterId = parseInt(moduleId);
         if (masterId > 1) {
             const { data: completedData } = await window.supabaseClient
@@ -124,6 +124,7 @@ async function initModule(moduleId) {
             }
         }
     }
+    */
 
     injectModuleUI(user.email, moduleId, false);
 }

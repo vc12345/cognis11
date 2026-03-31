@@ -17,8 +17,6 @@
     window.gtag = gtag; 
 })();
 
-const SAMPLE_IDS = ["11_sample", "47_sample", "53_sample"];
-
 /**
  * SMART LOADER: Fetches the consolidated registry
  */
@@ -28,7 +26,6 @@ async function ensureRegistry() {
     return new Promise((resolve) => {
         const script = document.createElement('script');
         const isInMembers = window.location.pathname.includes('/members/');
-        // MANDATORY: Sandbox Registry
         script.src = isInMembers ? '../js/registry-a.js' : 'js/registry-a.js'; 
         
         script.onload = () => resolve(true);
@@ -41,44 +38,28 @@ async function ensureRegistry() {
 }
 
 /**
- * PLAN HELPER: Used by module-X-a.html to determine layout
- */
-async function getUserPlan() {
-    if (!window.supabaseClient) return 'foundational';
-    const { data: { user } } = await window.supabaseClient.auth.getUser();
-    if (!user) return 'foundational';
-
-    const { data: profile } = await window.supabaseClient
-        .from('profiles')
-        .select('subscription_plan')
-        .eq('id', user.id)
-        .maybeSingle();
-
-    return profile ? profile.subscription_plan : 'foundational';
-}
-
-/**
  * MAIN INITIALIZATION
  */
 async function initModule(moduleId) {
-    // Check if the user has already smashed this goal
-    await checkCompletionStatus(moduleId);
+    const isSampleFile = window.location.pathname.includes('-sample.html');
 
-    const isSample = SAMPLE_IDS.includes(String(moduleId));
-    
+    // 1. ANALYTICS
     if (window.gtag) {
         window.gtag('event', 'module_view', {
             'module_id': moduleId,
-            'view_mode': isSample ? 'sample' : 'member'
+            'view_mode': isSampleFile ? 'sample' : 'member'
         });
     }
 
-    await ensureRegistry();
-
-    if (isSample) {
-        injectModuleUI("Guest Explorer", moduleId, true);
+    // 2. BYPASS AUTH FOR SAMPLES
+    if (isSampleFile) {
+        console.log("Sample Mode: Skipping Auth & Registry");
         return; 
     }
+
+    // 3. MEMBER FLOW
+    await checkCompletionStatus(moduleId);
+    await ensureRegistry();
 
     if (!window.supabaseClient) {
         let attempts = 0;
@@ -106,33 +87,11 @@ async function initModule(moduleId) {
         return;
     }
 
-    const userPlan = profile.subscription_plan || 'foundational';
-
-    // Sequential lock is disabled for Foundational users in the Sandbox
-    /*if (userPlan === 'supplemental') {
-        const masterId = parseInt(moduleId);
-        if (masterId > 1) {
-            const { data: completedData } = await window.supabaseClient
-                .from('module_progress')
-                .select('module_id')
-                .eq('user_id', user.id);
-
-            const completedSIDs = completedData ? completedData.map(item => String(item.module_id)) : [];
-            const prevModuleSID = String(masterId - 1);
-
-            if (!completedSIDs.includes(prevModuleSID)) {
-                alert("Please complete the previous module mastery first.");
-                window.location.href = "/members/dashboard-a.html";
-                return;
-            }
-        }
-    }
-    */
-
     injectModuleUI(user.email, moduleId, false);
 }
 
 async function checkCompletionStatus(moduleId) {
+    if (!window.supabaseClient) return;
     const { data: { user } } = await window.supabaseClient.auth.getUser();
     if (!user) return;
 
@@ -153,14 +112,10 @@ function disableCompleteButton() {
     if (btn) {
         btn.disabled = true;
         btn.innerText = "Module Completed ✓";
-        btn.classList.add('is-finished'); // Good for specific CSS hooks
+        btn.classList.add('is-finished');
     }
 }
 
-
-/**
- * UI INJECTION
- */
 function injectModuleUI(email, currentId, isSample) {
     let prevMod = null;
     let nextMod = null;
@@ -185,7 +140,8 @@ function injectModuleUI(email, currentId, isSample) {
             .cognis-m-nav a { color: #1B3A5C !important; text-decoration: none; font-weight: 600; font-size: 0.85rem; }
             .module-footer-nav {
                 max-width: 920px; margin: 40px auto;
-                display: ${isSample ? 'none' : 'flex'}; justify-content: space-between; gap: 20px;
+                display: flex; justify-content: space-between; gap: 20px;
+                padding: 0 20px;
             }
             .nav-cta { flex: 1; text-decoration: none; padding: 20px; border-radius: 12px; display: flex; flex-direction: column; transition: 0.3s; }
             .nav-prev { background: white; color: #1B3A5C; border: 2px solid #E5E3DD; }
@@ -201,24 +157,17 @@ function injectModuleUI(email, currentId, isSample) {
 
     document.body.insertAdjacentHTML('afterbegin', uiHTML);
 
-    if (!isSample) {
-        const footerHTML = `
-            <div class="module-footer-nav">
-                ${prevMod ? `<a href="${prevMod.path}" class="nav-cta nav-prev"><span class="cta-label">Previous</span><span>${prevMod.title}</span></a>` : '<div></div>'}
-                ${nextMod ? `<a href="${nextMod.path}" class="nav-cta nav-next" style="text-align:right;"><span class="cta-label">Next</span><span>${nextMod.title}</span></a>` : '<div></div>'}
-            </div>
-        `;
-        document.body.insertAdjacentHTML('beforeend', footerHTML);
-    }
+    const footerHTML = `
+        <div class="module-footer-nav">
+            ${prevMod ? `<a href="${prevMod.path}" class="nav-cta nav-prev"><span class="cta-label">Previous</span><span>${prevMod.title}</span></a>` : '<div></div>'}
+            ${nextMod ? `<a href="${nextMod.path}" class="nav-cta nav-next" style="text-align:right;"><span class="cta-label">Next</span><span>${nextMod.title}</span></a>` : '<div></div>'}
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', footerHTML);
 }
 
-/**
- * COMPLETION LOGIC
- */
 async function markComplete(moduleId) {
     const btn = document.querySelector('.btn-complete');
-    
-    // 1. Visual Feedback: Show we are working
     if (btn) {
         btn.disabled = true;
         btn.innerText = "Saving Progress...";
@@ -228,7 +177,6 @@ async function markComplete(moduleId) {
         const { data: { user } } = await window.supabaseClient.auth.getUser();
         if (!user) throw new Error("No user logged in");
 
-        // 2. Use upsert to prevent duplicates at the database level anyway
         const { error } = await window.supabaseClient
             .from('module_progress')
             .upsert({ 
@@ -238,16 +186,8 @@ async function markComplete(moduleId) {
             }, { onConflict: 'user_id, module_id' });
 
         if (error) throw error;
-
-        // 3. Success: Permanently lock the button for this session
         disableCompleteButton();
-        console.log(`Module ${moduleId} marked as complete.`);
-
     } catch (err) {
-        console.error("Error saving progress:", err);
-        alert("Failed to save progress. Please try again.");
-        
-        // 4. Fail-safe: Re-enable the button if it didn't save
         if (btn) {
             btn.disabled = false;
             btn.innerText = "Complete Module & Update Lattice";

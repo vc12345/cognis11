@@ -7,30 +7,31 @@
     <link rel="stylesheet" href="../css/module-style.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
-        /* FORCE SHOW ALL CONTENT FOR SAMPLE */
-        .foundational-only, .supplemental-only { display: block !important; }
-        .btn-complete { display: none !important; }
+        /* CENTER EVERYTHING */
+        body { background: transparent !important; padding: 0; margin: 0; display: flex; justify-content: center; overflow: hidden; }
+        .module-card { max-width: 850px !important; width: 100%; margin: 0 auto !important; border: none; box-shadow: none; background: transparent; padding: 0; }
         
-        /* SAMPLE ACCORDIONS */
+        /* CLEANER ACCORDION */
         details.sample-acc {
-            background: #fff; border: 2px solid var(--cognis-blue);
-            border-radius: 16px; margin: 20px 0; overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            background: #fff; border: 1px solid var(--lgrey);
+            border-radius: 12px; margin-bottom: 12px; overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
         }
         details.sample-acc summary {
-            font-weight: 800; color: white; background: var(--cognis-blue);
-            cursor: pointer; padding: 20px; outline: none; list-style: none;
+            font-weight: 700; color: var(--navy); background: #fff;
+            cursor: pointer; padding: 22px 30px; outline: none; list-style: none;
             display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid transparent; transition: 0.2s;
         }
-        details.sample-acc summary::after { content: '⊕'; font-size: 1.2rem; }
-        details.sample-acc[open] summary::after { content: '⊖'; }
+        details.sample-acc[open] summary { border-bottom: 1px solid var(--lgrey); background: var(--off); }
+        details.sample-acc summary::after { content: '↓'; font-weight: 400; opacity: 0.5; transition: 0.3s; }
+        details.sample-acc[open] summary::after { transform: rotate(180deg); }
         
-        details.sample-acc.supp-acc { border-color: var(--cognis-gold); }
-        details.sample-acc.supp-acc summary { background: var(--cognis-gold); }
-        
-        .acc-inner { padding: 30px; }
+        .acc-inner { padding: 40px 30px; background: #fff; }
 
-        /* VIZ STYLES PRESERVED */
+        /* ALL ORIGINAL STYLES RESTORED */
+        .foundational-only, .supplemental-only { display: block !important; }
+        .btn-complete { display: none !important; }
         .viz-container { background: #f8fafc; border: 2px dashed #cbd5e0; border-radius: 12px; padding: 20px; margin: 25px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 320px; }
         .hour-box-container { display: flex; gap: 12px; margin-top: 25px; flex-wrap: wrap; justify-content: center; }
         .hour-box { width: 85px; height: 85px; border: 3px solid var(--cognis-blue); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; background: #fff; box-shadow: 0 4px 0 var(--cognis-blue); }
@@ -51,40 +52,61 @@
         .leg-label b { display: block; color: var(--cognis-blue); font-size: 0.9rem; }
         .summary-banner { background: var(--cognis-light); padding: 15px 30px; border-radius: 30px; font-weight: 800; color: var(--cognis-blue); font-size: 1.1rem; border: 1px solid var(--border-light); text-align: center; }
         .section-tag { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; background: #f1f5f9; color: var(--cognis-blue); }
-        .phase { border: 1px solid var(--border-light); margin-bottom: 30px !important; }
+        .phase { border: 1px solid var(--border-light); margin-bottom: 30px !important; padding: 30px; border-radius: 12px; }
         .parent-script { font-style: italic; color: #4a5568; border-left: 3px solid #cbd5e0; padding-left: 15px; margin: 15px 0; }
     </style>
     <script src="../js/module-core-a.js"></script>
 </head>
-<body style="background: transparent;">
+<body>
 
-<div class="module-card" style="border:none; box-shadow:none; padding:0; margin:0;">
-    <div class="header" style="margin-bottom: 40px;"><h1>Module 11: Average Speed</h1></div>
+<div class="module-card">
+    <div class="header" style="text-align:center; padding: 40px 0;"><h1>Module 11: Average Speed</h1></div>
 
     <details class="sample-acc">
         <summary>Preview Stage 1: Foundational Phase (Years 2–4)</summary>
         <div class="acc-inner">
-            <section class="phase">
+            <section class="phase" id="sub-intro">
                 <span class="section-tag">Foundation Intro</span>
                 <h2>The Big Squash</h2>
-                <p>Average speed isn't a complex formula; it's a <b>"Fair Share"</b> game. Imagine your child has a big pile of miles. To find the average, they just have to deal those miles out into "Hour Boxes" until the pile is gone.</p>
-                <div class="parent-script">"Look at this pile of <b><span id="script-dist">40</span> miles</b>. We have <b><span id="script-time">2</span> hours</b>. How many miles go into each box?"</div>
+                <p>Average speed isn't a complex formula; it's a <b>"Fair Share"</b> game. Imagine your child has a big pile of miles. To find the average, they just have to deal those miles out into "Hour Boxes" like playing cards until the pile is gone.</p>
+                
+                <div class="parent-script">"Look at this pile of <b><span id="script-dist">40</span> miles</b>. We have <b><span id="script-time">2</span> hours</b> to travel. If we want to be 'fair' and do the exact same amount each hour, how many miles go into each box?"</div>
+
                 <div class="viz-container">
                     <div id="intro-pile-display" style="background: var(--cognis-blue); color: white; padding: 10px 25px; border-radius: 20px; font-weight: 800; margin-bottom: 15px;">TOTAL PILE: 40 MILES</div>
+                    <div style="font-size: 2rem;">🚗💨</div>
                     <div class="hour-box-container" id="box-display-intro"></div>
                 </div>
+
                 <div class="engine-container">
                     <div class="controls">
-                        <div class="control-group"><label>The Mile Pile</label><input type="range" min="10" max="100" step="10" value="40" id="intro-dist"></div>
-                        <div class="control-group"><label>The Hour Boxes</label><input type="range" min="1" max="5" step="1" value="2" id="intro-time"></div>
+                        <div class="control-group">
+                            <label>The Mile Pile</label>
+                            <input type="range" min="10" max="100" step="10" value="40" id="intro-dist">
+                            <div class="val-out" id="intro-dist-val">40 miles</div>
+                        </div>
+                        <div class="control-group">
+                            <label>The Hour Boxes</label>
+                            <input type="range" min="1" max="5" step="1" value="2" id="intro-time">
+                            <div class="val-out" id="intro-time-val">2 hours</div>
+                        </div>
                     </div>
                     <div class="trace-log" id="intro-log"></div>
                 </div>
+
+                <div class="trap-box" style="margin-top:20px;">
+                    <h3>The "Box Rule"</h3>
+                    <p>Tell your child: <b>"Average Speed is just the number inside ONE box."</b> It doesn't matter how many miles there are total; we only care about the share for one single hour.</p>
+                </div>
             </section>
-            
-            <section class="phase">
+
+            <section class="phase" id="sub-progressing">
                 <span class="section-tag">Foundation Progressing</span>
                 <h2>The Tug-of-War</h2>
+                <p>In the 11+, the average speed is rarely right in the middle. It has <b>Gravity</b>. If a car travels slowly for 5 hours and quickly for only 1 hour, the average speed will be "pulled" down toward the slow speed.</p>
+                
+                <div class="parent-script">"The car traveled at two different speeds. But look at the weights—we spent much more <b>time</b> going slow. That 'Slow Time' is heavier, so it wins the tug-of-war."</div>
+
                 <div class="viz-container">
                     <div class="scale-wrap">
                         <div class="scale-beam" id="beam">
@@ -93,23 +115,46 @@
                         </div>
                         <div class="scale-pivot"></div>
                     </div>
+                    <p id="scale-status" style="margin-top:20px; font-weight:800; color:var(--cognis-blue);"></p>
                 </div>
+
                 <div class="engine-container">
                     <div class="controls">
-                        <div class="control-group"><label>Slow Time</label><input type="range" min="1" max="10" value="8" id="prog-slow"></div>
-                        <div class="control-group"><label>Fast Time</label><input type="range" min="1" max="10" value="2" id="prog-fast"></div>
+                        <div class="control-group">
+                            <label>Slow Time (Weight)</label>
+                            <input type="range" min="1" max="10" value="8" id="prog-slow">
+                        </div>
+                        <div class="control-group">
+                            <label>Fast Time (Weight)</label>
+                            <input type="range" min="1" max="10" value="2" id="prog-fast">
+                        </div>
                     </div>
+                    <div class="trace-log" id="prog-log"></div>
+                </div>
+
+                <div class="trap-box" style="margin-top:20px;">
+                    <h3>The "Tie-Breaker" Secret</h3>
+                    <p>The only time the average is in the middle is if the weights are a <b>Perfect Tie</b>. Look for the winner!</p>
                 </div>
             </section>
         </div>
     </details>
 
-    <details class="sample-acc supp-acc">
+    <details class="sample-acc">
         <summary>Preview Stage 2: Supplemental Mastery (Years 4–6)</summary>
         <div class="acc-inner">
             <section class="phase">
+                <h2>Phase 1: The X-Ray</h2>
+                <p>Success isn't about averaging numbers; it's about squashing the whole trip into one "Total Distance" and one "Total Time."</p>
+                <div class="question-tiers">
+                    <div class="tier-card"><b>The Road Trip</b> 15 miles in morning, 25 miles in afternoon. 2 hours total.</div>
+                    <div class="tier-card"><b>The Flight Path</b> 600 miles at 300mph, then 400 miles at 200mph.</div>
+                </div>
+            </section>
+
+            <section class="phase">
                 <h2>Phase 2: The Anatomy</h2>
-                <p>Add the distances to get the "Road" and add the hours to get the "Time."</p>
+                <p>We aren't interested in separate trips; we are watching them merge into one long road. Add the distances and add the hours.</p>
                 <div class="anatomy-display">
                     <div class="journey-line">
                         <div class="marker marker-start"></div>
@@ -119,16 +164,24 @@
                     <div class="summary-banner" id="total-summary">TOTAL: 90.00 km in 3.00 hours</div>
                 </div>
             </section>
+
             <section class="phase">
                 <h2>Phase 3: The Engine</h2>
                 <div class="engine-container">
                     <div class="inputs">
-                        <div class="control-group"><label>Leg 1 Distance</label><input type="number" id="d1-in" value="30"></div>
-                        <div class="control-group"><label>Leg 1 Time</label><input type="number" id="t1-in" value="1"></div>
-                        <div class="control-group"><label>Leg 2 Distance</label><input type="number" id="d2-in" value="60"></div>
-                        <div class="control-group"><label>Leg 2 Time</label><input type="number" id="t2-in" value="2"></div>
+                        <div class="control-group"><label>Leg 1 Dist (km)</label><input type="number" id="d1-in" value="30"></div>
+                        <div class="control-group"><label>Leg 1 Time (hrs)</label><input type="number" id="t1-in" value="1"></div>
+                        <div class="control-group"><label>Leg 2 Dist (km)</label><input type="number" id="d2-in" value="60"></div>
+                        <div class="control-group"><label>Leg 2 Time (hrs)</label><input type="number" id="t2-in" value="2"></div>
                     </div>
                     <div class="trace-log" id="logic-trace"></div>
+                </div>
+            </section>
+
+            <section class="phase">
+                <div class="trap-box">
+                    <h3>Phase 4: The Saboteur</h3>
+                    <p><b>The "Speed Splitter" Trap:</b> 40mph then 60mph does NOT always equal 50mph. Unless times are equal, adding the speeds leads to a wrong answer.</p>
                 </div>
             </section>
         </div>
@@ -140,6 +193,8 @@
         const d = parseInt(document.getElementById('intro-dist').value);
         const t = parseInt(document.getElementById('intro-time').value);
         const share = (d / t).toFixed(1);
+        document.getElementById('intro-dist-val').innerText = d + " miles";
+        document.getElementById('intro-time-val').innerText = t + " hours";
         document.getElementById('script-dist').innerText = d;
         document.getElementById('script-time').innerText = t;
         document.getElementById('intro-pile-display').innerText = `TOTAL PILE: ${d} MILES`;
@@ -157,6 +212,8 @@
         document.getElementById('w-fast').style.width = (f * 15) + "px";
         document.getElementById('w-fast').style.height = (f * 15) + "px";
         document.getElementById('beam').style.transform = `rotate(${(f - s) * 2}deg)`;
+        let logWinner = s > f ? "Slow" : (f > s ? "Fast" : "Tie");
+        document.getElementById('prog-log').innerHTML = `→ <b>Gravity Check:</b> Pull toward: <b>${logWinner}</b>.`;
     }
 
     function updateSupp() {
@@ -172,7 +229,17 @@
         document.getElementById('label-d1').innerText = `${d1.toFixed(2)} km`;
         document.getElementById('label-d2').innerText = `${d2.toFixed(2)} km`;
         document.getElementById('total-summary').innerText = `TOTAL: ${totalDist.toFixed(2)} km in ${totalTime.toFixed(2)} hours`;
-        document.getElementById('logic-trace').innerHTML = `→ AVERAGE SPEED: ${avgSpeed.toFixed(2)} km/h`;
+        document.getElementById('logic-trace').innerHTML = `
+            <div>→ 1. Grand Distance: <b>${totalDist.toFixed(2)} km</b></div>
+            <div>→ 2. Grand Time: <b>${totalTime.toFixed(2)} hrs</b></div>
+            <div style="color:var(--cognis-gold); font-weight:bold; margin-top:10px;">→ AVERAGE SPEED: ${avgSpeed.toFixed(2)} km/h</div>
+        `;
+    }
+
+    // RESIZE SENDER: Sends height to parent iframe whenever an accordion is clicked
+    function sendHeight() {
+        const height = document.body.scrollHeight;
+        window.parent.postMessage({ type: 'resize', height: height }, '*');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -181,7 +248,13 @@
         document.getElementById('prog-slow').oninput = updateProg;
         document.getElementById('prog-fast').oninput = updateProg;
         ['d1-in', 't1-in', 'd2-in', 't2-in'].forEach(id => document.getElementById(id).oninput = updateSupp);
-        updateIntro(); updateProg(); updateSupp();
+        
+        // Listen for accordion toggles to trigger resize
+        document.querySelectorAll('details').forEach(det => {
+            det.addEventListener('toggle', sendHeight);
+        });
+
+        updateIntro(); updateProg(); updateSupp(); sendHeight();
         if(typeof initModule === "function") initModule(11);
     });
 </script>

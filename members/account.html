@@ -59,7 +59,7 @@
 <body>
 
 <nav class="nav">
-    <a href="/members/dashboard.html">
+    <a href="/members/dashboard-a.html">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         Dashboard
     </a>
@@ -67,7 +67,7 @@
 </nav>
 
 <div class="container">
-    <h1>Account <small style="font-size: 0.4em; vertical-align: middle; opacity: 0.5;">V3.0</small></h1>
+    <h1>Account Settings</h1>
     <p class="sub-h1">Manage your profile and subscription preferences.</p>
     
     <div class="settings-card">
@@ -172,6 +172,32 @@
         }
     }
 
+    async function redirectToStripePortal() {
+        const btn = document.getElementById('portal-btn');
+        const originalText = btn.innerText;
+        btn.innerText = "Connecting to Stripe...";
+        btn.disabled = true;
+
+        try {
+            // This calls the Supabase Edge Function
+            const { data, error } = await window.supabaseClient.functions.invoke('create-portal-session');
+
+            if (error) throw error;
+
+            if (data && data.url) {
+                window.location.href = data.url;
+            } else {
+                throw new Error("No URL returned from billing server.");
+            }
+
+        } catch (e) {
+            console.error("Portal Error:", e);
+            alert("Unable to reach the billing portal. Please contact support or try again later.");
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+    }
+
     async function updateEmail() {
         const newEmail = document.getElementById('new-email').value;
         if (!newEmail) return;
@@ -194,33 +220,6 @@
         window.supabaseClient.auth.signOut().then(() => {
             window.location.href = "/login.html";
         });
-    }
-
-    async function redirectToStripePortal() {
-        const btn = document.getElementById('portal-btn');
-        btn.innerText = "Connecting to Stripe...";
-        btn.disabled = true;
-
-        try {
-            // NATIVE INVOKE: This automatically handles apikey and auth headers
-            const { data, error } = await window.supabaseClient.functions.invoke('create-portal-session');
-
-            if (error) {
-                throw new Error(error.message || "Unauthorized Gateway access");
-            }
-
-            if (data && data.url) {
-                window.location.href = data.url;
-            } else {
-                throw new Error("No URL returned from billing server.");
-            }
-
-        } catch (e) {
-            console.error("V3.0 Error:", e);
-            alert("Billing Access Error (V3.0): " + e.message);
-            btn.innerText = "Manage Billing & Cancellation";
-            btn.disabled = false;
-        }
     }
 
     document.addEventListener('DOMContentLoaded', loadAccountData);

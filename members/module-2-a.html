@@ -9,75 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* SUBSCRIPTION DISPLAY LOGIC */
-        .foundational-only, .supplemental-only { display: none; }
-        body.user-plan-foundational .foundational-only { display: block; }
-        body.user-plan-supplemental .supplemental-only { display: block; }
-
-        /* REFRESHER ACCORDION */
-        details.refresher-box {
-            background: #fff; border: 2px solid var(--cognis-blue);
-            border-radius: 16px; margin: 30px 0; overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        details.refresher-box summary {
-            font-weight: 800; color: white; background: var(--cognis-blue);
-            cursor: pointer; padding: 20px; outline: none; list-style: none;
-        }
-
-        /* GREEN BUTTON TEMPLATE */
-        .btn-complete { 
-            background-color: #276245 !important; 
-            color: white !important; 
-            border: none !important;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .btn-complete:hover { background-color: #1e4a34 !important; transform: translateY(-2px); }
-        .btn-complete:disabled { background-color: #cbd5e0 !important; cursor: not-allowed; transform: none; }
-
-        /* VIZ CONTAINERS */
-        .viz-container { 
-            background: #f8fafc; border: 2px dashed #cbd5e0; 
-            border-radius: 12px; padding: 20px; margin: 25px 0;
-            display: flex; flex-direction: column; 
-            align-items: center; justify-content: center;
-            min-height: 380px; 
-            position: relative;
-        }
-
-        /* FOUNDATIONAL LOGS */
-        .discovery-log {
-            background: #fdfbf7; padding: 20px; border-radius: 12px;
-            border: 1px solid #f0e6d2; font-size: 0.95rem; color: #5d5c58; line-height: 1.5;
-        }
-        .discovery-log b { color: var(--cognis-blue); }
-        .discovery-step { margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; }
-        .discovery-step::before { content: '✨'; }
-
-        /* INTRO: SWEETS ON PLATES */
+        /* UNIQUE COMPONENT STYLES FOR MODULE 2 */
         .plate { fill: #fff; stroke: #e2e8f0; stroke-width: 2; }
         .sweet { transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .sweet-blue { fill: var(--cognis-blue); stroke: #001a35; stroke-width: 1; }
         .sweet-gold { fill: var(--cognis-gold); stroke: #a38241; stroke-width: 1; }
-
-        /* PROGRESSING: VALUE ENVELOPES */
         .envelope { fill: #fff; stroke: #cbd5e0; stroke-width: 2; transition: all 0.3s; }
-
-        /* SUPPLEMENTAL: RATIO BAR */
         .ratio-bar-main { display: flex; width: 100%; max-width: 600px; height: 60px; border-radius: 10px; overflow: hidden; border: 3px solid var(--cognis-blue); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .ratio-box { flex: 1; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; border-right: 1px solid rgba(255,255,255,0.2); transition: all 0.3s; font-size: 0.8rem; }
         .box-a { background: var(--cognis-blue); }
         .box-b { background: var(--cognis-gold); }
-
-        /* UTILITY */
-        .section-tag { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; background: #f1f5f9; color: var(--cognis-blue); border-left: 3px solid var(--cognis-gold); }
-        .parent-script { font-style: italic; color: #4a5568; border-left: 3px solid #cbd5e0; padding-left: 15px; margin: 15px 0; }
         .btn-interact { background: var(--cognis-blue); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; margin-top: 10px; }
     </style>
 
@@ -115,7 +56,7 @@
                 </svg>
                 <div style="display: flex; gap: 10px;">
                     <button class="btn-interact" id="btn-deal" onclick="dealSet()">Deal One Set</button>
-                    <button class="btn-interact" style="background:#94a3b8;" onclick="resetIntro()">Reset Pile</button>
+                    <button class="btn-reset" onclick="resetIntro()">Reset Pile</button>
                 </div>
             </div>
 
@@ -203,9 +144,9 @@
             <h2>Phase 3: The Engine</h2>
             <div class="engine-container">
                 <div class="inputs">
-                    <div class="control-group"><label>Total Value (£)</label><input type="range" id="in-v" min="10" max="1000" step="10" value="100" oninput="runSupp()"></div>
-                    <div class="control-group"><label>Part A</label><input type="range" id="in-a" min="1" max="12" value="3" oninput="runSupp()"></div>
-                    <div class="control-group"><label>Part B</label><input type="range" id="in-b" min="1" max="12" value="2" oninput="runSupp()"></div>
+                    <div class="control-group"><label>Total Value (£)</label><input type="range" id="in-v" min="10" max="1000" step="10" value="100" oninput="runSupp()"><div class="val-out" id="in-v-val">£100</div></div>
+                    <div class="control-group"><label>Part A</label><input type="range" id="in-a" min="1" max="12" value="3" oninput="runSupp()"><div class="val-out" id="in-a-val">3</div></div>
+                    <div class="control-group"><label>Part B</label><input type="range" id="in-b" min="1" max="12" value="2" oninput="runSupp()"><div class="val-out" id="in-b-val">2</div></div>
                 </div>
                 <div class="trace-log" id="supp-log"></div>
             </div>
@@ -256,7 +197,7 @@
         dealtSets = 0;
         const a = parseInt(document.getElementById('intro-a').value);
         const b = parseInt(document.getElementById('intro-b').value);
-        totalSweets = (a + b) * 5; // Ensure we always have exactly 5 rounds
+        totalSweets = (a + b) * 5; 
         document.getElementById('pile-count-txt').textContent = totalSweets;
         document.getElementById('sweet-container').innerHTML = '';
         document.getElementById('intro-a-val').innerText = a;
@@ -276,26 +217,20 @@
         
         const container = document.getElementById('sweet-container');
         
-        // Deal Blue Side
         for(let i=0; i<a; i++) {
             const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            circle.setAttribute("cx", "200");
-            circle.setAttribute("cy", "50");
-            circle.setAttribute("r", "6");
-            circle.setAttribute("class", "sweet sweet-blue");
+            circle.setAttribute("cx", "200"); circle.setAttribute("cy", "50");
+            circle.setAttribute("r", "6"); circle.setAttribute("class", "sweet sweet-blue");
             container.appendChild(circle);
             setTimeout(() => {
                 circle.setAttribute("cx", 100 + (Math.random()*100-50));
                 circle.setAttribute("cy", 165 + (Math.random()*40-20));
             }, 50);
         }
-        // Deal Gold Side
         for(let i=0; i<b; i++) {
             const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            circle.setAttribute("cx", "200");
-            circle.setAttribute("cy", "50");
-            circle.setAttribute("r", "6");
-            circle.setAttribute("class", "sweet sweet-gold");
+            circle.setAttribute("cx", "200"); circle.setAttribute("cy", "50");
+            circle.setAttribute("r", "6"); circle.setAttribute("class", "sweet sweet-gold");
             container.appendChild(circle);
             setTimeout(() => {
                 circle.setAttribute("cx", 300 + (Math.random()*100-50));
@@ -321,33 +256,24 @@
         let a = parseInt(document.getElementById('prog-a').value) || 1;
         let b = parseInt(document.getElementById('prog-b').value) || 1;
         
-        // Prevent layout explosion
         if (a + b > 16) { 
             alert("Maximum 16 parts total for this visualization."); 
-            document.getElementById('prog-a').value = 8;
-            document.getElementById('prog-b').value = 8;
+            document.getElementById('prog-a').value = 8; document.getElementById('prog-b').value = 8;
             a = 8; b = 8;
         }
 
-        const parts = a + b;
-        const valPer = tot / parts;
+        const parts = a + b; const valPer = tot / parts;
         document.getElementById('prog-total-val').innerText = '£' + tot;
         
-        const svg = document.getElementById('env-svg');
-        svg.innerHTML = '';
-        const envW = 40;
-        const envH = 35;
-        const gap = 10;
+        const svg = document.getElementById('env-svg'); svg.innerHTML = '';
+        const envW = 40; const envH = 35; const gap = 10;
         
         for(let i=0; i<parts; i++) {
-            const row = Math.floor(i / 8);
-            const col = i % 8;
+            const row = Math.floor(i / 8); const col = i % 8;
             const itemsInThisRow = Math.min(8, parts - (row * 8));
             const rowStartX = (420 - (itemsInThisRow * (envW + gap))) / 2;
-            
             const color = i < a ? '#1B3A5C' : '#c5a059';
-            const x = rowStartX + col * (envW + gap);
-            const y = 30 + row * 80;
+            const x = rowStartX + col * (envW + gap); const y = 30 + row * 80;
 
             const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
             g.innerHTML = `
@@ -370,14 +296,12 @@
         const v = parseInt(document.getElementById('in-v').value);
         const a = parseInt(document.getElementById('in-a').value);
         const b = parseInt(document.getElementById('in-b').value);
-        const totalP = a + b;
-        const unit = v / totalP;
+        const totalP = a + b; const unit = v / totalP;
 
         document.getElementById('label-v').innerText = `Total: £${v}`;
         document.getElementById('label-p').innerText = `${totalP} Parts`;
 
-        const bar = document.getElementById('supp-bar');
-        bar.innerHTML = '';
+        const bar = document.getElementById('supp-bar'); bar.innerHTML = '';
         for(let i=0; i<a; i++) bar.innerHTML += `<div class="ratio-box box-a">£${unit.toFixed(0)}</div>`;
         for(let i=0; i<b; i++) bar.innerHTML += `<div class="ratio-box box-b">£${unit.toFixed(0)}</div>`;
 

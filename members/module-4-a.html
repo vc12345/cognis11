@@ -9,58 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* SUBSCRIPTION DISPLAY LOGIC */
-        .foundational-only, .supplemental-only { display: none; }
-        body.user-plan-foundational .foundational-only { display: block; }
-        body.user-plan-supplemental .supplemental-only { display: block; }
-
-        /* REFRESHER ACCORDION */
-        details.refresher-box {
-            background: #fff; border: 2px solid var(--cognis-blue);
-            border-radius: 16px; margin: 30px 0; overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        details.refresher-box summary {
-            font-weight: 800; color: white; background: var(--cognis-blue);
-            cursor: pointer; padding: 20px; outline: none; list-style: none;
-        }
-
-        /* GREEN BUTTON TEMPLATE */
-        .btn-complete { background-color: #276245 !important; color: white !important; border: none !important; padding: 15px 30px; border-radius: 8px; font-weight: 800; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
-        .btn-complete:hover { background-color: #1e4a34 !important; }
-
-        /* VIZ CONTAINERS */
-        .viz-container { 
-            background: #f8fafc; border: 2px dashed #cbd5e0; 
-            border-radius: 12px; padding: 20px; margin: 25px 0;
-            display: flex; flex-direction: column; 
-            align-items: center; justify-content: center;
-            min-height: 360px; position: relative;
-        }
-
-        /* LOGS */
-        .discovery-log {
-            background: #fdfbf7; padding: 20px; border-radius: 12px;
-            border: 1px solid #f0e6d2; font-size: 0.95rem; color: #5d5c58; line-height: 1.5;
-        }
-        .discovery-step { margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; }
-        .discovery-step::before { content: '⏱️'; }
-
-        /* INTRO: TIDY UP VIZ */
+        /* UNIQUE COMPONENT STYLES FOR MODULE 4 */
         .lego-pile { fill: #c5a059; transition: all 0.5s; }
         .kid-icon { font-size: 2.2rem; transition: transform 0.3s; }
-
-        /* PROGRESSING: THE SEE-SAW */
         .seesaw-group { transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .weight-box { transition: all 0.5s; }
-
-        /* SUPPLEMENTAL: WORK RECTANGLE */
         .work-chart { position: relative; width: 300px; height: 200px; border-left: 3px solid var(--cognis-blue); border-bottom: 3px solid var(--cognis-blue); display: flex; align-items: flex-end; }
         .work-rect { background: rgba(197, 160, 89, 0.15); border: 3px solid var(--cognis-gold); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--cognis-blue); font-weight: 900; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-
-        /* UTILITY */
-        .section-tag { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; background: #f1f5f9; color: var(--cognis-blue); border-left: 3px solid var(--cognis-gold); }
-        .parent-script { font-style: italic; color: #4a5568; border-left: 3px solid #cbd5e0; padding-left: 15px; margin: 15px 0; }
         .magic-formula { text-align: center; margin: 20px 0; padding: 15px; background: var(--cognis-light); border-radius: 8px; border: 1px dashed var(--cognis-blue); font-weight: 800; color: var(--cognis-blue); }
     </style>
 
@@ -92,8 +47,8 @@
                     <path id="lego-pile" d="M20,90 Q100,20 180,90 Z" class="lego-pile" />
                 </svg>
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button class="btn-interact" onclick="addIntroHelper()">Add a Helper!</button>
-                    <button class="btn-interact" style="background:#94a3b8;" onclick="resetIntro()">Reset</button>
+                    <button class="btn-reset" style="background:var(--cognis-blue); padding:10px 20px;" onclick="addIntroHelper()">Add a Helper!</button>
+                    <button class="btn-reset" onclick="resetIntro()">Reset</button>
                 </div>
             </div>
 
@@ -114,10 +69,8 @@
                     <path d="M205,220 L225,180 L245,220 Z" fill="#2d3748" /> 
                     <g id="seesaw-group" class="seesaw-group">
                         <rect x="50" y="175" width="350" height="12" rx="6" fill="var(--cognis-blue)" />
-                        
                         <rect id="worker-weight" x="80" y="135" width="40" height="40" fill="var(--cognis-blue)" rx="4" class="weight-box" />
                         <text id="worker-label" x="100" y="160" text-anchor="middle" fill="white" font-weight="900" font-size="14">1</text>
-                        
                         <rect id="time-weight" x="330" y="55" width="40" height="120" fill="var(--cognis-gold)" rx="4" class="weight-box" />
                         <text id="time-label" x="350" y="120" text-anchor="middle" fill="white" font-weight="900" font-size="14">12</text>
                     </g>
@@ -172,9 +125,9 @@
             <h2>Phase 3: The Engine</h2>
             <div class="engine-container">
                 <div class="inputs">
-                    <div class="control-group"><label>Initial Workers</label><input type="range" id="in-w1" min="1" max="10" value="4" oninput="runSupp()"></div>
-                    <div class="control-group"><label>Initial Time</label><input type="range" id="in-t1" min="1" max="20" value="10" oninput="runSupp()"></div>
-                    <div class="control-group" style="margin-top:20px; border-top:1px solid #4a5568; padding-top:20px;"><label>New Team Size</label><input type="range" id="in-w2" min="1" max="20" value="5" oninput="runSupp()"></div>
+                    <div class="control-group"><label>Initial Workers</label><input type="range" id="in-w1" min="1" max="10" value="4" oninput="runSupp()"><div class="val-out" id="w1-disp">4</div></div>
+                    <div class="control-group"><label>Initial Time</label><input type="range" id="in-t1" min="1" max="20" value="10" oninput="runSupp()"><div class="val-out" id="t1-disp">10</div></div>
+                    <div class="control-group" style="margin-top:20px; border-top:1px solid #4a5568; padding-top:20px;"><label>New Team Size</label><input type="range" id="in-w2" min="1" max="20" value="5" oninput="runSupp()"><div class="val-out" id="w2-disp">5</div></div>
                 </div>
                 <div class="trace-log" id="supp-log"></div>
             </div>
@@ -215,69 +168,42 @@
 
     /* --- INTRO: LEGO TIDY --- */
     let introHelpers = 1;
-    function resetIntro() {
-        introHelpers = 1;
-        renderIntro();
-    }
-    function addIntroHelper() {
-        if(introHelpers < 4) introHelpers++;
-        renderIntro();
-    }
+    function resetIntro() { introHelpers = 1; renderIntro(); }
+    function addIntroHelper() { if(introHelpers < 4) introHelpers++; renderIntro(); }
     function renderIntro() {
         const time = 12 / introHelpers;
         document.getElementById('intro-clock').innerText = Math.round(time) + ":00";
-        const row = document.getElementById('helper-row');
-        row.innerHTML = '';
+        const row = document.getElementById('helper-row'); row.innerHTML = '';
         for(let i=0; i<introHelpers; i++) row.innerHTML += '<div class="kid-icon">👦</div>';
-        
-        const scale = 1 - (introHelpers * 0.2);
         const pile = document.getElementById('lego-pile');
-        pile.style.transform = `scale(${scale})`;
+        pile.style.transform = `scale(${1 - (introHelpers * 0.2)})`;
         pile.style.transformOrigin = "bottom center";
-
-        document.getElementById('intro-log').innerHTML = `
-            <div class="discovery-step">With <b>${introHelpers}</b> helper(s), the time drops to <b>${Math.round(time)} minutes</b>.</div>
-        `;
+        document.getElementById('intro-log').innerHTML = `With <b>${introHelpers}</b> helper(s), the time drops to <b>${Math.round(time)} minutes</b>.`;
     }
 
     /* --- PROGRESSING: SEE-SAW (Fixed labels) --- */
     function updateProg() {
         const w = parseInt(document.getElementById('prog-w').value);
-        const magic = 12;
-        const t = magic / w;
-        
+        const magic = 12; const t = magic / w;
         document.getElementById('prog-w-val').innerText = w + " Worker" + (w>1?'s':'');
-        
-        // Move Weights & Labels
-        const wBox = document.getElementById('worker-weight');
-        const wLabel = document.getElementById('worker-label');
-        const tBox = document.getElementById('time-weight');
-        const tLabel = document.getElementById('time-label');
+        const wBox = document.getElementById('worker-weight'); const wLabel = document.getElementById('worker-label');
+        const tBox = document.getElementById('time-weight'); const tLabel = document.getElementById('time-label');
 
         const workerSize = 25 + (w * 3);
-        wBox.setAttribute("width", workerSize);
-        wBox.setAttribute("height", workerSize);
-        wBox.setAttribute("x", 100 - (workerSize/2));
-        wBox.setAttribute("y", 175 - workerSize);
-        wLabel.setAttribute("x", 100);
-        wLabel.setAttribute("y", 175 - (workerSize/2) + 5);
+        wBox.setAttribute("width", workerSize); wBox.setAttribute("height", workerSize);
+        wBox.setAttribute("x", 100 - (workerSize/2)); wBox.setAttribute("y", 175 - workerSize);
+        wLabel.setAttribute("x", 100); wLabel.setAttribute("y", 175 - (workerSize/2) + 5);
         wLabel.textContent = w;
 
         const timeHeight = t * 10 + 10;
-        tBox.setAttribute("height", timeHeight);
-        tBox.setAttribute("y", 175 - timeHeight);
-        tLabel.setAttribute("y", 175 - (timeHeight/2) + 5);
-        tLabel.textContent = t.toFixed(1);
+        tBox.setAttribute("height", timeHeight); tBox.setAttribute("y", 175 - timeHeight);
+        tLabel.setAttribute("y", 175 - (timeHeight/2) + 5); tLabel.textContent = t.toFixed(1);
 
-        // Seesaw tilt
         const tilt = (w - t) * 1.5;
         document.getElementById('seesaw-group').style.transform = `rotate(${tilt}deg)`;
         document.getElementById('seesaw-group').style.transformOrigin = "225px 181px";
 
-        document.getElementById('prog-log').innerHTML = `
-            <div class="discovery-step">Total Work is locked at <b>12</b>.</div>
-            <div class="discovery-step"><b>${w}</b> workers × <b>${t.toFixed(1)}</b> hours = 12.</div>
-        `;
+        document.getElementById('prog-log').innerHTML = `Total Work is locked at <b>12</b>. <b>${w}</b> workers × <b>${t.toFixed(1)}</b> hours = 12.`;
     }
 
     /* --- SUPPLEMENTAL: RECTANGLE --- */
@@ -285,18 +211,11 @@
         const w1 = parseInt(document.getElementById('in-w1').value);
         const t1 = parseInt(document.getElementById('in-t1').value);
         const w2 = parseInt(document.getElementById('in-w2').value);
-        const magic = w1 * t1;
-        const t2 = magic / w2;
-
-        const rect = document.getElementById('supp-rect');
-        rect.style.width = Math.min(280, (w2 * 20)) + "px";
-        rect.style.height = Math.min(180, (t2 * 12)) + "px";
+        const magic = w1 * t1; const t2 = magic / w2;
+        document.getElementById('supp-rect').style.width = Math.min(280, (w2 * 20)) + "px";
+        document.getElementById('supp-rect').style.height = Math.min(180, (t2 * 12)) + "px";
         document.getElementById('supp-magic-val').innerText = magic;
-
-        document.getElementById('supp-log').innerHTML = `
-            → 1. Magic Number: ${w1} × ${t1} = <b>${magic}</b><br>
-            → 2. New Split: ${magic} ÷ ${w2} helpers = <b>${t2.toFixed(2)} Time</b>
-        `;
+        document.getElementById('supp-log').innerHTML = `→ Magic Number: ${w1} × ${t1} = <b>${magic}</b><br>→ Result: ${magic} ÷ ${w2} = <b>${t2.toFixed(2)} Time</b>`;
     }
 
     document.addEventListener('DOMContentLoaded', () => {

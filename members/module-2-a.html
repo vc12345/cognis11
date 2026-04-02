@@ -9,76 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* SUBSCRIPTION DISPLAY LOGIC */
-        .foundational-only, .supplemental-only { display: none; }
-        body.user-plan-foundational .foundational-only { display: block; }
-        body.user-plan-supplemental .supplemental-only { display: block; }
-
-        /* REFRESHER ACCORDION */
-        details.refresher-box {
-            background: #fff; border: 2px solid var(--cognis-blue);
-            border-radius: 16px; margin: 30px 0; overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        details.refresher-box summary {
-            font-weight: 800; color: white; background: var(--cognis-blue);
-            cursor: pointer; padding: 20px; outline: none; list-style: none;
-        }
-
-        /* GREEN BUTTON TEMPLATE */
-        .btn-complete { 
-            background-color: #276245 !important; 
-            color: white !important; 
-            border: none !important;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .btn-complete:hover { background-color: #1e4a34 !important; transform: translateY(-2px); }
-        .btn-complete:disabled { background-color: #cbd5e0 !important; cursor: not-allowed; transform: none; }
-
-        /* VIZ CONTAINERS */
-        .viz-container { 
-            background: #f8fafc; border: 2px dashed #cbd5e0; 
-            border-radius: 12px; padding: 20px; margin: 25px 0;
-            display: flex; flex-direction: column; 
-            align-items: center; justify-content: center;
-            min-height: 380px; 
-            position: relative;
-        }
-
-        /* FOUNDATIONAL LOGS */
-        .discovery-log {
-            background: #fdfbf7; padding: 20px; border-radius: 12px;
-            border: 1px solid #f0e6d2; font-size: 0.95rem; color: #5d5c58; line-height: 1.5;
-        }
-        .discovery-log b { color: var(--cognis-blue); }
-        .discovery-step { margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; }
-        .discovery-step::before { content: '✨'; }
-
-        /* INTRO: SWEETS ON PLATES */
         .plate { fill: #fff; stroke: #e2e8f0; stroke-width: 2; }
         .sweet { transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .sweet-blue { fill: var(--cognis-blue); stroke: #001a35; stroke-width: 1; }
         .sweet-gold { fill: var(--cognis-gold); stroke: #a38241; stroke-width: 1; }
-
-        /* PROGRESSING: VALUE ENVELOPES */
-        .envelope { fill: #fff; stroke: #cbd5e0; stroke-width: 2; transition: all 0.3s; }
-
-        /* SUPPLEMENTAL: RATIO BAR */
-        .ratio-bar-main { display: flex; width: 100%; max-width: 600px; height: 60px; border-radius: 10px; overflow: hidden; border: 3px solid var(--cognis-blue); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .ratio-box { flex: 1; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; border-right: 1px solid rgba(255,255,255,0.2); transition: all 0.3s; font-size: 0.8rem; }
+        .envelope { fill: #fff; stroke: #cbd5e0; stroke-width: 2; }
+        .ratio-bar-main { display: flex; width: 100%; max-width: 600px; height: 60px; border-radius: 10px; overflow: hidden; border: 3px solid var(--cognis-blue); }
+        .ratio-box { flex: 1; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; border-right: 1px solid rgba(255,255,255,0.2); }
         .box-a { background: var(--cognis-blue); }
         .box-b { background: var(--cognis-gold); }
-
-        /* UTILITY */
-        .section-tag { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; background: #f1f5f9; color: var(--cognis-blue); border-left: 3px solid var(--cognis-gold); }
-        .parent-script { font-style: italic; color: #4a5568; border-left: 3px solid #cbd5e0; padding-left: 15px; margin: 15px 0; }
-        .btn-interact { background: var(--cognis-blue); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; margin-top: 10px; }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -94,77 +33,45 @@
         <section class="phase" id="sub-intro">
             <span class="section-tag">Foundation Intro</span>
             <h2>The Sweet Share</h2>
-            <p>A ratio isn't just a list of numbers; it's a <b>Sharing Rule</b>. If the rule is <b>2:1</b>, it means every single time you give 2 sweets to the blue plate, you <i>must</i> give 1 sweet to the gold plate.</p>
+            <p>A ratio is a <b>Sharing Rule</b>. If the rule is <b>2:1</b>, every time you give 2 to Blue, you must give 1 to Gold.</p>
             
-            <div class="parent-script">
-                "We have a pile of sweets and a sharing rule. Watch how many sets we can deal before the pile is empty! Every 'round' uses up a set of sweets from the pile."
-            </div>
-
             <div class="viz-container">
-                <svg width="400" height="240" viewBox="0 0 400 240" id="sweet-svg">
+                <svg width="400" height="240" viewBox="0 0 400 240">
                     <circle cx="200" cy="50" r="45" fill="#f1f5f9" stroke="#cbd5e0" stroke-dasharray="4" />
-                    <text x="200" y="45" text-anchor="middle" font-size="10" font-weight="800" fill="#94a3b8">PILE</text>
-                    <text id="pile-count-txt" x="200" y="65" text-anchor="middle" font-size="16" font-weight="900" fill="var(--cognis-blue)">15</text>
-                    
+                    <text id="pile-count-txt" x="200" y="60" text-anchor="middle" font-size="16" font-weight="900" fill="var(--cognis-blue)">15</text>
                     <ellipse cx="100" cy="165" rx="85" ry="35" class="plate" />
                     <ellipse cx="300" cy="165" rx="85" ry="35" class="plate" />
-                    <text x="100" y="215" text-anchor="middle" font-size="10" font-weight="800" fill="var(--cognis-blue)">BLUE SIDE</text>
-                    <text x="300" y="215" text-anchor="middle" font-size="10" font-weight="800" fill="var(--cognis-gold)">GOLD SIDE</text>
-                    
                     <g id="sweet-container"></g>
                 </svg>
                 <div style="display: flex; gap: 10px;">
-                    <button class="btn-interact" id="btn-deal" onclick="dealSet()">Deal One Set</button>
-                    <button class="btn-interact" style="background:#94a3b8;" onclick="resetIntro()">Reset Pile</button>
+                    <button class="btn-reset" id="btn-deal" style="background:var(--cognis-blue); padding:10px 20px;" onclick="dealSet()">Deal One Set</button>
+                    <button class="btn-reset" onclick="resetIntro()">Reset Pile</button>
                 </div>
             </div>
 
             <div class="engine-container">
                 <div class="controls">
-                    <div class="control-group">
-                        <label>Rule: Blue Side</label>
-                        <input type="range" min="1" max="4" value="2" id="intro-a" oninput="resetIntro()">
-                        <div class="val-out" id="intro-a-val">2</div>
-                    </div>
-                    <div class="control-group">
-                        <label>Rule: Gold Side</label>
-                        <input type="range" min="1" max="4" value="1" id="intro-b" oninput="resetIntro()">
-                        <div class="val-out" id="intro-b-val">1</div>
-                    </div>
+                    <div class="control-group"><label>Blue Side</label><input type="range" min="1" max="4" value="2" id="intro-a" oninput="resetIntro()"><div class="val-out" id="intro-a-val">2</div></div>
+                    <div class="control-group"><label>Gold Side</label><input type="range" min="1" max="4" value="1" id="intro-b" oninput="resetIntro()"><div class="val-out" id="intro-b-val">1</div></div>
                 </div>
-                <div class="discovery-log" id="intro-log">Ready to share? Click 'Deal' to start!</div>
+                <div class="discovery-log" id="intro-log"></div>
             </div>
         </section>
 
         <section class="phase" id="sub-progressing">
             <span class="section-tag">Foundation Progressing</span>
             <h2>The Magic Envelope</h2>
-            <p>To share a large number like £100, we don't deal individual coins. We find the <b>Value of One Envelope</b>. Once you know what's inside one envelope, you just hand them out to match the ratio.</p>
-            
-            <div class="parent-script">
-                "Look at these envelopes. The ratio 3:2 means we have <b>5 envelopes in total</b>. If we split the whole £100 into those 5 envelopes, how much goes in each one?"
-            </div>
+            <p>Instead of coins, find the <b>Value of One Envelope</b>. Once you have that, you just match the ratio.</p>
 
             <div class="viz-container">
                 <svg width="420" height="200" viewBox="0 0 420 200" id="env-svg"></svg>
-                <div id="env-summary" style="margin-top:15px; font-weight:800; color:var(--cognis-blue);"></div>
+                <div id="env-summary" style="font-weight:800; color:var(--cognis-blue);"></div>
             </div>
 
             <div class="engine-container">
                 <div class="controls">
-                    <div class="control-group">
-                        <label>Total to Split (£)</label>
-                        <input type="range" min="20" max="600" step="20" value="100" id="prog-total" oninput="updateProg()">
-                        <div class="val-out" id="prog-total-val">£100</div>
-                    </div>
-                    <div class="control-group">
-                        <label>Ratio (A:B)</label>
-                        <div style="display:flex; gap:10px; align-items:center;">
-                            <input type="number" id="prog-a" value="3" min="1" max="8" style="width:50px; background:var(--engine-input); color:white; border:none; padding:8px; border-radius:6px; font-weight:800;" oninput="updateProg()">
-                            <span style="color:white; font-size:1.2rem; font-weight:800;">:</span>
-                            <input type="number" id="prog-b" value="2" min="1" max="8" style="width:50px; background:var(--engine-input); color:white; border:none; padding:8px; border-radius:6px; font-weight:800;" oninput="updateProg()">
-                        </div>
-                    </div>
+                    <div class="control-group"><label>Total (£)</label><input type="range" min="20" max="600" step="20" value="100" id="prog-total" oninput="updateProg()"><div class="val-out" id="prog-total-val">£100</div></div>
+                    <div class="control-group"><label>Ratio (A:B)</label><div style="display:flex; gap:10px;"><input type="number" id="prog-a" value="3" class="btn-reset" style="background:#2d3748; width:50px;" oninput="updateProg()"><input type="number" id="prog-b" value="2" class="btn-reset" style="background:#2d3748; width:50px;" oninput="updateProg()"></div></div>
                 </div>
                 <div class="discovery-log" id="prog-log"></div>
             </div>
@@ -178,23 +85,19 @@
     <div id="sub-supplemental" class="supplemental-only">
         <section class="phase">
             <h2>Phase 1: The X-Ray</h2>
-            <p>The secret weapon for every ratio problem is finding the <b>Value of One Chunk</b>. Once your child knows what one single piece is worth, they can hand out the right amount to anyone.</p>
-            
             <div class="question-tiers">
-                <div class="tier-card"><b>Level 1</b> Share £20 in the ratio 3:1. How much is the larger share?</div>
-                <div class="tier-card"><b>Level 2</b> A 40cm rope is cut 5:3. How much longer is the first piece?</div>
-                <div class="tier-card"><b>Level 3</b> A map scale is 2:7. If the total distance is 180km, find the smaller leg.</div>
+                <div class="tier-card"><b>Level 1</b> £20 in ratio 3:1. Larger share?</div>
+                <div class="tier-card"><b>Level 2</b> 40cm rope cut 5:3. Longer piece?</div>
             </div>
         </section>
 
         <section class="phase">
             <h2>Phase 2: The Anatomy</h2>
-            <p>To find the "Value of One Box," you must divide the <b>Total Amount</b> by the <b>Total Number of Boxes</b>. Count the boxes below—always find the "Total Parts" first.</p>
             <div class="anatomy-display">
                 <div class="ratio-bar-main" id="supp-bar"></div>
-                <div style="display:flex; justify-content:space-between; width:100%; max-width:600px; margin-top:20px; font-weight:800; color:var(--cognis-blue);">
-                    <span id="label-v">Total: £100</span>
-                    <span id="label-p" style="color:var(--cognis-gold);">5 Parts</span>
+                <div style="display:flex; justify-content:space-between; width:100%; max-width:600px; margin-top:20px;">
+                    <span id="label-v" class="val-out">Total: £100</span>
+                    <span id="label-p" class="val-out">5 Parts</span>
                 </div>
             </div>
         </section>
@@ -203,19 +106,11 @@
             <h2>Phase 3: The Engine</h2>
             <div class="engine-container">
                 <div class="inputs">
-                    <div class="control-group"><label>Total Value (£)</label><input type="range" id="in-v" min="10" max="1000" step="10" value="100" oninput="runSupp()"></div>
-                    <div class="control-group"><label>Part A</label><input type="range" id="in-a" min="1" max="12" value="3" oninput="runSupp()"></div>
-                    <div class="control-group"><label>Part B</label><input type="range" id="in-b" min="1" max="12" value="2" oninput="runSupp()"></div>
+                    <div class="control-group"><label>Total (£)</label><input type="range" id="in-v" min="10" max="1000" step="10" value="100" oninput="runSupp()"><div class="val-out" id="v-disp">£100</div></div>
+                    <div class="control-group"><label>Part A</label><input type="range" id="in-a" min="1" max="12" value="3" oninput="runSupp()"><div class="val-out" id="a-disp">3</div></div>
+                    <div class="control-group"><label>Part B</label><input type="range" id="in-b" min="1" max="12" value="2" oninput="runSupp()"><div class="val-out" id="b-disp">2</div></div>
                 </div>
                 <div class="trace-log" id="supp-log"></div>
-            </div>
-        </section>
-
-        <section class="phase">
-            <div class="trap-box">
-                <h3>Phase 4: The Saboteur</h3>
-                <p><b>The "One-Sided" Mistake:</b> Bright children often divide the total by just one side of the ratio. They forget that the total covers the <i>entire</i> bar.</p>
-                <p><b>The Fix: The "Add First" Rule.</b> Always ask: "How many chunks are in the <b>Whole Bar</b>?" Add A + B first.</p>
             </div>
         </section>
         
@@ -228,165 +123,83 @@
         if (!window.supabaseClient) { setTimeout(applyLayout, 100); return; }
         const { data: { user } } = await window.supabaseClient.auth.getUser();
         if (!user) return;
-        const { data: profile } = await window.supabaseClient
-            .from('profiles').select('subscription_plan').eq('id', user.id).maybeSingle();
+        const { data: profile } = await window.supabaseClient.from('profiles').select('subscription_plan').eq('id', user.id).maybeSingle();
         const plan = profile ? profile.subscription_plan : 'foundational'; 
-
-        const body = document.body;
-        const bundle = document.getElementById('foundation-bundle');
-        const supp = document.getElementById('sub-supplemental');
-
         if (plan === 'supplemental') {
-            body.className = 'user-plan-supplemental';
             const acc = document.createElement('details');
             acc.className = 'refresher-box';
             acc.innerHTML = `<summary>▼ Need a Refresh? (Years 2-4 Ratios Foundations)</summary>`;
-            acc.appendChild(bundle);
-            supp.parentNode.insertBefore(acc, supp);
+            acc.appendChild(document.getElementById('foundation-bundle'));
+            document.getElementById('sub-supplemental').parentNode.insertBefore(acc, document.getElementById('sub-supplemental'));
         } else {
-            body.className = 'user-plan-foundational';
-            if(supp) supp.remove();
+            if(document.getElementById('sub-supplemental')) document.getElementById('sub-supplemental').remove();
         }
     }
 
-    /* --- INTRO: SWEET SHARE --- */
-    let dealtSets = 0;
-    let totalSweets = 15;
+    let dealtSets = 0; let totalSweets = 15;
     function resetIntro() {
         dealtSets = 0;
         const a = parseInt(document.getElementById('intro-a').value);
         const b = parseInt(document.getElementById('intro-b').value);
-        totalSweets = (a + b) * 5; // Ensure we always have exactly 5 rounds
+        totalSweets = (a + b) * 5;
         document.getElementById('pile-count-txt').textContent = totalSweets;
         document.getElementById('sweet-container').innerHTML = '';
         document.getElementById('intro-a-val').innerText = a;
         document.getElementById('intro-b-val').innerText = b;
         document.getElementById('intro-log').innerHTML = "Pile refilled. Ready to share!";
         document.getElementById('btn-deal').disabled = false;
-        document.getElementById('btn-deal').style.opacity = '1';
     }
 
     function dealSet() {
         const a = parseInt(document.getElementById('intro-a').value);
         const b = parseInt(document.getElementById('intro-b').value);
-        const setTotal = a + b;
-        dealtSets++;
-        totalSweets -= setTotal;
+        dealtSets++; totalSweets -= (a + b);
         document.getElementById('pile-count-txt').textContent = totalSweets;
-        
         const container = document.getElementById('sweet-container');
-        
-        // Deal Blue Side
-        for(let i=0; i<a; i++) {
-            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            circle.setAttribute("cx", "200");
-            circle.setAttribute("cy", "50");
-            circle.setAttribute("r", "6");
-            circle.setAttribute("class", "sweet sweet-blue");
-            container.appendChild(circle);
-            setTimeout(() => {
-                circle.setAttribute("cx", 100 + (Math.random()*100-50));
-                circle.setAttribute("cy", 165 + (Math.random()*40-20));
-            }, 50);
-        }
-        // Deal Gold Side
-        for(let i=0; i<b; i++) {
-            const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            circle.setAttribute("cx", "200");
-            circle.setAttribute("cy", "50");
-            circle.setAttribute("r", "6");
-            circle.setAttribute("class", "sweet sweet-gold");
-            container.appendChild(circle);
-            setTimeout(() => {
-                circle.setAttribute("cx", 300 + (Math.random()*100-50));
-                circle.setAttribute("cy", 165 + (Math.random()*40-20));
-            }, 50);
-        }
-
-        document.getElementById('intro-log').innerHTML = `
-            <div class="discovery-step">Round ${dealtSets}: Dealt <b>${setTotal}</b> sweets.</div>
-            <div class="discovery-step">Plate Balance: <b>${dealtSets * a}</b> Blue : <b>${dealtSets * b}</b> Gold.</div>
-        `;
-
-        if(dealtSets >= 5) {
-            document.getElementById('btn-deal').disabled = true;
-            document.getElementById('btn-deal').style.opacity = '0.5';
-            document.getElementById('intro-log').innerHTML += `<div class="discovery-step"><b>The pile is empty!</b> The ratio is still ${a}:${b}.</div>`;
-        }
+        for(let i=0; i<a; i++) createSweet(100, 'sweet-blue', container);
+        for(let i=0; i<b; i++) createSweet(300, 'sweet-gold', container);
+        document.getElementById('intro-log').innerHTML = `Round ${dealtSets}: Ratio stays ${a}:${b}.`;
+        if(dealtSets >= 5) document.getElementById('btn-deal').disabled = true;
     }
 
-    /* --- PROGRESSING: ENVELOPES (Multi-row support) --- */
+    function createSweet(targetX, cls, container) {
+        const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        c.setAttribute("cx", "200"); c.setAttribute("cy", "50"); c.setAttribute("r", "6");
+        c.setAttribute("class", "sweet " + cls);
+        container.appendChild(c);
+        setTimeout(() => {
+            c.setAttribute("cx", targetX + (Math.random()*80-40));
+            c.setAttribute("cy", 165 + (Math.random()*30-15));
+        }, 50);
+    }
+
     function updateProg() {
         const tot = parseInt(document.getElementById('prog-total').value);
-        let a = parseInt(document.getElementById('prog-a').value) || 1;
-        let b = parseInt(document.getElementById('prog-b').value) || 1;
-        
-        // Prevent layout explosion
-        if (a + b > 16) { 
-            alert("Maximum 16 parts total for this visualization."); 
-            document.getElementById('prog-a').value = 8;
-            document.getElementById('prog-b').value = 8;
-            a = 8; b = 8;
-        }
-
-        const parts = a + b;
-        const valPer = tot / parts;
+        const a = parseInt(document.getElementById('prog-a').value) || 1;
+        const b = parseInt(document.getElementById('prog-b').value) || 1;
+        const parts = a + b; const valPer = tot / parts;
         document.getElementById('prog-total-val').innerText = '£' + tot;
-        
-        const svg = document.getElementById('env-svg');
-        svg.innerHTML = '';
-        const envW = 40;
-        const envH = 35;
-        const gap = 10;
-        
+        const svg = document.getElementById('env-svg'); svg.innerHTML = '';
         for(let i=0; i<parts; i++) {
-            const row = Math.floor(i / 8);
-            const col = i % 8;
-            const itemsInThisRow = Math.min(8, parts - (row * 8));
-            const rowStartX = (420 - (itemsInThisRow * (envW + gap))) / 2;
-            
+            const row = Math.floor(i / 8); const col = i % 8;
+            const x = (420 - (Math.min(8, parts - row*8)*50))/2 + col*50;
             const color = i < a ? '#1B3A5C' : '#c5a059';
-            const x = rowStartX + col * (envW + gap);
-            const y = 30 + row * 80;
-
-            const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-            g.innerHTML = `
-                <rect x="${x}" y="${y}" width="${envW}" height="${envH}" fill="${color}" rx="4" class="envelope" />
-                <path d="M${x},${y} L${x + envW/2},${y+15} L${x+envW},${y}" fill="none" stroke="white" stroke-width="2" />
-                <text x="${x + envW/2}" y="${y + 55}" text-anchor="middle" font-size="10" font-weight="900" fill="#1b3a5c">£${valPer.toFixed(0)}</text>
-            `;
-            svg.appendChild(g);
+            svg.innerHTML += `<rect x="${x}" y="${30+row*70}" width="40" height="30" fill="${color}" rx="4"/><text x="${x+20}" y="${75+row*70}" text-anchor="middle" font-size="10" font-weight="900" fill="var(--cognis-blue)">£${valPer.toFixed(0)}</text>`;
         }
-
         document.getElementById('env-summary').innerText = `1 Envelope = £${valPer.toFixed(2)}`;
-        document.getElementById('prog-log').innerHTML = `
-            <div class="discovery-step">Total Envelopes: <b>${a} + ${b} = ${parts}</b>.</div>
-            <div class="discovery-step">Value: <b>£${tot} ÷ ${parts} = £${valPer.toFixed(2)}</b> each.</div>
-        `;
     }
 
-    /* --- SUPPLEMENTAL: BAR MODEL --- */
     function runSupp() {
         const v = parseInt(document.getElementById('in-v').value);
         const a = parseInt(document.getElementById('in-a').value);
         const b = parseInt(document.getElementById('in-b').value);
-        const totalP = a + b;
-        const unit = v / totalP;
-
-        document.getElementById('label-v').innerText = `Total: £${v}`;
-        document.getElementById('label-p').innerText = `${totalP} Parts`;
-
-        const bar = document.getElementById('supp-bar');
-        bar.innerHTML = '';
+        document.getElementById('v-disp').innerText = "£"+v; document.getElementById('a-disp').innerText = a; document.getElementById('b-disp').innerText = b;
+        const totalP = a + b; const unit = v / totalP;
+        document.getElementById('label-v').innerText = `Total: £${v}`; document.getElementById('label-p').innerText = `${totalP} Parts`;
+        const bar = document.getElementById('supp-bar'); bar.innerHTML = '';
         for(let i=0; i<a; i++) bar.innerHTML += `<div class="ratio-box box-a">£${unit.toFixed(0)}</div>`;
         for(let i=0; i<b; i++) bar.innerHTML += `<div class="ratio-box box-b">£${unit.toFixed(0)}</div>`;
-
-        document.getElementById('supp-log').innerHTML = `
-            → 1. Total Chunks: ${a} + ${b} = <b>${totalP}</b><br>
-            → 2. One Chunk: £${v} ÷ ${totalP} = <b>£${unit.toFixed(2)}</b><br>
-            → 3. Final A: ${a} × £${unit.toFixed(2)} = <b>£${(a*unit).toFixed(2)}</b><br>
-            → 4. Final B: ${b} × £${unit.toFixed(2)} = <b>£${(b*unit).toFixed(2)}</b>
-        `;
+        document.getElementById('supp-log').innerHTML = `→ Chunk Value: £${v} ÷ ${totalP} = <b>£${unit.toFixed(2)}</b>`;
     }
 
     document.addEventListener('DOMContentLoaded', () => {

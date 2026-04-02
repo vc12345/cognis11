@@ -53,7 +53,7 @@ async function initModule(moduleId) {
 
     // 2. BYPASS AUTH FOR SAMPLES
     if (isSampleFile) {
-        console.log("Sample Mode: Skipping Auth & Registry");
+        injectModuleUI("Guest Explorer", moduleId, true);
         return; 
     }
 
@@ -128,42 +128,24 @@ function injectModuleUI(email, currentId, isSample) {
         }
     }
 
-    const uiHTML = `
-        <style>
-            body { background-color: #FAFAF6 !important; padding-bottom: 80px; }
-            .module-card { max-width: 920px !important; margin: 20px auto !important; }
-            .cognis-m-nav {
-                background: #ffffff; border-bottom: 1px solid #E5E3DD;
-                padding: 12px 30px; display: flex; justify-content: space-between;
-                align-items: center; position: sticky; top: 0; z-index: 1000;
-            }
-            .cognis-m-nav a { color: #1B3A5C !important; text-decoration: none; font-weight: 600; font-size: 0.85rem; }
-            .module-footer-nav {
-                max-width: 920px; margin: 40px auto;
-                display: flex; justify-content: space-between; gap: 20px;
-                padding: 0 20px;
-            }
-            .nav-cta { flex: 1; text-decoration: none; padding: 20px; border-radius: 12px; display: flex; flex-direction: column; transition: 0.3s; }
-            .nav-prev { background: white; color: #1B3A5C; border: 2px solid #E5E3DD; }
-            .nav-next { background: #1B3A5C; color: white; }
-            .cta-label { font-size: 0.65rem; text-transform: uppercase; font-weight: 800; opacity: 0.7; }
-        </style>
-
+    const navHTML = `
         <nav class="cognis-m-nav">
             <a href="/members/dashboard-a.html">← Dashboard</a>
-            <div style="font-size: 0.75rem; font-weight: 700; color: #888;">${email}</div>
+            <div class="user-identity-tag">${email}</div>
         </nav>
     `;
 
-    document.body.insertAdjacentHTML('afterbegin', uiHTML);
+    document.body.insertAdjacentHTML('afterbegin', navHTML);
 
-    const footerHTML = `
-        <div class="module-footer-nav">
-            ${prevMod ? `<a href="${prevMod.path}" class="nav-cta nav-prev"><span class="cta-label">Previous</span><span>${prevMod.title}</span></a>` : '<div></div>'}
-            ${nextMod ? `<a href="${nextMod.path}" class="nav-cta nav-next" style="text-align:right;"><span class="cta-label">Next</span><span>${nextMod.title}</span></a>` : '<div></div>'}
-        </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', footerHTML);
+    if (!isSample) {
+        const footerHTML = `
+            <div class="module-footer-nav">
+                ${prevMod ? `<a href="${prevMod.path}" class="nav-cta nav-prev"><span class="cta-label">Previous</span><span>${prevMod.title}</span></a>` : '<div></div>'}
+                ${nextMod ? `<a href="${nextMod.path}" class="nav-cta nav-next"><span class="cta-label">Next</span><span>${nextMod.title}</span></a>` : '<div></div>'}
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', footerHTML);
+    }
 }
 
 async function markComplete(moduleId) {
